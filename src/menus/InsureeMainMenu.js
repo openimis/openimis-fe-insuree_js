@@ -26,13 +26,13 @@ class InsureeMainMenu extends Component {
         route: "/" + modulesManager.getRef("insuree.route.families"),
       });
     }
-    if (rights.includes(RIGHT_INSUREE)) {
+    /*if (rights.includes(RIGHT_INSUREE)) {
       entries.push({
         text: formatMessage(this.props.intl, "insuree", "menu.insurees"),
         icon: <Person />,
         route: "/" + modulesManager.getRef("insuree.route.insurees"),
       });
-    }
+    }*/
     entries.push(
       ...this.props.modulesManager
         .getContribs(INSUREE_MAIN_MENU_CONTRIBUTION_KEY)
