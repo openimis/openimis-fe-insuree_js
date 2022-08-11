@@ -122,6 +122,8 @@ class FamilyForm extends Component {
   };
 
   canSave = () => {
+    if (!this.state.family.headInsuree.passport) return false;
+    if (!this.state.family.headInsuree.typeOfId) return false;
     if (!this.state.family.location) return false;
     if (!this.state.family.headInsuree) return false;
     if (!this.state.family.headInsuree.chfId) return false;
