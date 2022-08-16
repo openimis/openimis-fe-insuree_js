@@ -74,7 +74,6 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.insuranceNo",
       "insuree.familySummaries.lastName",
       "insuree.familySummaries.otherNames",
-      "insuree.familySummaries.email",
       "insuree.familySummaries.phone",
       "insuree.familySummaries.dob",
     ];
@@ -82,7 +81,6 @@ class FamilySearcher extends Component {
       h.push(`location.locationType.${i}`);
     }
     h.push(
-      "insuree.familySummaries.poverty",
       "insuree.familySummaries.confirmationNo",
       "insuree.familySummaries.validityFrom",
       "insuree.familySummaries.validityTo",
@@ -99,7 +97,6 @@ class FamilySearcher extends Component {
       ["headInsuree__chfId", true],
       ["headInsuree__lastName", true],
       ["headInsuree__otherNames", true],
-      ["headInsuree__email", true],
       ["headInsuree__phone", true],
       ["headInsuree__dob", true],
     ];
@@ -146,7 +143,6 @@ class FamilySearcher extends Component {
       (family) => (!!family.headInsuree ? family.headInsuree.chfId : ""),
       (family) => (!!family.headInsuree ? family.headInsuree.lastName : ""),
       (family) => (!!family.headInsuree ? family.headInsuree.otherNames : ""),
-      (family) => (!!family.headInsuree ? family.headInsuree.email : ""),
       (family) => (!!family.headInsuree ? family.headInsuree.phone : ""),
       (family) =>
         !!family.headInsuree
@@ -159,7 +155,6 @@ class FamilySearcher extends Component {
       formatters.push((family) => this.parentLocation(family.location, j));
     }
     formatters.push(
-      (family) => <Checkbox color="primary" checked={family.poverty} readOnly />,
       (family) => family.confirmationNo,
       (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom),
       (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityTo),

@@ -101,11 +101,10 @@ export function fetchFamilySummaries(mm, filters) {
   let projections = [
     "id",
     "uuid",
-    "poverty",
     "confirmationNo",
     "validityFrom",
     "validityTo",
-    "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone}",
+    "headInsuree{id,uuid,chfId,lastName,otherNames,phone}",
     "location" + mm.getProjection("location.Location.FlatProjection"),
   ];
   const payload = formatPageQueryWithCount("families", filters, projections);
