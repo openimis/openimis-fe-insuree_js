@@ -145,6 +145,7 @@
   "insuree.IdentificationType.D": "Driver's License",
   "insuree.IdentificationType.N": "National ID",
   "insuree.IdentificationType.P": "Passport",
+  "insuree.IdentificationType.F": "Fiche d'identification",
   "insuree.IdentificationType.V": "Voter Card",
   "insuree.FamilyFilter.showHistory": "Show historical values",
   "insuree.FamilyOverview.title": "Family/Group {label}",

@@ -118,7 +118,7 @@ const DEFAULT_CONFIG = {
   "core.MainMenu": [InsureeMainMenu],
   "insuree.InsureeSummaryAvatar": [InsureeAvatar],
   "insuree.InsureeSummaryExt": [InsureeFirstServicePointDisplay],
-  //"insuree.Insuree.panels": [InsureeFirstServicePointPanel],
+  "insuree.Insuree.panels": [InsureeFirstServicePointPanel],
   "policy.Policy.headPanel": [FamilyDisplayPanel],
   "invoice.SubjectAndThirdpartyPicker": [
     {

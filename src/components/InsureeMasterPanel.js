@@ -168,7 +168,7 @@ class InsureeMasterPanel extends FormPanel {
                       module="insuree"
                       value={!!edited && !!edited.typeOfId ? edited.typeOfId.code : null}
                       readOnly={readOnly}
-                      withNull={true}
+                      withNull={false}
                       required={true}
                       nullLabel={formatMessage(intl, "insuree", "IdentificationType.none")}
                       onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
@@ -205,7 +205,6 @@ class InsureeMasterPanel extends FormPanel {
           <Contributions
             {...this.props}
             updateAttribute={this.updateAttribute}
-            contributionKey={INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY}
           />
         </Grid>
       </Grid>
