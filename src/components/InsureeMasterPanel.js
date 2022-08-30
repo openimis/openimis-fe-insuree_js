@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Paper, Grid, Typography, Divider, Checkbox, FormControlLabel } from "@material-ui/core";
+import { Paper, Grid, Typography, Divider, Checkbox, FormGroup, FormControlLabel, Switch } from "@material-ui/core";
 import {
   formatMessage,
   withTooltip,
@@ -35,8 +35,6 @@ class InsureeMasterPanel extends FormPanel {
       readOnly = true,
       actions,
     } = this.props;
-    console.log(this.props);
-    console.log(this.state);
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -198,6 +196,41 @@ class InsureeMasterPanel extends FormPanel {
                   onChange={(v) => this.updateAttribute("photo", !!v ? v : null)}
                 />
               </Grid>
+              {console.log(edited)}
+              <Grid item xs={2} className={classes.item}>
+                <FormControlLabel 
+                  module="insuree"
+                  control={<Switch 
+                    checked={!!edited ? edited.dead : false}
+                    module="insuree"
+                    readOnly={readOnly}
+                    onChange={(e, c) => this.updateAttribute("dead", c)}
+                  />}
+                 label={formatMessage(this.props.intl, "insuree", `Insuree.dead`)} />
+              </Grid>
+              {edited?.dead &&
+                <Grid item xs={3} className={classes.item}>
+                  <PublishedComponent
+                    pubRef="core.DatePicker"
+                    value={!!edited ? edited.dod : null}
+                    module="insuree"
+                    label="Insuree.dod"
+                    readOnly={readOnly}
+                    onChange={(v) => this.updateAttribute("dod", v)}
+                  />
+                </Grid>
+                }
+                {edited?.dead &&
+                <Grid item xs={6} className={classes.item}>
+                  <TextInput
+                    module="insuree"
+                    label="Insuree.deathreason"
+                    readOnly={readOnly}
+                    value={!!edited && !!edited.deathReason ? edited.deathReason : ""}
+                    onChange={(v) => this.updateAttribute("deathReason", v)}
+                  />
+                </Grid>
+                }
               <Contributions
                 {...this.props}
                 updateAttribute={this.updateAttribute}
