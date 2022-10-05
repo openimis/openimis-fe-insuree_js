@@ -13,7 +13,7 @@ class InsureeMainMenu extends Component {
     let entries = [];
     if (rights.includes(RIGHT_FAMILY_ADD)) {
       entries.push({
-        text: "Add Family/Group",
+        text: formatMessage(this.props.intl, "insuree", "menu.addFamilyOrGroup"),
         icon: <GroupAdd />,
         route: "/" + modulesManager.getRef("insuree.route.family"),
         withDivider: true,

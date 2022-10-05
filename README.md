@@ -25,6 +25,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 - `insuree.Insuree.panels`: `[InsureeFirstServicePointPanel]`, contributing to own contribution point and adding First Service Point contribution when creating a new Insuree
 - `insuree.InsureePage.panels`: `[InsureeMasterPanel, InsureeFirstServicePointPanel]`, contributing to own contribution point and register the defaults MasterPanel and First Service Point as panels of Insuree Page
 - `core.Router`: registering the `insuree/create`, `insuree/families`, `insuree/insurees`, `insuree/cappedItemService` and `insuree/profile` routes in openIMIS client-side router
+- `invoice.SubjectAndThirdpartyPicker`, providing Insuree picker and Family picker for Invoice module
 
 ## Available Contribution Points
 

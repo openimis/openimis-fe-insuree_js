@@ -26,6 +26,8 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "clientMutationId",
 ];
 
+export const FAMILY_PICKER_PROJECTION = ["id", "uuid", "headInsuree{id chfId uuid lastName otherNames}"];
+
 const INSUREE_FULL_PROJECTION = (mm) => [
   "id",
   "uuid",
@@ -53,6 +55,8 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "phone",
   "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
 ];
+
+export const INSUREE_PICKER_PROJECTION = ["id", "uuid", "chfId", "lastName", "otherNames"];
 
 export function fetchInsureeGenders() {
   const payload = formatQuery("insureeGenders", null, ["code"]);

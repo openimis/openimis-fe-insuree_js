@@ -151,7 +151,6 @@ class InsureeSearcher extends Component {
         <PublishedComponent
           pubRef="insuree.InsureeMaritalStatusPicker"
           withLabel={false}
-          withNull={true}
           readOnly={true}
           value={insuree.marital}
         />
@@ -160,7 +159,6 @@ class InsureeSearcher extends Component {
         <PublishedComponent
           pubRef="insuree.InsureeGenderPicker"
           withLabel={false}
-          withNull={true}
           readOnly={true}
           value={!!insuree.gender ? insuree.gender.code : null}
         />
