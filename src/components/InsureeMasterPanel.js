@@ -25,6 +25,28 @@ const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
 
 class InsureeMasterPanel extends FormPanel {
+
+  state = {
+    age: "",
+  };
+
+  _updateAge = (dob) => {
+    var age;
+    var date = new Date(dob);
+    var month_diff = Date.now() - date.getTime();
+    var age_dt = new Date(month_diff);
+    var year = age_dt.getUTCFullYear();
+    age = Math.abs(year - 1970);
+
+    if (age < 13) {
+      alert(formatMessage(this.props.intl, "insuree", "Ce beneficiaire est mineur"));
+    } else if (age > 50) {
+      alert(formatMessage(this.props.intl, "insuree", "Ce bénéficiaire est ménopausé"));
+    }
+
+    this.setState({ age: age });
+  }
+
   render() {
     const {
       intl,
@@ -117,7 +139,19 @@ class InsureeMasterPanel extends FormPanel {
                       label="Insuree.dob"
                       readOnly={readOnly}
                       required={true}
-                      onChange={(v) => this.updateAttribute("dob", v)}
+                      onChange={(v) => {
+                        this.updateAttribute("dob", v);
+                        this._updateAge(v);
+                      }
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={2} className={classes.item}>
+                    <TextInput
+                      module="insuree"
+                      label="Age"
+                      readOnly={true}
+                      value={this.state.age}
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
@@ -141,7 +175,7 @@ class InsureeMasterPanel extends FormPanel {
                       nullLabel="InsureeMaritalStatus.N"
                       onChange={(v) => this.updateAttribute("marital", v)}
                     />
-                  </Grid> }
+                  </Grid>}
                   <Grid item xs={6} className={classes.item}>
                     <TextInput
                       module="insuree"
@@ -196,17 +230,16 @@ class InsureeMasterPanel extends FormPanel {
                   onChange={(v) => this.updateAttribute("photo", !!v ? v : null)}
                 />
               </Grid>
-              {console.log(edited)}
               <Grid item xs={2} className={classes.item}>
-                <FormControlLabel 
+                <FormControlLabel
                   module="insuree"
-                  control={<Switch 
+                  control={<Switch
                     checked={!!edited ? edited.dead : false}
                     module="insuree"
                     readOnly={readOnly}
                     onChange={(e, c) => this.updateAttribute("dead", c)}
                   />}
-                 label={formatMessage(this.props.intl, "insuree", `Insuree.dead`)} />
+                  label={formatMessage(this.props.intl, "insuree", `Insuree.dead`)} />
               </Grid>
               {edited?.dead &&
                 <Grid item xs={3} className={classes.item}>
@@ -219,8 +252,8 @@ class InsureeMasterPanel extends FormPanel {
                     onChange={(v) => this.updateAttribute("dod", v)}
                   />
                 </Grid>
-                }
-                {edited?.dead &&
+              }
+              {edited?.dead &&
                 <Grid item xs={6} className={classes.item}>
                   <TextInput
                     module="insuree"
@@ -230,7 +263,7 @@ class InsureeMasterPanel extends FormPanel {
                     onChange={(v) => this.updateAttribute("deathReason", v)}
                   />
                 </Grid>
-                }
+              }
               <Contributions
                 {...this.props}
                 updateAttribute={this.updateAttribute}
