@@ -83,6 +83,7 @@ class InsureeMasterPanel extends FormPanel {
                   required={true}
                   readOnly={readOnly}
                   value={edited?.chfId}
+                  new_insuree={!edited?.id}
                   onChange={(v) => this.updateAttribute("chfId", v)}
                 />
               </Grid>
@@ -126,6 +127,7 @@ class InsureeMasterPanel extends FormPanel {
                       module="insuree"
                       readOnly={readOnly}
                       withNull={true}
+                      required={true}
                       onChange={(v) => this.updateAttribute("gender", { code: v })}
                     />
                   </Grid>

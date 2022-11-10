@@ -48,7 +48,7 @@ class InsureeSearcher extends Component {
     if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
       this.setState({ reset: this.state.reset + 1 });
-    } else if (!prevProps.confirmed && this.props.confirmed) {
+    } else if (!prevProps.confirmed && this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
     }
   }

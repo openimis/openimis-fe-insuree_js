@@ -16,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const operation = `
-  query ($number: String!) {
-    isValid: insureeNumberValidity(insureeNumber: $number)
+  query ($number: String!, $newInsuree: Boolean) {
+    isValid: insureeNumberValidity(insureeNumber: $number, newInsuree: $newInsuree)
   }
 `;
 
 const InsureeNumberInput = (props) => {
-  const { value, onChange, className, label = "Insuree.chfId", placeholder, readOnly, required } = props;
+  const { value, new_insuree, onChange, className, label = "Insuree.chfId", placeholder, readOnly, required } = props;
   const [internalValue, setInternalValue] = useState(value);
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations("insuree", modulesManager);
@@ -31,7 +31,7 @@ const InsureeNumberInput = (props) => {
     isLoading,
     data,
     error: graphqlError,
-  } = useGraphqlQuery(operation, { number: internalValue }, { skip: !internalValue });
+  } = useGraphqlQuery(operation, { number: internalValue, newInsuree: new_insuree }, { skip: !internalValue });
 
   const handleValueChange = useDebounceCb((val) => {
     if (val) {
@@ -60,6 +60,7 @@ const InsureeNumberInput = (props) => {
       placeholder={placeholder}
       error={graphqlError || isInvalid ? formatMessage("InsureeNumberInput.error") : null}
       value={value}
+      new_insuree={new_insuree}
       inputProps={{ maxLength: modulesManager.getConf("fe-insuree", "insureeForm.chfIdMaxLength", 12) }}
       endAdornment={
         <InputAdornment position="end" className={clsx(isValid && classes.validIcon, isInvalid && classes.invalidIcon)}>
