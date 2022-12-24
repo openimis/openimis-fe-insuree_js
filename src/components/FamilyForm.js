@@ -39,7 +39,7 @@ class FamilyForm extends Component {
     reset: 0,
     family: this._newFamily(),
     newFamily: true,
-    consirmedAction: null,
+    confirmedAction: null,
   };
 
   _newFamily() {
