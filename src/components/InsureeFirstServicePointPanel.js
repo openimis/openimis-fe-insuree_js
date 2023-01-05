@@ -12,6 +12,7 @@ const styles = (theme) => ({
 class InsureeFirstServicePointPanel extends FormPanel {
   render() {
     const { classes, updateAttribute, readOnly, edited } = this.props;
+    const allRegions = true;
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -29,6 +30,7 @@ class InsureeFirstServicePointPanel extends FormPanel {
                   value={edited?.healthFacility ?? null}
                   readOnly={readOnly}
                   onChange={(hf) => updateAttribute("healthFacility", hf)}
+                  allRegions={allRegions}
                 />
               )}
             </Grid>
