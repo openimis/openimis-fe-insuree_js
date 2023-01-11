@@ -247,7 +247,7 @@ class InsureeSearcher extends Component {
       onDoubleClick,
     } = this.props;
 
-    let count = insureesPageInfo.totalCount;
+    let count = insureesPageInfo.totalCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     return (
       <Fragment>
