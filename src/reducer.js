@@ -464,6 +464,18 @@ function reducer(
           },
         },
       };
+    case "INSUREE_NUMBER_VALIDATION_FIELDS_SET_VALID":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          insureeNumber: {
+            isValidating: false,
+            isValid: true,
+            validationError: null,
+          },
+        },
+      };
     case "INSUREE_MUTATION_REQ":
       return dispatchMutationReq(state, action);
     case "INSUREE_MUTATION_ERR":

@@ -97,6 +97,7 @@ class InsureeForm extends Component {
   };
 
   canSave = () => {
+    if (!this.props.isInsureeNumberValid) return false;
     if (!this.state.insuree.chfId) return false;
     if (!this.state.insuree.lastName) return false;
     if (!this.state.insuree.otherNames) return false;
@@ -191,6 +192,7 @@ const mapStateToProps = (state, props) => ({
   family: state.insuree.family,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
+  isInsureeNumberValid: state.insuree?.validationFields?.insureeNumber?.isValid,
 });
 
 export default withHistory(

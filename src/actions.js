@@ -416,6 +416,12 @@ export function insureeNumberValidationCheck(mm, variables) {
   );
 }
 
+export function insureeNumberSetValid() {
+  return (dispatch) => {
+    dispatch({ type: `INSUREE_NUMBER_VALIDATION_FIELDS_SET_VALID` });
+  };
+}
+
 export function insureeNumberValidationClear() {
   return (dispatch) => {
     dispatch({ type: `INSUREE_NUMBER_VALIDATION_FIELDS_CLEAR` });
