@@ -274,8 +274,6 @@ class FamilyFilter extends Component {
       if (filter.value === null && module in filters.additionalFilters) {
         delete filters.additionalFilters[module][filter.id];
       } else {
-        console.log("f1: ", filters);
-
         if (!(module in filters.additionalFilters)) {
           filters.additionalFilters[module] = {};
         }
@@ -285,7 +283,6 @@ class FamilyFilter extends Component {
     let filterContent = !!JSON.stringify(filters.additionalFilters) ? JSON.stringify(filters.additionalFilters) : "{}";
     filterContent = filterContent.replaceAll('"', '\\"');
 
-    console.log("additional filters", filterContent);
     onChangeFilters([
       {
         id: "additionalFilter",

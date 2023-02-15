@@ -32,7 +32,7 @@ const InsureeNumberInput = (props) => {
       clearAction={insureeNumberValidationClear}
       module="insuree"
       className={className}
-      disabled={readOnly}
+      readOnly={readOnly}
       required={required}
       label={label}
       placeholder={placeholder}
