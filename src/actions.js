@@ -7,7 +7,7 @@ import {
   decodeId,
   formatMutation,
   formatGQLString,
-  graphqlWithVariables
+  graphqlWithVariables,
 } from "@openimis/fe-core";
 
 const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone,dob,gender{code}}";
@@ -407,9 +407,13 @@ export function changeFamily(mm, family_uuid, insuree, cancelPolicies, clientMut
 export function insureeNumberValidationCheck(mm, variables) {
   return graphqlWithVariables(
     `
-      query ($number: String!) {
-        isValid: insureeNumberValidity(insureeNumber: $number)
+    query ($insuranceNumber: String!) {
+      insureeNumberValidity(insureeNumber: $insuranceNumber) {
+        isValid
+        errorCode
+        errorMessage
       }
+    }
     `,
     variables,
     `INSUREE_NUMBER_VALIDATION_FIELDS`,

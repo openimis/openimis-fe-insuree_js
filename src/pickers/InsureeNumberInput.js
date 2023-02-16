@@ -17,6 +17,7 @@ const InsureeNumberInput = (props) => {
     isInsureeNumberValid,
     isInsureeNumberValidating,
     insureeNumberValidationError,
+    insureeNumberValidationErrorMessage,
   } = props;
   const modulesManager = useModulesManager();
   const numberMaxLength = modulesManager.getConf("fe-insuree", "insureeForm.chfIdMaxLength", 12);
@@ -28,8 +29,8 @@ const InsureeNumberInput = (props) => {
 
   return (
     <ValidatedTextInput
-      itemQueryIdentifier="number"
-      codeTakenLabel={"InsureeNumberInput.error"}
+      itemQueryIdentifier="insuranceNumber"
+      codeTakenLabel={insureeNumberValidationErrorMessage}
       shouldValidate={shouldValidate}
       isValid={isInsureeNumberValid}
       isValidating={isInsureeNumberValidating}
@@ -54,6 +55,7 @@ const mapStateToProps = (state) => ({
   isInsureeNumberValid: state.insuree.validationFields?.insureeNumber?.isValid,
   isInsureeNumberValidating: state.insuree.validationFields?.insureeNumber?.isValidating,
   insureeNumberValidationError: state.insuree.validationFields?.insureeNumber?.validationError,
+  insureeNumberValidationErrorMessage: state.insuree.validationFields?.insureeNumber?.validationErrorMessage,
   savedInsureeNumber: state.insuree?.insuree?.chfId,
 });
 
