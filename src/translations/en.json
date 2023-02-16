@@ -222,7 +222,6 @@
   "insuree.selectHeadInsuree.tooltip": "Select existing insuree as head",
   "insuree.addInsuree.alert.title": "Add insuree to family warning(s):",
   "insuree.addInsuree.alert.message": "However, insuree can still be added to the family.",
-  "insuree.InsureeNumberInput.error": "Insurance number already in use",
   "insuree.EnrolledFamiliesReport.dateFrom": "From Date",
   "insuree.EnrolledFamiliesReport.dateTo": "To Date",
   "insuree.InsureeFamilyOverviewReport.dateFrom": "From Date",
