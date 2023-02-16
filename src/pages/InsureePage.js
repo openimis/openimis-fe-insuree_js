@@ -40,7 +40,6 @@ class InsureePage extends Component {
   render() {
     const { classes, modulesManager, history, rights, insuree_uuid, family_uuid } = this.props;
     if (!rights.includes(RIGHT_INSUREE)) return null;
-    console.log(rights.includes(RIGHT_INSUREE_EDIT), !rights.includes(RIGHT_INSUREE_ADD))
     return (
       <div className={classes.page}>
         <InsureeForm
