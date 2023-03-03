@@ -123,6 +123,7 @@ class FamilyMasterPanel extends FormPanel {
               pubRef="location.DetailedLocation"
               withNull={true}
               readOnly={readOnly}
+              required
               value={!edited ? null : edited.location}
               onChange={(v) => this.updateAttribute("location", v)}
               filterLabels={false}

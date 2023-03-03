@@ -48,7 +48,7 @@ class InsureeSearcher extends Component {
     if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
       this.setState({ reset: this.state.reset + 1 });
-    } else if (!prevProps.confirmed && this.props.confirmed) {
+    } else if (!prevProps.confirmed && this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
     }
   }
@@ -151,7 +151,6 @@ class InsureeSearcher extends Component {
         <PublishedComponent
           pubRef="insuree.InsureeMaritalStatusPicker"
           withLabel={false}
-          withNull={true}
           readOnly={true}
           value={insuree.marital}
         />
@@ -160,7 +159,6 @@ class InsureeSearcher extends Component {
         <PublishedComponent
           pubRef="insuree.InsureeGenderPicker"
           withLabel={false}
-          withNull={true}
           readOnly={true}
           value={!!insuree.gender ? insuree.gender.code : null}
         />
