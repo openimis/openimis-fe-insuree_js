@@ -81,8 +81,10 @@ class InsureeMasterPanel extends FormPanel {
                   module="insuree"
                   label="Insuree.chfId"
                   required={false}
-                  readOnly="true"
-                  value="123123123"
+                  readOnly={readOnly}
+                  value={edited?.chfId}
+                  new_insuree={!edited?.id}
+                  onChange={(v) => this.updateAttribute("chfId", v)}
                 />
               </Grid>
               <Grid item xs={4} className={classes.item}>

@@ -57,7 +57,7 @@ const InsureeNumberInput = (props) => {
       disabled={readOnly}
       required={required}
       label={label}
-      readOnly="true"
+      readOnly = {true}
       placeholder={placeholder}
       error={graphqlError || isInvalid ? formatMessage("InsureeNumberInput.error") : null}
       value={value}
