@@ -23,8 +23,9 @@ const InsureeNumberInput = (props) => {
   const numberMaxLength = modulesManager.getConf("fe-insuree", "insureeForm.chfIdMaxLength", 12);
 
   const shouldValidate = (inputValue) => {
-    const { savedInsureeNumber } = props;
-    return inputValue !== savedInsureeNumber;
+    const { savedInsureeNumber, edited_id } = props;
+    if (edited_id) return inputValue !== savedInsureeNumber;
+    else return true;
   };
 
   return (

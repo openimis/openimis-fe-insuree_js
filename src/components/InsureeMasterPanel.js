@@ -34,6 +34,7 @@ class InsureeMasterPanel extends FormPanel {
       titleParams = { label: "" },
       readOnly = true,
       actions,
+      edited_id,
     } = this.props;
     return (
       <Grid container>
@@ -83,6 +84,7 @@ class InsureeMasterPanel extends FormPanel {
                   required={true}
                   readOnly={readOnly}
                   value={edited?.chfId}
+                  edited_id={edited_id}
                   onChange={(v) => this.updateAttribute("chfId", v)}
                 />
               </Grid>
