@@ -63,12 +63,16 @@ class InsureeSearcher extends Component {
     let prms = Object.keys(state.filters)
       .filter((f) => !!state.filters[f]["filter"])
       .map((f) => state.filters[f]["filter"]);
-    prms.push(`first: ${state.pageSize}`);
+    if (!state.beforeCursor && !state.afterCursor) {
+      prms.push(`first: ${state.pageSize}`);
+    }
     if (!!state.afterCursor) {
       prms.push(`after: "${state.afterCursor}"`);
+      prms.push(`first: ${state.pageSize}`);
     }
     if (!!state.beforeCursor) {
       prms.push(`before: "${state.beforeCursor}"`);
+      prms.push(`last: ${state.pageSize}`);
     }
     if (!!state.orderBy) {
       prms.push(`orderBy: ["${state.orderBy}"]`);

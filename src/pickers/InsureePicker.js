@@ -111,12 +111,16 @@ class InsureePicker extends Component {
 
   filtersToQueryParams = () => {
     let prms = [...(this.props.forcedFilter || []), ...this.state.filters];
-    prms = prms.concat(`first: ${this.state.pageSize}`);
+    if (!this.state.beforeCursor && !this.state.afterCursor) {
+      prms.push(`first: ${this.state.pageSize}`);
+    }
     if (!!this.state.afterCursor) {
-      prms = prms.concat(`after: "${this.state.afterCursor}"`);
+      prms.push(`after: "${this.state.afterCursor}"`);
+      prms.push(`first: ${this.state.pageSize}`);
     }
     if (!!this.state.beforeCursor) {
-      prms = prms.concat(`before: "${this.state.beforeCursor}"`);
+      prms.push(`before: "${this.state.beforeCursor}"`);
+      prms.push(`last: ${this.state.pageSize}`);
     }
     return prms;
   };
