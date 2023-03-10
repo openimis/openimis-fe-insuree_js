@@ -19,6 +19,7 @@ import InsureeMasterPanel from "../components/InsureeMasterPanel";
 
 import { fetchInsureeFull, fetchFamily } from "../actions";
 import { insureeLabel } from "../utils/utils";
+import InsureeAttachmentPanel from "./InsureeAttachmentPanel";
 
 const styles = (theme) => ({
   page: theme.page,
@@ -166,7 +167,7 @@ class InsureeForm extends Component {
               readOnly={readOnly || !!insuree.validityTo}
               actions={actions}
               HeadPanel={FamilyDisplayPanel}
-              Panels={[InsureeMasterPanel]}
+              Panels={[InsureeMasterPanel, InsureeAttachmentPanel]}
               contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
               insuree={this.state.insuree}
               onEditedChanged={this.onEditedChanged}

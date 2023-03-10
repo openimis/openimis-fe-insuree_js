@@ -10,6 +10,7 @@ import {
 
 function reducer(
   state = {
+    user: null,
     fetchingInsuree: false,
     fetchedInsuree: false,
     errorInsuree: null,
@@ -438,6 +439,20 @@ function reducer(
       return dispatchMutationResp(state, "setFamilyHead", action);
     case "INSUREE_CHANGE_FAMILY_HEAD_RESP":
       return dispatchMutationResp(state, "changeInsureeFamily", action);
+    case "INSUREE_INSUREES_PRINT_RESP":
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case "INSUREE_INSUREES_PRINT_ERR":
+      return {
+        ...state,
+        error: {
+          code: action.payload.status,
+          message: action.payload.statusText,
+          detail: !!action.payload.response ? action.payload.response.detail : null,
+        },
+      };
     default:
       return state;
   }

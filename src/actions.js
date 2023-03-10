@@ -5,11 +5,13 @@ import {
   formatPageQueryWithCount,
   formatJsonField,
   decodeId,
+  formatServerError,
   formatMutation,
   formatGQLString,
 } from "@openimis/fe-core";
 
 const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone,dob,gender{code}}";
+export const baseApiUrl = "/api";
 
 const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
@@ -130,6 +132,30 @@ export function selectFamilyMember(member) {
   };
 }
 
+export function print(selection) {
+  return async (dispatch) => {
+    try {
+      const response = await dispatch(
+        fetch(
+          `http://localhost:3000/api/report/beneficiary_card_mauritania/pdf/?insureeids=${selection}`,
+          {
+          method: "GET",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }),
+      );
+      if (response.error) {
+        dispatch(coreAlert(formatServerError(response.payload)));
+      }
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+}
+
 export function fetchConfirmationTypes() {
   const payload = formatQuery("confirmationTypes", null, ["code"]);
   return graphql(payload, "INSUREE_CONFIRMATION_TYPES");
@@ -237,10 +263,9 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.phone ? `phone: "${formatGQLString(insuree.phone)}"` : ""}
     ${!!insuree.email ? `email: "${formatGQLString(insuree.email)}"` : ""}
     ${!!insuree.currentAddress ? `currentAddress: "${formatGQLString(insuree.currentAddress)}"` : ""}
-    ${
-      !!insuree.currentVillage && !!insuree.currentVillage.id
-        ? `currentVillageId: ${decodeId(insuree.currentVillage.id)}`
-        : ""
+    ${!!insuree.currentVillage && !!insuree.currentVillage.id
+      ? `currentVillageId: ${decodeId(insuree.currentVillage.id)}`
+      : ""
     }
     ${!!insuree.photo ? `photo:${formatInsureePhoto(insuree.photo)}` : ""}
     cardIssued:${!!insuree.cardIssued}
@@ -249,10 +274,9 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.typeOfId && !!insuree.typeOfId.code ? `typeOfIdId: "${insuree.typeOfId.code}"` : ""}
     ${!!insuree.family && !!insuree.family.id ? `familyId: ${decodeId(insuree.family.id)}` : ""}
     ${!!insuree.relationship && !!insuree.relationship.id ? `relationshipId: ${insuree.relationship.id}` : ""}
-    ${
-      !!insuree.healthFacility && !!insuree.healthFacility.id
-        ? `healthFacilityId: ${decodeId(insuree.healthFacility.id)}`
-        : ""
+    ${!!insuree.healthFacility && !!insuree.healthFacility.id
+      ? `healthFacilityId: ${decodeId(insuree.healthFacility.id)}`
+      : ""
     }
     ${!!insuree.jsonExt ? `jsonExt: ${formatJsonField(insuree.jsonExt)}` : ""}
   `;
@@ -268,10 +292,9 @@ export function formatFamilyGQL(mm, family) {
     poverty: ${!!family.poverty}
     ${!!family.familyType && !!family.familyType.code ? `familyTypeId: "${family.familyType.code}"` : ""}
     ${!!family.address ? `address: "${formatGQLString(family.address)}"` : ""}
-    ${
-      !!family.confirmationType && !!family.confirmationType.code
-        ? `confirmationTypeId: "${family.confirmationType.code}"`
-        : ""
+    ${!!family.confirmationType && !!family.confirmationType.code
+      ? `confirmationTypeId: "${family.confirmationType.code}"`
+      : ""
     }
     ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
