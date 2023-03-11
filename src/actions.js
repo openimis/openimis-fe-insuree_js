@@ -135,20 +135,7 @@ export function selectFamilyMember(member) {
 export function print(selection) {
   return async (dispatch) => {
     try {
-      const response = await dispatch(
-        fetch(
-          `http://localhost:3000/api/report/beneficiary_card_mauritania/pdf/?insureeids=${selection}`,
-          {
-          method: "GET",
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }),
-      );
-      if (response.error) {
-        dispatch(coreAlert(formatServerError(response.payload)));
-      }
+      const response =window.open('../../api/report/beneficiary_card_mauritania/pdf/?insureeids='+selection, "_blank")
       return response;
     } catch (err) {
       console.error(err);
