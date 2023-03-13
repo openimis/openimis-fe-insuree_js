@@ -15,6 +15,7 @@ import {
   journalize,
   Searcher,
   PublishedComponent,
+  decodeId
 } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
 import { RIGHT_INSUREE_DELETE, RIGHT_PRINT } from "../constants";
@@ -234,6 +235,9 @@ class InsureeSearcher extends Component {
   rowDisabled = (selection, i) => !!i.validityTo;
   rowLocked = (selection, i) => !!i.clientMutationId;
 
+  canSelectAll = (selection) =>
+    this.props.insurees.map((i) => decodeId(i.id)).filter((s) => !selection.map((s) => decodeId(s.id)).includes(s)).length;
+
   render() {
     const {
       intl,
@@ -259,6 +263,7 @@ class InsureeSearcher extends Component {
           FilterPane={InsureeFilter}
           filterPaneContributionsKey={filterPaneContributionsKey}
           items={insurees}
+          canSelectAll={this.canSelectAll}
           itemsPageInfo={insureesPageInfo}
           fetchingItems={fetchingInsurees}
           fetchedItems={fetchedInsurees}

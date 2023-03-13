@@ -232,6 +232,7 @@
   "insuree.insureeAttachment.title": "Title",
   "insuree.insureeAttachment.date": "Date",
   "insuree.insureeAttachment.fileName": "File",
-  "insureeSummaries.printSelected": "Print Selected"
+  "insureeSummaries.printSelected": "Print Selected",
+  "insureeSummaries.printAll": "Print All"
 
 }
