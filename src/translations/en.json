@@ -226,5 +226,12 @@
   "insuree.EnrolledFamiliesReport.dateFrom": "From Date",
   "insuree.EnrolledFamiliesReport.dateTo": "To Date",
   "insuree.InsureeFamilyOverviewReport.dateFrom": "From Date",
-  "insuree.InsureeFamilyOverviewReport.dateTo": "To Date"
+  "insuree.InsureeFamilyOverviewReport.dateTo": "To Date",
+  "insuree.insuree.InsureeFilePanel.title": "Attachments",
+  "insuree.insureeAttachment.type": "Type",
+  "insuree.insureeAttachment.title": "Title",
+  "insuree.insureeAttachment.date": "Date",
+  "insuree.insureeAttachment.fileName": "File",
+  "insureeSummaries.printSelected": "Print Selected"
+
 }
