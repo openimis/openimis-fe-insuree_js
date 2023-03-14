@@ -17,7 +17,10 @@ import {
   PublishedComponent,
 } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
-import { RIGHT_INSUREE_DELETE } from "../constants";
+import {
+  RIGHT_INSUREE_DELETE,
+  INSUREE_MARITAL_STATUS
+} from "../constants";
 import { fetchInsureeSummaries, deleteInsuree } from "../actions";
 
 import InsureeFilter from "./InsureeFilter";
@@ -156,7 +159,7 @@ class InsureeSearcher extends Component {
           pubRef="insuree.InsureeMaritalStatusPicker"
           withLabel={false}
           readOnly={true}
-          value={insuree.marital || "N"}
+          value={insuree.marital || INSUREE_MARITAL_STATUS[0]}
         />
       ),
       (insuree) => (
@@ -181,7 +184,7 @@ class InsureeSearcher extends Component {
     formatters.push(
       (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom),
       filters.showHistory &&
-        ((insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)),
+      ((insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)),
       (insuree) => (
         <Grid container wrap="nowrap" spacing="2">
           <Grid item>
