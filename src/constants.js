@@ -12,4 +12,5 @@ export const RIGHT_SEARCH = 101101;
 export const RIGHT_INSUREE_ADD = 101102;
 export const RIGHT_INSUREE_EDIT = 101103;
 export const RIGHT_INSUREE_DELETE = 101104;
+export const RIGHT_PRINT = 111006;
 export const RIGHT_INSUREE_ENQUIRE = 101105;

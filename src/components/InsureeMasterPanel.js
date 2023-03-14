@@ -75,18 +75,20 @@ class InsureeMasterPanel extends FormPanel {
             </Grid>
             <Divider />
             <Grid container className={classes.item}>
-              <Grid item xs={4} className={classes.item}>
-                <PublishedComponent
-                  pubRef="insuree.InsureeNumberInput"
-                  module="insuree"
-                  label="Insuree.chfId"
-                  required={true}
-                  readOnly={readOnly}
-                  value={edited?.chfId}
-                  new_insuree={!edited?.id}
-                  onChange={(v) => this.updateAttribute("chfId", v)}
-                />
-              </Grid>
+              {!!edited && !!edited.chfId && (
+                <Grid item xs={4} className={classes.item}>
+                  <PublishedComponent
+                    pubRef="insuree.InsureeNumberInput"
+                    module="insuree"
+                    label="Insuree.chfId"
+                    required={false}
+                    readOnly={readOnly}
+                    value={edited?.chfId}
+                    new_insuree={!edited?.id}
+                    onChange={(v) => this.updateAttribute("chfId", v)}
+                  />
+                </Grid>
+              )}
               <Grid item xs={4} className={classes.item}>
                 <TextInput
                   module="insuree"

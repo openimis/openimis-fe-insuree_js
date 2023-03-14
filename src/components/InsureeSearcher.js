@@ -15,10 +15,11 @@ import {
   journalize,
   Searcher,
   PublishedComponent,
+  decodeId
 } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
-import { RIGHT_INSUREE_DELETE } from "../constants";
-import { fetchInsureeSummaries, deleteInsuree } from "../actions";
+import { RIGHT_INSUREE_DELETE, RIGHT_PRINT } from "../constants";
+import { fetchInsureeSummaries, deleteInsuree, print } from "../actions";
 
 import InsureeFilter from "./InsureeFilter";
 import { insureeLabel } from "../utils/utils";
@@ -234,6 +235,9 @@ class InsureeSearcher extends Component {
   rowDisabled = (selection, i) => !!i.validityTo;
   rowLocked = (selection, i) => !!i.clientMutationId;
 
+  canSelectAll = (selection) =>
+    this.props.insurees.map((i) => decodeId(i.id)).filter((s) => !selection.map((s) => decodeId(s.id)).includes(s)).length;
+
   render() {
     const {
       intl,
@@ -245,6 +249,7 @@ class InsureeSearcher extends Component {
       filterPaneContributionsKey,
       cacheFiltersKey,
       onDoubleClick,
+      actions
     } = this.props;
 
     let count = insureesPageInfo.totalCount;
@@ -258,6 +263,7 @@ class InsureeSearcher extends Component {
           FilterPane={InsureeFilter}
           filterPaneContributionsKey={filterPaneContributionsKey}
           items={insurees}
+          canSelectAll={this.canSelectAll}
           itemsPageInfo={insureesPageInfo}
           fetchingItems={fetchingInsurees}
           fetchedItems={fetchedInsurees}
@@ -267,10 +273,12 @@ class InsureeSearcher extends Component {
           rowsPerPageOptions={this.rowsPerPageOptions}
           defaultPageSize={this.defaultPageSize}
           fetch={this.fetch}
+          withSelection="multiple"
           rowIdentifier={this.rowIdentifier}
           filtersToQueryParams={this.filtersToQueryParams}
           defaultOrderBy="chfId"
           headers={this.headers}
+          actions={actions}
           itemFormatters={this.itemFormatters}
           sorts={this.sorts}
           rowDisabled={this.rowDisabled}
