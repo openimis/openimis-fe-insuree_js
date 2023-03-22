@@ -173,6 +173,7 @@ class InsureeForm extends Component {
               onEditedChanged={this.onEditedChanged}
               canSave={this.canSave}
               save={!!save ? this._save : null}
+              openDirty={save}
             />
           )}
       </Fragment>

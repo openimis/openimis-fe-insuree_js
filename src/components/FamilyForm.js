@@ -221,6 +221,7 @@ class FamilyForm extends Component {
             canSave={this.canSave}
             save={!!save ? this._save : null}
             onActionToConfirm={this.onActionToConfirm}
+            openDirty={save}
           />
         )}
       </div>
