@@ -39,10 +39,10 @@ import EnrolledFamiliesReport from "./reports/EnrolledFamiliesReport";
 import InsureeFamilyOverviewReport from "./reports/InsureeFamilyOverviewReport";
 
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
-const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/familyOverview";
+const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
 const ROUTE_INSUREE_FAMILY = "insuree/family";
 const ROUTE_INSUREE_INSUREES = "insuree/insurees";
-const ROUTE_INSUREE_INSUREE = "insuree/insuree";
+const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
 
 const DEFAULT_CONFIG = {
   "translations": [{ key: "en", messages: messages_en }],

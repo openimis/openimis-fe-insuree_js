@@ -1,10 +1,18 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { historyPush, withModulesManager, withHistory, withTooltip, formatMessage } from "@openimis/fe-core";
+import {
+  historyPush,
+  withModulesManager,
+  withHistory,
+  withTooltip,
+  formatMessage,
+  clearCurrentPaginationPage,
+} from "@openimis/fe-core";
 import FamilySearcher from "../components/FamilySearcher";
 
 import { RIGHT_FAMILY_ADD } from "../constants";
@@ -24,6 +32,21 @@ class FamiliesPage extends Component {
 
   onAdd = () => {
     historyPush(this.props.modulesManager, this.props.history, "insuree.route.family");
+  };
+
+  componentDidMount = () => {
+    const moduleName = "insuree";
+    const { module } = this.props;
+    if (module !== moduleName) this.props.clearCurrentPaginationPage();
+  };
+
+  componentWillUnmount = () => {
+    const { location, history } = this.props;
+    const {
+      location: { pathname },
+    } = history;
+    const urlPath = location.pathname;
+    if (!pathname.includes(urlPath)) this.props.clearCurrentPaginationPage();
   };
 
   render() {
@@ -52,8 +75,13 @@ class FamiliesPage extends Component {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  module: state.core?.savedPagination?.module,
 });
 
+const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPaginationPage }, dispatch);
+
 export default injectIntl(
-  withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(FamiliesPage))))),
+  withModulesManager(
+    withHistory(connect(mapStateToProps, mapDispatchToProps)(withTheme(withStyles(styles)(FamiliesPage)))),
+  ),
 );
