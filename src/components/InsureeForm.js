@@ -17,7 +17,7 @@ import { RIGHT_INSUREE } from "../constants";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
 
-import { fetchInsureeFull, fetchFamily } from "../actions";
+import { fetchInsureeFull, fetchFamily, clearInsuree } from "../actions";
 import { insureeLabel } from "../utils/utils";
 
 const styles = (theme) => ({
@@ -76,6 +76,10 @@ class InsureeForm extends Component {
       this.setState({ reset: this.state.reset + 1 });
     }
   }
+
+  componentWillUnmount = () => {
+    this.props.clearInsuree();
+  };
 
   _add = () => {
     this.setState(
@@ -198,7 +202,7 @@ const mapStateToProps = (state, props) => ({
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, { fetchInsureeFull, fetchFamily, journalize })(
+    connect(mapStateToProps, { fetchInsureeFull, fetchFamily, clearInsuree, journalize })(
       injectIntl(withTheme(withStyles(styles)(InsureeForm))),
     ),
   ),

@@ -87,6 +87,14 @@ function reducer(
         fetchingInsuree: false,
         errorInsuree: formatServerError(action.payload),
       };
+    case "INSUREE_INSUREE_CLEAR":
+      return {
+        ...state,
+        fetchingInsuree: true,
+        fetchedInsuree: false,
+        insuree: null,
+        errorInsuree: null,
+      };
     case "INSUREE_FAMILY_NEW":
       return {
         ...state,

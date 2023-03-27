@@ -35,6 +35,7 @@ class InsureeMasterPanel extends FormPanel {
       readOnly = true,
       actions,
       edited_id,
+      headSelected,
     } = this.props;
     return (
       <Grid container>
@@ -83,6 +84,7 @@ class InsureeMasterPanel extends FormPanel {
                   label="Insuree.chfId"
                   required={true}
                   readOnly={readOnly}
+                  headSelected={headSelected}
                   value={edited?.chfId}
                   edited_id={edited_id}
                   onChange={(v) => this.updateAttribute("chfId", v)}

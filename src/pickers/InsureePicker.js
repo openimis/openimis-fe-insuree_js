@@ -149,6 +149,7 @@ class InsureePicker extends Component {
   };
 
   onSelect = (v) => {
+    this.props.checkIfHeadSelected(v);
     this.setState({ selected: v }, this.props.onChange(v, this.formatSuggestion(v)));
   };
 

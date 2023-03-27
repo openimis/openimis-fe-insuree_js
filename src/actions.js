@@ -98,6 +98,12 @@ export function fetchInsureesForPicker(mm, filters) {
   return graphql(payload, "INSUREE_INSUREES");
 }
 
+export function clearInsuree() {
+  return (dispatch) => {
+    dispatch({type: "INSUREE_INSUREE_CLEAR"})
+  }
+}
+
 export function fetchFamilySummaries(mm, filters) {
   let projections = [
     "id",
