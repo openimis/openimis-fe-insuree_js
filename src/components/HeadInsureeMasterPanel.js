@@ -9,9 +9,6 @@ import { fetchInsureeFull } from "../actions";
 const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels";
 
 class HeadInsureeMasterPanel extends Component {
-  state = {
-    headSelected: false,
-  };
 
   onEditedChanged = (head) => {
     let edited = { ...this.props.edited };
@@ -20,13 +17,6 @@ class HeadInsureeMasterPanel extends Component {
     if (head && head.uuid) {
       this.props.dispatch(fetchInsureeFull(this.props.modulesManager, head.uuid));
     }
-  };
-
-  checkIfHeadSelected = (insuree) => {
-    Boolean(insuree) &&
-      this.setState({
-        headSelected: true,
-      });
   };
 
   render() {
@@ -38,7 +28,6 @@ class HeadInsureeMasterPanel extends Component {
             <PublishedComponent //div needed for the tooltip style!!
               pubRef="insuree.InsureePicker"
               IconRender={AddExistingIcon}
-              checkIfHeadSelected={this.checkIfHeadSelected}
               forcedFilter={["head: false"]}
               onChange={this.onEditedChanged}
             />
@@ -55,7 +44,6 @@ class HeadInsureeMasterPanel extends Component {
           onEditedChanged={this.onEditedChanged}
           title="insuree.HeadInsureeMasterPanel.title"
           actions={actions}
-          headSelected={this.state.headSelected}
         />
         <Contributions
           {...this.props}

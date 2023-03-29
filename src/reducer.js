@@ -60,6 +60,7 @@ function reducer(
     canAddInsureeWarnings: [],
     errorCanAddInsuree: null,
     submittingMutation: false,
+    headSelected: false,
     mutation: {},
   },
   action,
@@ -487,6 +488,11 @@ function reducer(
             validationError: null,
           },
         },
+      };
+    case "INSUREE_CHECK_IS_HEAD_SELECTED":
+      return {
+        ...state,
+        headSelected: action.payload?.headSelected,
       };
     case "INSUREE_MUTATION_REQ":
       return dispatchMutationReq(state, action);

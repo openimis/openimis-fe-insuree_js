@@ -100,8 +100,8 @@ export function fetchInsureesForPicker(mm, filters) {
 
 export function clearInsuree() {
   return (dispatch) => {
-    dispatch({type: "INSUREE_INSUREE_CLEAR"})
-  }
+    dispatch({ type: "INSUREE_INSUREE_CLEAR" });
+  };
 }
 
 export function fetchFamilySummaries(mm, filters) {
@@ -435,5 +435,13 @@ export function insureeNumberSetValid() {
 export function insureeNumberValidationClear() {
   return (dispatch) => {
     dispatch({ type: `INSUREE_NUMBER_VALIDATION_FIELDS_CLEAR` });
+  };
+}
+
+export function checkIfHeadSelected(insuree) {
+  const headSelected = Boolean(insuree) ? true : false;
+
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_CHECK_IS_HEAD_SELECTED", payload: { headSelected } });
   };
 }

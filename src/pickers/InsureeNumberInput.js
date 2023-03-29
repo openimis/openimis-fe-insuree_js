@@ -60,6 +60,7 @@ const mapStateToProps = (state) => ({
   insureeNumberValidationError: state.insuree.validationFields?.insureeNumber?.validationError,
   insureeNumberValidationErrorMessage: state.insuree.validationFields?.insureeNumber?.validationErrorMessage,
   savedInsureeNumber: state.insuree?.insuree?.chfId,
+  headSelected: state.insuree?.headSelected,
 });
 
 export default withModulesManager(connect(mapStateToProps)(injectIntl(InsureeNumberInput)));
