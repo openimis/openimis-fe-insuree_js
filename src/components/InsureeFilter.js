@@ -48,7 +48,6 @@ class InsureeFilter extends Component {
 
   _filterValue = (k) => {
     const { filters } = this.props;
-    console.log("filters: ", filters);
     return !!filters && !!filters[k] ? filters[k].value : null;
   };
   _onChangeShowHistory = () => {
