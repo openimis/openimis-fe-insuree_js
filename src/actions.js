@@ -162,6 +162,15 @@ export function fetchFamilyMutation(mm, clientMutationId) {
   return graphql(payload, "INSUREE_INSUREE");
 }
 
+export function fetchInsureeMutation(mm, clientMutationId) {
+  let payload = formatPageQuery(
+    "mutationLogs",
+    [`clientMutationId:"${clientMutationId}"`],
+    ["id", "insurees{insuree{uuid}}"],
+  );
+  return graphql(payload, "INSUREE_INSUREE");
+}
+
 export function fetchInsureeOfficers(mm) {
   const payload = formatPageQuery("insureeOfficers", null, mm.getRef("insuree.InsureeOfficerPicker.projection"));
   return graphql(payload, "INSUREE_INSUREE_OFFICERS");
