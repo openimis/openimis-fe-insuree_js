@@ -93,7 +93,6 @@ class FamilyForm extends Component {
 
   reload = () => {
     const { family } = this.state;
-    console.log(this.props);
     const { clientMutationId, familyUuid } = this.props.mutation;
     if (clientMutationId && !familyUuid) {
       // creation, we need to fetch the new family uuid from mutations logs and redirect to family overview
