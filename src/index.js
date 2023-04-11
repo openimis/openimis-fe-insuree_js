@@ -37,6 +37,7 @@ import { FAMILY_PICKER_PROJECTION, INSUREE_PICKER_PROJECTION } from "./actions";
 import { decodeId } from "@openimis/fe-core";
 import EnrolledFamiliesReport from "./reports/EnrolledFamiliesReport";
 import InsureeFamilyOverviewReport from "./reports/InsureeFamilyOverviewReport";
+import InsureeMissingPhotoReport from "./reports/InsureeMissingPhotoReport";
 
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
 const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
@@ -48,6 +49,21 @@ const DEFAULT_CONFIG = {
   "translations": [{ key: "en", messages: messages_en }],
   "reducers": [{ key: "insuree", reducer }],
   "reports": [
+    {
+      key: "insuree_missing_photo",
+      component: InsureeMissingPhotoReport,
+      isValid: (values) => true,
+      getParams: (values) => {
+        const params = {}
+        if (values.officer) {
+          params.officerId = decodeId(values.officer.id);
+        }
+        if (values.location) {
+          params.locationId = decodeId(values.location.id);
+        }
+        return params;
+      },
+    },
     {
       key: "insuree_family_overview",
       component: InsureeFamilyOverviewReport,
