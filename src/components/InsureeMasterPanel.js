@@ -118,6 +118,7 @@ class InsureeMasterPanel extends FormPanel {
                       label="Insuree.dob"
                       readOnly={readOnly}
                       required={true}
+                      maxDate={new Date()}
                       onChange={(v) => this.updateAttribute("dob", v)}
                     />
                   </Grid>
