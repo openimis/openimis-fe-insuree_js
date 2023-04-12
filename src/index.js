@@ -38,6 +38,7 @@ import { decodeId } from "@openimis/fe-core";
 import EnrolledFamiliesReport from "./reports/EnrolledFamiliesReport";
 import InsureeFamilyOverviewReport from "./reports/InsureeFamilyOverviewReport";
 import InsureeMissingPhotoReport from "./reports/InsureeMissingPhotoReport";
+import InsureePendingEnrollmentReport from "./reports/InsureePendingEnrollmentReport";
 
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
 const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
@@ -63,6 +64,17 @@ const DEFAULT_CONFIG = {
         }
         return params;
       },
+    },
+    {
+      key: "insurees_pending_enrollment",
+      component: InsureePendingEnrollmentReport,
+      isValid: (values) => values.officer && values.location && values.dateFrom && values.dateTo,
+      getParams: (values) => ({
+        dateFrom: values.dateFrom,
+        dateTo: values.dateTo,
+        officerId: decodeId(values.officer.id),
+        locationId: decodeId(values.location.id)
+      }),
     },
     {
       key: "insuree_family_overview",
