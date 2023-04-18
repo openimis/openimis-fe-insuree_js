@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
+import _ from "lodash";
 
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
@@ -136,13 +137,23 @@ class InsureeForm extends Component {
     });
   };
 
+  doesInsureeChange = () => {
+    const { insuree } = this.props;
+    if (_.isEqual(insuree, this.state.insuree)) {
+      return false;
+    }
+    return true;
+  };
+
   canSave = () => {
+    const doesInsureeChange = this.doesInsureeChange();
+    if (!doesInsureeChange) return false;
     if (!this.props.isInsureeNumberValid) return false;
     if (!this.state.insuree.chfId) return false;
     if (!this.state.insuree.lastName) return false;
     if (!this.state.insuree.otherNames) return false;
     if (!this.state.insuree.dob) return false;
-    if (!this.state.insuree.gender) return false;
+    if (!this.state.insuree.gender || !this.state.insuree.gender?.code) return false;
     if (this.state.lockNew) return false;
     if (!!this.state.insuree.photo && (!this.state.insuree.photo.date || !this.state.insuree.photo.officerId))
       return false;
