@@ -1,15 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import _debounce from "lodash/debounce";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
-import { Checkbox, FormControlLabel, Grid, Slider } from "@material-ui/core";
+import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
 import {
   withModulesManager,
   formatMessage,
   Contributions,
-  FormattedMessage,
   PublishedComponent,
   ControlledField,
   TextInput,
