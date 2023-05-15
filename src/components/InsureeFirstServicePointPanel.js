@@ -1,6 +1,8 @@
 import React from "react";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import { Paper, Grid, Typography, Divider } from "@material-ui/core";
+import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import { FormattedMessage, PublishedComponent, FormPanel } from "@openimis/fe-core";
 
 const styles = (theme) => ({
@@ -12,7 +14,6 @@ const styles = (theme) => ({
 class InsureeFirstServicePointPanel extends FormPanel {
   render() {
     const { classes, updateAttribute, readOnly, edited } = this.props;
-    const allRegions = true;
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -30,7 +31,6 @@ class InsureeFirstServicePointPanel extends FormPanel {
                   value={edited?.healthFacility ?? null}
                   readOnly={readOnly}
                   onChange={(hf) => updateAttribute("healthFacility", hf)}
-                  allRegions={allRegions}
                   ignoreLocation={true}
                 />
               )}
