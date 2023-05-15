@@ -39,9 +39,9 @@ class InsureeMasterPanel extends FormPanel {
     age = Math.abs(year - 1970);
 
     if (age < 13) {
-      alert(formatMessage(this.props.intl, "insuree", "Ce beneficiaire est mineur"));
+      alert(formatMessage(this.props.intl, "insuree", "minorBeneficiary"));
     } else if (age > 50) {
-      alert(formatMessage(this.props.intl, "insuree", "Ce bénéficiaire est ménopausé"));
+      alert(formatMessage(this.props.intl, "insuree", "menopausalBeneficiary"));
     }
 
     this.setState({ age: age });

@@ -230,5 +230,7 @@
   "insuree.EnrolledFamiliesReport.dateFrom": "From Date",
   "insuree.EnrolledFamiliesReport.dateTo": "To Date",
   "insuree.InsureeFamilyOverviewReport.dateFrom": "From Date",
-  "insuree.InsureeFamilyOverviewReport.dateTo": "To Date"
+  "insuree.InsureeFamilyOverviewReport.dateTo": "To Date",
+  "insuree.minorBeneficiary": "This beneficiary is a minor",
+  "insuree.menopausalBeneficiary": "This beneficiary is menopausal"
 }
