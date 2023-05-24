@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
-import _debounce from "lodash/debounce";
-import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
+import _debounce from "lodash/debounce";
+
 import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
+import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import {
   withModulesManager,
   formatMessage,
@@ -26,7 +28,6 @@ const styles = (theme) => ({
 
 class FamilyFilter extends Component {
   state = {
-    showHistory: false,
     additionalFilters: {},
   };
 
@@ -35,19 +36,9 @@ class FamilyFilter extends Component {
     this.filterFamiliesOnMembers = this.props.modulesManager.getConf("fe-insuree", "filterFamiliesOnMembers", true);
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (
-      prevProps.filters["showHistory"] !== this.props.filters["showHistory"] &&
-      !!this.props.filters["showHistory"] &&
-      this.state.showHistory !== this.props.filters["showHistory"]["value"]
-    ) {
-      this.setState((sate, props) => ({ showHistory: props.filters["showHistory"]["value"] }));
-    }
-  }
-
   debouncedOnChangeFilters = _debounce(
     this.props.onChangeFilters,
-    this.props.modulesManager.getConf("fe-insuree", "debounceTime", 800),
+    this.props.modulesManager.getConf("fe-insuree", "debounceTime", 200),
   );
 
   _filterValue = (k) => {
@@ -55,18 +46,20 @@ class FamilyFilter extends Component {
     return !!filters && !!filters[k] ? filters[k].value : null;
   };
 
-  _onChangeShowHistory = () => {
+  _filterTextFieldValue = (k) => {
+    const { filters } = this.props;
+    return !!filters && !!filters[k] ? filters[k].value : "";
+  };
+
+  _onChangeCheckbox = (key, value) => {
     let filters = [
       {
-        id: "showHistory",
-        value: !this.state.showHistory,
-        filter: `showHistory: ${!this.state.showHistory}`,
+        id: key,
+        value: value,
+        filter: `${key}: ${value}`,
       },
     ];
     this.props.onChangeFilters(filters);
-    this.setState((state) => ({
-      showHistory: !state.showHistory,
-    }));
   };
 
   personFilter = (anchor) => {
@@ -82,7 +75,7 @@ class FamilyFilter extends Component {
                 module="insuree"
                 label={`Family.${anchor}.chfId`}
                 name={`${anchor}_chfId`}
-                value={this._filterValue(`${anchor}.chfId`)}
+                value={this._filterTextFieldValue(`${anchor}.chfId`)}
                 onChange={(v) =>
                   this.debouncedOnChangeFilters([
                     {
@@ -105,7 +98,7 @@ class FamilyFilter extends Component {
                 module="insuree"
                 label={`Family.${anchor}.lastName`}
                 name={`${anchor}_lastName`}
-                value={this._filterValue(`${anchor}.lastName`)}
+                value={this._filterTextFieldValue(`${anchor}.lastName`)}
                 onChange={(v) =>
                   this.debouncedOnChangeFilters([
                     {
@@ -128,7 +121,7 @@ class FamilyFilter extends Component {
                 module="insuree"
                 label={`Family.${anchor}.otherNames`}
                 name={`${anchor}_givenName`}
-                value={this._filterValue(`${anchor}.givenName`)}
+                value={this._filterTextFieldValue(`${anchor}.givenName`)}
                 onChange={(v) =>
                   this.debouncedOnChangeFilters([
                     {
@@ -174,7 +167,7 @@ class FamilyFilter extends Component {
                 module="insuree"
                 label={`Family.${anchor}.phone`}
                 name={`${anchor}_phone`}
-                value={this._filterValue(`${anchor}.phone`)}
+                value={this._filterTextFieldValue(`${anchor}.phone`)}
                 onChange={(v) =>
                   this.debouncedOnChangeFilters([
                     {
@@ -197,7 +190,7 @@ class FamilyFilter extends Component {
                 module="insuree"
                 label={`Family.${anchor}.email`}
                 name={`${anchor}_email`}
-                value={this._filterValue(`${anchor}.email`)}
+                value={this._filterTextFieldValue(`${anchor}.email`)}
                 onChange={(v) =>
                   this.debouncedOnChangeFilters([
                     {
@@ -343,7 +336,7 @@ class FamilyFilter extends Component {
                 module="insuree"
                 label="Family.confirmationNo"
                 name="confirmationNo"
-                value={this._filterValue("confirmationNo")}
+                value={this._filterTextFieldValue("confirmationNo")}
                 onChange={(v) =>
                   this.debouncedOnChangeFilters([
                     {
@@ -395,8 +388,8 @@ class FamilyFilter extends Component {
                 control={
                   <Checkbox
                     color="primary"
-                    checked={this.state.showHistory}
-                    onChange={(e) => this._onChangeShowHistory()}
+                    checked={!!this._filterValue("showHistory")}
+                    onChange={(event) => this._onChangeCheckbox("showHistory", event.target.checked)}
                   />
                 }
                 label={formatMessage(intl, "insuree", "FamilyFilter.showHistory")}
