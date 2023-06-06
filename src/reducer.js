@@ -90,6 +90,28 @@ function reducer(
         fetchingInsuree: false,
         errorInsuree: formatServerError(action.payload),
       };
+    case "INSUREE_INSUREE_NAME_REQ":
+      return {
+        ...state,
+        fetchingInsureeName: true,
+        fetchedInsureeName: false,
+        insureeName: null,
+        errorInsureeName: null,
+      };
+    case "INSUREE_INSUREE_NAME_RESP":
+      return {
+        ...state,
+        fetchingInsureeName: false,
+        fetchedInsureeName: true,
+        insureeName: action.payload.data?.insureeName,
+        errorInsureeName: formatGraphQLError(action.payload),
+      };
+    case "INSUREE_INSUREE_NAME_ERR":
+      return {
+        ...state,
+        fetchingInsureeName: false,
+        errorInsureeName: formatServerError(action.payload),
+      };
     case "INSUREE_INSUREE_CLEAR":
       return {
         ...state,

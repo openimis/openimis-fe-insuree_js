@@ -39,6 +39,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 
 - `insuree.InsureePicker`, ability to search and select an insuree (via searcher dialog)
 - `insuree.InsureeChfIdPicker`, ability to select an insuree, from his (exact) CHFID
+- `insuree.InsureeNameByChfIdPicker`, ability to select an insuree name, from his (exact) CHFID
 - `insuree.InsureeNumberInput`, input that validates the insuree's number with the server
 - `insuree.InsureeOfficerPicker`, picker (select drop down) for insuree (enrolment) officers
 - `insuree.InsureeGenderPicker`, picker (drop down) for available insuree genders (male, female, other)
@@ -64,6 +65,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 - `INSUREE_ENQUIRY_{REQ|RESP|ERR}`: fetching insuree main information (Known usage: enquiry dialog)
 - `INSUREE_FAMILY_{REQ|RESP|ERR}`: fetching insuree family information (Known usage: `insuree.FamilySummary` component)
 - `INSUREE_INSUREES_{REQ|RESP|ERR}`: fetching insurees with filter (CHFID, Name and/or OtherName). Known usage: `insuree.InsureePicker`
+- `INSUREE_INSUREE_NAME_{REQ|RESP|ERR}`: fetching insuree name and last name (Known usage: `insuree.InsureeNameByChfIdPicker`)
 
 ## Other Modules Listened Redux Actions
 

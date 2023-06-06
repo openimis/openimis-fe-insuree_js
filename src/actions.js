@@ -88,6 +88,20 @@ export function fetchInsuree(mm, chfid) {
   return graphql(payload, "INSUREE_INSUREE");
 }
 
+export function fetchInsureeNameByChfId(mm, insureeChfId) {
+  const variables = {
+    insureeChfId,
+  };
+
+  return graphqlWithVariables(
+    `query ($insureeChfId: String!) {
+      insureeName: insureeNameByChfid(chfId: $insureeChfId)
+    }`,
+    variables,
+    "INSUREE_INSUREE_NAME",
+  );
+}
+
 export function fetchInsureeFull(mm, uuid) {
   let payload = formatPageQuery("insurees", [`uuid:"${uuid}"`], INSUREE_FULL_PROJECTION(mm), "clientMutationId");
   return graphql(payload, "INSUREE_INSUREE");
