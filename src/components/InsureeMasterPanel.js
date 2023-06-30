@@ -128,7 +128,7 @@ class InsureeMasterPanel extends FormPanel {
                       value={!!edited && !!edited.gender ? edited.gender.code : ""}
                       module="insuree"
                       readOnly={readOnly}
-                      withNull={true}
+                      withNull={false}
                       required={true}
                       onChange={(v) => this.updateAttribute("gender", { code: v })}
                     />
