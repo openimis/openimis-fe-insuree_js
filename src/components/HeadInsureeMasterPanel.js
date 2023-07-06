@@ -1,16 +1,22 @@
 import React, { Component, Fragment } from "react";
 import InsureeMasterPanel from "./InsureeMasterPanel";
 import { injectIntl } from "react-intl";
-import { Contributions, PublishedComponent, formatMessage } from "@openimis/fe-core";
+import { connect } from "react-redux";
+import { Contributions, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
 import { PersonAdd as AddExistingIcon } from "@material-ui/icons";
+import { fetchInsureeFull } from "../actions";
 
 const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels";
 
 class HeadInsureeMasterPanel extends Component {
+
   onEditedChanged = (head) => {
     let edited = { ...this.props.edited };
     edited["headInsuree"] = head;
     this.props.onEditedChanged(edited);
+    if (head && head.uuid) {
+      this.props.dispatch(fetchInsureeFull(this.props.modulesManager, head.uuid));
+    }
   };
 
   render() {
@@ -49,4 +55,4 @@ class HeadInsureeMasterPanel extends Component {
   }
 }
 
-export default injectIntl(HeadInsureeMasterPanel);
+export default withModulesManager(connect()(injectIntl(HeadInsureeMasterPanel)));

@@ -37,17 +37,45 @@ import { FAMILY_PICKER_PROJECTION, INSUREE_PICKER_PROJECTION } from "./actions";
 import { decodeId } from "@openimis/fe-core";
 import EnrolledFamiliesReport from "./reports/EnrolledFamiliesReport";
 import InsureeFamilyOverviewReport from "./reports/InsureeFamilyOverviewReport";
+import InsureeMissingPhotoReport from "./reports/InsureeMissingPhotoReport";
+import InsureePendingEnrollmentReport from "./reports/InsureePendingEnrollmentReport";
 
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
-const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/familyOverview";
+const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
 const ROUTE_INSUREE_FAMILY = "insuree/family";
 const ROUTE_INSUREE_INSUREES = "insuree/insurees";
-const ROUTE_INSUREE_INSUREE = "insuree/insuree";
+const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
 
 const DEFAULT_CONFIG = {
   "translations": [{ key: "en", messages: messages_en }],
   "reducers": [{ key: "insuree", reducer }],
   "reports": [
+    {
+      key: "insuree_missing_photo",
+      component: InsureeMissingPhotoReport,
+      isValid: (values) => true,
+      getParams: (values) => {
+        const params = {}
+        if (values.officer) {
+          params.officerId = decodeId(values.officer.id);
+        }
+        if (values.location) {
+          params.locationId = decodeId(values.location.id);
+        }
+        return params;
+      },
+    },
+    {
+      key: "insurees_pending_enrollment",
+      component: InsureePendingEnrollmentReport,
+      isValid: (values) => values.officer && values.location && values.dateFrom && values.dateTo,
+      getParams: (values) => ({
+        dateFrom: values.dateFrom,
+        dateTo: values.dateTo,
+        officerId: decodeId(values.officer.id),
+        locationId: decodeId(values.location.id)
+      }),
+    },
     {
       key: "insuree_family_overview",
       component: InsureeFamilyOverviewReport,

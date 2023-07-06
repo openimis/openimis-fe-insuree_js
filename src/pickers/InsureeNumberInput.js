@@ -1,83 +1,66 @@
-import React, { useState, useEffect } from "react";
-import clsx from "clsx";
-import { TextInput, useDebounceCb, useModulesManager, useTranslations, useGraphqlQuery } from "@openimis/fe-core";
-import { InputAdornment, CircularProgress, Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
-import ErrorOutlineOutlinedIcon from "@material-ui/icons/ErrorOutlineOutlined";
+import React from "react";
+import { connect } from "react-redux";
+import { injectIntl } from "react-intl";
 
-const useStyles = makeStyles((theme) => ({
-  validIcon: {
-    color: "green",
-  },
-  invalidIcon: {
-    color: theme.palette.error.main,
-  },
-}));
-
-const operation = `
-  query ($number: String!, $newInsuree: Boolean) {
-    isValid: insureeNumberValidity(insureeNumber: $number, newInsuree: $newInsuree)
-  }
-`;
+import { withModulesManager, useModulesManager, ValidatedTextInput } from "@openimis/fe-core";
+import { insureeNumberValidationCheck, insureeNumberValidationClear, insureeNumberSetValid } from "../actions";
 
 const InsureeNumberInput = (props) => {
-  const { value, new_insuree, onChange, className, label = "Insuree.chfId", placeholder, readOnly, required } = props;
-  const [internalValue, setInternalValue] = useState(value);
-  const modulesManager = useModulesManager();
-  const { formatMessage } = useTranslations("insuree", modulesManager);
-  const classes = useStyles();
   const {
-    isLoading,
-    data,
-    error: graphqlError,
-  } = useGraphqlQuery(operation, { number: internalValue, newInsuree: new_insuree }, { skip: !internalValue });
+    value,
+    onChange,
+    className,
+    label,
+    placeholder,
+    readOnly,
+    required,
+    isInsureeNumberValid,
+    isInsureeNumberValidating,
+    insureeNumberValidationError,
+    insureeNumberValidationErrorMessage,
+  } = props;
+  const modulesManager = useModulesManager();
+  const numberMaxLength = modulesManager.getConf("fe-insuree", "insureeForm.chfIdMaxLength", 12);
 
-  const handleValueChange = useDebounceCb((val) => {
-    if (val) {
-      setInternalValue(val);
-    } else {
-      onChange(val);
-    }
-  }, modulesManager.getConf("fe-insuree", "debounceTime", 400));
+  const shouldValidate = (inputValue) => {
+    const { savedInsureeNumber, headSelected } = props;
 
-  const isValid = !isLoading && data?.isValid;
-  const isInvalid = !isLoading && data && !data.isValid;
+    if (headSelected && savedInsureeNumber && inputValue === savedInsureeNumber) return false;
 
-  useEffect(() => {
-    if (isValid && internalValue !== value) {
-      onChange(internalValue);
-    }
-  }, [isValid]);
+    if (!headSelected || (headSelected && savedInsureeNumber)) return inputValue !== savedInsureeNumber;
+  };
 
   return (
-    <TextInput
+    <ValidatedTextInput
+      itemQueryIdentifier="insuranceNumber"
+      codeTakenLabel={insureeNumberValidationErrorMessage}
+      shouldValidate={shouldValidate}
+      isValid={isInsureeNumberValid}
+      isValidating={isInsureeNumberValidating}
+      validationError={insureeNumberValidationError}
+      action={insureeNumberValidationCheck}
+      clearAction={insureeNumberValidationClear}
+      setValidAction={insureeNumberSetValid}
       module="insuree"
       className={className}
-      disabled={readOnly}
+      readOnly={readOnly}
       required={required}
       label={label}
       placeholder={placeholder}
-      error={graphqlError || isInvalid ? formatMessage("InsureeNumberInput.error") : null}
       value={value}
-      new_insuree={new_insuree}
-      inputProps={{ maxLength: modulesManager.getConf("fe-insuree", "insureeForm.chfIdMaxLength", 12) }}
-      endAdornment={
-        <InputAdornment position="end" className={clsx(isValid && classes.validIcon, isInvalid && classes.invalidIcon)}>
-          <>
-            {isLoading && (
-              <Box mr={1}>
-                <CircularProgress size={20} />
-              </Box>
-            )}
-            {isValid && <CheckOutlinedIcon size={20} />}
-            {isInvalid && <ErrorOutlineOutlinedIcon size={20} />}
-          </>
-        </InputAdornment>
-      }
-      onChange={handleValueChange}
+      inputProps={{ maxLength: numberMaxLength }}
+      onChange={onChange}
     />
   );
 };
 
-export default InsureeNumberInput;
+const mapStateToProps = (state) => ({
+  isInsureeNumberValid: state.insuree.validationFields?.insureeNumber?.isValid,
+  isInsureeNumberValidating: state.insuree.validationFields?.insureeNumber?.isValidating,
+  insureeNumberValidationError: state.insuree.validationFields?.insureeNumber?.validationError,
+  insureeNumberValidationErrorMessage: state.insuree.validationFields?.insureeNumber?.validationErrorMessage,
+  savedInsureeNumber: state.insuree?.insuree?.chfId,
+  headSelected: state.insuree?.headSelected,
+});
+
+export default withModulesManager(connect(mapStateToProps)(injectIntl(InsureeNumberInput)));

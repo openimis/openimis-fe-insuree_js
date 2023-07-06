@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React from "react";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { Paper, Grid, Typography, Divider, Checkbox, FormControlLabel } from "@material-ui/core";
 import {
@@ -34,6 +34,7 @@ class InsureeMasterPanel extends FormPanel {
       titleParams = { label: "" },
       readOnly = true,
       actions,
+      edited_id,
     } = this.props;
     return (
       <Grid container>
@@ -83,7 +84,7 @@ class InsureeMasterPanel extends FormPanel {
                   required={true}
                   readOnly={readOnly}
                   value={edited?.chfId}
-                  new_insuree={!edited?.id}
+                  edited_id={edited_id}
                   onChange={(v) => this.updateAttribute("chfId", v)}
                 />
               </Grid>
@@ -117,6 +118,7 @@ class InsureeMasterPanel extends FormPanel {
                       label="Insuree.dob"
                       readOnly={readOnly}
                       required={true}
+                      maxDate={new Date()}
                       onChange={(v) => this.updateAttribute("dob", v)}
                     />
                   </Grid>

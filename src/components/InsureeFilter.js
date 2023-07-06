@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import _debounce from "lodash/debounce";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
-import { Checkbox, FormControlLabel, Grid, Slider } from "@material-ui/core";
+import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
 import {
   withModulesManager,
   formatMessage,
@@ -50,7 +50,6 @@ class InsureeFilter extends Component {
     const { filters } = this.props;
     return !!filters && !!filters[k] ? filters[k].value : null;
   };
-
   _onChangeShowHistory = () => {
     let filters = [
       {
@@ -275,6 +274,7 @@ class InsureeFilter extends Component {
                     value={this._filterValue("dobTo")}
                     module="insuree"
                     label="Insuree.dobTo"
+                    minDate={filters?.dobFrom}
                     onChange={(d) =>
                       onChangeFilters([
                         {
