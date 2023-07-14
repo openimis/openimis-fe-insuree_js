@@ -7,6 +7,7 @@ import {
   decodeId,
   formatMutation,
   formatGQLString,
+  graphqlWithVariables,
 } from "@openimis/fe-core";
 
 const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone,dob,gender{code}}";
@@ -66,7 +67,7 @@ export function fetchInsureeGenders() {
 export function fetchInsuree(mm, chfid) {
   let payload = formatPageQuery(
     "insurees",
-    [`chfId:"${chfid}"`],
+    [`chfId:"${chfid}", ignoreLocation:true`],
     [
       "id",
       "uuid",
@@ -95,6 +96,12 @@ export function fetchInsureeFull(mm, uuid) {
 export function fetchInsureesForPicker(mm, filters) {
   let payload = formatPageQueryWithCount("insurees", filters, INSUREE_FULL_PROJECTION(mm));
   return graphql(payload, "INSUREE_INSUREES");
+}
+
+export function clearInsuree() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_INSUREE_CLEAR" });
+  };
 }
 
 export function fetchFamilySummaries(mm, filters) {
@@ -151,6 +158,15 @@ export function fetchFamilyMutation(mm, clientMutationId) {
     "mutationLogs",
     [`clientMutationId:"${clientMutationId}"`],
     ["id", "families{family{uuid}}"],
+  );
+  return graphql(payload, "INSUREE_INSUREE");
+}
+
+export function fetchInsureeMutation(mm, clientMutationId) {
+  let payload = formatPageQuery(
+    "mutationLogs",
+    [`clientMutationId:"${clientMutationId}"`],
+    ["id", "insurees{insuree{uuid}}"],
   );
   return graphql(payload, "INSUREE_INSUREE");
 }
@@ -261,7 +277,7 @@ export function formatInsureeGQL(mm, insuree) {
 export function formatFamilyGQL(mm, family) {
   let headInsuree = family.headInsuree;
   headInsuree["head"] = true;
-  return `  
+  return `
     ${family.uuid !== undefined && family.uuid !== null ? `uuid: "${family.uuid}"` : ""}
     headInsuree: {${formatInsureeGQL(mm, headInsuree)}}
     ${!!family.location ? `locationId: ${decodeId(family.location.id)}` : ""}
@@ -401,4 +417,40 @@ export function changeFamily(mm, family_uuid, insuree, cancelPolicies, clientMut
       insureeUuid: insuree.uuid,
     },
   );
+}
+
+export function insureeNumberValidationCheck(mm, variables) {
+  return graphqlWithVariables(
+    `
+    query ($insuranceNumber: String!) {
+      insureeNumberValidity(insureeNumber: $insuranceNumber) {
+        isValid
+        errorCode
+        errorMessage
+      }
+    }
+    `,
+    variables,
+    `INSUREE_NUMBER_VALIDATION_FIELDS`,
+  );
+}
+
+export function insureeNumberSetValid() {
+  return (dispatch) => {
+    dispatch({ type: `INSUREE_NUMBER_VALIDATION_FIELDS_SET_VALID` });
+  };
+}
+
+export function insureeNumberValidationClear() {
+  return (dispatch) => {
+    dispatch({ type: `INSUREE_NUMBER_VALIDATION_FIELDS_CLEAR` });
+  };
+}
+
+export function checkIfHeadSelected(insuree) {
+  const headSelected = Boolean(insuree) ? true : false;
+
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_CHECK_IS_HEAD_SELECTED", payload: { headSelected } });
+  };
 }

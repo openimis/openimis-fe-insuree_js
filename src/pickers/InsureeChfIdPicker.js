@@ -40,7 +40,7 @@ class InsureeChfIdPicker extends Component {
       this.props.onChange(this.props.insuree, this.formatInsuree(this.props.insuree));
     } else if (!_.isEqual(prevProps.value, this.props.value)) {
       this.setState((state, props) => ({
-        search: !!props.value ? props.value.chfId : null,
+        search: !!props.value ? props.value.chfId : this.state.search,
         selected: props.value,
       }));
     }

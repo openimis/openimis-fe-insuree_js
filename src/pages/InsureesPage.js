@@ -1,10 +1,18 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { historyPush, withModulesManager, withHistory, withTooltip, formatMessage } from "@openimis/fe-core";
+import {
+  historyPush,
+  withModulesManager,
+  withHistory,
+  withTooltip,
+  formatMessage,
+  clearCurrentPaginationPage,
+} from "@openimis/fe-core";
 import InsureeSearcher from "../components/InsureeSearcher";
 
 import { RIGHT_INSUREE_ADD } from "../constants";
@@ -21,6 +29,21 @@ class InsureesPage extends Component {
 
   onAdd = () => {
     historyPush(this.props.modulesManager, this.props.history, "insuree.route.insuree");
+  };
+
+  componentDidMount = () => {
+    const moduleName = "insuree";
+    const { module } = this.props;
+    if (module !== moduleName) this.props.clearCurrentPaginationPage();
+  };
+
+  componentWillUnmount = () => {
+    const { location, history } = this.props;
+    const {
+      location: { pathname },
+    } = history;
+    const urlPath = location.pathname;
+    if (!pathname.includes(urlPath)) this.props.clearCurrentPaginationPage();
   };
 
   render() {
@@ -44,8 +67,13 @@ class InsureesPage extends Component {
 
 const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  module: state.core?.savedPagination?.module,
 });
 
+const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPaginationPage }, dispatch);
+
 export default injectIntl(
-  withModulesManager(withHistory(connect(mapStateToProps)(withTheme(withStyles(styles)(InsureesPage))))),
+  withModulesManager(
+    withHistory(connect(mapStateToProps, mapDispatchToProps)(withTheme(withStyles(styles)(InsureesPage)))),
+  ),
 );

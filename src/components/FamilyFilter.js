@@ -1,15 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import _debounce from "lodash/debounce";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
-import { Checkbox, FormControlLabel, Grid, Slider } from "@material-ui/core";
+import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
 import {
   withModulesManager,
   formatMessage,
   Contributions,
-  FormattedMessage,
   PublishedComponent,
   ControlledField,
   TextInput,
@@ -274,8 +271,6 @@ class FamilyFilter extends Component {
       if (filter.value === null && module in filters.additionalFilters) {
         delete filters.additionalFilters[module][filter.id];
       } else {
-        console.log("f1: ", filters);
-
         if (!(module in filters.additionalFilters)) {
           filters.additionalFilters[module] = {};
         }
@@ -285,7 +280,6 @@ class FamilyFilter extends Component {
     let filterContent = !!JSON.stringify(filters.additionalFilters) ? JSON.stringify(filters.additionalFilters) : "{}";
     filterContent = filterContent.replaceAll('"', '\\"');
 
-    console.log("additional filters", filterContent);
     onChangeFilters([
       {
         id: "additionalFilter",
