@@ -5,8 +5,8 @@ import { bindActionCreators } from "redux";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
 import FamilyForm from "../components/FamilyForm";
-import { createFamily, updateFamily } from "../actions";
-import { RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants";
+import { createFamily, updateFamily, clearInsuree } from "../actions";
+import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants";
 import { familyLabel } from "../utils/utils";
 
 const styles = (theme) => ({
@@ -38,9 +38,13 @@ class FamilyPage extends Component {
     }
   };
 
+  componentWillUnmount = () => {
+    this.props.clearInsuree();
+  };
+
   render() {
     const { classes, modulesManager, history, rights, family_uuid, overview } = this.props;
-    if (!rights.includes(RIGHT_FAMILY_EDIT)) return null;
+    if (!rights.includes(RIGHT_FAMILY)) return null;
 
     return (
       <div className={classes.page}>
@@ -50,6 +54,7 @@ class FamilyPage extends Component {
           back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
           add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
           save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
+          readOnly={!rights.includes(RIGHT_FAMILY_EDIT) || !rights.includes(RIGHT_FAMILY_ADD)}
         />
       </div>
     );
@@ -62,7 +67,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ createFamily, updateFamily }, dispatch);
+  return bindActionCreators({ createFamily, updateFamily, clearInsuree }, dispatch);
 };
 
 export default withHistory(

@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useRef } from "react";
 import { injectIntl } from "react-intl";
 import { Dialog, Button, DialogActions, DialogContent } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -23,14 +23,24 @@ const useStyles = makeStyles(() => ({
 }));
 
 const EnquiryDialog = (props) => {
-  const { intl, modulesManager, fetchInsuree, fetching, fetched, insuree, error, onClose, open, chfid } = props;
+  const { intl, modulesManager, fetchInsuree, fetching, fetched, insuree, error, onClose, open, chfid, match } = props;
   const classes = useStyles();
+  const prevMatchUrl = useRef(null);
 
   useEffect(() => {
     if (open && insuree?.id !== chfid) {
       fetchInsuree(modulesManager, chfid);
     }
-  }, [open, chfid]);
+
+    if (!!match?.url && match.url !== prevMatchUrl.current) {
+      onClose();
+    }
+
+    if (!!match?.url) {
+      prevMatchUrl.current = match.url;
+    }
+
+  }, [open, chfid, match?.url]);
 
   return (
     <Dialog maxWidth="xl" fullWidth open={open} onClose={onClose}>

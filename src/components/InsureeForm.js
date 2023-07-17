@@ -1,8 +1,11 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
+import _ from "lodash";
+
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
+
 import {
   formatMessageWithValues,
   withModulesManager,
@@ -10,18 +13,19 @@ import {
   historyPush,
   journalize,
   Form,
+  parseData,
   ProgressOrError,
   Helmet,
 } from "@openimis/fe-core";
+import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation } from "../actions";
 import { RIGHT_INSUREE } from "../constants";
+import { insureeLabel } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
 
-import { fetchInsureeFull, fetchFamily } from "../actions";
-import { insureeLabel } from "../utils/utils";
-
 const styles = (theme) => ({
   page: theme.page,
+  lockedPage: theme.page.locked,
 });
 
 const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";
@@ -73,9 +77,19 @@ class InsureeForm extends Component {
       this.setState({ insuree: this._newInsuree(), newInsuree: true, lockNew: false, insuree_uuid: null });
     } else if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
-      this.setState({ reset: this.state.reset + 1 });
+      this.setState((state, props) => {
+        return {
+          ...state.insuree,
+          reset: this.state.reset + 1,
+          clientMutationId: props.mutation.clientMutationId,
+        };
+      });
     }
   }
+
+  componentWillUnmount = () => {
+    this.props.clearInsuree();
+  };
 
   _add = () => {
     this.setState(
@@ -93,10 +107,48 @@ class InsureeForm extends Component {
   };
 
   reload = () => {
-    this.props.fetchInsureeFull(this.props.modulesManager, this.state.insuree_uuid);
+    const {
+      mutation: { clientMutationId },
+      insuree_uuid,
+      family_uuid,
+    } = this.props;
+
+    if (clientMutationId && !insuree_uuid) {
+      this.props.fetchInsureeMutation(this.props.modulesManager, clientMutationId).then((res) => {
+        const mutationLogs = parseData(res.payload.data.mutationLogs);
+        if (mutationLogs?.[0]?.insurees?.[0]?.insuree) {
+          const uuid = parseData(res.payload.data.mutationLogs)[0].insurees[0].insuree.uuid;
+          uuid && family_uuid
+            ? historyPush(this.props.modulesManager, this.props.history, "insuree.route.familyOverview", [family_uuid])
+            : historyPush(this.props.modulesManager, this.props.history, "insuree.route.insuree", [uuid]);
+        }
+      });
+    } else {
+      family_uuid
+        ? historyPush(this.props.modulesManager, this.props.history, "insuree.route.familyOverview", [family_uuid])
+        : this.props.fetchInsureeFull(this.props.modulesManager, this.state.insuree_uuid);
+    }
+
+    this.setState((state, props) => {
+      return {
+        ...state.insuree,
+        clientMutationId: false,
+      };
+    });
+  };
+
+  doesInsureeChange = () => {
+    const { insuree } = this.props;
+    if (_.isEqual(insuree, this.state.insuree)) {
+      return false;
+    }
+    return true;
   };
 
   canSave = () => {
+    const doesInsureeChange = this.doesInsureeChange();
+    if (!doesInsureeChange) return false;
+    if (!this.props.isInsureeNumberValid) return false;
     if (!this.state.insuree.chfId) return false;
     if (!this.state.insuree.lastName) return false;
     if (!this.state.insuree.otherNames) return false;
@@ -109,7 +161,7 @@ class InsureeForm extends Component {
 
   _save = (insuree) => {
     this.setState(
-      { lockNew: !insuree.uuid }, // avoid duplicates
+      { lockNew: true }, // avoid duplicates
       (e) => this.props.save(insuree),
     );
   };
@@ -131,20 +183,22 @@ class InsureeForm extends Component {
       fetchedFamily,
       errorFamily,
       readOnly = false,
+      classes,
       add,
       save,
     } = this.props;
-    const { insuree } = this.state;
+    const { insuree, clientMutationId } = this.state;
     if (!rights.includes(RIGHT_INSUREE)) return null;
+    let runningMutation = !!insuree && !!clientMutationId;
     let actions = [
       {
         doIt: this.reload,
         icon: <ReplayIcon />,
-        onlyIfDirty: !readOnly,
+        onlyIfDirty: !readOnly && !runningMutation,
       },
     ];
     return (
-      <Fragment>
+      <div className={runningMutation ? classes.lockedPage : null}>
         <Helmet
           title={formatMessageWithValues(this.props.intl, "insuree", "Insuree.title", {
             label: insureeLabel(this.state.insuree),
@@ -163,7 +217,7 @@ class InsureeForm extends Component {
               reset={this.state.reset}
               back={this.back}
               add={!!add && !this.state.newInsuree ? this._add : null}
-              readOnly={readOnly || !!insuree.validityTo}
+              readOnly={readOnly || runningMutation || !!insuree.validityTo}
               actions={actions}
               HeadPanel={FamilyDisplayPanel}
               Panels={[InsureeMasterPanel]}
@@ -172,9 +226,10 @@ class InsureeForm extends Component {
               onEditedChanged={this.onEditedChanged}
               canSave={this.canSave}
               save={!!save ? this._save : null}
+              openDirty={save}
             />
           )}
-      </Fragment>
+      </div>
     );
   }
 }
@@ -191,11 +246,12 @@ const mapStateToProps = (state, props) => ({
   family: state.insuree.family,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
+  isInsureeNumberValid: state.insuree?.validationFields?.insureeNumber?.isValid,
 });
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, { fetchInsureeFull, fetchFamily, journalize })(
+    connect(mapStateToProps, { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation, journalize })(
       injectIntl(withTheme(withStyles(styles)(InsureeForm))),
     ),
   ),

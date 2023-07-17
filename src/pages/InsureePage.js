@@ -6,7 +6,7 @@ import { withTheme, withStyles } from "@material-ui/core/styles";
 import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
 import InsureeForm from "../components/InsureeForm";
 import { createInsuree, updateInsuree } from "../actions";
-import { RIGHT_INSUREE_ADD, RIGHT_INSUREE_EDIT } from "../constants";
+import { RIGHT_INSUREE, RIGHT_INSUREE_ADD, RIGHT_INSUREE_EDIT } from "../constants";
 
 const styles = (theme) => ({
   page: theme.page,
@@ -39,7 +39,7 @@ class InsureePage extends Component {
 
   render() {
     const { classes, modulesManager, history, rights, insuree_uuid, family_uuid } = this.props;
-    if (!rights.includes(RIGHT_INSUREE_EDIT)) return null;
+    if (!rights.includes(RIGHT_INSUREE)) return null;
     return (
       <div className={classes.page}>
         <InsureeForm
@@ -48,6 +48,7 @@ class InsureePage extends Component {
           back={(e) => historyPush(modulesManager, history, "insuree.route.insurees")}
           add={rights.includes(RIGHT_INSUREE_ADD) ? this.add : null}
           save={rights.includes(RIGHT_INSUREE_EDIT) ? this.save : null}
+          readOnly={!rights.includes(RIGHT_INSUREE_EDIT) || !rights.includes(RIGHT_INSUREE_ADD)}
         />
       </div>
     );
