@@ -57,6 +57,7 @@ class InsureeForm extends Component {
       insuree.family = { ...this.props.family };
       this.setState({ insuree });
     }
+    this.isInsureeFirstServicePointRequired = this.props.modulesManager.getConf("fe-insuree", "insureeForm.isInsureeFirstServicePointRequired", false);
   }
 
   back = (e) => {
@@ -147,6 +148,7 @@ class InsureeForm extends Component {
 
   canSave = () => {
     const doesInsureeChange = this.doesInsureeChange();
+    if (this.isInsureeFirstServicePointRequired && !this.state.insuree.healthFacility) return false;
     if (!doesInsureeChange) return false;
     if (!this.props.isInsureeNumberValid) return false;
     if (!this.state.insuree.chfId) return false;
