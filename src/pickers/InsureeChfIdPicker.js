@@ -8,8 +8,8 @@ import { fetchInsuree } from "../actions";
 import _debounce from "lodash/debounce";
 
 const INIT_STATE = {
-  search: null,
-  selected: null,
+  search: "",
+  selected: "",
 };
 
 class InsureeChfIdPicker extends Component {
@@ -23,7 +23,7 @@ class InsureeChfIdPicker extends Component {
   componentDidMount() {
     if (this.props.value) {
       this.setState((state, props) => ({
-        search: !!props.value ? props.value.chfId : null,
+        search: !!props.value ? props.value.chfId : "",
         selected: props.value,
       }));
     }
@@ -33,7 +33,7 @@ class InsureeChfIdPicker extends Component {
     if (prevProps.reset !== this.props.reset) {
       this.setState((state, props) => ({
         ...INIT_STATE,
-        search: !!props.value ? props.value.chfId : null,
+        search: !!props.value ? props.value.chfId : "",
         selected: props.value,
       }));
     } else if (!_.isEqual(prevProps.insuree, this.props.insuree)) {
@@ -50,7 +50,7 @@ class InsureeChfIdPicker extends Component {
     this.setState(
       {
         search: chfId,
-        selected: null,
+        selected: "",
       },
       (e) => this.props.fetchInsuree(this.props.modulesManager, chfId),
     );
@@ -59,7 +59,7 @@ class InsureeChfIdPicker extends Component {
   debouncedSearch = _debounce(this.fetch, this.props.modulesManager.getConf("fe-insuree", "debounceTime", 800));
 
   formatInsuree(insuree) {
-    if (!insuree) return null;
+    if (!insuree) return "";
     return `${insuree.otherNames} ${insuree.lastName}`;
   }
 
