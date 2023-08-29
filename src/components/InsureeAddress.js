@@ -1,99 +1,89 @@
-import React, { Component } from "react";
-import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
-import { formatMessage, PublishedComponent, TextInput } from "@openimis/fe-core";
+import React, { useState } from "react";
 
-const styles = (theme) => ({
+import {
+  Grid,
+  FormControlLabel,
+  Checkbox
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+
+import {
+  PublishedComponent,
+  TextInput,
+  useTranslations,
+  useModulesManager
+} from "@openimis/fe-core";
+import { EMPTY_STRING, MODULE_NAME } from "../constants";
+
+const useStyles = makeStyles((theme) => ({
   item: theme.paper.item,
-});
+}));
 
-class InsureeAddress extends Component {
-  state = {
-    editedLocation: false,
-    editedAddress: false,
-  };
+const InsureeAddress = ({
+  onChangeLocation,
+  onChangeAddress,
+  readOnly,
+  value,
+}) => {
+  const classes = useStyles();
+  const modulesManager = useModulesManager();
+  const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
 
-  renderLocation = () => {
-    const { value, classes, readOnly, onChangeLocation } = this.props;
-    if (
-      !this.state.editedLocation &&
-      (!value || !value.currentVillage || value.family?.location?.id === value.currentVillage.uuid)
-    ) {
-      return (
-        <FormControlLabel
-          className={classes.item}
-          control={
-            <Checkbox
-              color="primary"
-              checked={!this.state.editedLocation}
-              disabled={readOnly}
-              onChange={(e) => this.setState((state) => ({ editedLocation: !state.editedLocation }))}
-            />
-          }
-          label={formatMessage(this.props.intl, "insuree", "Insuree.currentVillage.sameAsFamily")}
-        />
-      );
-    }
-    return (
-      <PublishedComponent
-        pubRef="location.DetailedLocation"
-        withNull={true}
-        value={!!value ? value.currentVillage : null}
-        split={true}
-        readOnly={readOnly}
-        onChange={onChangeLocation}
-        filterLabels={false}
-      />
-    );
-  };
+  const [location, setLocation] = useState(true);
+  const [address, setAddress] = useState(true);
 
-  renderAddress = () => {
-    const { value, readOnly, onChangeAddress } = this.props;
-    if (
-      !this.state.editedAddress &&
-      (!value || !value.currentAddress || value.family?.address === value.currentAddress)
-    ) {
-      return (
+  return (
+    <Grid container>
+      <Grid item xs={6} className={classes.item}>
         <FormControlLabel
           control={
             <Checkbox
               color="primary"
-              checked={!this.state.editedAddress}
+              checked={location}
               disabled={readOnly}
-              onChange={(e) => this.setState((state) => ({ editedAddress: !state.editedAddress }))}
+              onChange={(e) => setLocation((prevState) => !prevState)}
             />
           }
-          label={formatMessage(this.props.intl, "insuree", "Insuree.currentAddress.sameAsFamily")}
+          label={formatMessage("Insuree.currentVillage.sameAsFamily")}
         />
-      );
-    }
-    return (
-      <TextInput
-        module="insuree"
-        label="Insuree.currentAddress"
-        multiline
-        rows={5}
-        readOnly={readOnly}
-        value={value?.currentAddress ?? ""}
-        onChange={onChangeAddress}
-      />
-    );
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <Grid container>
-        <Grid item xs={6}>
-          {this.renderLocation()}
-        </Grid>
-        <Grid item xs={6} className={classes.item}>
-          {this.renderAddress()}
-        </Grid>
+        {!location &&
+          <PublishedComponent
+            pubRef="location.DetailedLocation"
+            withNull={true}
+            value={value?.currentVillage ?? null}
+            split={true}
+            readOnly={readOnly}
+            onChange={onChangeLocation}
+            filterLabels={false}
+          />
+        }
       </Grid>
-    );
-  }
+      <Grid item xs={6} className={classes.item}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              color="primary"
+              checked={address}
+              disabled={readOnly}
+              onChange={(e) => setAddress((prevState) => !prevState)}
+            />
+          }
+          label={formatMessage("Insuree.currentAddress.sameAsFamily")}
+        />
+        {!address &&
+          <TextInput
+            module="insuree"
+            label="Insuree.currentAddress"
+            multiline
+            rows={4}
+            readOnly={readOnly}
+            value={value?.currentAddress ?? EMPTY_STRING}
+            onChange={onChangeAddress}
+          />
+        }
+      </Grid>
+    </Grid>
+  )
 }
 
-export default injectIntl(withTheme(withStyles(styles)(InsureeAddress)));
+export default InsureeAddress;
