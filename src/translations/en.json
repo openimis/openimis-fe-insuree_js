@@ -177,6 +177,7 @@
   "insuree.insureeSummaries.openNewTab": " ",
   "insuree.insureeSummaries.delete": " ",
   "insuree.insureeSummaries.deleteInsuree.tooltip": "Delete insuree",
+  "insuree.insureeSummaries.goToFamilyButton": "Go to family",
   "insuree.InsureeFilter.showHistory": "Show historical values",
   "insuree.PhotoStatus": "Photo status",
   "insuree.PhotoStatus.null": "Any",
