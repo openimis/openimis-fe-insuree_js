@@ -9,7 +9,7 @@ import {
   Contributions,
   ControlledField,
   historyPush,
-  withHistory
+  withHistory,
 } from "@openimis/fe-core";
 
 const INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY = "insuree.InsureeSummaryAvatar";
@@ -21,7 +21,6 @@ const useStyles = makeStyles(() => ({
   label: {
     textAlign: "right",
   },
-  button: {width: 130, height: 40, background: "#F5F5F5"}
 }));
 
 function goToFamilyUuid(mm, history, uuid) {
@@ -103,13 +102,18 @@ const InsureeSummary = (props) => {
               <Contributions contributionKey={INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY} insuree={insuree} />
             </Grid>
           )}
-          { !!insuree?.family?.uuid &&
+          {!!insuree?.family?.uuid && (
             <Grid item>
-              <Button className={classes.button} onClick={() => goToFamilyUuid(modulesManager, history, insuree.family.uuid)}>
+              <Button 
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={() => goToFamilyUuid(modulesManager, history, insuree.family.uuid)}
+              >
                 {formatMessage(intl, "insuree", "insureeSummaries.goToFamilyButton")}
               </Button>
             </Grid>
-          }
+          )}
         </Grid>
       </Box>
       <Grid item xs={12}>
