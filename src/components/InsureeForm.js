@@ -149,6 +149,7 @@ class InsureeForm extends Component {
     const doesInsureeChange = this.doesInsureeChange();
     if (!doesInsureeChange) return false;
     if (this.state.lockNew) return false;
+    if (!this.props.isChfIdValid) return false;
     
     return isValidInsuree(this.state.insuree, this.props.modulesManager);
   };
