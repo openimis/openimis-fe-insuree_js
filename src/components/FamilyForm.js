@@ -23,7 +23,7 @@ import { fetchFamily, newFamily, createFamily, fetchFamilyMutation } from "../ac
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 
-import { insureeLabel } from "../utils/utils";
+import { insureeLabel, isValidInsuree } from "../utils/utils";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -123,18 +123,9 @@ class FamilyForm extends Component {
 
   canSave = () => {
     if (!this.state.family.location) return false;
-    if (!this.state.family.headInsuree) return false;
-    if (!this.state.family.headInsuree.chfId) return false;
     if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
-    if (!this.state.family.headInsuree.lastName) return false;
-    if (!this.state.family.headInsuree.otherNames) return false;
-    if (!this.state.family.headInsuree.dob) return false;
-    if (
-      !!this.state.family.headInsuree.photo &&
-      (!this.state.family.headInsuree.photo.date || !this.state.family.headInsuree.photo.officerId)
-    )
-      return false;
-    return true;
+
+    return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
   };
 
   _save = (family) => {

@@ -19,7 +19,7 @@ import {
 } from "@openimis/fe-core";
 import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation } from "../actions";
 import { RIGHT_INSUREE } from "../constants";
-import { insureeLabel } from "../utils/utils";
+import { insureeLabel, isValidInsuree } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
 
@@ -57,7 +57,6 @@ class InsureeForm extends Component {
       insuree.family = { ...this.props.family };
       this.setState({ insuree });
     }
-    this.isInsureeFirstServicePointRequired = this.props.modulesManager.getConf("fe-insuree", "insureeForm.isInsureeFirstServicePointRequired", false);
   }
 
   back = (e) => {
@@ -148,18 +147,10 @@ class InsureeForm extends Component {
 
   canSave = () => {
     const doesInsureeChange = this.doesInsureeChange();
-    if (this.isInsureeFirstServicePointRequired && !this.state.insuree.healthFacility) return false;
     if (!doesInsureeChange) return false;
-    if (!this.props.isInsureeNumberValid) return false;
-    if (!this.state.insuree.chfId) return false;
-    if (!this.state.insuree.lastName) return false;
-    if (!this.state.insuree.otherNames) return false;
-    if (!this.state.insuree.dob) return false;
-    if (!this.state.insuree.gender || !this.state.insuree.gender?.code) return false;
     if (this.state.lockNew) return false;
-    if (!!this.state.insuree.photo && (!this.state.insuree.photo.date || !this.state.insuree.photo.officerId))
-      return false;
-    return true;
+    
+    return isValidInsuree(this.state.insuree, this.props.modulesManager);
   };
 
   _save = (insuree) => {
@@ -249,7 +240,7 @@ const mapStateToProps = (state, props) => ({
   family: state.insuree.family,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
-  isInsureeNumberValid: state.insuree?.validationFields?.insureeNumber?.isValid,
+  isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
 });
 
 export default withHistory(
