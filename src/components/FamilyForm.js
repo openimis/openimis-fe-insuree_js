@@ -177,8 +177,9 @@ class FamilyForm extends Component {
         onlyIfDirty: !readOnly && !runningMutation,
       });
     }
+    const shouldBeLocked = !!runningMutation || family?.validityTo;
     return (
-      <div className={!!runningMutation ? classes.lockedPage : null}>
+      <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
           title={formatMessageWithValues(
             this.props.intl,

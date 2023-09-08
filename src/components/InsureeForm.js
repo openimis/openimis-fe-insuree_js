@@ -192,8 +192,9 @@ class InsureeForm extends Component {
         onlyIfDirty: !readOnly && !runningMutation,
       },
     ];
+    const shouldBeLocked = !!runningMutation || insuree?.validityTo;
     return (
-      <div className={runningMutation ? classes.lockedPage : null}>
+      <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
           title={formatMessageWithValues(this.props.intl, "insuree", "Insuree.title", {
             label: insureeLabel(this.state.insuree),

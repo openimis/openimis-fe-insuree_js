@@ -19,6 +19,7 @@ export const isValidInsuree = (insuree, modulesManager) => {
   );
 
   if (isInsureeFirstServicePointRequired && !insuree.healthFacility) return false;
+  if (family.validityTo) return false;
   if (!insuree.chfId) return false;
   if (!insuree.lastName) return false;
   if (!insuree.otherNames) return false;
