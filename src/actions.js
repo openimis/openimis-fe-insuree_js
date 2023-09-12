@@ -54,6 +54,9 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "head",
   "email",
   "phone",
+  "dead",
+  "dod",
+  "deathReason",
   "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
 ];
 
@@ -247,6 +250,9 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.otherNames ? `otherNames: "${formatGQLString(insuree.otherNames)}"` : ""}
     ${!!insuree.gender && !!insuree.gender.code ? `genderId: "${insuree.gender.code}"` : ""}
     ${!!insuree.dob ? `dob: "${insuree.dob}"` : ""}
+    ${!!insuree.dod ? `dod: "${insuree.dod}"` : ""}
+    dead:${!!insuree.dead}
+    ${!!insuree.deathReason ? `deathReason: "${insuree.deathReason}"` : ""}
     head: ${!!insuree.head}
     ${!!insuree.marital ? `marital: "${insuree.marital}"` : ""}
     ${!!insuree.passport ? `passport: "${formatGQLString(insuree.passport)}"` : ""}

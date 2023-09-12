@@ -238,6 +238,40 @@ class InsureeMasterPanel extends FormPanel {
                   onChange={(v) => this.updateAttribute("photo", !!v ? v : null)}
                 />
               </Grid>
+              <Grid item xs={2} className={classes.item}>
+                <FormControlLabel
+                  module="insuree"
+                  control={<Switch
+                    checked={!!edited ? edited.dead : false}
+                    module="insuree"
+                    readOnly={readOnly}
+                    onChange={(e, c) => this.updateAttribute("dead", c)}
+                  />}
+                  label={formatMessage(this.props.intl, "insuree", `Insuree.dead`)} />
+              </Grid>
+              {edited?.dead &&
+                <Grid item xs={3} className={classes.item}>
+                  <PublishedComponent
+                    pubRef="core.DatePicker"
+                    value={!!edited ? edited.dod : null}
+                    module="insuree"
+                    label="Insuree.dod"
+                    readOnly={readOnly}
+                    onChange={(v) => this.updateAttribute("dod", v)}
+                  />
+                </Grid>
+              }
+              {edited?.dead &&
+                <Grid item xs={6} className={classes.item}>
+                  <TextInput
+                    module="insuree"
+                    label="Insuree.deathreason"
+                    readOnly={readOnly}
+                    value={!!edited && !!edited.deathReason ? edited.deathReason : ""}
+                    onChange={(v) => this.updateAttribute("deathReason", v)}
+                  />
+                </Grid>
+              }
               <Contributions
                 {...this.props}
                 updateAttribute={this.updateAttribute}
