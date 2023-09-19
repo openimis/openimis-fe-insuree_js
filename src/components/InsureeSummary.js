@@ -113,7 +113,7 @@ const InsureeSummary = (props) => {
                   field={
                     <Grid item xs={12}>
                       <Typography className={classes.rawValue}>{
-                        formatMessageWithValues(props.intl, "insuree", "InsureeSummary.insureeLocation", 
+                        formatMessageWithValues(intl, "insuree", "InsureeSummary.insureeLocation", 
                         {
                           location: `${formatLocationString(insuree?.family?.location)}`,
                         })
