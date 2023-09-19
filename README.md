@@ -93,3 +93,4 @@ None
 - `InsureeOfficer.selectThreshold`, threshold to switch from combo box to drop down options in insuree officer picker, default: 10
 - `RelationPicker.selectThreshold`, threshold to switch from combo box to drop down options in family relation picker, default: 10
 - `insureeForm.isInsureeFirstServicePointRequired`, allow to set FSP to required while creating new insuree, default false.
+- `showInsureeSummaryAddress`, show insuree address information in enquire, default false.

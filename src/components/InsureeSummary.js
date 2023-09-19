@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Box, Typography, Button } from "@material-ui/core";
 import {
   formatMessage,
+  formatMessageWithValues,
   withModulesManager,
   formatDateFromISO,
   Contributions,
@@ -27,11 +28,23 @@ function goToFamilyUuid(mm, history, uuid) {
   historyPush(mm, history, "insuree.route.familyOverview", [uuid], true);
 }
 
+const formatLocationString = (location) => {
+  return [location?.parent?.parent?.name,
+    location?.parent?.name,
+    location?.name].filter(Boolean).join(', ')
+}
+
 const InsureeSummary = (props) => {
   const { insuree, intl, modulesManager, className, history } = props;
   const classes = useStyles();
   const hasAvatarContribution = modulesManager.getContribs(INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY).length > 0;
   const hasExtContributions = modulesManager.getContribs(INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY).length > 0;
+  const showInsureeSummaryAddress = props.modulesManager.getConf(
+    "fe-insuree",
+    "showInsureeSummaryAddress",
+    false
+  );
+
   return (
     <Grid container className={className}>
       {hasAvatarContribution && (
@@ -93,6 +106,23 @@ const InsureeSummary = (props) => {
                   }
                 />
               </Box>
+              {showInsureeSummaryAddress && <Box>
+                <ControlledField
+                  module="insuree"
+                  id="InsureeSummary.insureeLocation"
+                  field={
+                    <Grid item xs={12}>
+                      <Typography className={classes.rawValue}>{
+                        formatMessageWithValues(props.intl, "insuree", "InsureeSummary.insureeLocation", 
+                        {
+                          location: `${formatLocationString(insuree?.family?.location)}`,
+                        })
+                        }
+                      </Typography>
+                    </Grid>
+                  }
+                />
+              </Box>}
 
               <Contributions contributionKey={INSUREE_SUMMARY_CORE_CONTRIBUTION_KEY} insuree={insuree} />
             </div>
