@@ -1,8 +1,8 @@
 export const INSUREE_MARITAL_STATUS = ["N", "W", "S", "D", "M"];
 export const FAMILY_POVERTY_STATUS = [true, false];
 export const PHOTO_STATUS = ["with", "without"];
-export const EMPTY_STRING = '';
-export const MODULE_NAME = 'insuree';
+export const EMPTY_STRING = "";
+export const MODULE_NAME = "insuree";
 
 export const RIGHT_FAMILY = 101001; //101000 in doc ... but in practice...
 export const RIGHT_FAMILY_SEARCH = 101001;
@@ -15,3 +15,8 @@ export const RIGHT_INSUREE_ADD = 101102;
 export const RIGHT_INSUREE_EDIT = 101103;
 export const RIGHT_INSUREE_DELETE = 101104;
 export const RIGHT_INSUREE_ENQUIRE = 101105;
+
+export const DEFAULT = {
+  SHOW_INSUREE_PROFILE: false,
+  SHOW_INSUREE_SUMMARY_ADDRESS: false,
+};

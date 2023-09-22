@@ -4,7 +4,7 @@ import InsureePage from "./pages/InsureePage";
 import FamilyPage from "./pages/FamilyPage";
 import { CappedItemServicePage } from "./pages/CappedItemServicePage";
 import InsureesPage from "./pages/InsureesPage";
-import { ProfilePage } from "./pages/ProfilePage";
+import ProfilePage from "./pages/ProfilePage";
 import FamilyOverviewPage from "./pages/FamilyOverviewPage";
 import Enquiry from "./components/Enquiry";
 import InsureeOfficerPicker from "./pickers/InsureeOfficerPicker";
@@ -43,6 +43,7 @@ import InsureePendingEnrollmentReport from "./reports/InsureePendingEnrollmentRe
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
 const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
 const ROUTE_INSUREE_FAMILY = "insuree/family";
+const ROUTE_INSUREE_PROFILE = "insuree/profile";
 const ROUTE_INSUREE_INSUREES = "insuree/insurees";
 const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
 
@@ -124,6 +125,7 @@ const DEFAULT_CONFIG = {
     { key: "insuree.route.family", ref: ROUTE_INSUREE_FAMILY },
     { key: "insuree.route.insurees", ref: ROUTE_INSUREE_INSUREES },
     { key: "insuree.route.insuree", ref: ROUTE_INSUREE_INSUREE },
+    { key: "insuree.route.insureeProfile", ref: ROUTE_INSUREE_PROFILE },
 
     { key: "insuree.Avatar", ref: InsureeAvatar },
     { key: "insuree.Summary", ref: InsureeSummary },
@@ -140,7 +142,7 @@ const DEFAULT_CONFIG = {
     { path: ROUTE_INSUREE_INSUREES, component: InsureesPage },
     { path: ROUTE_INSUREE_INSUREE + "/:insuree_uuid?/:family_uuid?", component: InsureePage },
     { path: "insuree/cappedItemService", component: CappedItemServicePage },
-    { path: "insuree/profile", component: ProfilePage },
+    { path: ROUTE_INSUREE_PROFILE + "/:insuree_uuid", component: ProfilePage },
   ],
   "core.AppBar": [Enquiry],
   "core.MainMenu": [InsureeMainMenu],

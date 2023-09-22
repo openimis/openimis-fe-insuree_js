@@ -12,26 +12,31 @@ import {
   historyPush,
   withHistory,
 } from "@openimis/fe-core";
+import { DEFAULT } from "../constants";
+import InsureeProfileLink from "./InsureeProfileLink";
+import { formatLocationString } from "../utils/utils";
 
 const INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY = "insuree.InsureeSummaryAvatar";
 const INSUREE_SUMMARY_CORE_CONTRIBUTION_KEY = "insuree.InsureeSummaryCore";
 const INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY = "insuree.InsureeSummaryExt";
 const INSUREE_SUMMARY_CONTRIBUTION_KEY = "insuree.InsureeSummary";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   label: {
     textAlign: "right",
   },
+  topRightCorner: {
+    position: "absolute",
+    top: theme.spacing(2),
+    right: theme.spacing(2),
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+  },
 }));
 
-function goToFamilyUuid(mm, history, uuid) {
-  historyPush(mm, history, "insuree.route.familyOverview", [uuid], true);
-}
-
-const formatLocationString = (location) => {
-  return [location?.parent?.parent?.name,
-    location?.parent?.name,
-    location?.name].filter(Boolean).join(', ')
+function goToFamilyUuid(modulesManager, history, uuid) {
+  historyPush(modulesManager, history, "insuree.route.familyOverview", [uuid], true);
 }
 
 const InsureeSummary = (props) => {
@@ -42,8 +47,15 @@ const InsureeSummary = (props) => {
   const showInsureeSummaryAddress = props.modulesManager.getConf(
     "fe-insuree",
     "showInsureeSummaryAddress",
-    false
+    DEFAULT.SHOW_INSUREE_SUMMARY_ADDRESS
   );
+  const showInsureeProfile = props.modulesManager.getConf(
+    "fe-insuree",
+    "InsureeSummary.showInsureeProfileLink",
+    DEFAULT.SHOW_INSUREE_PROFILE,
+  );
+
+  console.log(showInsureeProfile);
 
   return (
     <Grid container className={className}>
@@ -144,6 +156,9 @@ const InsureeSummary = (props) => {
               </Button>
             </Grid>
           )}
+          <Grid className={classes.topRightCorner}>
+            {showInsureeProfile && <InsureeProfileLink insureeUuid={insuree.uuid} />}
+          </Grid>
         </Grid>
       </Box>
       <Grid item xs={12}>

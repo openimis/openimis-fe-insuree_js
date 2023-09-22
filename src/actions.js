@@ -41,7 +41,7 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "validityTo",
   `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
   `photo{id,uuid,date,folder,filename,officerId,photo}`,
-  "gender{code}",
+  "gender{code, gender}",
   "education{id}",
   "profession{id}",
   "marital",
@@ -120,6 +120,7 @@ export function fetchFamilySummaries(mm, filters) {
 }
 
 export function fetchFamilyMembers(mm, filters) {
+  console.log(filters);
   let projections = ["uuid", "chfId", "otherNames", "lastName", "head", "phone", "gender{code}", "dob", "cardIssued"];
   const payload = formatPageQueryWithCount("familyMembers", filters, projections);
   return graphql(payload, "INSUREE_FAMILY_MEMBERS");
