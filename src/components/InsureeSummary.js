@@ -154,9 +154,11 @@ const InsureeSummary = (props) => {
               </Button>
             </Grid>
           )}
-          <Grid className={classes.topRightCorner}>
-            {showInsureeProfile && <InsureeProfileLink insureeUuid={insuree.uuid} />}
-          </Grid>
+          {showInsureeProfile && (
+            <Grid className={classes.topRightCorner}>
+              <InsureeProfileLink insureeUuid={insuree.uuid} />
+            </Grid>
+          )}
         </Grid>
       </Box>
       <Grid item xs={12}>
