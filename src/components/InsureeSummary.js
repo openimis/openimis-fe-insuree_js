@@ -55,8 +55,6 @@ const InsureeSummary = (props) => {
     DEFAULT.SHOW_INSUREE_PROFILE,
   );
 
-  console.log(showInsureeProfile);
-
   return (
     <Grid container className={className}>
       {hasAvatarContribution && (

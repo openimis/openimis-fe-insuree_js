@@ -234,5 +234,8 @@
   "insuree.InsureeFamilyOverviewReport.dateFrom": "From Date",
   "insuree.InsureeFamilyOverviewReport.dateTo": "To Date",
   "insuree.InsureeMissingPhotoReport.officer": "Officer",
-  "insuree.InsureeSummary.insureeLocation": "Address: {location}"
+  "insuree.InsureeSummary.insureeLocation": "Address: {location}",
+  "insuree.FamilyMembersTable.NSHI": "NSHI",
+  "insuree.FamilyMembersTable.memberName": "MEMBER NAME",
+  "insuree.FamilyMembersTable.phone": "PHONE"
 }

@@ -22,10 +22,15 @@ const useStyles = makeStyles((theme) => ({
   paper: theme.paper.paper,
   title: theme.paper.title,
   item: theme.paper.item,
+  flexContainer: {
+    flex: 1,
+  },
 }));
 
 const INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY = "insuree.InsureeSummaryAvatar";
 const INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY = "insuree.InsureeSummaryExt";
+const INSUREE_POLICIES_OVERVIEW_CONTRIBUTION_KEY = "insuree.ProfilePage.insureePolicies";
+const INSUREE_CLAIMS_OVERVIEW_CONTRIBUTION_KEY = "insuree.ProfilePage.insureeClaims";
 
 const ProfilePage = () => {
   const { insuree_uuid } = useParams();
@@ -36,8 +41,8 @@ const ProfilePage = () => {
 
   const { fetchingInsuree, insuree, errorInsuree } = useSelector((store) => store.insuree);
 
-  const hasAvatarContribution = modulesManager.getContribs(INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY).length > 0;
-  const hasExtContributions = modulesManager.getContribs(INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY).length > 0;
+  const hasAvatarContribution = !!modulesManager.getContribs(INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY);
+  const hasExtContributions = !!modulesManager.getContribs(INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY);
 
   const showInsureeSummaryAddress = modulesManager.getConf(
     "fe-insuree",
@@ -45,11 +50,9 @@ const ProfilePage = () => {
     DEFAULT.SHOW_INSUREE_SUMMARY_ADDRESS,
   );
 
-  console.log(insuree);
-
   useEffect(() => {
     if (insuree_uuid) dispatch(fetchInsureeFull(modulesManager, insuree_uuid));
-  }, [insuree_uuid, dispatch, modulesManager]);
+  }, [insuree_uuid]);
 
   if (fetchingInsuree || errorInsuree) {
     return <ProgressOrError progress={fetchingInsuree} error={errorInsuree} />;
@@ -61,91 +64,103 @@ const ProfilePage = () => {
         <Typography className={classes.title} variant="h6">
           {formatMessage("link.profile")}
         </Typography>
-        <Grid item xs={12} container className={classes.item} display="flex">
-          {hasAvatarContribution && (
-            <Box mr={3}>
-              <Contributions
-                readOnly
-                photo={insuree?.photo}
-                contributionKey={INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY}
-              />
-            </Box>
-          )}
-          <Box mr={10}>
-            <ControlledField
-              module="insuree"
-              id="InsureeSummary.chfId"
-              field={<Typography variant="h4">{insuree?.chfId}</Typography>}
-            />
-            <Box>
-              <Typography variant="h6">
-                {insuree && (
-                  <Fragment>
-                    <ControlledField
-                      module="insuree"
-                      id="InsureeSummary.otherNames"
-                      field={`${insuree?.otherNames} `}
-                    />
-                    <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree?.lastName} />
-                  </Fragment>
-                )}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography>
-                <Fragment>
-                  <ControlledField
-                    module="insuree"
-                    id="InsureeSummary.dob"
-                    field={formatDateFromISO(modulesManager, null, insuree?.dob)}
+        <Grid item xs={12} container display="flex">
+          <Grid item container direction="row" className={classes.flexContainer}>
+            {hasAvatarContribution && (
+              <Grid className={classes.item}>
+                <Box mr={3}>
+                  <Contributions
+                    readOnly
+                    photo={insuree?.photo}
+                    contributionKey={INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY}
                   />
-                  <ControlledField
-                    module="insuree"
-                    id="InsureeSummary.age"
-                    field={` (${insuree?.age} ${formatMessage("ageUnit")})`}
-                  />
-                </Fragment>
-              </Typography>
-            </Box>
-            <Box>
-              <ControlledField
-                module="insuree"
-                id="InsureeSummary.gender"
-                field={
-                  <Grid item xs={12}>
-                    <Typography> {insuree?.gender?.gender} </Typography>
-                  </Grid>
-                }
-              />
-            </Box>
-            {showInsureeSummaryAddress && (
-              <Box>
+                </Box>
+              </Grid>
+            )}
+            <Grid className={classes.item}>
+              <Box mr={10}>
                 <ControlledField
                   module="insuree"
-                  id="InsureeSummary.insureeLocation"
-                  field={
-                    <Grid item xs={12}>
-                      <Typography>
-                        {formatMessageWithValues("InsureeSummary.insureeLocation", {
-                          location: `${formatLocationString(insuree?.family?.location)}`,
-                        })}
-                      </Typography>
-                    </Grid>
-                  }
+                  id="InsureeSummary.chfId"
+                  field={<Typography variant="h4">{insuree?.chfId}</Typography>}
                 />
+                <Box>
+                  <Typography variant="h6">
+                    {insuree && (
+                      <Fragment>
+                        <ControlledField
+                          module="insuree"
+                          id="InsureeSummary.otherNames"
+                          field={`${insuree?.otherNames} `}
+                        />
+                        <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree?.lastName} />
+                      </Fragment>
+                    )}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography>
+                    <Fragment>
+                      <ControlledField
+                        module="insuree"
+                        id="InsureeSummary.dob"
+                        field={formatDateFromISO(modulesManager, null, insuree?.dob)}
+                      />
+                      <ControlledField
+                        module="insuree"
+                        id="InsureeSummary.age"
+                        field={` (${insuree?.age} ${formatMessage("ageUnit")})`}
+                      />
+                    </Fragment>
+                  </Typography>
+                </Box>
+                <Box>
+                  <ControlledField
+                    module="insuree"
+                    id="InsureeSummary.gender"
+                    field={
+                      <Grid item xs={12}>
+                        <Typography> {insuree?.gender?.gender} </Typography>
+                      </Grid>
+                    }
+                  />
+                </Box>
+                {showInsureeSummaryAddress && (
+                  <Box>
+                    <ControlledField
+                      module="insuree"
+                      id="InsureeSummary.insureeLocation"
+                      field={
+                        <Grid item xs={12}>
+                          <Typography>
+                            {formatMessageWithValues("InsureeSummary.insureeLocation", {
+                              location: `${formatLocationString(insuree?.family?.location)}`,
+                            })}
+                          </Typography>
+                        </Grid>
+                      }
+                    />
+                  </Box>
+                )}
               </Box>
+            </Grid>
+            {hasExtContributions && (
+              <Grid className={classes.item}>
+                <Box>
+                  <Contributions contributionKey={INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY} insuree={insuree} />
+                </Box>
+              </Grid>
             )}
-          </Box>
-          {hasExtContributions && (
+          </Grid>
+          <Grid className={classes.item}>
             <Box>
-              <Contributions contributionKey={INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY} insuree={insuree} />
+              <FamilyMembersTable />
             </Box>
-          )}
-          <Box>
-            <FamilyMembersTable />
-          </Box>
+          </Grid>
         </Grid>
       </Paper>
+      <Contributions contributionKey={INSUREE_POLICIES_OVERVIEW_CONTRIBUTION_KEY} insuree={insuree} />
+      <Contributions contributionKey={INSUREE_CLAIMS_OVERVIEW_CONTRIBUTION_KEY} insuree={insuree} />
     </Box>
   );
 };

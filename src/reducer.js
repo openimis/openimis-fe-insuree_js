@@ -133,7 +133,6 @@ function reducer(
         fetchingFamilyMembers: true,
         fetchedFamilyMembers: false,
         insureeFamilyMembers: null,
-        insuree: null,
         errorFamilyMembers: null,
       };
     case "INSUREE_FAMILY_MEMBERS_RESP":
