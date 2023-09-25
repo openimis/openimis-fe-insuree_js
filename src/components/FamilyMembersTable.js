@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   header: theme.table.header,
 }));
 
-const FAMILY_MEMBERS_HEADERS = ["FamilyMembersTable.NSHI", "FamilyMembersTable.memberName", "FamilyMembersTable.phone"];
+const FAMILY_MEMBERS_HEADERS = ["FamilyMembersTable.InsuranceNo", "FamilyMembersTable.memberName", "FamilyMembersTable.phone"];
 
 const FamilyMembersTable = () => {
   const dispatch = useDispatch();
