@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { INSUREE_ACTIVE_STRING } from "../constants";
 
 export function insureeLabel(insuree) {
   if (!insuree) return "";
@@ -18,6 +19,8 @@ export const isValidInsuree = (insuree, modulesManager) => {
     false,
   );
 
+  const isInsureeStatusRequired = modulesManager.getConf("fe-insuree", "insureeForm.isInsureeStatusRequired", false);
+
   if (isInsureeFirstServicePointRequired && !insuree.healthFacility) return false;
   if (insuree.validityTo) return false;
   if (!insuree.chfId) return false;
@@ -26,6 +29,8 @@ export const isValidInsuree = (insuree, modulesManager) => {
   if (!insuree.dob) return false;
   if (!insuree.gender || !insuree.gender?.code) return false;
   if (!!insuree.photo && (!insuree.photo.date || !insuree.photo.officerId)) return false;
+  if (isInsureeStatusRequired && !insuree.status) return false;
+  if (!!insuree.status && insuree.status !== INSUREE_ACTIVE_STRING && (!insuree.statusDate || !insuree.statusReason)) return false;
 
   return true;
 };

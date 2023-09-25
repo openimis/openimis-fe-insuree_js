@@ -233,5 +233,13 @@
   "insuree.InsureeFamilyOverviewReport.dateFrom": "From Date",
   "insuree.InsureeFamilyOverviewReport.dateTo": "To Date",
   "insuree.InsureeMissingPhotoReport.officer": "Officer",
-  "insuree.InsureeSummary.insureeLocation": "Address: {location}"
+  "insuree.InsureeSummary.insureeLocation": "Address: {location}",
+  "insuree.Insuree.status": "Status",
+  "insuree.Insuree.status.null": "Any",
+  "insuree.Insuree.status.AC": "Active",
+  "insuree.Insuree.status.DE": "Dead",
+  "insuree.Insuree.status.IN": "Inactive",
+  "insuree.Insuree.statusDate": "Date from of status",
+  "insuree.Insuree.statusReason": "Reason",
+  "insuree.InsureeReasonPicker.placeholder": "Search reason…"
 }
