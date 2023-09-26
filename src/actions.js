@@ -54,6 +54,8 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "relationship{id}",
   "head",
   "status",
+  "statusDate",
+  "statusReason{code,insureeStatusReason}",
   "email",
   "phone",
   "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
