@@ -147,7 +147,7 @@ class FamilyMasterPanel extends FormPanel {
               readOnly={readOnly}
               nullLabel={formatMessage(intl, "insuree", "Family.ConfirmationType.null")}
               value={!!edited && !!edited.confirmationType ? edited.confirmationType.code : null}
-              onChange={(v) => this.updateAttribute("confirmationType", { code: v })}
+              onChange={(v) => this.updateAttribute("confirmationType", v)}
             />
           </Grid>
           <Grid item xs={3} className={classes.item}>
@@ -157,6 +157,7 @@ class FamilyMasterPanel extends FormPanel {
               readOnly={readOnly}
               value={!edited ? "" : edited.confirmationNo}
               onChange={(v) => this.updateAttribute("confirmationNo", v)}
+              required={edited?.confirmationType?.isRequired ?? false}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>

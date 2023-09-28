@@ -283,7 +283,7 @@ function reducer(
         ...state,
         fetchingConfirmationTypes: false,
         fetchedConfirmationTypes: true,
-        confirmationTypes: action.payload.data.confirmationTypes.map((c) => c.code),
+        confirmationTypes: action.payload.data.confirmationTypes,
         errorConfirmationTypes: formatGraphQLError(action.payload),
       };
     case "INSUREE_CONFIRMATION_TYPES_ERR":
