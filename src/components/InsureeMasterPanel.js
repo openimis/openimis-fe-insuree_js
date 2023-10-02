@@ -239,9 +239,7 @@ class InsureeMasterPanel extends FormPanel {
                       value={edited?.status}
                       module="insuree"
                       readOnly={readOnly}
-                      onChange={(v) => {
-                        this.updateAttributes({ "status": v, "statusReason": null });
-                      }}
+                      onChange={(v) => this.updateAttributes({ "status": v, "statusReason": null })}
                       required={isInsureeStatusRequired}
                     />
                   </Grid>

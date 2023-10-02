@@ -1,6 +1,6 @@
 import React from "react";
+
 import { ConstantBasedPicker } from "@openimis/fe-core";
-import _debounce from "lodash/debounce";
 
 import { INSUREE_STATUS } from "../constants";
 

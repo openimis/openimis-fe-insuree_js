@@ -239,7 +239,7 @@
   "insuree.Insuree.status.AC": "Active",
   "insuree.Insuree.status.DE": "Dead",
   "insuree.Insuree.status.IN": "Inactive",
-  "insuree.Insuree.statusDate": "Date from of status",
+  "insuree.Insuree.statusDate": "Status date",
   "insuree.Insuree.statusReason": "Reason",
   "insuree.InsureeReasonPicker.placeholder": "Search reason…"
 }

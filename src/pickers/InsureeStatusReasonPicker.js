@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { useModulesManager, useTranslations, Autocomplete, useGraphqlQuery } from "@openimis/fe-core";
-import _debounce from "lodash/debounce";
+import { MODULE_NAME } from "../constants";
 
-const InsureeStatusReasonPicker = (props) => {
-  const { onChange, readOnly, required, value, filterOptions, filterSelectedOptions, multiple, extraFragment, edited } =
-    props;
-
+const InsureeStatusReasonPicker = ({
+  onChange,
+  readOnly,
+  required,
+  value,
+  filterOptions,
+  filterSelectedOptions,
+  multiple,
+  extraFragment,
+  statusType
+}) => {
   const modulesManager = useModulesManager();
-  const { formatMessage } = useTranslations("insuree", modulesManager);
+  const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
   const [variables, setVariables] = useState({});
 
   const { isLoading, data, error } = useGraphqlQuery(
@@ -46,7 +53,7 @@ const InsureeStatusReasonPicker = (props) => {
       onChange={(v) => onChange(v, v ? `${v.code} ${v.insureeStatusReason}` : null)}
       filterOptions={filterOptions}
       filterSelectedOptions={filterSelectedOptions}
-      onInputChange={(search) => setVariables({ search, statusType: props.statusType })}
+      onInputChange={(search) => setVariables({ search, statusType: statusType })}
     />
   );
 };
