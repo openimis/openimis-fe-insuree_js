@@ -42,7 +42,7 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "validityTo",
   `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
   `photo{id,uuid,date,folder,filename,officerId,photo}`,
-  "gender{code}",
+  "gender{code, gender}",
   "education{id}",
   "profession{id}",
   "marital",
