@@ -273,12 +273,12 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.relationship && !!insuree.relationship.id ? `relationshipId: ${insuree.relationship.id}` : ""}
     ${!!insuree.status ? `status: "${insuree.status}"` : ""}
     ${
-      !!insuree.statusDate && !!insuree.statusDate !== INSUREE_ACTIVE_STRING
+      !!insuree.statusDate && !!insuree.status != INSUREE_ACTIVE_STRING
         ? `statusDate: "${insuree.statusDate}"`
         : ""
     }
     ${
-      !!insuree.statusReason && !!insuree.statusDate !== INSUREE_ACTIVE_STRING
+      !!insuree.statusReason && !!insuree.status != INSUREE_ACTIVE_STRING
         ? `statusReason: "${insuree.statusReason.code}"`
         : ""
     }
