@@ -1,31 +1,26 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Link, Grid } from "@material-ui/core";
-import { FormattedMessage } from "@openimis/fe-core";
+import React from "react";
 
-const styles = (theme) => ({
-  lnk: {
-    textAlign: "center",
-  },
-});
+import { Tooltip, IconButton } from "@material-ui/core";
+import { Person } from "@material-ui/icons";
 
-class InsureeProfileLink extends Component {
-  render() {
-    const { classes, insuree } = this.props;
-    return (
-      <Grid item xs={12} className={classes.lnk}>
-        <Link href={`${process.env.PUBLIC_URL || ""}/insuree/profile?nshid=${insuree.chfId}`}>
-          <FormattedMessage module="insuree" id="link.profile" />
-        </Link>
-      </Grid>
-    );
-  }
-}
+import { useModulesManager, useTranslations, useHistory, historyPush } from "@openimis/fe-core";
+import { MODULE_NAME } from "../constants";
 
-const mapStateToProps = (state) => ({
-  insuree: state.insuree.insuree,
-});
+const InsureeProfileLink = ({ insureeUuid }) => {
+  const modulesManager = useModulesManager();
+  const history = useHistory();
+  const { formatMessage } = useTranslations(MODULE_NAME);
 
-export default injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(InsureeProfileLink))));
+  const goToInsureeProfile = (modulesManager, history, uuid, showInAnotherTab = false) =>
+    historyPush(modulesManager, history, "insuree.route.insureeProfile", [uuid], showInAnotherTab);
+
+  return (
+    <Tooltip title={formatMessage("insureeSummaries.goToTheProfile")}>
+      <IconButton onClick={() => goToInsureeProfile(modulesManager, history, insureeUuid)}>
+        <Person />
+      </IconButton>
+    </Tooltip>
+  );
+};
+
+export default InsureeProfileLink;

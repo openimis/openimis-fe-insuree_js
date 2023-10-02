@@ -20,6 +20,7 @@ const styles = (theme) => ({
     height: "100%",
   },
 });
+import { INSUREE_ACTIVE_STRING } from "../constants";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
@@ -35,7 +36,11 @@ class InsureeMasterPanel extends FormPanel {
       readOnly = true,
       actions,
       edited_id,
+      modulesManager,
     } = this.props;
+
+    const isInsureeStatusRequired = modulesManager.getConf("fe-insuree", "insureeForm.isInsureeStatusRequired", false);
+
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -227,6 +232,45 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("passport", !!v ? v : null)}
                     />
                   </Grid>
+                  <Grid item xs={3} className={classes.item}>
+                    <PublishedComponent
+                      pubRef="insuree.InsureeStatusPicker"
+                      label="Insuree.status"
+                      value={edited?.status}
+                      module="insuree"
+                      readOnly={readOnly}
+                      onChange={(v) => this.updateAttributes({ "status": v, "statusReason": null })}
+                      required={isInsureeStatusRequired}
+                    />
+                  </Grid>
+                  {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
+                    <Grid item xs={3} className={classes.item}>
+                      <PublishedComponent
+                        pubRef="core.DatePicker"
+                        label="Insuree.statusDate"
+                        value={edited?.statusDate}
+                        module="insuree"
+                        readOnly={readOnly}
+                        required={true}
+                        onChange={(v) => this.updateAttribute("statusDate", v)}
+                      />
+                    </Grid>
+                  )}
+                  {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
+                    <Grid item xs={3} className={classes.item}>
+                      <PublishedComponent
+                        pubRef="insuree.InsureeStatusReasonPicker"
+                        label="Insuree.statusReason"
+                        value={edited?.statusReason}
+                        module="insuree"
+                        readOnly={readOnly}
+                        withNull={false}
+                        statusType={edited.status}
+                        required={true}
+                        onChange={(v) => this.updateAttribute("statusReason", v)}
+                      />
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
               <Grid item xs={4} className={classes.item}>
