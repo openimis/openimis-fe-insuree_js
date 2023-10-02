@@ -16,7 +16,7 @@ const InsureeStatusDatePicker = (props) => {
       module="insuree"
       label="Insuree.statusDate"
       readOnly={readOnly}
-      onChange={(p) => updateAttribute("insureeStatusDate", p)}
+      onChange={(date) => updateAttribute("insureeStatusDate", date)}
     />
   )
 };

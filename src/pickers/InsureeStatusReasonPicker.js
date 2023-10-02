@@ -50,7 +50,7 @@ const InsureeStatusReasonPicker = ({
       isLoading={isLoading}
       value={value}
       getOptionLabel={(option) => `${option.code} ${option.insureeStatusReason}`}
-      onChange={(v) => onChange(v, v ? `${v.code} ${v.insureeStatusReason}` : null)}
+      onChange={(currentValue) => onChange(currentValue, currentValue ? `${currentValue.code} ${currentValue.insureeStatusReason}` : null)}
       filterOptions={filterOptions}
       filterSelectedOptions={filterSelectedOptions}
       onInputChange={(search) => setVariables({ search, statusType: statusType })}
