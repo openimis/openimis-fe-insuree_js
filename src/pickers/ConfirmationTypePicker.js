@@ -21,7 +21,7 @@ class ConfirmationTypePicker extends Component {
   nullDisplay = this.props.nullLabel || formatMessage(this.props.intl, "insuree", `ConfirmationType.null`);
 
   formatSuggestion = (i) =>
-    !!i ? `${formatMessage(this.props.intl, "insuree", `ConfirmationType.${i}`)}` : this.nullDisplay;
+    !!i ? `${formatMessage(this.props.intl, "insuree", `ConfirmationType.${i.code}`)}` : this.nullDisplay;
 
   onSuggestionSelected = (v) => this.props.onChange(v, this.formatSuggestion(v));
 
