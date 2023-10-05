@@ -157,7 +157,7 @@ class FamilyMasterPanel extends FormPanel {
               readOnly={readOnly}
               value={!edited ? "" : edited.confirmationNo}
               onChange={(v) => this.updateAttribute("confirmationNo", v)}
-              required={edited?.confirmationType?.isRequired ?? false}
+              required={edited?.confirmationType?.isConfirmationNumberRequired ?? false}
             />
           </Grid>
           <Grid item xs={4} className={classes.item}>

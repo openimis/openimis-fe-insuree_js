@@ -18,7 +18,7 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "uuid",
   "poverty",
   "confirmationNo",
-  "confirmationType{code, isRequired}",
+  "confirmationType{code, isConfirmationNumberRequired}",
   "familyType{code}",
   "address",
   "validityFrom",
@@ -143,7 +143,7 @@ export function selectFamilyMember(member) {
 }
 
 export function fetchConfirmationTypes() {
-  const payload = formatQuery("confirmationTypes", null, ["code", "isRequired"]);
+  const payload = formatQuery("confirmationTypes", null, ["code", "isConfirmationNumberRequired"]);
   return graphql(payload, "INSUREE_CONFIRMATION_TYPES");
 }
 
