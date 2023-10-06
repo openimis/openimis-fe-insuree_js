@@ -1,13 +1,21 @@
 import React from "react";
 
-import { Tooltip, IconButton } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { Person } from "@material-ui/icons";
 
 import { useModulesManager, useTranslations, useHistory, historyPush } from "@openimis/fe-core";
 import { MODULE_NAME } from "../constants";
 
+const useStyles = makeStyles(() => ({
+  label: {
+    marginLeft: "8px",
+  },
+}));
+
 const InsureeProfileLink = ({ insureeUuid }) => {
   const modulesManager = useModulesManager();
+  const classes = useStyles();
   const history = useHistory();
   const { formatMessage } = useTranslations(MODULE_NAME);
 
@@ -15,11 +23,14 @@ const InsureeProfileLink = ({ insureeUuid }) => {
     historyPush(modulesManager, history, "insuree.route.insureeProfile", [uuid], showInAnotherTab);
 
   return (
-    <Tooltip title={formatMessage("insureeSummaries.goToTheProfile")}>
-      <IconButton onClick={() => goToInsureeProfile(modulesManager, history, insureeUuid)}>
-        <Person />
-      </IconButton>
-    </Tooltip>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => goToInsureeProfile(modulesManager, history, insureeUuid)}
+    >
+      <Person />
+      <span className={classes.label}> {formatMessage("insureeSummaries.goToTheProfile")} </span>
+    </Button>
   );
 };
 

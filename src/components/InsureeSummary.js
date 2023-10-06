@@ -1,7 +1,10 @@
 import React, { Fragment } from "react";
 import { injectIntl } from "react-intl";
-import { makeStyles } from "@material-ui/core/styles";
+
 import { Grid, Box, Typography, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { People } from "@material-ui/icons";
+
 import {
   formatMessage,
   formatMessageWithValues,
@@ -13,25 +16,17 @@ import {
   withHistory,
 } from "@openimis/fe-core";
 import { DEFAULT } from "../constants";
-import InsureeProfileLink from "./InsureeProfileLink";
 import { formatLocationString } from "../utils/utils";
+import InsureeProfileLink from "./InsureeProfileLink";
 
 const INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY = "insuree.InsureeSummaryAvatar";
 const INSUREE_SUMMARY_CORE_CONTRIBUTION_KEY = "insuree.InsureeSummaryCore";
 const INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY = "insuree.InsureeSummaryExt";
 const INSUREE_SUMMARY_CONTRIBUTION_KEY = "insuree.InsureeSummary";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   label: {
-    textAlign: "right",
-  },
-  topRightCorner: {
-    position: "absolute",
-    top: theme.spacing(2),
-    right: theme.spacing(2),
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing(1),
+    marginLeft: "10px",
   },
 }));
 
@@ -144,18 +139,18 @@ const InsureeSummary = (props) => {
           )}
           {!!insuree?.family?.uuid && (
             <Grid item>
-              <Button 
+              <Button
                 variant="contained"
                 color="primary"
-                className={classes.button}
                 onClick={() => goToFamilyUuid(modulesManager, history, insuree.family.uuid)}
               >
-                {formatMessage(intl, "insuree", "insureeSummaries.goToFamilyButton")}
+                <People />
+                <span className={classes.label}> {formatMessage(intl, "insuree", "insureeSummaries.goToFamilyButton")} </span>
               </Button>
             </Grid>
           )}
           {showInsureeProfile && (
-            <Grid className={classes.topRightCorner}>
+            <Grid item>
               <InsureeProfileLink insureeUuid={insuree.uuid} />
             </Grid>
           )}

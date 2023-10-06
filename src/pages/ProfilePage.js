@@ -54,10 +54,6 @@ const ProfilePage = () => {
     if (insuree_uuid) dispatch(fetchInsureeFull(modulesManager, insuree_uuid));
   }, [insuree_uuid]);
 
-  if (fetchingInsuree || errorInsuree) {
-    return <ProgressOrError progress={fetchingInsuree} error={errorInsuree} />;
-  }
-
   return (
     <Box className={classes.page}>
       <Paper className={classes.paper}>
@@ -65,6 +61,7 @@ const ProfilePage = () => {
           {formatMessage("link.profile")}
         </Typography>
         <Grid item xs={12} container display="flex">
+          <ProgressOrError progress={fetchingInsuree} error={errorInsuree} />
           <Grid item container direction="row" className={classes.flexContainer}>
             {hasAvatarContribution && (
               <Grid className={classes.item}>
@@ -159,7 +156,11 @@ const ProfilePage = () => {
           </Grid>
         </Grid>
       </Paper>
-      <Contributions contributionKey={INSUREE_POLICIES_OVERVIEW_CONTRIBUTION_KEY} insuree={insuree} />
+      <Contributions
+        contributionKey={INSUREE_POLICIES_OVERVIEW_CONTRIBUTION_KEY}
+        insuree={insuree}
+        hideAddPolicyButton={true}
+      />
       <Contributions contributionKey={INSUREE_CLAIMS_OVERVIEW_CONTRIBUTION_KEY} insuree={insuree} />
     </Box>
   );
