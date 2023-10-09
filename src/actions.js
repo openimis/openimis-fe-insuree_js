@@ -11,7 +11,36 @@ import {
 } from "@openimis/fe-core";
 import { INSUREE_ACTIVE_STRING } from "./constants";
 
-const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone,dob,gender{code}}";
+//NOTE: Fetching all INSUREE_FULL_PROJECTION fields except family.
+const FAMILY_HEAD_PROJECTION = (mm) => [
+  "id",
+  "uuid",
+  "chfId",
+  "lastName",
+  "otherNames",
+  "dob",
+  "age",
+  "validityFrom",
+  "validityTo",
+  `photo{id,uuid,date,folder,filename,officerId,photo}`,
+  "gender{code, gender}",
+  "education{id}",
+  "profession{id}",
+  "marital",
+  "cardIssued",
+  "currentVillage" + mm.getProjection("location.Location.FlatProjection"),
+  "currentAddress",
+  "typeOfId{code}",
+  "passport",
+  "relationship{id}",
+  "head",
+  "status",
+  "statusDate",
+  "statusReason{code,insureeStatusReason}",
+  "email",
+  "phone",
+  "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
+]
 
 const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
@@ -23,7 +52,7 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "address",
   "validityFrom",
   "validityTo",
-  FAMILY_HEAD_PROJECTION,
+  `headInsuree{${FAMILY_HEAD_PROJECTION(mm).join(",")}}`,
   "location" + mm.getProjection("location.Location.FlatProjection"),
   "clientMutationId",
 ];
