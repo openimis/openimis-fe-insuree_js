@@ -3,14 +3,47 @@ import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { AssignmentInd, GroupAdd, People, Person } from "@material-ui/icons";
 import { formatMessage, MainMenuContribution, withModulesManager } from "@openimis/fe-core";
-import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE } from "../constants";
+import { DEFAULT, RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE, RIGHT_WORKER } from "../constants";
 
 const INSUREE_MAIN_MENU_CONTRIBUTION_KEY = "insuree.MainMenu";
+const WORKER_MAIN_MENU_CONTRIBUTION_KEY = "worker.MainMenu";
 
 class InsureeMainMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.isWorker = props.modulesManager.getConf("fe-insuree", "isWorker", DEFAULT.IS_WORKER);
+  }
+
   render() {
     const { modulesManager, rights } = this.props;
     let entries = [];
+
+    if (this.isWorker) {
+      if (rights.includes(RIGHT_WORKER)) {
+        entries.push({
+          text: formatMessage(this.props.intl, "insuree", "menu.workers"),
+          icon: <People />,
+          route: `/${modulesManager.getRef("insuree.route.insurees")}`,
+        });
+      }
+      entries.push(
+        ...this.props.modulesManager
+          .getContribs(WORKER_MAIN_MENU_CONTRIBUTION_KEY)
+          .filter((c) => !c.filter || c.filter(rights)),
+      );
+
+      if (!entries) return null;
+
+      return (
+        <MainMenuContribution
+          {...this.props}
+          header={formatMessage(this.props.intl, "insuree", "workersMainMenu")}
+          icon={<AssignmentInd />}
+          entries={entries}
+        />
+      );
+    }
+
     if (rights.includes(RIGHT_FAMILY_ADD)) {
       entries.push({
         text: formatMessage(this.props.intl, "insuree", "menu.addFamilyOrGroup"),

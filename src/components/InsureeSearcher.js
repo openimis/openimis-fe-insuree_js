@@ -259,7 +259,7 @@ class InsureeSearcher extends Component {
       onDoubleClick,
     } = this.props;
 
-    let count = insureesPageInfo.totalCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    let count = (insureesPageInfo?.totalCount || 0).toLocaleString();
 
     return (
       <Fragment>

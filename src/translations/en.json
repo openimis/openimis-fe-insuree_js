@@ -1,9 +1,11 @@
 {
   "insuree.appBar.enquiry": "Insuree enquiry…",
   "insuree.mainMenu": "Insurees and Policies",
+  "insuree.workersMainMenu": "Workers and Vouchers",
   "insuree.menu.addFamilyOrGroup": "Add Family/Group",
   "insuree.menu.familiesOrGroups": "Families/Groups",
   "insuree.menu.insurees": "Insurees",
+  "insuree.menu.workers": "Workers",
   "insuree.ageUnit": "Years",
   "insuree.label.regionFSP": "Region of FSP",
   "insuree.label.districtFSP": "District of FSP",
