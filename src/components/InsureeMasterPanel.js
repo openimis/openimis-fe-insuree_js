@@ -26,14 +26,6 @@ const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
 
 class InsureeMasterPanel extends FormPanel {
-  componentDidMount(prevProps, prevState, snapshot) {
-    this.isNewInsuree = false;
-    if(!this.props.edited?.status){
-      this.updateAttributes({ "status": INSUREE_ACTIVE_STRING, "statusReason": null });
-      this.isNewInsuree = true;
-    }
-  }
-
   render() {
     const {
       intl,
@@ -247,7 +239,7 @@ class InsureeMasterPanel extends FormPanel {
                       value={edited?.status}
                       withNull={false}
                       module="insuree"
-                      readOnly={this.isNewInsuree||this.props.readOnly}
+                      readOnly={!edited?.uuid || readOnly}
                       onChange={(v) => this.updateAttributes({ "status": v, "statusReason": null })}
                       required={isInsureeStatusRequired}
                     />
