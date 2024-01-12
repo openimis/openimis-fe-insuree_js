@@ -97,3 +97,4 @@ None
 - `insureeForm.isInsureeFirstServicePointRequired`, allow to set FSP to required while creating new insuree, default false.
 - `showInsureeSummaryAddress`, show insuree address information in enquire, default false.
 - `insureeForm.isInsureeStatusRequired`, make insuree status dropdown mandatory, default false.
+- `insureeForm.isInsureePhotoRequired`, make photo upload of an insuree mandatory, default false.
