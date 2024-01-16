@@ -57,7 +57,7 @@ const EnquiryDialog = (props) => {
         {!fetching && insuree && (
           <Fragment>
             <InsureeSummary modulesManager={modulesManager} insuree={insuree} className={classes.summary} />
-            <Contributions contributionKey="insuree.EnquiryDialog" insuree={insuree} />
+            <Contributions contributionKey="insuree.EnquiryDialog" insuree={insuree} hideAddPolicyButton />
           </Fragment>
         )}
       </DialogContent>

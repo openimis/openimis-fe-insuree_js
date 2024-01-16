@@ -1,31 +1,37 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Link, Grid } from "@material-ui/core";
-import { FormattedMessage } from "@openimis/fe-core";
+import React from "react";
 
-const styles = (theme) => ({
-  lnk: {
-    textAlign: "center",
+import { Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Person } from "@material-ui/icons";
+
+import { useModulesManager, useTranslations, useHistory, historyPush } from "@openimis/fe-core";
+import { MODULE_NAME } from "../constants";
+
+const useStyles = makeStyles(() => ({
+  label: {
+    marginLeft: "8px",
   },
-});
+}));
 
-class InsureeProfileLink extends Component {
-  render() {
-    const { classes, insuree } = this.props;
-    return (
-      <Grid item xs={12} className={classes.lnk}>
-        <Link href={`${process.env.PUBLIC_URL || ""}/insuree/profile?nshid=${insuree.chfId}`}>
-          <FormattedMessage module="insuree" id="link.profile" />
-        </Link>
-      </Grid>
-    );
-  }
-}
+const InsureeProfileLink = ({ insureeUuid }) => {
+  const modulesManager = useModulesManager();
+  const classes = useStyles();
+  const history = useHistory();
+  const { formatMessage } = useTranslations(MODULE_NAME);
 
-const mapStateToProps = (state) => ({
-  insuree: state.insuree.insuree,
-});
+  const goToInsureeProfile = (modulesManager, history, uuid, showInAnotherTab = false) =>
+    historyPush(modulesManager, history, "insuree.route.insureeProfile", [uuid], showInAnotherTab);
 
-export default injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(InsureeProfileLink))));
+  return (
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => goToInsureeProfile(modulesManager, history, insureeUuid)}
+    >
+      <Person />
+      <span className={classes.label}> {formatMessage("insureeSummaries.goToTheProfile")} </span>
+    </Button>
+  );
+};
+
+export default InsureeProfileLink;

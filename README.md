@@ -26,6 +26,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 - `insuree.InsureePage.panels`: `[InsureeMasterPanel, InsureeFirstServicePointPanel]`, contributing to own contribution point and register the defaults MasterPanel and First Service Point as panels of Insuree Page
 - `core.Router`: registering the `insuree/create`, `insuree/families`, `insuree/insurees`, `insuree/cappedItemService` and `insuree/profile` routes in openIMIS client-side router
 - `invoice.SubjectAndThirdpartyPicker`, providing Insuree picker and Family picker for Invoice module
+- `isWorker`: Specifies whether the individual should be classified and managed as a worker or a standard insuree. In Moldova, the Insuree entity is also used to represent workers. When set to true, the system displays 'Workers and Vouchers' instead of the default 'Insurees and Policies', aligning the interface with the specific needs of worker representation. Default: __false__.
 
 ## Available Contribution Points
 
@@ -92,3 +93,6 @@ None
 - `ProfessionPicker.selectThreshold`, threshold to switch from combo box to drop down options in profession picker, default: 10
 - `InsureeOfficer.selectThreshold`, threshold to switch from combo box to drop down options in insuree officer picker, default: 10
 - `RelationPicker.selectThreshold`, threshold to switch from combo box to drop down options in family relation picker, default: 10
+- `insureeForm.isInsureeFirstServicePointRequired`, allow to set FSP to required while creating new insuree, default false.
+- `showInsureeSummaryAddress`, show insuree address information in enquire, default false.
+- `insureeForm.isInsureeStatusRequired`, make insuree status dropdown mandatory, default false.

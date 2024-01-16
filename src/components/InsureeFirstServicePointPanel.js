@@ -14,6 +14,7 @@ const styles = (theme) => ({
 class InsureeFirstServicePointPanel extends FormPanel {
   render() {
     const { classes, updateAttribute, readOnly, edited } = this.props;
+    let isInsureeFirstServicePointRequired = this.props.modulesManager.getConf("fe-insuree", "insureeForm.isInsureeFirstServicePointRequired", false);
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -30,6 +31,7 @@ class InsureeFirstServicePointPanel extends FormPanel {
                   pubRef="location.DetailedHealthFacility"
                   value={edited?.healthFacility ?? null}
                   readOnly={readOnly}
+                  required={isInsureeFirstServicePointRequired}
                   onChange={(hf) => updateAttribute("healthFacility", hf)}
                   ignoreLocation={true}
                 />

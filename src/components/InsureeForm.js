@@ -18,10 +18,11 @@ import {
   Helmet,
 } from "@openimis/fe-core";
 import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation } from "../actions";
-import { RIGHT_INSUREE } from "../constants";
-import { insureeLabel } from "../utils/utils";
+import { DEFAULT, INSUREE_ACTIVE_STRING, RIGHT_INSUREE } from "../constants";
+import { insureeLabel, isValidInsuree, isValidWorker } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
+import WorkerMasterPanel from "./worker/WorkerMasterPanel";
 
 const styles = (theme) => ({
   page: theme.page,
@@ -31,24 +32,34 @@ const styles = (theme) => ({
 const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";
 
 class InsureeForm extends Component {
-  state = {
-    lockNew: false,
-    reset: 0,
-    insuree: this._newInsuree(),
-    newInsuree: true,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      lockNew: false,
+      reset: 0,
+      insuree: this._newInsuree(),
+      newInsuree: true,
+    };
+    this.isWorker = props.modulesManager.getConf("fe-insuree", "isWorker", DEFAULT.IS_WORKER);
+  }
 
   _newInsuree() {
     let insuree = {};
     insuree.jsonExt = {};
+    insuree.status = INSUREE_ACTIVE_STRING;
+    insuree.statusReason = null;
     return insuree;
   }
 
   componentDidMount() {
     if (!!this.props.insuree_uuid) {
+      if (!!this.props.family_uuid) {
+        this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid);
+      }
+
       this.setState(
         (state, props) => ({ insuree_uuid: props.insuree_uuid }),
-        (e) => this.props.fetchInsureeFull(this.props.modulesManager, this.props.insuree_uuid),
+        (e) => this.props.fetchInsureeFull(this.props.modulesManager, this.props.insuree_uuid, this.isWorker),
       );
     } else if (!!this.props.family_uuid && (!this.props.family || this.props.family.uuid !== this.props.family_uuid)) {
       this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid);
@@ -84,6 +95,11 @@ class InsureeForm extends Component {
           clientMutationId: props.mutation.clientMutationId,
         };
       });
+    }
+
+    if (!this.state.insuree.family && this.props.family) {
+      const updatedInsuree = { ...this.state.insuree, family: this.props.family };
+      this.setState({ insuree: updatedInsuree });
     }
   }
 
@@ -126,7 +142,7 @@ class InsureeForm extends Component {
     } else {
       family_uuid
         ? historyPush(this.props.modulesManager, this.props.history, "insuree.route.familyOverview", [family_uuid])
-        : this.props.fetchInsureeFull(this.props.modulesManager, this.state.insuree_uuid);
+        : this.props.fetchInsureeFull(this.props.modulesManager, this.state.insuree_uuid, this.isWorker);
     }
 
     this.setState((state, props) => {
@@ -148,16 +164,12 @@ class InsureeForm extends Component {
   canSave = () => {
     const doesInsureeChange = this.doesInsureeChange();
     if (!doesInsureeChange) return false;
-    if (!this.props.isInsureeNumberValid) return false;
-    if (!this.state.insuree.chfId) return false;
-    if (!this.state.insuree.lastName) return false;
-    if (!this.state.insuree.otherNames) return false;
-    if (!this.state.insuree.dob) return false;
-    if (!this.state.insuree.gender || !this.state.insuree.gender?.code) return false;
     if (this.state.lockNew) return false;
-    if (!!this.state.insuree.photo && (!this.state.insuree.photo.date || !this.state.insuree.photo.officerId))
-      return false;
-    return true;
+    if (!this.props.isChfIdValid) return false;
+
+    return this.isWorker
+      ? isValidWorker(this.state.insuree)
+      : isValidInsuree(this.state.insuree, this.props.modulesManager);
   };
 
   _save = (insuree) => {
@@ -198,8 +210,9 @@ class InsureeForm extends Component {
         onlyIfDirty: !readOnly && !runningMutation,
       },
     ];
+    const shouldBeLocked = !!runningMutation || insuree?.validityTo;
     return (
-      <div className={runningMutation ? classes.lockedPage : null}>
+      <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
           title={formatMessageWithValues(this.props.intl, "insuree", "Insuree.title", {
             label: insureeLabel(this.state.insuree),
@@ -221,7 +234,7 @@ class InsureeForm extends Component {
               readOnly={readOnly || runningMutation || !!insuree.validityTo}
               actions={actions}
               HeadPanel={FamilyDisplayPanel}
-              Panels={[InsureeMasterPanel]}
+              Panels={[this.isWorker ? WorkerMasterPanel : InsureeMasterPanel]}
               contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
               insuree={this.state.insuree}
               onEditedChanged={this.onEditedChanged}
@@ -247,7 +260,7 @@ const mapStateToProps = (state, props) => ({
   family: state.insuree.family,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
-  isInsureeNumberValid: state.insuree?.validationFields?.insureeNumber?.isValid,
+  isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
 });
 
 export default withHistory(

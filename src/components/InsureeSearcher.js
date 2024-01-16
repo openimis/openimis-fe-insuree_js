@@ -19,7 +19,7 @@ import {
 import EnquiryDialog from "./EnquiryDialog";
 import {
   RIGHT_INSUREE_DELETE,
-  INSUREE_MARITAL_STATUS
+  INSUREE_MARITAL_STATUS, DEFAULT
 } from "../constants";
 import { fetchInsureeSummaries, deleteInsuree } from "../actions";
 
@@ -45,6 +45,7 @@ class InsureeSearcher extends Component {
     );
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "insureeFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
+    this.isWorker = props.modulesManager.getConf("fe-insuree", "isWorker", DEFAULT.IS_WORKER);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -57,7 +58,7 @@ class InsureeSearcher extends Component {
   }
 
   fetch = (prms) => {
-    this.props.fetchInsureeSummaries(this.props.modulesManager, prms);
+    this.props.fetchInsureeSummaries(this.props.modulesManager, prms, this.isWorker);
   };
 
   rowIdentifier = (r) => r.uuid;
@@ -88,12 +89,12 @@ class InsureeSearcher extends Component {
       "insuree.insureeSummaries.insuranceNo",
       "insuree.insureeSummaries.lastName",
       "insuree.insureeSummaries.otherNames",
-      "insuree.insureeSummaries.maritalStatus",
-      "insuree.insureeSummaries.gender",
-      "insuree.insureeSummaries.email",
-      "insuree.insureeSummaries.phone",
-      "insuree.insureeSummaries.dob",
-      ...Array.from(Array(this.locationLevels)).map((_, i) => `location.locationType.${i}`),
+        this.isWorker ? null : "insuree.insureeSummaries.maritalStatus",
+        this.isWorker ? null : "insuree.insureeSummaries.gender",
+        this.isWorker ? null : "insuree.insureeSummaries.email",
+        this.isWorker ? null : "insuree.insureeSummaries.phone",
+        this.isWorker ? null : "insuree.insureeSummaries.dob",
+        ...Array.from(Array(this.locationLevels)).map((_, i) => this.isWorker ? null : `location.locationType.${i}`),
       "insuree.insureeSummaries.validityFrom",
       filters.showHistory && "insuree.insureeSummaries.validityTo",
       "",
@@ -154,7 +155,7 @@ class InsureeSearcher extends Component {
       (insuree) => insuree.chfId,
       (insuree) => insuree.lastName,
       (insuree) => insuree.otherNames,
-      (insuree) => (
+      this.isWorker? null : (insuree) => (
         <PublishedComponent
           pubRef="insuree.InsureeMaritalStatusPicker"
           withLabel={false}
@@ -162,7 +163,7 @@ class InsureeSearcher extends Component {
           value={insuree.marital || INSUREE_MARITAL_STATUS[0]}
         />
       ),
-      (insuree) => (
+        this.isWorker? null : (insuree) => (
         <PublishedComponent
           pubRef="insuree.InsureeGenderPicker"
           withLabel={false}
@@ -170,16 +171,18 @@ class InsureeSearcher extends Component {
           value={!!insuree.gender ? insuree.gender.code : null}
         />
       ),
-      (insuree) => insuree.email,
-      (insuree) => insuree.phone,
-      (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
+        this.isWorker? null : (insuree) => insuree.email,
+        this.isWorker? null : (insuree) => insuree.phone,
+        this.isWorker? null : (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
     ];
-    for (var i = 0; i < this.locationLevels; i++) {
-      // need a fixed variable to refer to as parentLocation argument
-      let j = i + 0;
-      formatters.push((insuree) =>
-        this.parentLocation(insuree.currentVillage || (!!insuree.family && insuree.family.location), j),
-      );
+    if (!this.isWorker) {
+        for (var i = 0; i < this.locationLevels; i++) {
+            // need a fixed variable to refer to as parentLocation argument
+            let j = i + 0;
+            formatters.push((insuree) =>
+                this.parentLocation(insuree.currentVillage || (!!insuree.family && insuree.family.location), j),
+            );
+        }
     }
     formatters.push(
       (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom),
@@ -187,14 +190,16 @@ class InsureeSearcher extends Component {
       ((insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)),
       (insuree) => (
         <Grid container wrap="nowrap" spacing="2">
-          <Grid item>
-            <IconButton
-              size="small"
-              onClick={(e) => !insuree.clientMutationId && this.setState({ open: true, chfid: insuree.chfId })}
-            >
-              <SearchIcon />
-            </IconButton>
-          </Grid>
+            {!this.isWorker &&
+              (<Grid item>
+                <IconButton
+                    size="small"
+                    onClick={(e) => !insuree.clientMutationId && this.setState({open: true, chfid: insuree.chfId})}
+                >
+                    <SearchIcon/>
+                </IconButton>
+            </Grid>
+              )}
 
           {insuree.family && (
             <Grid item>
@@ -254,7 +259,7 @@ class InsureeSearcher extends Component {
       onDoubleClick,
     } = this.props;
 
-    let count = insureesPageInfo.totalCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    let count = (insureesPageInfo?.totalCount || 0).toLocaleString();
 
     return (
       <Fragment>
