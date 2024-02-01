@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { Grid } from "@material-ui/core";
-import { withModulesManager, TextInput, ProgressOrError } from "@openimis/fe-core";
+import { withModulesManager, TextInput, ProgressOrError, formatMessage } from "@openimis/fe-core";
 
 import { fetchInsuree } from "../actions";
 import _debounce from "lodash/debounce";
+import { EMPTY_STRING } from "../constants";
 
 const INIT_STATE = {
   search: "",
@@ -59,7 +61,13 @@ class InsureeChfIdPicker extends Component {
   debouncedSearch = _debounce(this.fetch, this.props.modulesManager.getConf("fe-insuree", "debounceTime", 800));
 
   formatInsuree(insuree) {
-    if (!insuree) return "";
+    const { search } = this.state;
+    const { intl } = this.props;
+
+    if (!insuree) {
+      return search === EMPTY_STRING ? EMPTY_STRING : formatMessage(intl, "insuree", "notFound");
+    }
+
     return `${insuree.otherNames} ${insuree.lastName}`;
   }
 
@@ -107,4 +115,4 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchInsuree }, dispatch);
 };
 
-export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(InsureeChfIdPicker));
+export default withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(InsureeChfIdPicker)));
