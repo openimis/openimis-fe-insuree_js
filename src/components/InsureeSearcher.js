@@ -118,8 +118,8 @@ class InsureeSearcher extends Component {
       this.isWorker ? null : "insuree.insureeSummaries.phone",
       this.isWorker ? null : "insuree.insureeSummaries.dob",
       ...Array.from(Array(this.locationLevels)).map((_, i) => (this.isWorker ? null : `location.locationType.${i}`)),
-      "insuree.insureeSummaries.validityFrom",
-      filters.showHistory && "insuree.insureeSummaries.validityTo",
+      filters?.showHistory?.value ? "insuree.insureeSummaries.validityFrom" : null,
+      filters?.showHistory?.value ? "insuree.insureeSummaries.validityTo" : null,
       "",
     ];
     return h.filter(Boolean);
@@ -135,9 +135,10 @@ class InsureeSearcher extends Component {
       ["email", true],
       ["phone", true],
       ["dob", true],
+      filters?.showHistory?.value ? ["validityFrom", false] : null,
+      filters?.showHistory?.value ? ["validityTo", false] : null,
     ];
     _.times(this.locationLevels, () => results.push(null));
-    results.push(["validityFrom", false], ["validityTo", false]);
     return results;
   };
 
@@ -218,9 +219,12 @@ class InsureeSearcher extends Component {
       }
     }
     formatters.push(
-      (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom),
-      filters.showHistory &&
-        ((insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)),
+      filters?.showHistory?.value
+        ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom)
+        : null,
+      filters?.showHistory?.value
+        ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)
+        : null,
       (insuree) => (
         <Grid container wrap="nowrap" spacing="2">
           {!this.isWorker && (
