@@ -298,6 +298,7 @@ class InsureeFilter extends Component {
                                   value={this._filterValue("dobFrom")}
                                   module="insuree"
                                   label="Insuree.dobFrom"
+                                  {...(filters.dobTo ? { maxDate: filters.dobTo.value } : null)}
                                   onChange={(d) =>
                                       onChangeFilters([
                                           {
@@ -315,7 +316,7 @@ class InsureeFilter extends Component {
                                   value={this._filterValue("dobTo")}
                                   module="insuree"
                                   label="Insuree.dobTo"
-                                  minDate={filters?.dobFrom}
+                                  {...(filters.dobFrom ? { minDate: filters.dobFrom.value } : null)}
                                   onChange={(d) =>
                                       onChangeFilters([
                                           {
