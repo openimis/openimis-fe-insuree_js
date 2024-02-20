@@ -94,7 +94,7 @@ const InsureeSummary = (props) => {
                             module="insuree"
                             id="InsureeSummary.otherNames"
                             field={`${insuree.otherNames}`}
-                          />{" "}
+                          />
                           <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree.lastName} />
                         </>
                       )}
@@ -129,23 +129,25 @@ const InsureeSummary = (props) => {
                   }
                 />
               </Box>
-              {showInsureeSummaryAddress && <Box>
-                <ControlledField
-                  module="insuree"
-                  id="InsureeSummary.insureeLocation"
-                  field={
-                    <Grid item xs={12}>
-                      <Typography className={classes.rawValue}>{
-                        formatMessageWithValues(intl, "insuree", "InsureeSummary.insureeLocation", 
-                        {
-                          location: `${formatLocationString(insuree?.family?.location)}`,
-                        })
-                        }
-                      </Typography>
-                    </Grid>
-                  }
-                />
-              </Box>}
+              {showInsureeSummaryAddress && (
+                <Box>
+                  <ControlledField
+                    module="insuree"
+                    id="InsureeSummary.insureeLocation"
+                    field={
+                      <Grid item xs={12}>
+                        <Typography className={classes.rawValue}>
+                          {formatMessageWithValues(intl, "insuree", "InsureeSummary.insureeLocation", {
+                            location: insuree?.family
+                              ? `${formatLocationString(insuree.family)}`
+                              : formatMessage(intl, "insuree", "notFound"),
+                          })}
+                        </Typography>
+                      </Grid>
+                    }
+                  />
+                </Box>
+              )}
 
               <Contributions contributionKey={INSUREE_SUMMARY_CORE_CONTRIBUTION_KEY} insuree={insuree} />
             </div>
@@ -163,7 +165,9 @@ const InsureeSummary = (props) => {
                 onClick={() => goToFamilyUuid(modulesManager, history, insuree.family.uuid)}
               >
                 <People />
-                <span className={classes.label}> {formatMessage(intl, "insuree", "insureeSummaries.goToFamilyButton")} </span>
+                <span className={classes.label}>
+                  {formatMessage(intl, "insuree", "insureeSummaries.goToFamilyButton")}
+                </span>
               </Button>
             </Grid>
           )}

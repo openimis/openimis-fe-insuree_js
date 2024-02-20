@@ -113,7 +113,7 @@ export function fetchInsuree(mm, chfid) {
       "validityTo",
       "gender{code}",
       "status",
-      `family{id, uuid, address location{name, parent{name, parent{name}}}}`,
+      `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
       "photo{folder,filename,photo}",
       "gender{code, gender, altLanguage}",
       "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),

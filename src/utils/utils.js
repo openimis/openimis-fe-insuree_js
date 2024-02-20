@@ -42,8 +42,17 @@ export const isValidInsuree = (insuree, modulesManager) => {
   return true;
 };
 
-export const formatLocationString = (location) => {
-  return [location?.parent?.parent?.name, location?.parent?.name, location?.name].filter(Boolean).join(", ");
+export const formatLocationString = (family) => {
+  const { location, address } = family;
+  return [
+    location?.parent?.parent?.parent?.name,
+    location?.parent?.parent?.name,
+    location?.parent?.name,
+    location?.name,
+    address,
+  ]
+    .filter(Boolean)
+    .join(", ");
 };
 
 export const isValidWorker = (worker) => {

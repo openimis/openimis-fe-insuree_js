@@ -149,7 +149,9 @@ const ProfilePage = () => {
                         <Grid item xs={12}>
                           <Typography>
                             {formatMessageWithValues("InsureeSummary.insureeLocation", {
-                              location: `${formatLocationString(insuree?.family?.location)}`,
+                              location: insuree?.family
+                                ? `${formatLocationString(insuree.family)}`
+                                : formatMessage("notFound"),
                             })}
                           </Typography>
                         </Grid>
