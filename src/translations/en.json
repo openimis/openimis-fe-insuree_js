@@ -21,7 +21,7 @@
   "insuree.link.cappedItemService": "Capped Items/Services",
   "insuree.link.profile": "Profile",
   "insuree.notFound": "Not Found",
-  "insuree.chfidNotFound": "No insuree with chfid {chfid} found.",
+  "insuree.chfIdNotFound": "No insuree with chfid {chfid} found.",
   "insuree.noFSP": "First Service Point not registered.",
   "insuree.FSP.title": "First Service Point",
   "insuree.Insuree.searchCriteria": "Search Criteria",
