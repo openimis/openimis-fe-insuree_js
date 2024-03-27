@@ -11,6 +11,7 @@ import {
 } from "@openimis/fe-core";
 
 const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone,dob,gender{code}}";
+export const baseApiUrl =  "/api";
 
 const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
@@ -22,6 +23,9 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "address",
   "validityFrom",
   "validityTo",
+  "bankCoordinates",
+  "incomeLevel{id, frenchVersion , englishVersion}",
+  "coordinates",
   FAMILY_HEAD_PROJECTION,
   "location" + mm.getProjection("location.Location.FlatProjection"),
   "clientMutationId",
@@ -39,6 +43,8 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "age",
   "validityFrom",
   "validityTo",
+  "professionalSituation",
+  "preferredPaymentMethod",
   `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
   `photo{id,uuid,date,folder,filename,officerId,photo}`,
   "gender{code}",
@@ -147,6 +153,11 @@ export function fetchFamilyTypes() {
   return graphql(payload, "INSUREE_FAMILY_TYPES");
 }
 
+export function fetchIncomeLevels (){
+  const payload = formatQuery("incomeLevels", null, ["id", "frenchVersion", "englishVersion"]);
+  return graphql(payload, "INSUREE_FAMILY_INCOME_LEVEL")
+}
+
 export function newFamily() {
   return (dispatch) => {
     dispatch({ type: "INSUREE_FAMILY_NEW" });
@@ -219,6 +230,8 @@ export function fetchInsureeSummaries(mm, filters) {
     "phone",
     "gender{code}",
     "dob",
+    "professionalSituation",
+    "preferredPaymentMethod",
     "marital",
     "family{uuid,location" + mm.getProjection("location.Location.FlatProjection") + "}",
     "currentVillage" + mm.getProjection("location.Location.FlatProjection"),
@@ -269,8 +282,11 @@ export function formatInsureeGQL(mm, insuree) {
       !!insuree.healthFacility && !!insuree.healthFacility.id
         ? `healthFacilityId: ${decodeId(insuree.healthFacility.id)}`
         : ""
-    }
+    } 
     ${!!insuree.jsonExt ? `jsonExt: ${formatJsonField(insuree.jsonExt)}` : ""}
+    ${!!insuree.preferredPaymentMethod ? `preferredPaymentMethod: "${insuree.preferredPaymentMethod.id}"`: ""}
+    ${!!insuree.professionalSituation ? `professionalSituation: "${insuree.professionalSituation}"`: ""}
+
   `;
 }
 
@@ -292,6 +308,9 @@ export function formatFamilyGQL(mm, family) {
     ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
+    ${!!family.headInsuree.coordinates ? `coordinates: "${family.headInsuree.coordinates}"`: ""}
+    ${!!family.headInsuree.incomeLevel ? `incomeLevelId: ${decodeId(family.headInsuree.incomeLevel.id.id)}`: ""}
+    ${!!family.headInsuree.bankCoordinates? `bankCoordinates: "${formatGQLString(family.headInsuree.bankCoordinates)}"`: ""}
   `;
 }
 

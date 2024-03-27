@@ -232,5 +232,14 @@
   "insuree.EnrolledFamiliesReport.dateTo": "To Date",
   "insuree.InsureeFamilyOverviewReport.dateFrom": "From Date",
   "insuree.InsureeFamilyOverviewReport.dateTo": "To Date",
-  "insuree.InsureeMissingPhotoReport.officer": "Officer"
+  "insuree.Insuree.otherHousehold": "Other Household",
+  "insuree.Insuree.professionalSituation": "Professional situation",
+  "insuree.PaymentMethodPicker": "Payment Method",
+  "insuree.PaymentMethodPicker.MO": "Mobile Money",
+  "insuree.PaymentMethodPicker.PB": "Bank Debit",
+  "insuree.PaymentMethodPicker.TP": "Third-party payment",
+  "insuree.Insuree.accountDetails": "Account details",
+  "insuree.Payment.none": "None",
+  "insuree.InsureeMaritalStatus.P": "Polygamy",
+  "insuree.IncomeLevel.label": "Income level"
 }

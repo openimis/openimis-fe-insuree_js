@@ -16,9 +16,11 @@ import EducationPicker from "./pickers/EducationPicker";
 import ProfessionPicker from "./pickers/ProfessionPicker";
 import IdentificationTypePicker from "./pickers/IdentificationTypePicker";
 import InsureeMaritalStatusPicker from "./pickers/InsureeMaritalStatusPicker";
+import PaymentMethodPicker from "./pickers/PaymentMethodPicker";
 import FamilyPovertyStatusPicker from "./pickers/FamilyPovertyStatusPicker";
 import ConfirmationTypePicker from "./pickers/ConfirmationTypePicker";
 import FamilyTypePicker from "./pickers/FamilyTypePicker";
+import InsureIncomeLevelPicker from "./pickers/InsureIncomeLevelPicker";
 import PhotoStatusPicker from "./pickers/PhotoStatusPicker";
 import RelationPicker from "./pickers/RelationPicker";
 import InsureeNumberInput from "./pickers/InsureeNumberInput";
@@ -32,6 +34,7 @@ import InsureeAddress from "./components/InsureeAddress";
 import FamilyDisplayPanel from "./components/FamilyDisplayPanel";
 import { familyLabel } from "./utils/utils";
 import messages_en from "./translations/en.json";
+import messages_fr from "./translations/fr.json";
 import reducer from "./reducer";
 import { FAMILY_PICKER_PROJECTION, INSUREE_PICKER_PROJECTION } from "./actions";
 import { decodeId } from "@openimis/fe-core";
@@ -47,7 +50,7 @@ const ROUTE_INSUREE_INSUREES = "insuree/insurees";
 const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
 
 const DEFAULT_CONFIG = {
-  "translations": [{ key: "en", messages: messages_en }],
+  "translations": [{ key: "en", messages: messages_en}, {key: 'fr', messages: messages_fr}],
   "reducers": [{ key: "insuree", reducer }],
   "reports": [
     {
@@ -115,9 +118,11 @@ const DEFAULT_CONFIG = {
     { key: "insuree.FamilyPovertyStatusPicker", ref: FamilyPovertyStatusPicker },
     { key: "insuree.ConfirmationTypePicker", ref: ConfirmationTypePicker },
     { key: "insuree.FamilyTypePicker", ref: FamilyTypePicker },
+    { key: "insuree.InsureIncomeLevelPicker", ref: InsureIncomeLevelPicker },
     { key: "insuree.PhotoStatusPicker", ref: PhotoStatusPicker },
     { key: "insuree.RelationPicker", ref: RelationPicker },
     { key: "insuree.InsureeNumberInput", ref: InsureeNumberInput },
+    { key: "insuree.PaymentMethodPicker", ref: PaymentMethodPicker},
 
     { key: "insuree.route.families", ref: ROUTE_INSUREE_FAMILIES },
     { key: "insuree.route.familyOverview", ref: ROUTE_INSUREE_FAMILY_OVERVIEW },

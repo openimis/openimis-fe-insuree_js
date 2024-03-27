@@ -1,0 +1,12 @@
+{
+    "insuree.Insuree.otherHousehold": "Autre ménage",
+    "insuree.Insuree.professionalSituation": "Situation Professionnel ",
+    "insuree.PaymentMethodPicker": "Méthode de payment",
+    "insuree.PaymentMethodPicker.MO": "Mobile Money",
+    "insuree.PaymentMethodPicker.PB": "Prélèvement bancaire",
+    "insuree.PaymentMethodPicker.TP": "Tiers payant",
+    "insuree.Insuree.accountDetails": "Details du compte",
+    "insuree.Payment.none": "Aucun",
+    "insuree.InsureeMaritalStatus.P": "Polygamie",
+    "insuree.IncomeLevel.label": "Niveau de revenu"
+}
