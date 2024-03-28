@@ -248,7 +248,7 @@ class InsureeMasterPanel extends FormPanel {
                       readOnly={readOnly}
                       withNull={false}
                       required={true}
-                      onChange={(v) => this.updateAttribute("incomeLevel", {id: v})}
+                      onChange={(v) => this.updateAttribute("incomeLevel", v)}
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
@@ -266,14 +266,14 @@ class InsureeMasterPanel extends FormPanel {
                     <PublishedComponent
                       pubRef="insuree.PaymentMethodPicker"
                       module="insuree"
-                      value={!!edited && !!edited.preferredPaymentMethod ? edited.preferredPaymentMethod.id : ""}
+                      value={!!edited && !!edited.preferredPaymentMethod ? edited.preferredPaymentMethod: ""}
                       readOnly={readOnly}
                       withNull={true}
                       nullLabel={formatMessage(intl, "insuree", "insuree.Payment.none")}
-                      onChange={(v) => this.updateAttribute("preferredPaymentMethod", { id: v })}
+                      onChange={(v) => this.updateAttribute("preferredPaymentMethod", v)}
                     />
                   </Grid>
-                  {edited?.preferredPaymentMethod?.id == "PB" &&
+                  {edited?.preferredPaymentMethod == "PB" &&
                       <Grid item xs={3} className={classes.item}>
                       <TextInput
                         module="insuree"
@@ -281,7 +281,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         required={true}
                         value={!!edited && !!edited.bankCoordinates ? edited.bankCoordinates : ""}
-                        onChange={(v) => this.updateAttribute("accountNumber", !!v ? v : null)}
+                        onChange={(v) => this.updateAttribute("bankCoordinates", !!v ? v : null)}
                       />
                     </Grid>
                   }

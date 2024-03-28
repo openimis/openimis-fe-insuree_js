@@ -26,6 +26,9 @@ export const isValidInsuree = (insuree, modulesManager) => {
   if (!insuree.dob) return false;
   if (!insuree.gender || !insuree.gender?.code) return false;
   if (!!insuree.photo && (!insuree.photo.date || !insuree.photo.officerId)) return false;
+  if (!insuree.incomeLevel ) return false;
+  if (!insuree.passport) return false;
+  if (!!insuree.preferredPaymentMethod && insuree.preferredPaymentMethod == "PB" && !insuree.bankCoordinates ) return false
 
   return true;
 };

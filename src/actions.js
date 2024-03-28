@@ -23,9 +23,6 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "address",
   "validityFrom",
   "validityTo",
-  "bankCoordinates",
-  "incomeLevel{id, frenchVersion , englishVersion}",
-  "coordinates",
   FAMILY_HEAD_PROJECTION,
   "location" + mm.getProjection("location.Location.FlatProjection"),
   "clientMutationId",
@@ -44,6 +41,9 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "validityFrom",
   "validityTo",
   "professionalSituation",
+  "bankCoordinates",
+  "coordinates",
+  "incomeLevel{id, frenchVersion, englishVersion}",
   "preferredPaymentMethod",
   `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
   `photo{id,uuid,date,folder,filename,officerId,photo}`,
@@ -231,6 +231,9 @@ export function fetchInsureeSummaries(mm, filters) {
     "gender{code}",
     "dob",
     "professionalSituation",
+    "bankCoordinates",
+    "coordinates",
+    "incomeLevel{id, frenchVersion, englishVersion}",
     "preferredPaymentMethod",
     "marital",
     "family{uuid,location" + mm.getProjection("location.Location.FlatProjection") + "}",
@@ -284,8 +287,11 @@ export function formatInsureeGQL(mm, insuree) {
         : ""
     } 
     ${!!insuree.jsonExt ? `jsonExt: ${formatJsonField(insuree.jsonExt)}` : ""}
-    ${!!insuree.preferredPaymentMethod ? `preferredPaymentMethod: "${insuree.preferredPaymentMethod.id}"`: ""}
+    ${!!insuree.preferredPaymentMethod ? `preferredPaymentMethod: "${insuree.preferredPaymentMethod}"`: ""}
     ${!!insuree.professionalSituation ? `professionalSituation: "${insuree.professionalSituation}"`: ""}
+    ${!!insuree.coordinates ? `coordinates: "${insuree.coordinates}"`: ""}
+    ${!!insuree.bankCoordinates? `bankCoordinates: "${formatGQLString(insuree.bankCoordinates)}"`: ""}
+    ${!!insuree.incomeLevel? `incomeLevelId: ${decodeId(insuree.incomeLevel.id)}`: ""}
 
   `;
 }
@@ -308,9 +314,7 @@ export function formatFamilyGQL(mm, family) {
     ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
-    ${!!family.headInsuree.coordinates ? `coordinates: "${family.headInsuree.coordinates}"`: ""}
-    ${!!family.headInsuree.incomeLevel ? `incomeLevelId: ${decodeId(family.headInsuree.incomeLevel.id.id)}`: ""}
-    ${!!family.headInsuree.bankCoordinates? `bankCoordinates: "${formatGQLString(family.headInsuree.bankCoordinates)}"`: ""}
+
   `;
 }
 
