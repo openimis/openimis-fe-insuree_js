@@ -34,6 +34,7 @@ const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";
 class InsureeForm extends Component {
   constructor(props) {
     super(props);
+    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
     this.state = {
       lockNew: false,
       reset: 0,
@@ -41,11 +42,27 @@ class InsureeForm extends Component {
       newInsuree: true,
       isSaved: false,
     };
-    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
   }
 
   _newInsuree() {
     let insuree = {};
+
+    // NOTE: This is a placeholder data for the worker entity,
+    // as the worker itself does not have the same fields as the insuree.
+    if (this.isWorker) {
+      const dateOfBirthPlaceholder = "2000-01-01";
+      const genderCodePlaceholder = "O";
+
+      const insureeWithPlaceholderData = {
+        dob: dateOfBirthPlaceholder,
+        gender: {
+          code: genderCodePlaceholder,
+        },
+      };
+
+      insuree = { ...insuree, ...insureeWithPlaceholderData };
+    }
+
     insuree.jsonExt = {};
     insuree.status = INSUREE_ACTIVE_STRING;
     insuree.statusReason = null;
