@@ -10,7 +10,7 @@ import {
   graphqlWithVariables,
 } from "@openimis/fe-core";
 
-const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone,dob,gender{code}}";
+const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,marital,otherNames,email,phone,dob,gender{code}}";
 export const baseApiUrl =  "/api";
 
 const FAMILY_FULL_PROJECTION = (mm) => [
