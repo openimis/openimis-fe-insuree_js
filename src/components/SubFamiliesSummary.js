@@ -49,6 +49,7 @@ import {
   setFamilyHead,
   changeFamily,
   checkCanAddInsuree,
+  fetchSubFamily,
 } from "../actions";
 import { RIGHT_INSUREE_DELETE, EMPTY_STRING } from "../constants";
 import { insureeLabel, familyLabel } from "../utils/utils";
@@ -64,7 +65,7 @@ const styles = (theme) => ({
   tableTitle: theme.table.title,
 });
 
-class FamilyInsureesOverview extends PagedDataHandler {
+class SubFamiliesSummary extends PagedDataHandler {
   state = {
     enquiryOpen: false,
     chfid: null,
@@ -75,21 +76,21 @@ class FamilyInsureesOverview extends PagedDataHandler {
     canAddAction: null,
     checkedCanAdd: false,
     filters: {},
-    showInsureeSearcher: false,
+    showIFamilySearcher: false,
   };
 
   constructor(props) {
     super(props);
     this.rowsPerPageOptions = props.modulesManager.getConf(
-      "fe-insuree",
-      "familyInsureesOverview.rowsPerPageOptions",
+      "fe-family",
+      "subFamiliesSummary.rowsPerPageOptions",
       [5, 10, 20],
     );
-    this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "familyInsureesOverview.defaultPageSize", 5);
+    this.defaultPageSize = props.modulesManager.getConf("fe-family", "subFamiliesSummary.defaultPageSize", 5);
   }
 
-  handleInsureeSearcherToogle = (providedState) => this.setState(() => ({
-    showInsureeSearcher: providedState,
+  handleFamilySearcherToogle = (providedState) => this.setState(() => ({
+    showIFamilySearcher: providedState,
   }));
 
   onChangeFilters = (newFilters) => {
@@ -106,8 +107,8 @@ class FamilyInsureesOverview extends PagedDataHandler {
 
   resetFilters = () => this.setState(() => ({ filters: {} }))
 
-  closeInsureeSearcher = () => {
-    this.handleInsureeSearcherToogle(false);
+  closeFamilySearcher = () => {
+    this.handleFamilySearcherToogle(false);
     this.resetFilters();
   }
 
@@ -146,7 +147,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
       prms.push(`orderBy: "${this.state.orderBy}"`);
     }
     if (!!this.props.family && !!this.props.family.uuid) {
-      prms.push(`familyUuid:"${this.props.family.uuid}"`);
+      prms.push(`parent_Uuid:"${this.props.family.uuid}"`);
       for (const [key, value] of Object.entries(this.state.filters)) {
         prms.push(value["filter"]);
       }
@@ -159,7 +160,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
     historyPush(
       this.props.modulesManager,
       this.props.history,
-      "insuree.route.insuree",
+      "family.route.family",
       [i.uuid, this.props.family.uuid],
       newTab,
     );
@@ -170,15 +171,15 @@ class FamilyInsureesOverview extends PagedDataHandler {
   };
 
   headers = [
-    "Insuree.chfId",
-    "Insuree.lastName",
-    "Insuree.otherNames",
-    "Insuree.gender",
-    "Insuree.dob",
-    "Insuree.cardIssued",
-    "",
-    "",
-    "",
+    "insuree.familySummaries.insuranceNo",
+    "insuree.familySummaries.lastName",
+    "insuree.familySummaries.otherNames",
+    "insuree.familySummaries.email",
+    "insuree.familySummaries.phone",
+    "insuree.familySummaries.dob",
+    "insuree.familySummaries.poverty",
+    "insuree.familySummaries.confirmationNo"
+
   ];
 
   sorter = (attr, asc = true) => [
@@ -199,17 +200,17 @@ class FamilyInsureesOverview extends PagedDataHandler {
     this.sorter("cardIssued"),
   ];
 
-  adornedChfId = (i) => (
-    <Fragment>
-      <IconButton
-        size="small"
-        onClick={(e) => !i.clientMutationId && this.setState({ enquiryOpen: true, chfid: i.chfId })}
-      >
-        <SearchIcon />
-      </IconButton>
-      {i.chfId}
-    </Fragment>
-  );
+//   adornedChfId = (i) => (
+//     <Fragment>
+//       <IconButton
+//         size="small"
+//         onClick={(e) => !i.clientMutationId && this.setState({ enquiryOpen: true, chfid: i.chfId })}
+//       >
+//         <SearchIcon />
+//       </IconButton>
+//       {i.chfId}
+//     </Fragment>
+//   );
 
   confirmSetHeadInsuree = (i) => {
     let confirmedAction = () => {
@@ -296,34 +297,15 @@ class FamilyInsureesOverview extends PagedDataHandler {
   isHead = (f, i) => i.chfId === (!!f.headInsuree && f.headInsuree.chfId);
 
   formatters = [
-    (i) => this.adornedChfId(i),
-    (i) => i.lastName || "",
-    (i) => i.otherNames || "",
-    (i) =>
-      i.gender && i.gender.code ? formatMessage(this.props.intl, "insuree", `InsureeGender.${i.gender.code}`) : "",
-    (i) => formatDateFromISO(this.props.modulesManager, this.props.intl, i.dob),
-    (i) => <Checkbox color="primary" readOnly={true} disabled={true} checked={i.cardIssued} />,
-    (i) =>
-      !!this.props.readOnly ||
-        !this.props.rights.includes(RIGHT_INSUREE_DELETE) ||
-        this.isHead(this.props.family, i) ||
-        !!i.clientMutationId
-        ? null
-        : this.setHeadInsureeAction(i),
-    (i) =>
-      !!this.props.readOnly ||
-        !this.props.rights.includes(RIGHT_INSUREE_DELETE) ||
-        this.isHead(this.props.family, i) ||
-        !!i.clientMutationId
-        ? null
-        : this.removeInsureeAction(i),
-    (i) =>
-      !!this.props.readOnly ||
-        !this.props.rights.includes(RIGHT_INSUREE_DELETE) ||
-        this.isHead(this.props.family, i) ||
-        !!i.clientMutationId
-        ? null
-        : this.deleteInsureeAction(i),
+    (i) => i.headInsuree.chfId || "",
+    (i) => i.headInsuree.otherNames || "",
+    (i) =>i.headInsuree.lastName || "",
+    (i) => i.headInsuree.email  || "",
+    (i) => i.headInsuree.phone || "",
+    (i) => i.headInsuree.dob || "",
+    (i) => i.poverty || "",
+    (i) => i.confimationNo || "",
+    
   ];
 
   addNewInsuree = () =>
@@ -365,14 +347,15 @@ class FamilyInsureesOverview extends PagedDataHandler {
       classes,
       pageInfo,
       family,
-      familyMembers,
-      fetchingFamilyMembers,
-      errorFamilyMembers,
+      subFamily,
+      fetchingSubFamily,
+      errorSubFamily,
       readOnly,
       checkingCanAddInsuree,
       errorCanAddInsuree,
+      familiesTotalCount
     } = this.props;
-    console.log('insuree props', this.props);
+    console.log('insuree props over ', this.props);
     let actions =
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []
@@ -401,15 +384,15 @@ class FamilyInsureesOverview extends PagedDataHandler {
             tooltip: formatMessage(intl, "insuree", "familyAddNewInsuree.tooltip"),
           },
           {
-            button: this.state.showInsureeSearcher ?
+            button: this.state.showIFamilySearcher ?
               <IconButton onClick={(e) => this.closeInsureeSearcher()}>
                 <CloseIcon />
               </IconButton> :
-              <IconButton onClick={(e) => this.handleInsureeSearcherToogle(true)}>
+              <IconButton onClick={(e) => this.handleFamilySearcherToogle(true)}>
                 <SearchIcon />
               </IconButton>
             ,
-            tooltip: this.state.showInsureeSearcher ?
+            tooltip: this.state.showIFamilySearcher ?
               formatMessage(intl, "insuree", "closeInsureeSearchCriteria.tooltip") :
               formatMessage(intl, "insuree", "showInsureeSearchCriteria.tooltip"),
           },
@@ -445,7 +428,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
           onConfirm={this.removeInsuree}
           onCancel={(e) => this.setState({ removeInsuree: null })}
         />
-        <Collapse in={this.state.showInsureeSearcher}>
+        <Collapse in={this.state.showIFamilySearcher}>
           <FamilyInsureesSearcher
             filters={this.state.filters}
             onChangeFilters={this.onChangeFilters}
@@ -455,7 +438,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
         <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
           <Grid item xs={8}>
             <Typography className={classes.tableTitle}>
-              <FormattedMessage module="insuree" id="Family.insurees" values={{ count: pageInfo.totalCount }} />
+              <FormattedMessage module="insuree" id="Family.families" values={{ count: familiesTotalCount }} />
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -478,9 +461,9 @@ class FamilyInsureesOverview extends PagedDataHandler {
           headers={this.headers}
           headerActions={this.headerActions}
           itemFormatters={this.formatters}
-          items={(!!family && familyMembers) || []}
-          fetching={fetchingFamilyMembers}
-          error={errorFamilyMembers}
+          items={(!!family && subFamily) || []}
+          fetching={fetchingSubFamily}
+          error={errorSubFamily}
           onDoubleClick={this.onDoubleClick}
           withSelection={"single"}
           onChangeSelection={this.onChangeSelection}
@@ -495,6 +478,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
           rowLocked={this.rowLocked}
         />
       </Paper>
+   
     );
   }
 }
@@ -503,11 +487,12 @@ const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   alert: !!state.core ? state.core.alert : null,
   family: state.insuree.family,
-  fetchingFamilyMembers: state.insuree.fetchingFamilyMembers,
-  fetchedFamilyMembers: state.insuree.fetchedFamilyMembers,
-  familyMembers: state.insuree.familyMembers,
+  fetchingSubFamily: state.insuree.fetchingSubFamily,
+  fetchedSubFamily: state.insuree.fetchedSubFamily,
+  subFamily: state.insuree.subFamily,
   pageInfo: state.insuree.familyMembersPageInfo,
-  errorFamilyMembers: state.insuree.errorFamilyMembers,
+  familiesTotalCount: state.insuree.subFamilyTotalCount,
+  errorSubFamily: state.insuree.errorSubFamily,
   checkingCanAddInsuree: state.insuree.checkingCanAddInsuree,
   checkedCanAddInsuree: state.insuree.checkedCanAddInsuree,
   canAddInsureeWarnings: state.insuree.canAddInsureeWarnings,
@@ -519,7 +504,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      fetch: fetchFamilyMembers,
+      fetch: fetchSubFamily,
       selectFamilyMember,
       deleteInsuree,
       removeInsuree,
@@ -533,5 +518,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withModulesManager(
-  injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FamilyInsureesOverview)))),
+  injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SubFamiliesSummary)))),
 );

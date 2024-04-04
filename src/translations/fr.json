@@ -8,5 +8,6 @@
     "insuree.Insuree.accountDetails": "Details du compte",
     "insuree.Payment.none": "Aucun",
     "insuree.InsureeMaritalStatus.P": "Polygamie",
-    "insuree.IncomeLevel.label": "Niveau de revenu"
+    "insuree.IncomeLevel.label": "Niveau de revenu",
+    "insuree.Family.families": "{count} Famille(s)"
 }

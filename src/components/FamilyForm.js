@@ -21,6 +21,7 @@ import FamilyMasterPanel from "./FamilyMasterPanel";
 
 import { fetchFamily, newFamily, createFamily, fetchFamilyMutation } from "../actions";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
+import SubFamiliesSummary from "./SubFamiliesSummary";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 
 import { insureeLabel, isValidInsuree } from "../utils/utils";
@@ -205,7 +206,7 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview] : [HeadInsureeMasterPanel]}
+            Panels={overview ? [FamilyInsureesOverview, SubFamiliesSummary] : [HeadInsureeMasterPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }

@@ -151,6 +151,7 @@
   "insuree.FamilyOverview.title": "Family/Group {label}",
   "insuree.FamilyDetailPanel.title": "Family Details",
   "insuree.Family.insurees": "{count} Insurees",
+  "insuree.Family.families": "{count} Families",
   "insuree.Family.policies": "Policies",
   "insuree.Family.contributions": "Contributions",
   "insuree.Family.payments": "Payments",

@@ -21,6 +21,7 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "confirmationType{code}",
   "familyType{code}",
   "address",
+  "parent{id}",
   "validityFrom",
   "validityTo",
   FAMILY_HEAD_PROJECTION,
@@ -126,9 +127,29 @@ export function fetchFamilySummaries(mm, filters) {
 }
 
 export function fetchFamilyMembers(mm, filters) {
+  console.log("filters ", filters);
   let projections = ["uuid", "chfId", "otherNames", "lastName", "head", "phone", "gender{code}", "dob", "cardIssued"];
   const payload = formatPageQueryWithCount("familyMembers", filters, projections);
   return graphql(payload, "INSUREE_FAMILY_MEMBERS");
+}
+export function fetchSubFamily(mm, filters) {
+  let projections =[ 
+    "id",
+    "uuid",
+    "poverty",
+    "confirmationNo",
+    "confirmationType{code}",
+    "familyType{code}",
+    "address",
+    "parent{id}",
+    "validityFrom",
+    "validityTo",
+    FAMILY_HEAD_PROJECTION,
+    "location" + mm.getProjection("location.Location.FlatProjection"),
+    "clientMutationId",] ;
+  const payload = formatPageQueryWithCount("families", filters, projections);
+  console.log("subfamily ", payload)
+  return graphql(payload, "INSUREE_SUB_FAMILY");
 }
 
 export function checkCanAddInsuree(family) {
