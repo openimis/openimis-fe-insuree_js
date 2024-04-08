@@ -9,5 +9,5 @@
     "insuree.Payment.none": "Aucun",
     "insuree.InsureeMaritalStatus.P": "Polygamie",
     "insuree.IncomeLevel.label": "Niveau de revenu",
-    "insuree.Family.families": "{count} Famille(s)"
+    "insuree.Family.families": "{count} Sous Famille(s)"
 }

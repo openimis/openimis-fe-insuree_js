@@ -179,7 +179,10 @@ class SubFamiliesSummary extends PagedDataHandler {
     "insuree.familySummaries.phone",
     "insuree.familySummaries.dob",
     "insuree.familySummaries.poverty",
-    "insuree.familySummaries.confirmationNo"
+    "insuree.familySummaries.confirmationNo",
+    "insuree.familySummaries.validityFrom",
+    "insuree.familySummaries.validityTo",
+    
 
   ];
 
@@ -306,6 +309,9 @@ class SubFamiliesSummary extends PagedDataHandler {
     (i) => i.headInsuree.dob || "",
     (i) => i.poverty || "",
     (i) => i.confimationNo || "",
+    (i) => i.validityFrom || "",
+    (i) => i.validityTo || "",
+
     
   ];
 
@@ -353,7 +359,6 @@ class SubFamiliesSummary extends PagedDataHandler {
       errorCanAddInsuree,
       familiesTotalCount
     } = this.props;
-    console.log('insuree props over ', this.props);
     let actions =
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []

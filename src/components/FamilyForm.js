@@ -165,7 +165,6 @@ class FamilyForm extends Component {
       mutation,
       canShowSubfamily,
     } = this.props;
-    console.log('props / edited ', this.props, this.props.overview )
     const { family, newFamily } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
@@ -208,7 +207,7 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview, SubFamiliesSummary]  : [HeadInsureeMasterPanel]}
+            Panels={overview ? [FamilyInsureesOverview, SubFamiliesSummary]  : canShowSubfamily == true ? [HeadInsureeMasterPanel, SubFamiliesSummary] : [HeadInsureeMasterPanel] }
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
@@ -216,9 +215,9 @@ class FamilyForm extends Component {
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
-            save={!!save ? this._save : null}
+            save={!!save  ? this._save : null}
             onActionToConfirm={this.onActionToConfirm}
-            openDirty={save}
+            openDirty={ save}
           />
         )}
       </div>

@@ -21,7 +21,7 @@ class HeadInsureeMasterPanel extends Component {
 
   render() {
     const { intl, edited, canShowSubfamily } = this.props;
-    console.log(" headinsutree master pannel value, ", this.props);
+
     let actions = [
       {
         button: (
@@ -45,15 +45,7 @@ class HeadInsureeMasterPanel extends Component {
           onEditedChanged={this.onEditedChanged}
           title="insuree.HeadInsureeMasterPanel.title"
           actions={actions}
-        />
-        {canShowSubfamily == true ? (
-          <SubFamiliesSummary
-            {...this.props}
-            edited={!!edited ? edited : null}
-            onEditedChanged={this.onEditedChanged}
-            title="insuree.Family.families"
-          />
-        ) : null}
+        /> 
 
         <Contributions
           {...this.props}
