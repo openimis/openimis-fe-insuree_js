@@ -55,6 +55,7 @@ class FamilyPage extends Component {
           add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
           save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
           readOnly={!rights.includes(RIGHT_FAMILY_EDIT) || !rights.includes(RIGHT_FAMILY_ADD)}
+          canShowSubfamily={true}
         />
       </div>
     );

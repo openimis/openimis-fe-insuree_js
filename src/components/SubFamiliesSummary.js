@@ -57,6 +57,7 @@ import ChangeInsureeFamilyDialog from "./ChangeInsureeFamilyDialog";
 import EnquiryDialog from "./EnquiryDialog";
 import FamilyInsureesSearcher from "./FamilyInsureesSearcher";
 import RemoveInsureeFromFamilyDialog from "./RemoveInsureeFromFamilyDialog";
+import AddFamilyDialog from "./AddFamilyDialog";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -67,7 +68,7 @@ const styles = (theme) => ({
 
 class SubFamiliesSummary extends PagedDataHandler {
   state = {
-    enquiryOpen: false,
+    addFamily: false,
     chfid: null,
     confirmedAction: null,
     removeInsuree: null,
@@ -308,11 +309,8 @@ class SubFamiliesSummary extends PagedDataHandler {
     
   ];
 
-  addNewInsuree = () =>
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.insuree", [
-      "_NEW_",
-      this.props.family.uuid,
-    ]);
+  addNewFamily = () =>
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.family")
   rowLocked = (i) => !!i.clientMutationId;
 
   changeInsureeFamily = (cancelPolicies) => {
@@ -360,24 +358,24 @@ class SubFamiliesSummary extends PagedDataHandler {
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []
         : [
+        //   {
+        //     button: (
+        //       <div>
+        //         <PublishedComponent //div needed for the tooltip style!!
+        //           pubRef="insuree.InsureePicker"
+        //           IconRender={AddExistingIcon}
+        //           forcedFilter={["head: false"]}
+        //           onChange={(changeInsureeFamily) => this.setState({ changeInsureeFamily })}
+        //           check={() => this.checkCanAddInsuree(() => this.setState({ checkedCanAdd: true }))}
+        //           checked={this.state.checkedCanAdd}
+        //         />
+        //       </div>
+        //     ),
+        //     tooltip: formatMessage(intl, "insuree", "familyAddExsistingInsuree.tooltip"),
+        //   },
           {
             button: (
-              <div>
-                <PublishedComponent //div needed for the tooltip style!!
-                  pubRef="insuree.InsureePicker"
-                  IconRender={AddExistingIcon}
-                  forcedFilter={["head: false"]}
-                  onChange={(changeInsureeFamily) => this.setState({ changeInsureeFamily })}
-                  check={() => this.checkCanAddInsuree(() => this.setState({ checkedCanAdd: true }))}
-                  checked={this.state.checkedCanAdd}
-                />
-              </div>
-            ),
-            tooltip: formatMessage(intl, "insuree", "familyAddExsistingInsuree.tooltip"),
-          },
-          {
-            button: (
-              <IconButton onClick={(e) => this.checkCanAddInsuree(this.addNewInsuree)}>
+              <IconButton onClick={(e) => this.setState({ addFamily: true })}>
                 <AddIcon />
               </IconButton>
             ),
@@ -409,11 +407,11 @@ class SubFamiliesSummary extends PagedDataHandler {
     }
     return (
       <Paper className={classes.paper}>
-        <EnquiryDialog
-          open={this.state.enquiryOpen}
-          chfid={this.state.chfid}
-          onClose={() => {
-            this.setState({ enquiryOpen: false, chfid: null });
+        <AddFamilyDialog
+        open={this.state.addFamily}
+        classes={classes}
+        onClose={() => {
+            this.setState({ addFamily: false});
           }}
         />
         <ChangeInsureeFamilyDialog

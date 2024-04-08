@@ -88,6 +88,7 @@ class FamilyMasterPanel extends FormPanel {
 
   render() {
     const { intl, classes, edited, openFamilyButton = false, readOnly, overview } = this.props;
+    console.log(" family edited ", edited)
     return (
       <Fragment>
         <Grid container className={classes.tableTitle}>
