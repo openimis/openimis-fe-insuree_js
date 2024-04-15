@@ -135,12 +135,13 @@ class FamilyMasterPanel extends FormPanel {
               pubRef="insuree.FamilyTypePicker"
               withNull={true}
               readOnly={readOnly}
+              required={true}
               nullLabel={formatMessage(intl, "insuree", "Family.FamilyType.null")}
               value={!!edited && !!edited.familyType ? edited.familyType.code : null}
               onChange={(v) => this.updateAttribute("familyType", { code: v })}
             />
           </Grid>
-          <Grid item xs={2} className={classes.item}>
+          {/* <Grid item xs={2} className={classes.item}>
             <PublishedComponent
               pubRef="insuree.ConfirmationTypePicker"
               withNull={true}
@@ -158,7 +159,7 @@ class FamilyMasterPanel extends FormPanel {
               value={!edited ? "" : edited.confirmationNo}
               onChange={(v) => this.updateAttribute("confirmationNo", v)}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={4} className={classes.item}>
             <TextInput
               module="insuree"

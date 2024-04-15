@@ -8,5 +8,12 @@
     "insuree.Insuree.accountDetails": "Details du compte",
     "insuree.Payment.none": "Aucun",
     "insuree.InsureeMaritalStatus.P": "Polygamie",
-    "insuree.IncomeLevel.label": "Niveau de revenu"
+    "insuree.IncomeLevel.label": "Niveau de revenu",
+    "insuree.Profession.1": "Liberale",
+    "insuree.Profession.2": "Privé",
+    "insuree.Profession.3": "Public",
+    "insuree.Profession.4": "Sans profession",
+    "insuree.FamilyType.C": "Famille",
+    "insuree.FamilyType.H": "Ménage",
+    "insuree.Insuree.chfId": "Numéro d'immatriculation"
 }

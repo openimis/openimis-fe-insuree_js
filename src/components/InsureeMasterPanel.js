@@ -36,6 +36,7 @@ class InsureeMasterPanel extends FormPanel {
       actions,
       edited_id,
     } = this.props;
+    console.log('form edited ', edited )
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -76,18 +77,20 @@ class InsureeMasterPanel extends FormPanel {
             </Grid>
             <Divider />
             <Grid container className={classes.item}>
-              <Grid item xs={4} className={classes.item}>
-                <PublishedComponent
-                  pubRef="insuree.InsureeNumberInput"
-                  module="insuree"
-                  label="Insuree.chfId"
-                  required={true}
-                  readOnly={readOnly}
-                  value={edited?.chfId}
-                  edited_id={edited_id}
-                  onChange={(v) => this.updateAttribute("chfId", v)}
-                />
-              </Grid>
+              {!!edited && !edited.chfId || !edited? null : (
+                <Grid item xs={4} className={classes.item}>
+                  <PublishedComponent
+                    pubRef="insuree.InsureeNumberInput"
+                    module="insuree"
+                    label="Insuree.chfId"
+                    required={true}
+                    readOnly={true}
+                    value={edited?.chfId}
+                    edited_id={edited_id}
+                    onChange={(v) => this.updateAttribute("chfId", v)}
+                  />
+                </Grid>
+              )}
               <Grid item xs={4} className={classes.item}>
                 <TextInput
                   module="insuree"
@@ -140,23 +143,21 @@ class InsureeMasterPanel extends FormPanel {
                       module="insuree"
                       readOnly={readOnly}
                       withNull={true}
-                      nullLabel="InsureeMaritalStatus.N"
+                      nullLabel="InsureeMaritalStatus.null"
                       onChange={(v) => this.updateAttribute("marital", v)}
                     />
                   </Grid>
-                  {edited?.marital == 'P' ? 
-                     <Grid item xs={3} className={classes.item}>
-                     <TextInput
-                       module="insuree"
-                       label="Insuree.otherHousehold"
-                       readOnly={readOnly}
-                       value={!!edited && !!edited.coordinates ? edited.coordinates : ""}
-                       onChange={(v) => this.updateAttribute("coordinates", v)}
-                     />
-                   </Grid>:
-                  null
-                  
-                }
+                  {edited?.marital == "P" ? (
+                    <Grid item xs={3} className={classes.item}>
+                      <TextInput
+                        module="insuree"
+                        label="Insuree.otherHousehold"
+                        readOnly={readOnly}
+                        value={!!edited && !!edited.coordinates ? edited.coordinates : ""}
+                        onChange={(v) => this.updateAttribute("coordinates", v)}
+                      />
+                    </Grid>
+                  ) : null}
                   <Grid item xs={3} className={classes.item}>
                     <FormControlLabel
                       control={
@@ -214,10 +215,11 @@ class InsureeMasterPanel extends FormPanel {
                       value={!!edited && !!edited.profession ? edited.profession.id : null}
                       readOnly={readOnly}
                       withNull={true}
+                      required={true}
                       nullLabel={formatMessage(intl, "insuree", "Profession.none")}
                       onChange={(v) => this.updateAttribute("profession", { id: v })}
                     />
-                  </Grid>               
+                  </Grid>
                   <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
                       pubRef="insuree.EducationPicker"
@@ -255,7 +257,7 @@ class InsureeMasterPanel extends FormPanel {
                     <TextInput
                       module="insuree"
                       label="Insuree.passport"
-                      error= { edited && edited.passport && edited.passport.length > 7 ? true: false}
+                      error={edited && edited.passport && edited.passport.length > 7 ? true : false}
                       readOnly={readOnly}
                       required={true}
                       value={!!edited && !!edited.passport ? edited.passport : ""}
@@ -266,15 +268,15 @@ class InsureeMasterPanel extends FormPanel {
                     <PublishedComponent
                       pubRef="insuree.PaymentMethodPicker"
                       module="insuree"
-                      value={!!edited && !!edited.preferredPaymentMethod ? edited.preferredPaymentMethod: ""}
+                      value={!!edited && !!edited.preferredPaymentMethod ? edited.preferredPaymentMethod : ""}
                       readOnly={readOnly}
                       withNull={true}
                       nullLabel={formatMessage(intl, "insuree", "insuree.Payment.none")}
                       onChange={(v) => this.updateAttribute("preferredPaymentMethod", v)}
                     />
                   </Grid>
-                  {edited?.preferredPaymentMethod == "PB" &&
-                      <Grid item xs={3} className={classes.item}>
+                  {edited?.preferredPaymentMethod == "PB" && (
+                    <Grid item xs={3} className={classes.item}>
                       <TextInput
                         module="insuree"
                         label="Insuree.accountDetails"
@@ -284,7 +286,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("bankCoordinates", !!v ? v : null)}
                       />
                     </Grid>
-                  }
+                  )}
                 </Grid>
               </Grid>
               <Grid item xs={4} className={classes.item}>

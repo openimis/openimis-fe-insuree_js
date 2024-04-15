@@ -163,6 +163,8 @@ class FamilyForm extends Component {
       back,
       mutation,
     } = this.props;
+    console.log('propriete ', this.props)
+    console.log('etat ', this.state)
     const { family, newFamily } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
