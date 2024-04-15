@@ -19,7 +19,7 @@ import {
 import { RIGHT_FAMILY, RIGHT_FAMILY_EDIT } from "../constants";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 
-import { fetchFamily, newFamily, createFamily, fetchFamilyMutation } from "../actions";
+import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, addSubfamily } from "../actions";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
 import SubFamiliesSummary from "./SubFamiliesSummary";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
@@ -34,53 +34,72 @@ const INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY = "insuree.Family.panels";
 const INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY = "insuree.FamilyOverview.panels";
 const INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY = "insuree.FamilyOverview.mutations";
 
-class FamilyForm extends Component {
+class SubFamilyForm extends Component {
   state = {
     lockNew: false,
     reset: 0,
-    family: this._newFamily(),
+    subFamily: this._newFamily(),
     newFamily: true,
     confirmedAction: null,
+    addpressed: false,
   };
 
   _newFamily() {
-    let family = {};
-    family.jsonExt = {};
-    return family;
+    let subFamily = {};
+    subFamily.jsonExt = {};
+    return subFamily;
   }
 
   componentDidMount() {
-    if (this.props.family_uuid) {
+    if (this.props.subFamily) {
       this.setState(
-        (state, props) => ({ family_uuid: props.family_uuid }),
-        (e) => this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid),
+        (state, props) => ({ subFamily_uuid: props.subFamily_uuid }),
+        (e) => this.props.fetchFamily(this.props.modulesManager, this.props.subFamily_uuid),
       );
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!prevProps.fetchedFamily && !!this.props.fetchedFamily) {
-      var family = this.props.family;
-      if (family) {
-        family.ext = !!family.jsonExt ? JSON.parse(family.jsonExt) : {};
-        this.setState({ family, family_uuid: family.uuid, lockNew: false, newFamily: false });
+    if (!prevProps.fetchedSubFamily && !!this.props.fetchedSubFamily) {
+      var subFamily = this.props.subFamily;
+      if (subFamily) {
+        subFamily.ext = !!subFamily.jsonExt ? JSON.parse(subFamily.jsonExt) : {};
+        this.setState({ subFamily, subFamily_uuid: subFamily.uuid, lockNew: false, newFamily: false });
       }
-    } else if (prevProps.family_uuid && !this.props.family_uuid) {
-      this.setState({ family: this._newFamily(), newFamily: true, lockNew: false, family_uuid: null });
+    } else if (prevProps.subFamily_uuid && !this.props.subFamily_uuid) {
+      this.setState({ subFamily: this._newFamily(), newFamily: true, lockNew: false, subFamily_uuid: null });
     } else if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
       this.setState((state, props) => ({
-        family: { ...state.family, clientMutationId: props.mutation.clientMutationId },
+        subFamily: { ...state.subFamily, clientMutationId: props.mutation.clientMutationId },
       }));
     } else if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
+    }
+    if (!!this.props.addpressed && this.props.addpressed == true) {
+      this.setState({
+        addpressed: this.props.addpressed,
+      });
+      if (this.state.addpressed == true) {
+        let canSave = this.canSave();
+        console.log("enter condition", canSave);
+        if (canSave == true) {
+          if (this.state.subFamily) {
+            this.props.addSubfamily(this.state.subFamily);
+            this.props.callBackPressed();
+          }
+        }
+        this.setState({
+          addpressed: false,
+        });
+      }
     }
   }
 
   _add = () => {
     this.setState(
       (state) => ({
-        family: this._newFamily(),
+        subFamily: this._newFamily(),
         newFamily: true,
         lockNew: false,
         reset: state.reset + 1,
@@ -93,9 +112,9 @@ class FamilyForm extends Component {
   };
 
   reload = () => {
-    const { family } = this.state;
-    const { clientMutationId, familyUuid } = this.props.mutation;
-    if (clientMutationId && !familyUuid) {
+    const { subFamily } = this.state;
+    const { clientMutationId, subFamilyUuid } = this.props.mutation;
+    if (clientMutationId && !subFamilyUuid) {
       // creation, we need to fetch the new family uuid from mutations logs and redirect to family overview
       this.props.fetchFamilyMutation(this.props.modulesManager, clientMutationId).then((res) => {
         const mutationLogs = parseData(res.payload.data.mutationLogs);
@@ -115,30 +134,32 @@ class FamilyForm extends Component {
     } else {
       this.props.fetchFamily(
         this.props.modulesManager,
-        familyUuid,
-        !!family.headInsuree ? family.headInsuree.chfId : null,
-        family.clientMutationId,
+        subFamilyUuid,
+        !!subFamily.headInsuree ? subFamily.headInsuree.chfId : null,
+        subFamily.clientMutationId,
       );
     }
   };
 
   canSave = () => {
-    if (!this.state.family.location) return false;
-    if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
-    if (this.state.family.validityTo) return false;
+    if (!this.state.subFamily.location) return false;
+    if (!this.state.subFamily.uuid && !this.props.isChfIdValid) return false;
+    if (this.state.subFamily.validityTo) return false;
 
-    return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
-  };
-
-  _save = (family) => {
-    this.setState(
-      { lockNew: !family.uuid }, // avoid duplicates
-      (e) => this.props.save(family),
+    return (
+      this.state.subFamily.headInsuree && isValidInsuree(this.state.subFamily.headInsuree, this.props.modulesManager)
     );
   };
 
-  onEditedChanged = (family) => {
-    this.setState({ family, newFamily: false });
+  _save = (subFamily) => {
+    this.setState(
+      { lockNew: !subFamily.uuid }, // avoid duplicates
+      (e) => this.props.save(subFamily),
+    );
+  };
+
+  onEditedChanged = (subFamily) => {
+    this.setState({ subFamily, newFamily: false });
   };
 
   onActionToConfirm = (title, message, confirmedAction) => {
@@ -151,10 +172,10 @@ class FamilyForm extends Component {
       classes,
       state,
       rights,
-      family_uuid,
-      fetchingFamily,
-      fetchedFamily,
-      errorFamily,
+      subFamily_uuid,
+      fetchingSubFamily,
+      fetchedSubFamily,
+      errorSubFamily,
       insuree,
       overview = false,
       openFamilyButton,
@@ -164,24 +185,26 @@ class FamilyForm extends Component {
       back,
       mutation,
       canShowSubfamily,
+      addpressed,
     } = this.props;
-    const { family, newFamily } = this.state;
-    console.log("edited du formumaire ", this.state)
+    const { subFamily, newFamily } = this.state;
+    console.log("sous famille ", this.state);
+    console.log("sous familles props ", this.props);
     if (!rights.includes(RIGHT_FAMILY)) return null;
-    let runningMutation = !!family && !!family.clientMutationId;
+    let runningMutation = !!subFamily && !!subFamily.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
     for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
       runningMutation = contributedMutations[i](state);
     }
     let actions = [];
-    if (family_uuid || !!family.clientMutationId) {
+    if (subFamily_uuid || !!subFamily.clientMutationId) {
       actions.push({
         doIt: this.reload,
         icon: <ReplayIcon />,
         onlyIfDirty: !readOnly && !runningMutation,
       });
     }
-    const shouldBeLocked = !!runningMutation || family?.validityTo;
+    const shouldBeLocked = !!runningMutation || subFamily?.validityTo;
     return (
       <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
@@ -189,36 +212,36 @@ class FamilyForm extends Component {
             this.props.intl,
             "insuree",
             !!this.props.overview ? "FamilyOverview.title" : "Family.title",
-            { label: insureeLabel(this.state.family.headInsuree) },
+            { label: insureeLabel(this.state.subFamily.headInsuree) },
           )}
         />
-        <ProgressOrError progress={fetchingFamily} error={errorFamily} />
-        {((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
+        <ProgressOrError progress={fetchingSubFamily} error={errorSubFamily} />
+        {((!!fetchedSubFamily && !!subFamily && subFamily.uuid === subFamily_uuid) || !subFamily_uuid) && (
           <Form
             module="insuree"
             title="FamilyOverview.title"
-            titleParams={{ label: insureeLabel(this.state.family.headInsuree) }}
-            edited_id={family_uuid}
-            edited={family}
+            titleParams={{ label: insureeLabel(this.state.subFamily.headInsuree) }}
+            edited_id={subFamily_uuid}
+            edited={subFamily}
             reset={this.state.reset}
             back={back}
             add={!!add && !newFamily ? this._add : null}
-            readOnly={readOnly || runningMutation || !!family.validityTo}
+            readOnly={readOnly || runningMutation || !!subFamily.validityTo}
             actions={actions}
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview, SubFamiliesSummary] : [HeadInsureeMasterPanel, SubFamiliesSummary] }
+            Panels={overview ? [HeadInsureeMasterPanel, SubFamiliesSummary] : [HeadInsureeMasterPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
-            family={family}
+            family={subFamily}
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
-            save={!!save  ? this._save : null}
+            save={!!save ? this._save : null}
             onActionToConfirm={this.onActionToConfirm}
-            openDirty={ save}
+            openDirty={save}
           />
         )}
       </div>
@@ -228,10 +251,10 @@ class FamilyForm extends Component {
 
 const mapStateToProps = (state, props) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
-  fetchingFamily: state.insuree.fetchingFamily,
-  errorFamily: state.insuree.errorFamily,
-  fetchedFamily: state.insuree.fetchedFamily,
-  family: state.insuree.family,
+  fetchingSubFamily: state.insuree.fetchingSubFamily,
+  errorSubFamily: state.insuree.errorSubFamily,
+  fetchedSubFamily: state.insuree.fetchedSubFamily,
+  subFamily: state.insuree.subFamily,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   insuree: state.insuree.insuree,
@@ -242,13 +265,13 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm },
+    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, addSubfamily, journalize, coreConfirm },
     dispatch,
   );
 };
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(FamilyForm)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(SubFamilyForm)))),
   ),
 );

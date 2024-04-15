@@ -11,6 +11,7 @@ const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels
 
 class HeadInsureeMasterPanel extends Component {
   onEditedChanged = (head) => {
+    console.log('head ', this)
     let edited = { ...this.props.edited };
     edited["headInsuree"] = head;
     this.props.onEditedChanged(edited);
@@ -21,6 +22,7 @@ class HeadInsureeMasterPanel extends Component {
 
   render() {
     const { intl, edited, canShowSubfamily } = this.props;
+    console.log('head insuree pannel ', this.props)
 
     let actions = [
       {
@@ -37,6 +39,7 @@ class HeadInsureeMasterPanel extends Component {
         tooltip: formatMessage(intl, "insuree", "selectHeadInsuree.tooltip"),
       },
     ];
+
     return (
       <Fragment>
         <InsureeMasterPanel

@@ -359,6 +359,8 @@ class SubFamiliesSummary extends PagedDataHandler {
       errorCanAddInsuree,
       familiesTotalCount
     } = this.props;
+    console.log('this.props', this.props)
+
     let actions =
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []
@@ -441,7 +443,7 @@ class SubFamiliesSummary extends PagedDataHandler {
         <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
           <Grid item xs={8}>
             <Typography className={classes.tableTitle}>
-              <FormattedMessage module="insuree" id="Family.families" values={{ count: familiesTotalCount }} />
+              <FormattedMessage module="insuree" id="Family.families" values={{ count: this.props.subFamily && this.props.subFamily.length > 0 ? this.props.subFamily.length : familiesTotalCount  }} />
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -464,7 +466,7 @@ class SubFamiliesSummary extends PagedDataHandler {
           headers={this.headers}
           headerActions={this.headerActions}
           itemFormatters={this.formatters}
-          items={(!!family && subFamily) || []}
+          items={subFamily? subFamily : this.state.subFamily ? this.state.subFamily : []}
           fetching={fetchingSubFamily}
           error={errorSubFamily}
           onDoubleClick={this.onDoubleClick}

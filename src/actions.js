@@ -152,6 +152,16 @@ export function fetchSubFamily(mm, filters) {
   return graphql(payload, "INSUREE_SUB_FAMILY");
 }
 
+export function addSubfamily(subfamily){
+  
+  console.log('subfamily ', subfamily)
+  let payload = subfamily
+  console.log("payload envoyé ", payload)
+  return(dispatch)=>{
+    dispatch({ type: "ADD_SUB_FAMILY", payload: payload})
+  }
+}
+
 export function checkCanAddInsuree(family) {
   let filters = [`familyId:${decodeId(family.id)}`];
   const payload = formatQuery("canAddInsuree", filters, null);

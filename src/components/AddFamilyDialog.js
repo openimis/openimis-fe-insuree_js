@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useRef } from "react";
+import React, { useEffect, Fragment, useRef, useState } from "react";
 import { injectIntl } from "react-intl";
 
 import { makeStyles } from "@material-ui/styles";
@@ -22,6 +22,7 @@ import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants"
 import { familyLabel } from "../utils/utils";
 
 import { Dialog, Button, DialogActions, DialogContent } from "@material-ui/core";
+import SubFamilyForm from "./SubFamilyForm";
 const useStyles = makeStyles(() => ({
   summary: {
     marginBottom: 32,
@@ -32,6 +33,7 @@ const useStyles = makeStyles(() => ({
 
 const AddFamilyDialog = (props) => {
     const { intl, modulesManager, fetchInsuree, classes, fetching, fetched, edited, error, onClose, open, chfid, match,createFamily, updateFamily , rights} = props;
+    const [addpressed , setAddPressed]= useState(false) 
     // const prevMatchUrl = useRef(null);
   
     // useEffect(() => {
@@ -71,6 +73,14 @@ const AddFamilyDialog = (props) => {
     //   componentWillUnmount = () => {
     //     clearInsuree();
     //   };
+    const handleAddPressed =()=>{
+      setAddPressed(true);
+      console.log("pressed ", addpressed)
+    } 
+    const callBackPressed =()=>{
+      setAddPressed(false)
+      onClose();
+    }
     if (!rights.includes(RIGHT_FAMILY)) return null;
   
     return (
@@ -78,8 +88,10 @@ const AddFamilyDialog = (props) => {
         <DialogContent>
 
             <Fragment>
-              <FamilyForm modulesManager={modulesManager}
-                canShowSubfamily={false}
+              <SubFamilyForm modulesManager={modulesManager}
+                canShowSubfamily={true}
+                addpressed={addpressed}
+                callBackPressed={callBackPressed}
                 back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
                 // add={rights.includes(RIGHT_FAMILY_ADD) ? add : null}
                 // save={rights.includes(RIGHT_FAMILY_EDIT) ? save : null}
@@ -94,6 +106,9 @@ const AddFamilyDialog = (props) => {
           </Button>
           <Button
            autoFocus
+           onClick={()=>{
+            handleAddPressed()
+          }}
           >
             <p>ADD</p>
           </Button>
