@@ -17,8 +17,8 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
   "uuid",
   "poverty",
-  // "confirmationNo",
-  // "confirmationType{code}",
+  "confirmationNo",
+  "confirmationType{code}",
   "familyType{code}",
   "address",
   "validityFrom",
@@ -115,7 +115,7 @@ export function fetchFamilySummaries(mm, filters) {
     "id",
     "uuid",
     "poverty",
-    // "confirmationNo",
+    "confirmationNo",
     "validityFrom",
     "validityTo",
     "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone, dob}",
@@ -305,6 +305,7 @@ export function formatFamilyGQL(mm, family) {
     ${!!family.location ? `locationId: ${decodeId(family.location.id)}` : ""}
     poverty: ${!!family.poverty}
     ${!!family.familyType && !!family.familyType.code ? `familyTypeId: "${family.familyType.code}"` : ""}
+    confirmationNo: ""
     ${!!family.address ? `address: "${formatGQLString(family.address)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
