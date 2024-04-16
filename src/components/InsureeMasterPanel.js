@@ -242,17 +242,7 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.item}>
-                    <PublishedComponent
-                      pubRef="insuree.InsureIncomeLevelPicker"
-                      module="insuree"
-                      value={!!edited && !!edited.incomeLevel ? edited.incomeLevel : null}
-                      readOnly={readOnly}
-                      withNull={false}
-                      required={true}
-                      onChange={(v) => this.updateAttribute("incomeLevel", v)}
-                    />
-                  </Grid>
+                  
                   <Grid item xs={3} className={classes.item}>
                     <TextInput
                       module="insuree"
@@ -262,6 +252,17 @@ class InsureeMasterPanel extends FormPanel {
                       required={true}
                       value={!!edited && !!edited.passport ? edited.passport : ""}
                       onChange={(v) => this.updateAttribute("passport", !!v ? v : null)}
+                    />
+                  </Grid>
+                  <Grid item xs={3} className={classes.item}>
+                    <PublishedComponent
+                      pubRef="insuree.InsureIncomeLevelPicker"
+                      module="insuree"
+                      value={!!edited && !!edited.incomeLevel ? edited.incomeLevel : null}
+                      readOnly={readOnly}
+                      withNull={false}
+                      required={true}
+                      onChange={(v) => this.updateAttribute("incomeLevel", v)}
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
