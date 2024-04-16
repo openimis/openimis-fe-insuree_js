@@ -23,13 +23,11 @@ import { familyLabel } from "../utils/utils";
 
 import { Dialog, Button, DialogActions, DialogContent } from "@material-ui/core";
 import SubFamilyForm from "./SubFamilyForm";
-const useStyles = makeStyles(() => ({
-  summary: {
-    marginBottom: 32,
-  },
-}));
 
-
+const styles = theme => ({
+  primaryButton: theme.dialog.primaryButton,
+  secondaryButton: theme.dialog.secondaryButton,
+})
 
 const AddFamilyDialog = (props) => {
     const { intl, modulesManager, fetchInsuree, classes, fetching, fetched, edited, error, onClose, open, chfid, match,createFamily, updateFamily , rights} = props;
@@ -79,6 +77,7 @@ const AddFamilyDialog = (props) => {
     } 
     const callBackPressed =()=>{
       setAddPressed(false)
+      console.log('pressed 3 ', addpressed)
       onClose();
     }
     if (!rights.includes(RIGHT_FAMILY)) return null;
@@ -109,8 +108,9 @@ const AddFamilyDialog = (props) => {
            onClick={()=>{
             handleAddPressed()
           }}
+          className={classes.primaryButton} 
           >
-            <p>ADD</p>
+            {formatMessage(intl, "insuree", "add")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -127,5 +127,5 @@ const AddFamilyDialog = (props) => {
   });
   
   const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchInsuree, createFamily, updateFamily, clearInsuree }, dispatch);
-  export default withModulesManager(withHistory(connect(mapStateToProps, mapDispatchToProps)(injectIntl(AddFamilyDialog))));
+  export default withModulesManager(withHistory(connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(AddFamilyDialog))))));
   

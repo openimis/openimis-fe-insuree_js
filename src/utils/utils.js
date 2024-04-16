@@ -20,7 +20,7 @@ export const isValidInsuree = (insuree, modulesManager) => {
 
   if (isInsureeFirstServicePointRequired && !insuree.healthFacility) return false;
   if (insuree.validityTo) return false;
-  if (!insuree.chfId) return false;
+  // if (!insuree.chfId) return false;
   if (!insuree.lastName) return false;
   if (!insuree.otherNames) return false;
   if (!insuree.dob) return false;
@@ -29,6 +29,8 @@ export const isValidInsuree = (insuree, modulesManager) => {
   if (!insuree.incomeLevel ) return false;
   if (!insuree.passport) return false;
   if (!!insuree.preferredPaymentMethod && insuree.preferredPaymentMethod == "PB" && !insuree.bankCoordinates ) return false
+  if (!insuree.photo) return false
+  if (!insuree.profession) return false
 
   return true;
 };

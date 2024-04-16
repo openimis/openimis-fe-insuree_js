@@ -165,6 +165,8 @@ class FamilyForm extends Component {
       mutation,
       canShowSubfamily,
     } = this.props;
+    console.log('propriete ', this.props)
+    console.log('etat ', this.state)
     const { family, newFamily } = this.state;
     console.log("edited du formumaire ", this.state)
     if (!rights.includes(RIGHT_FAMILY)) return null;
@@ -208,7 +210,7 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview, SubFamiliesSummary] : [HeadInsureeMasterPanel, SubFamiliesSummary] }
+            Panels={overview ? [FamilyInsureesOverview, SubFamiliesSummary] : (family.headInsuree && family.headInsuree.marital == 'P') ? [HeadInsureeMasterPanel, SubFamiliesSummary] : [HeadInsureeMasterPanel] }
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }

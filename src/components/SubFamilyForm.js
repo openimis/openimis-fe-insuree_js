@@ -77,23 +77,19 @@ class SubFamilyForm extends Component {
       this.state.confirmedAction();
     }
     if (!!this.props.addpressed && this.props.addpressed == true) {
-      this.setState({
-        addpressed: this.props.addpressed,
-      });
-      if (this.state.addpressed == true) {
         let canSave = this.canSave();
         console.log("enter condition", canSave);
         if (canSave == true) {
           if (this.state.subFamily) {
             this.props.addSubfamily(this.state.subFamily);
             this.props.callBackPressed();
+          }else{
+            this.props.callBackPressed() 
           }
-        }
-        this.setState({
-          addpressed: false,
-        });
+          this.props.callBackPressed() 
       }
     }
+    console.log('valeur de addpressed ' , this.props?.addpressed)
   }
 
   _add = () => {
@@ -143,7 +139,7 @@ class SubFamilyForm extends Component {
 
   canSave = () => {
     if (!this.state.subFamily.location) return false;
-    if (!this.state.subFamily.uuid && !this.props.isChfIdValid) return false;
+    // if (!this.state.subFamily.uuid && !this.props.isChfIdValid) return false;
     if (this.state.subFamily.validityTo) return false;
 
     return (
