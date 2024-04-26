@@ -62,6 +62,11 @@ function reducer(
     submittingMutation: false,
     headSelected: false,
     mutation: {},
+    fetchingWorkersExport: false,
+    fetchedWorkersExport: false,
+    workersExport: null,
+    workersExportPageInfo: {},
+    errorWorkersExport: null,
   },
   action,
 ) {
@@ -73,7 +78,6 @@ function reducer(
         fetchedInsuree: false,
         insuree: null,
         errorInsuree: null,
-        family: null,
       };
     case "INSUREE_INSUREE_RESP":
       return {
@@ -82,7 +86,6 @@ function reducer(
         fetchedInsuree: true,
         insuree: parseData(action.payload.data.insurees)[0],
         errorInsuree: formatGraphQLError(action.payload),
-        family: parseData(action.payload.data.insurees)[0]?.family,
       };
     case "INSUREE_INSUREE_ERR":
       return {
@@ -97,7 +100,6 @@ function reducer(
         fetchedInsuree: false,
         insuree: null,
         errorInsuree: null,
-        family: null,
       };
     case "INSUREE_FAMILY_NEW":
       return {
@@ -136,7 +138,6 @@ function reducer(
         fetchingFamilyMembers: true,
         fetchedFamilyMembers: false,
         insureeFamilyMembers: null,
-        insuree: null,
         errorFamilyMembers: null,
       };
     case "INSUREE_FAMILY_MEMBERS_RESP":
@@ -286,7 +287,7 @@ function reducer(
         ...state,
         fetchingConfirmationTypes: false,
         fetchedConfirmationTypes: true,
-        confirmationTypes: action.payload.data.confirmationTypes.map((c) => c.code),
+        confirmationTypes: action.payload.data.confirmationTypes,
         errorConfirmationTypes: formatGraphQLError(action.payload),
       };
     case "INSUREE_CONFIRMATION_TYPES_ERR":
@@ -517,6 +518,39 @@ function reducer(
       return {
         ...state,
         headSelected: action.payload?.headSelected,
+      };
+    case "WORKERS_EXPORT_REQ":
+      return {
+        ...state,
+        fetchingWorkersExport: true,
+        fetchedWorkersExport: false,
+        workersExport: null,
+        workersExportPageInfo: {},
+        errorWorkersExport: null,
+      };
+    case "WORKERS_EXPORT_RESP":
+      return {
+        ...state,
+        fetchingWorkersExport: false,
+        fetchedWorkersExport: true,
+        workersExport: action.payload.data.insureesExport,
+        workersExportPageInfo: pageInfo(action.payload.data.insureesExportPageInfo),
+        errorWorkersExport: formatGraphQLError(action.payload),
+      };
+    case "WORKERS_EXPORT_ERR":
+      return {
+        ...state,
+        fetchingWorkersExport: false,
+        errorWorkersExport: formatServerError(action.payload),
+      };
+    case "WORKERS_EXPORT_CLEAR":
+      return {
+        ...state,
+        fetchingWorkersExport: false,
+        fetchedWorkersExport: false,
+        workersExport: null,
+        workersExportPageInfo: {},
+        errorWorkersExport: null,
       };
     case "INSUREE_MUTATION_REQ":
       return dispatchMutationReq(state, action);

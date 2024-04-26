@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { INSUREE_ACTIVE_STRING } from "../constants";
 
 export function insureeLabel(insuree) {
   if (!insuree) return "";
@@ -18,6 +19,14 @@ export const isValidInsuree = (insuree, modulesManager) => {
     false,
   );
 
+  const isInsureePhotoRequired = modulesManager.getConf(
+    "fe-insuree",
+    "insureeForm.isInsureePhotoRequired",
+    false,
+  );
+
+  const isInsureeStatusRequired = modulesManager.getConf("fe-insuree", "insureeForm.isInsureeStatusRequired", false);
+
   if (isInsureeFirstServicePointRequired && !insuree.healthFacility) return false;
   if (insuree.validityTo) return false;
   // if (!insuree.chfId) return false;
@@ -31,6 +40,26 @@ export const isValidInsuree = (insuree, modulesManager) => {
   if (!!insuree.preferredPaymentMethod && insuree.preferredPaymentMethod == "PB" && !insuree.bankCoordinates ) return false
   if (!insuree.photo) return false
   if (!insuree.profession) return false
+  if (isInsureeStatusRequired && !insuree.status) return false;
+  if (isInsureePhotoRequired && !insuree.photo) return false;
+  if (!!insuree.status && insuree.status !== INSUREE_ACTIVE_STRING && (!insuree.statusDate || !insuree.statusReason)) return false;
 
   return true;
+};
+
+export const formatLocationString = (family) => {
+  const { location, address } = family;
+  return [
+    location?.parent?.parent?.parent?.name,
+    location?.parent?.parent?.name,
+    location?.parent?.name,
+    location?.name,
+    address,
+  ]
+    .filter(Boolean)
+    .join(", ");
+};
+
+export const isValidWorker = (worker) => {
+  return worker?.chfId;
 };
