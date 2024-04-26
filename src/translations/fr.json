@@ -1,0 +1,19 @@
+{
+    "insuree.Insuree.otherHousehold": "Autre ménage",
+    "insuree.Insuree.professionalSituation": "Situation Professionnelle/Employeur ",
+    "insuree.PaymentMethodPicker": "Méthode de payment",
+    "insuree.PaymentMethodPicker.MO": "Mobile Money",
+    "insuree.PaymentMethodPicker.PB": "Prélèvement bancaire",
+    "insuree.PaymentMethodPicker.TP": "Tiers payant",
+    "insuree.Insuree.accountDetails": "Details du compte",
+    "insuree.Payment.none": "Aucun",
+    "insuree.InsureeMaritalStatus.P": "Polygamie",
+    "insuree.IncomeLevel.label": "Niveau de revenu",
+    "insuree.Profession.1": "Liberale",
+    "insuree.Profession.2": "Privé",
+    "insuree.Profession.3": "Public",
+    "insuree.Profession.4": "Sans profession",
+    "insuree.FamilyType.C": "Famille",
+    "insuree.FamilyType.H": "Ménage",
+    "insuree.Insuree.chfId": "Numéro d'immatriculation"
+}

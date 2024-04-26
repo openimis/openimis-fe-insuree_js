@@ -1,4 +1,5 @@
-export const INSUREE_MARITAL_STATUS = ["N", "W", "S", "D", "M"];
+export const INSUREE_MARITAL_STATUS = ["N", "W", "S", "D", "M", "P"]; 
+export const INSUREE_PAYMENT_METHOD = ["MO", "PB", "TP"];
 export const FAMILY_POVERTY_STATUS = [true, false];
 export const PHOTO_STATUS = ["with", "without"];
 export const FAMILY_STATUS = ["with", "without"];

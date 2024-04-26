@@ -69,6 +69,11 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "age",
   "validityFrom",
   "validityTo",
+  "professionalSituation",
+  "bankCoordinates",
+  "coordinates",
+  "incomeLevel{id, frenchVersion, englishVersion}",
+  "preferredPaymentMethod",
   `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
   `photo{id,uuid,date,folder,filename,officerId,photo}`,
   "gender{code, gender}",
@@ -183,6 +188,11 @@ export function fetchFamilyTypes() {
   return graphql(payload, "INSUREE_FAMILY_TYPES");
 }
 
+export function fetchIncomeLevels (){
+  const payload = formatQuery("incomeLevels", null, ["id", "frenchVersion", "englishVersion"]);
+  return graphql(payload, "INSUREE_FAMILY_INCOME_LEVEL")
+}
+
 export function newFamily() {
   return (dispatch) => {
     dispatch({ type: "INSUREE_FAMILY_NEW" });
@@ -256,6 +266,11 @@ export function fetchInsureeSummaries(mm, filters, ignoreLocation = false) {
     "phone",
     "gender{code}",
     "dob",
+    "professionalSituation",
+    "bankCoordinates",
+    "coordinates",
+    "incomeLevel{id, frenchVersion, englishVersion}",
+    "preferredPaymentMethod",
     "marital",
     "status",
     "family{uuid,location" + mm.getProjection("location.Location.FlatProjection") + "}",
@@ -314,8 +329,14 @@ export function formatInsureeGQL(mm, insuree) {
       !!insuree.healthFacility && !!insuree.healthFacility.id
         ? `healthFacilityId: ${decodeId(insuree.healthFacility.id)}`
         : ""
-    }
+    } 
     ${!!insuree.jsonExt ? `jsonExt: ${formatJsonField(insuree.jsonExt)}` : ""}
+    ${!!insuree.preferredPaymentMethod ? `preferredPaymentMethod: "${insuree.preferredPaymentMethod}"`: ""}
+    ${!!insuree.professionalSituation ? `professionalSituation: "${insuree.professionalSituation}"`: ""}
+    ${!!insuree.coordinates ? `coordinates: "${insuree.coordinates}"`: ""}
+    ${!!insuree.bankCoordinates? `bankCoordinates: "${formatGQLString(insuree.bankCoordinates)}"`: ""}
+    ${!!insuree.incomeLevel? `incomeLevelId: ${decodeId(insuree.incomeLevel.id)}`: ""}
+
   `;
 }
 
@@ -328,15 +349,11 @@ export function formatFamilyGQL(mm, family) {
     ${!!family.location ? `locationId: ${decodeId(family.location.id)}` : ""}
     poverty: ${!!family.poverty}
     ${!!family.familyType && !!family.familyType.code ? `familyTypeId: "${family.familyType.code}"` : ""}
+    confirmationNo: ""
     ${!!family.address ? `address: "${formatGQLString(family.address)}"` : ""}
-    ${
-      !!family.confirmationType && !!family.confirmationType.code
-        ? `confirmationTypeId: "${family.confirmationType.code}"`
-        : ""
-    }
-    ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
+
   `;
 }
 
