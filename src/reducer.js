@@ -318,6 +318,27 @@ function reducer(
         fetchingFamilyTypes: false,
         errorFamilyTypes: formatServerError(action.payload),
       };
+    case "INSUREE_FAMILY_INCOME_LEVEL_REQ":
+      return{
+        ...state,
+        fetchingIncomeLevels: true,
+        fetchedIncomeLevels: false,
+        incomeLevels:null,
+      };
+    case "INSUREE_FAMILY_INCOME_LEVEL_RESP":
+      return{
+        ...state,
+        fetchingIncomeLevels: false,
+        fetchedIncomeLevels: true,
+        incomeLevels:action.payload.data.incomeLevels.map((t)=>t),
+        errorIncomeLevels: formatServerError(action.payload)
+      };
+    case "INSUREE_FAMILY_INCOME_LEVEL_ERR":
+      return{
+        ...state,
+        fetchingIncomeLevels: false,
+        errorIncomeLevels: formatServerError(action.payload)
+      };
     case "INSUREE_FAMILY_OVERVIEW_REQ":
       return {
         ...state,

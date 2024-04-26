@@ -66,7 +66,7 @@ const InsureeAvatar = (props) => {
               module="insuree"
               label="Insuree.photoDate"
               readOnly={readOnly}
-              required={isRequired}
+              required={true}
               onChange={(date) => onChange({ ...photo, date })}
             />
           </Grid>
@@ -77,7 +77,7 @@ const InsureeAvatar = (props) => {
               module="insuree"
               label={formatMessage("Insuree.photoOfficer")}
               readOnly={readOnly}
-              required={isRequired}
+              required={true}
               onChange={(v) => onChange({ ...photo, officerId: v?.id })}
             />
           </Grid>

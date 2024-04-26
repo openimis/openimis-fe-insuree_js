@@ -135,7 +135,7 @@ class FamilyForm extends Component {
 
   canSave = () => {
     if (!this.state.family.location) return false;
-    if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
+    // if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
     if (this.state.family.validityTo) return false;
     if (this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
       return false;
