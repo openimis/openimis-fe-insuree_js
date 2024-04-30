@@ -24,23 +24,27 @@ on:
         description: 'Access level for npm package'
         required: false
         default: 'public'
+      tab:
+        required: true
 
 jobs:
   call-npm-publish-workflow:
     uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@feature/central-publish-workflow
     with:
-      node_version: '20'
       registry_url: 'https://registry.npmjs.org/'
-      access: 'public'
-      scope: 'openimis'
+      node_version: ${{ github.event.inputs.node_version:-'20' }}
+      access: ${{ github.event.inputs.access:-'public' }}
+      scope: ${{ github.event.inputs.scope:-'openimis' }}
+      tag:  ${{ github.event.inputs.tag }}
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   call-gpr-publish-workflow:
     uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@feature/central-publish-workflow
     with:
-      node_version: '20'
       registry_url: 'https://npm.pkg.github.com/'
-      access: 'public'
-      scope: 'openimis'
+      node_version: ${{ github.event.inputs.node_version:-'20' }}
+      access: ${{ github.event.inputs.access:-'public' }}
+      scope: ${{ github.event.inputs.scope:-'openimis' }}
+      tag:  ${{ github.event.inputs.tag }}
     secrets:
       NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
