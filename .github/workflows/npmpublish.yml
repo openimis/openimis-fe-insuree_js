@@ -29,7 +29,7 @@ on:
 
 jobs:
   call-npm-publish-workflow:
-    uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@feature/central-publish-workflow
+    uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@develop
     with:
       registry_url: 'https://registry.npmjs.org/'
       node_version: ${{ github.event.inputs.node_version:-'20' }}
@@ -39,7 +39,7 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   call-gpr-publish-workflow:
-    uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@feature/central-publish-workflow
+    uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@develop
     with:
       registry_url: 'https://npm.pkg.github.com/'
       node_version: ${{ github.event.inputs.node_version:-'20' }}
