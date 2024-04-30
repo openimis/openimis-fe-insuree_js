@@ -19,16 +19,11 @@ on:
       scope:
         description: 'Scope for npm package'
         required: false
-        default: ''
+        default: 'openimis'
       access:
         description: 'Access level for npm package'
         required: false
         default: 'public'
-      publish_to_gpr:
-        description: 'Should publish to GitHub Package Registry'
-        required: false
-        type: boolean
-        default: true
 
 jobs:
   call-central-workflow:
@@ -38,7 +33,3 @@ jobs:
       registry_url: 'https://registry.npmjs.org/'
       access: 'public'
       scope: 'openimis'
-      publish_to_gpr: true
-    secrets:
-      TOKEN: ${{ secrets.NPM_TOKEN }}
-      GPR_TOKEN: ${{secrets.GITHUB_TOKEN}}
