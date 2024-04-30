@@ -11,7 +11,7 @@ on:
       node_version:
         description: 'Node version to use'
         required: true
-        default: '16'
+        default: '20'
       registry_url:
         description: 'NPM registry URL'
         required: true
@@ -26,12 +26,21 @@ on:
         default: 'public'
 
 jobs:
-  call-central-workflow:
+  call-npm-publish-workflow:
     uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@feature/central-publish-workflow
     with:
-      node_version: '16'
+      node_version: '20'
       registry_url: 'https://registry.npmjs.org/'
       access: 'public'
       scope: 'openimis'
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  call-gpr-publish-workflow:
+    uses: openimis/openimis-fe_js/.github/workflows/module-npmpublish.yml@feature/central-publish-workflow
+    with:
+      node_version: '20'
+      registry_url: 'https://npm.pkg.github.com/'
+      access: 'public'
+      scope: 'openimis'
+    secrets:
+      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
