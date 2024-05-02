@@ -111,6 +111,11 @@ export function clearInsuree() {
   };
 }
 
+export function clearSubFamily() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_SUB_FAMILY_CLEAR" });
+  };
+}
 export function fetchFamilySummaries(mm, filters) {
   let projections = [
     "id",
@@ -127,7 +132,6 @@ export function fetchFamilySummaries(mm, filters) {
 }
 
 export function fetchFamilyMembers(mm, filters) {
-  console.log("filters ", filters);
   let projections = ["uuid", "chfId", "otherNames", "lastName", "head", "phone", "gender{code}", "dob", "cardIssued"];
   const payload = formatPageQueryWithCount("familyMembers", filters, projections);
   return graphql(payload, "INSUREE_FAMILY_MEMBERS");
@@ -148,15 +152,11 @@ export function fetchSubFamily(mm, filters) {
     "location" + mm.getProjection("location.Location.FlatProjection"),
     "clientMutationId",] ;
   const payload = formatPageQueryWithCount("families", filters, projections);
-  console.log("subfamily ", payload)
   return graphql(payload, "INSUREE_SUB_FAMILY");
 }
 
 export function addSubfamily(subfamily){
-  
-  console.log('subfamily ', subfamily)
   let payload = subfamily
-  console.log("payload envoyé ", payload)
   return(dispatch)=>{
     dispatch({ type: "ADD_SUB_FAMILY", payload: payload})
   }

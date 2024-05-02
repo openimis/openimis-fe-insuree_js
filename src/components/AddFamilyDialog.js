@@ -15,8 +15,6 @@ import {
   withModulesManager,
   withHistory,
 } from "@openimis/fe-core";
-import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
-import FamilyForm from "./FamilyForm";
 import { createFamily, updateFamily, clearInsuree } from "../actions";
 import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants";
 import { familyLabel } from "../utils/utils";
@@ -32,6 +30,7 @@ const styles = theme => ({
 const AddFamilyDialog = (props) => {
     const { intl, modulesManager, fetchInsuree, classes, fetching, fetched, edited, error, onClose, open, chfid, match,createFamily, updateFamily , rights} = props;
     const [addpressed , setAddPressed]= useState(false) 
+    const [disabled , setDisabled]= useState(true) 
     // const prevMatchUrl = useRef(null);
   
     // useEffect(() => {
@@ -73,12 +72,18 @@ const AddFamilyDialog = (props) => {
     //   };
     const handleAddPressed =()=>{
       setAddPressed(true);
-      console.log("pressed ", addpressed)
     } 
     const callBackPressed =()=>{
-      setAddPressed(false)
-      console.log('pressed 3 ', addpressed)
+      setAddPressed(false)  
+    }
+    const closeModalAfterPressed = ()=>{
       onClose();
+    }
+    const enabledButton = () =>{
+      setDisabled(false);
+    }
+    const disabledButton = ()=>{
+      setDisabled(true);
     }
     if (!rights.includes(RIGHT_FAMILY)) return null;
   
@@ -91,6 +96,9 @@ const AddFamilyDialog = (props) => {
                 canShowSubfamily={true}
                 addpressed={addpressed}
                 callBackPressed={callBackPressed}
+                closeModalAfterPressed={closeModalAfterPressed}
+                enabledButton={enabledButton}
+                disabledButton={disabledButton}
                 back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
                 // add={rights.includes(RIGHT_FAMILY_ADD) ? add : null}
                 // save={rights.includes(RIGHT_FAMILY_EDIT) ? save : null}
@@ -101,14 +109,14 @@ const AddFamilyDialog = (props) => {
         <DialogActions>
           <Button onClick={onClose} color="primary">
             {formatMessage(intl, "insuree", "close")}
-
           </Button>
           <Button
            autoFocus
+           disabled={disabled}
            onClick={()=>{
             handleAddPressed()
           }}
-          className={classes.primaryButton} 
+          className={ disabled === true ? classes.secondaryButton :classes.primaryButton } 
           >
             {formatMessage(intl, "insuree", "add")}
           </Button>

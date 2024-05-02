@@ -4,16 +4,7 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 import _ from "lodash";
 
-import {
-  Checkbox,
-  Paper,
-  IconButton,
-  Grid,
-  Divider,
-  Typography,
-  Tooltip,
-  Collapse,
-} from "@material-ui/core";
+import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@material-ui/core";
 import {
   Search as SearchIcon,
   Add as AddIcon,
@@ -22,6 +13,8 @@ import {
   Delete as DeleteIcon,
   Clear as RemoveIcon,
   Remove as CloseIcon,
+  Link as LinkIcon ,
+  ArrowRightAlt as ArrowRightIcon
 } from "@material-ui/icons";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 
@@ -50,6 +43,7 @@ import {
   changeFamily,
   checkCanAddInsuree,
   fetchSubFamily,
+  clearSubFamily
 } from "../actions";
 import { RIGHT_INSUREE_DELETE, EMPTY_STRING } from "../constants";
 import { insureeLabel, familyLabel } from "../utils/utils";
@@ -68,7 +62,7 @@ const styles = (theme) => ({
 
 class SubFamiliesSummary extends PagedDataHandler {
   state = {
-    addFamily: false,
+    isAddSubFamilyModalOpen: false,
     chfid: null,
     confirmedAction: null,
     removeInsuree: null,
@@ -78,6 +72,7 @@ class SubFamiliesSummary extends PagedDataHandler {
     checkedCanAdd: false,
     filters: {},
     showIFamilySearcher: false,
+    subFamily: [],
   };
 
   constructor(props) {
@@ -88,11 +83,13 @@ class SubFamiliesSummary extends PagedDataHandler {
       [5, 10, 20],
     );
     this.defaultPageSize = props.modulesManager.getConf("fe-family", "subFamiliesSummary.defaultPageSize", 5);
+    this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
   }
 
-  handleFamilySearcherToogle = (providedState) => this.setState(() => ({
-    showIFamilySearcher: providedState,
-  }));
+  handleFamilySearcherToogle = (providedState) =>
+    this.setState(() => ({
+      showIFamilySearcher: providedState,
+    }));
 
   onChangeFilters = (newFilters) => {
     const tempFilters = { ...this.state.filters };
@@ -106,12 +103,12 @@ class SubFamiliesSummary extends PagedDataHandler {
     this.setState({ filters: tempFilters });
   };
 
-  resetFilters = () => this.setState(() => ({ filters: {} }))
+  resetFilters = () => this.setState(() => ({ filters: {} }));
 
   closeFamilySearcher = () => {
     this.handleFamilySearcherToogle(false);
     this.resetFilters();
-  }
+  };
 
   componentDidMount() {
     this.setState({ orderBy: null }, (e) => this.onChangeRowsPerPage(this.defaultPageSize));
@@ -141,6 +138,9 @@ class SubFamiliesSummary extends PagedDataHandler {
       this.query();
     }
   }
+  componentWillUnmount = () => {
+    this.props.clearSubFamily();
+  };
 
   queryPrms = () => {
     let prms = [];
@@ -178,11 +178,11 @@ class SubFamiliesSummary extends PagedDataHandler {
     "insuree.familySummaries.email",
     "insuree.familySummaries.phone",
     "insuree.familySummaries.dob",
-    "insuree.familySummaries.poverty",
+    // ...Array.from(Array(this.locationLevels)).map((_, i) => `location.locationType.${i}`),
+    // "insuree.familySummaries.poverty",
     "insuree.familySummaries.confirmationNo",
-    "insuree.familySummaries.validityFrom",
-    "insuree.familySummaries.validityTo",
-    
+    // "insuree.familySummaries.validityFrom",
+    // "insuree.familySummaries.validityTo",
 
   ];
 
@@ -201,20 +201,29 @@ class SubFamiliesSummary extends PagedDataHandler {
     this.sorter("otherNames"),
     this.sorter("gender"),
     this.sorter("dob"),
-    this.sorter("cardIssued"),
+    this.sorter("confirmationNo"),
   ];
+  parentLocation = (location, level) => {
+    if (!location) return "";
+    let loc = location;
+    for (var i = 1; i < this.locationLevels - level; i++) {
+      if (!loc.parent) return "";
+      loc = loc.parent;
+    }
+    return !!loc ? loc.name : "";
+  };
 
-//   adornedChfId = (i) => (
-//     <Fragment>
-//       <IconButton
-//         size="small"
-//         onClick={(e) => !i.clientMutationId && this.setState({ enquiryOpen: true, chfid: i.chfId })}
-//       >
-//         <SearchIcon />
-//       </IconButton>
-//       {i.chfId}
-//     </Fragment>
-//   );
+  //   adornedChfId = (i) => (
+  //     <Fragment>
+  //       <IconButton
+  //         size="small"
+  //         onClick={(e) => !i.clientMutationId && this.setState({ enquiryOpen: true, chfid: i.chfId })}
+  //       >
+  //         <SearchIcon />
+  //       </IconButton>
+  //       {i.chfId}
+  //     </Fragment>
+  //   );
 
   confirmSetHeadInsuree = (i) => {
     let confirmedAction = () => {
@@ -299,24 +308,6 @@ class SubFamiliesSummary extends PagedDataHandler {
   );
 
   isHead = (f, i) => i.chfId === (!!f.headInsuree && f.headInsuree.chfId);
-
-  formatters = [
-    (i) => i.headInsuree.chfId || "",
-    (i) => i.headInsuree.otherNames || "",
-    (i) =>i.headInsuree.lastName || "",
-    (i) => i.headInsuree.email  || "",
-    (i) => i.headInsuree.phone || "",
-    (i) => i.headInsuree.dob || "",
-    (i) => i.poverty || "",
-    (i) => i.confimationNo || "",
-    (i) => i.validityFrom || "",
-    (i) => i.validityTo || "",
-
-    
-  ];
-
-  addNewFamily = () =>
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.family")
   rowLocked = (i) => !!i.clientMutationId;
 
   changeInsureeFamily = (cancelPolicies) => {
@@ -353,55 +344,88 @@ class SubFamiliesSummary extends PagedDataHandler {
       family,
       subFamily,
       fetchingSubFamily,
+      fetchedSubFamily,
       errorSubFamily,
       readOnly,
       checkingCanAddInsuree,
       errorCanAddInsuree,
-      familiesTotalCount
+      familiesTotalCount,
+      clearSubFamily
     } = this.props;
-    console.log('this.props', this.props)
-
+    console.log('subfamily props ', this.props)
+    var formatters = [
+      (family) => (!!family.headInsuree ? family.headInsuree.chfId : ""),
+      (family) => (!!family.headInsuree ? family.headInsuree.lastName : ""),
+      (family) => (!!family.headInsuree ? family.headInsuree.otherNames : ""),
+      (family) => (!!family.headInsuree ? family.headInsuree.email : ""),
+      (family) => (!!family.headInsuree ? family.headInsuree.phone : ""),
+      (family) =>
+        !!family.headInsuree
+          ? formatDateFromISO(this.props.modulesManager, this.props.intl, family.headInsuree.dob)
+          : "",
+    ];
+    for (var i = 0; i < this.locationLevels; i++) {
+      // need a fixed variable to refer to as parentLocation argument
+      let j = i + 0;
+      formatters.push((family) => this.parentLocation(family.location, j));
+    }
+    formatters.push(
+      (family) => <Checkbox color="primary" checked={family.poverty} readOnly />,
+      (family) => family.confirmationNo,
+      (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom),
+      (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityTo),
+      (family) => <LinkIcon color="primary"  readOnly />,
+      (family) => <ArrowRightIcon color="primary"  readOnly />
+     
+    );
+    var headers = [
+      "insuree.familySummaries.insuranceNo",
+      "insuree.familySummaries.lastName",
+      "insuree.familySummaries.otherNames",
+      "insuree.familySummaries.email",
+      "insuree.familySummaries.phone",
+      "insuree.familySummaries.dob",
+    ];
+    for (var i = 0; i < this.locationLevels; i++) {
+      headers.push(`location.locationType.${i}`);
+    }
+    headers.push(
+      "insuree.familySummaries.poverty",
+      "insuree.familySummaries.confirmationNo",
+      "insuree.familySummaries.validityFrom",
+      "insuree.familySummaries.validityTo",
+      "insuree.familySummaries.includeHeadOfFamily",
+      "insuree.familySummaries.RemoveSubFamily",
+      "insuree.familySummaries.openNewTab",
+    );
+    
     let actions =
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []
         : [
-        //   {
-        //     button: (
-        //       <div>
-        //         <PublishedComponent //div needed for the tooltip style!!
-        //           pubRef="insuree.InsureePicker"
-        //           IconRender={AddExistingIcon}
-        //           forcedFilter={["head: false"]}
-        //           onChange={(changeInsureeFamily) => this.setState({ changeInsureeFamily })}
-        //           check={() => this.checkCanAddInsuree(() => this.setState({ checkedCanAdd: true }))}
-        //           checked={this.state.checkedCanAdd}
-        //         />
-        //       </div>
-        //     ),
-        //     tooltip: formatMessage(intl, "insuree", "familyAddExsistingInsuree.tooltip"),
-        //   },
-          {
-            button: (
-              <IconButton onClick={(e) => this.setState({ addFamily: true })}>
-                <AddIcon />
-              </IconButton>
-            ),
-            tooltip: formatMessage(intl, "insuree", "familyAddNewInsuree.tooltip"),
-          },
-          {
-            button: this.state.showIFamilySearcher ?
-              <IconButton onClick={(e) => this.closeInsureeSearcher()}>
-                <CloseIcon />
-              </IconButton> :
-              <IconButton onClick={(e) => this.handleFamilySearcherToogle(true)}>
-                <SearchIcon />
-              </IconButton>
-            ,
-            tooltip: this.state.showIFamilySearcher ?
-              formatMessage(intl, "insuree", "closeInsureeSearchCriteria.tooltip") :
-              formatMessage(intl, "insuree", "showInsureeSearchCriteria.tooltip"),
-          },
-        ];
+            {
+              button: (
+                <IconButton onClick={(e) => this.setState({ isAddSubFamilyModalOpen: true })}>
+                  <AddIcon />
+                </IconButton>
+              ),
+              tooltip: formatMessage(intl, "insuree", "familyAddNewSubFamily.tooltip"),
+            },
+            {
+              button: this.state.showIFamilySearcher ? (
+                <IconButton onClick={(e) => this.closeInsureeSearcher()}>
+                  <CloseIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={(e) => this.handleFamilySearcherToogle(true)}>
+                  <SearchIcon />
+                </IconButton>
+              ),
+              tooltip: this.state.showIFamilySearcher
+                ? formatMessage(intl, "insuree", "closeInsureeSearchCriteria.tooltip")
+                : formatMessage(intl, "insuree", "showInsureeSearchCriteria.tooltip"),
+            },
+          ];
     if (!!checkingCanAddInsuree || !!errorCanAddInsuree) {
       actions.push({
         button: (
@@ -415,10 +439,10 @@ class SubFamiliesSummary extends PagedDataHandler {
     return (
       <Paper className={classes.paper}>
         <AddFamilyDialog
-        open={this.state.addFamily}
-        classes={classes}
-        onClose={() => {
-            this.setState({ addFamily: false});
+          open={this.state.isAddSubFamilyModalOpen}
+          classes={classes}
+          onClose={() => {
+            this.setState({ isAddSubFamilyModalOpen: false });
           }}
         />
         <ChangeInsureeFamilyDialog
@@ -443,7 +467,16 @@ class SubFamiliesSummary extends PagedDataHandler {
         <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
           <Grid item xs={8}>
             <Typography className={classes.tableTitle}>
-              <FormattedMessage module="insuree" id="Family.families" values={{ count: this.props.subFamily && this.props.subFamily.length > 0 ? this.props.subFamily.length : familiesTotalCount  }} />
+              <FormattedMessage
+                module="insuree"
+                id="Family.families"
+                values={{
+                  count:
+                    this.props.subFamily && this.props.subFamily.length > 0
+                      ? this.props.subFamily.length
+                      : familiesTotalCount,
+                }}
+              />
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -463,10 +496,10 @@ class SubFamiliesSummary extends PagedDataHandler {
         </Grid>
         <Table
           module="insuree"
-          headers={this.headers}
+          headers={headers}
           headerActions={this.headerActions}
-          itemFormatters={this.formatters}
-          items={subFamily? subFamily : this.state.subFamily ? this.state.subFamily : []}
+          itemFormatters={formatters}
+          items={subFamily ? subFamily : []}
           fetching={fetchingSubFamily}
           error={errorSubFamily}
           onDoubleClick={this.onDoubleClick}
@@ -483,7 +516,6 @@ class SubFamiliesSummary extends PagedDataHandler {
           rowLocked={this.rowLocked}
         />
       </Paper>
-   
     );
   }
 }
@@ -515,6 +547,7 @@ const mapDispatchToProps = (dispatch) => {
       removeInsuree,
       setFamilyHead,
       changeFamily,
+      clearSubFamily,
       checkCanAddInsuree,
       coreAlert,
     },

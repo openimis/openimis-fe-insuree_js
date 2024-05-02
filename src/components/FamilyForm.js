@@ -126,6 +126,8 @@ class FamilyForm extends Component {
     if (!this.state.family.location) return false;
     // if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
     if (this.state.family.validityTo) return false;
+    if (!!this.state.family.headInsuree && this.state.family.headInsuree.marital === 'P' && this.props.subFamily.length<=0) return false;
+
 
     return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
   };
@@ -163,12 +165,10 @@ class FamilyForm extends Component {
       save,
       back,
       mutation,
-      canShowSubfamily,
     } = this.props;
-    console.log('propriete ', this.props)
-    console.log('etat ', this.state)
+    console.log('etat de la famille',this.state);
+    console.log('props de la famille', this.props.subFamily.length);
     const { family, newFamily } = this.state;
-    console.log("edited du formumaire ", this.state)
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
@@ -210,7 +210,7 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview, SubFamiliesSummary] : (family.headInsuree && family.headInsuree.marital == 'P') ? [HeadInsureeMasterPanel, SubFamiliesSummary] : [HeadInsureeMasterPanel] }
+            Panels={(overview &&  (family.headInsuree && family.headInsuree.marital == 'P'))? [ SubFamiliesSummary] : (family.headInsuree && family.headInsuree.marital == 'P') ? [HeadInsureeMasterPanel, SubFamiliesSummary] : [HeadInsureeMasterPanel] }
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
@@ -234,6 +234,7 @@ const mapStateToProps = (state, props) => ({
   errorFamily: state.insuree.errorFamily,
   fetchedFamily: state.insuree.fetchedFamily,
   family: state.insuree.family,
+  subFamily: state.insuree.subFamily,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   insuree: state.insuree.insuree,

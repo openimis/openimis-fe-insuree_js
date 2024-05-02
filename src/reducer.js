@@ -159,7 +159,7 @@ function reducer(
         ...state,
         fetchingSubFamily: true,
         fetchedSubFamily: false,
-        subFamily: null,
+        subFamily: [],
         errorSubFamily: null,
         subFamilyPageInfo: null,
         subFamilyTotalCount : 0,
@@ -180,6 +180,16 @@ function reducer(
         fetchingSubFamily: false,
         errorSubFamily: formatGraphQLError(action.payload),
         subFamilyTotalCount : 0,
+      }
+    case "INSUREE_SUB_FAMILY_CLEAR":
+      return{
+        ...state,
+        fetchingSubFamily: false,
+        fetchedSubFamily: false,
+        subFamily: [],
+        errorSubFamily: null,
+        subFamilyPageInfo: null,
+        subFamilyTotalCount : 0
       }
     case "ADD_SUB_FAMILY":
       return{

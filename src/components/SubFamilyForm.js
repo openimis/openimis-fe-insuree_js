@@ -20,8 +20,7 @@ import { RIGHT_FAMILY, RIGHT_FAMILY_EDIT } from "../constants";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 
 import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, addSubfamily } from "../actions";
-import FamilyInsureesOverview from "./FamilyInsureesOverview";
-import SubFamiliesSummary from "./SubFamiliesSummary";
+
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 
 import { insureeLabel, isValidInsuree } from "../utils/utils";
@@ -50,14 +49,14 @@ class SubFamilyForm extends Component {
     return subFamily;
   }
 
-  componentDidMount() {
-    if (this.props.subFamily) {
-      this.setState(
-        (state, props) => ({ subFamily_uuid: props.subFamily_uuid }),
-        (e) => this.props.fetchFamily(this.props.modulesManager, this.props.subFamily_uuid),
-      );
-    }
-  }
+  // componentDidMount() {
+  //   if (this.props.subFamily) {
+  //     this.setState(
+  //       (state, props) => ({ subFamily_uuid: props.subFamily_uuid }),
+  //       (e) => this.props.fetchFamily(this.props.modulesManager, this.props.subFamily_uuid),
+  //     );
+  //   }
+  // }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (!prevProps.fetchedSubFamily && !!this.props.fetchedSubFamily) {
@@ -76,20 +75,23 @@ class SubFamilyForm extends Component {
     } else if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
     }
-    if (!!this.props.addpressed && this.props.addpressed == true) {
+    if(this.canSave() == true){
+      this.props.enabledButton()
+    }else{
+      this.props.disabledButton();
+    }
+    if (!!this.props.addpressed && this.props.addpressed === true) {
         let canSave = this.canSave();
-        console.log("enter condition", canSave);
-        if (canSave == true) {
+        if (canSave === true) {
+          this.props.enabledButton()
           if (this.state.subFamily) {
             this.props.addSubfamily(this.state.subFamily);
-            this.props.callBackPressed();
-          }else{
-            this.props.callBackPressed() 
           }
-          this.props.callBackPressed() 
-      }
+          this.props.disabledButton();
+           this.props.closeModalAfterPressed();
+        }
+        this.props.callBackPressed();
     }
-    console.log('valeur de addpressed ' , this.props?.addpressed)
   }
 
   _add = () => {
@@ -178,14 +180,9 @@ class SubFamilyForm extends Component {
       readOnly = false,
       add,
       save,
-      back,
-      mutation,
-      canShowSubfamily,
-      addpressed,
+      back
     } = this.props;
     const { subFamily, newFamily } = this.state;
-    console.log("sous famille ", this.state);
-    console.log("sous familles props ", this.props);
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!subFamily && !!subFamily.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
@@ -224,10 +221,9 @@ class SubFamilyForm extends Component {
             add={!!add && !newFamily ? this._add : null}
             readOnly={readOnly || runningMutation || !!subFamily.validityTo}
             actions={actions}
-            openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [HeadInsureeMasterPanel, SubFamiliesSummary] : [HeadInsureeMasterPanel]}
+            Panels={[HeadInsureeMasterPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }

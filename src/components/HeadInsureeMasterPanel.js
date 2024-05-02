@@ -5,13 +5,11 @@ import { connect } from "react-redux";
 import { Contributions, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
 import { PersonAdd as AddExistingIcon } from "@material-ui/icons";
 import { fetchInsureeFull } from "../actions";
-import SubFamiliesSummary from "./SubFamiliesSummary";
 
 const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels";
 
 class HeadInsureeMasterPanel extends Component {
   onEditedChanged = (head) => {
-    console.log('head ', this)
     let edited = { ...this.props.edited };
     edited["headInsuree"] = head;
     this.props.onEditedChanged(edited);
@@ -22,23 +20,8 @@ class HeadInsureeMasterPanel extends Component {
 
   render() {
     const { intl, edited, canShowSubfamily } = this.props;
-    console.log('head insuree pannel ', this.props)
 
-    let actions = [
-      {
-        button: (
-          <div>
-            <PublishedComponent //div needed for the tooltip style!!
-              pubRef="insuree.InsureePicker"
-              IconRender={AddExistingIcon}
-              forcedFilter={["head: false"]}
-              onChange={this.onEditedChanged}
-            />
-          </div>
-        ),
-        tooltip: formatMessage(intl, "insuree", "selectHeadInsuree.tooltip"),
-      },
-    ];
+    
 
     return (
       <Fragment>
@@ -47,7 +30,7 @@ class HeadInsureeMasterPanel extends Component {
           edited={!!edited ? edited.headInsuree : null}
           onEditedChanged={this.onEditedChanged}
           title="insuree.HeadInsureeMasterPanel.title"
-          actions={actions}
+          // actions={actions}
         /> 
 
         <Contributions
