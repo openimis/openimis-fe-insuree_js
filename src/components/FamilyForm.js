@@ -124,11 +124,8 @@ class FamilyForm extends Component {
 
   canSave = () => {
     if (!this.state.family.location) return false;
-    // if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
+    if (!this.state.family.familyType) return false;
     if (this.state.family.validityTo) return false;
-    if (!!this.state.family.headInsuree && this.state.family.headInsuree.marital === 'P' && this.props.subFamily.length<=0) return false;
-
-
     return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
   };
 
@@ -166,8 +163,6 @@ class FamilyForm extends Component {
       back,
       mutation,
     } = this.props;
-    console.log('etat de la famille',this.state);
-    console.log('props de la famille', this.props.subFamily.length);
     const { family, newFamily } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
@@ -210,7 +205,7 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={(overview &&  (family.headInsuree && family.headInsuree.marital == 'P'))? [ SubFamiliesSummary] : (family.headInsuree && family.headInsuree.marital == 'P') ? [HeadInsureeMasterPanel, SubFamiliesSummary] : [HeadInsureeMasterPanel] }
+            Panels={(overview && (family.headInsuree && family.headInsuree.marital == 'P'))? [ SubFamiliesSummary]  : [HeadInsureeMasterPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
@@ -218,9 +213,9 @@ class FamilyForm extends Component {
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
-            save={!!save  ? this._save : null}
+            save={!!save ? this._save : null}
             onActionToConfirm={this.onActionToConfirm}
-            openDirty={ save}
+            openDirty={save}
           />
         )}
       </div>
@@ -234,7 +229,6 @@ const mapStateToProps = (state, props) => ({
   errorFamily: state.insuree.errorFamily,
   fetchedFamily: state.insuree.fetchedFamily,
   family: state.insuree.family,
-  subFamily: state.insuree.subFamily,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   insuree: state.insuree.insuree,

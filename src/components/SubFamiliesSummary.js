@@ -51,7 +51,6 @@ import ChangeInsureeFamilyDialog from "./ChangeInsureeFamilyDialog";
 import EnquiryDialog from "./EnquiryDialog";
 import FamilyInsureesSearcher from "./FamilyInsureesSearcher";
 import RemoveInsureeFromFamilyDialog from "./RemoveInsureeFromFamilyDialog";
-import AddFamilyDialog from "./AddFamilyDialog";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -299,6 +298,10 @@ class SubFamiliesSummary extends PagedDataHandler {
     );
   };
 
+  onAdd = () => {
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily");
+  };
+
   deleteInsureeAction = (i) => (
     <Tooltip title={formatMessage(this.props.intl, "insuree", "familyDeleteInsuree.tooltip")}>
       <IconButton onClick={(e) => this.confirmDeleteInsuree(i)}>
@@ -352,7 +355,6 @@ class SubFamiliesSummary extends PagedDataHandler {
       familiesTotalCount,
       clearSubFamily
     } = this.props;
-    console.log('subfamily props ', this.props)
     var formatters = [
       (family) => (!!family.headInsuree ? family.headInsuree.chfId : ""),
       (family) => (!!family.headInsuree ? family.headInsuree.lastName : ""),
@@ -405,7 +407,7 @@ class SubFamiliesSummary extends PagedDataHandler {
         : [
             {
               button: (
-                <IconButton onClick={(e) => this.setState({ isAddSubFamilyModalOpen: true })}>
+                <IconButton onClick={(e) =>{this.onAdd()}}>
                   <AddIcon />
                 </IconButton>
               ),
@@ -438,11 +440,11 @@ class SubFamiliesSummary extends PagedDataHandler {
     }
     return (
       <Paper className={classes.paper}>
-        <AddFamilyDialog
-          open={this.state.isAddSubFamilyModalOpen}
-          classes={classes}
+         <EnquiryDialog
+          open={this.state.enquiryOpen}
+          chfid={this.state.chfid}
           onClose={() => {
-            this.setState({ isAddSubFamilyModalOpen: false });
+            this.setState({ enquiryOpen: false, chfid: null });
           }}
         />
         <ChangeInsureeFamilyDialog

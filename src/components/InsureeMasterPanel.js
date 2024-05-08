@@ -35,8 +35,8 @@ class InsureeMasterPanel extends FormPanel {
       readOnly = true,
       actions,
       edited_id,
+      isSubFamily,
     } = this.props;
-    console.log('form edited ', edited )
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -77,7 +77,7 @@ class InsureeMasterPanel extends FormPanel {
             </Grid>
             <Divider />
             <Grid container className={classes.item}>
-              {!!edited && !edited.chfId || !edited? null : (
+              {(!!edited && !edited.chfId) || !edited ? null : (
                 <Grid item xs={4} className={classes.item}>
                   <PublishedComponent
                     pubRef="insuree.InsureeNumberInput"
@@ -136,17 +136,19 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("gender", { code: v })}
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.item}>
-                    <PublishedComponent
-                      pubRef="insuree.InsureeMaritalStatusPicker"
-                      value={!!edited && !!edited.marital ? edited.marital : ""}
-                      module="insuree"
-                      readOnly={readOnly}
-                      withNull={true}
-                      nullLabel="InsureeMaritalStatus.null"
-                      onChange={(v) => this.updateAttribute("marital", v)}
-                    />
-                  </Grid>
+                  {!!isSubFamily && isSubFamily == true ? null : (
+                    <Grid item xs={3} className={classes.item}>
+                      <PublishedComponent
+                        pubRef="insuree.InsureeMaritalStatusPicker"
+                        value={!!edited && !!edited.marital ? edited.marital : ""}
+                        module="insuree"
+                        readOnly={readOnly}
+                        withNull={true}
+                        nullLabel="InsureeMaritalStatus.null"
+                        onChange={(v) => this.updateAttribute("marital", v)}
+                      />
+                    </Grid>
+                  )}
                   {edited?.marital == "P" ? (
                     <Grid item xs={3} className={classes.item}>
                       <TextInput
@@ -242,7 +244,7 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
                     />
                   </Grid>
-                  
+
                   <Grid item xs={3} className={classes.item}>
                     <TextInput
                       module="insuree"

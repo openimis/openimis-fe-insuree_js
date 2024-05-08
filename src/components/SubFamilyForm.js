@@ -41,22 +41,24 @@ class SubFamilyForm extends Component {
     newFamily: true,
     confirmedAction: null,
     addpressed: false,
+    runningMutation: false,
   };
 
   _newFamily() {
     let subFamily = {};
     subFamily.jsonExt = {};
+    subFamily.isSubFamily = true;
     return subFamily;
   }
 
-  // componentDidMount() {
-  //   if (this.props.subFamily) {
-  //     this.setState(
-  //       (state, props) => ({ subFamily_uuid: props.subFamily_uuid }),
-  //       (e) => this.props.fetchFamily(this.props.modulesManager, this.props.subFamily_uuid),
-  //     );
-  //   }
-  // }
+  componentDidMount() {
+    if (this.props.subFamily) {
+      this.setState(
+        (state, props) => ({ subFamily_uuid: props.subFamily_uuid }),
+        (e) => this.props.fetchFamily(this.props.modulesManager, this.props.subFamily_uuid),
+      );
+    }
+  }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (!prevProps.fetchedSubFamily && !!this.props.fetchedSubFamily) {
@@ -75,23 +77,7 @@ class SubFamilyForm extends Component {
     } else if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
     }
-    if(this.canSave() == true){
-      this.props.enabledButton()
-    }else{
-      this.props.disabledButton();
-    }
-    if (!!this.props.addpressed && this.props.addpressed === true) {
-        let canSave = this.canSave();
-        if (canSave === true) {
-          this.props.enabledButton()
-          if (this.state.subFamily) {
-            this.props.addSubfamily(this.state.subFamily);
-          }
-          this.props.disabledButton();
-           this.props.closeModalAfterPressed();
-        }
-        this.props.callBackPressed();
-    }
+   
   }
 
   _add = () => {
@@ -151,9 +137,12 @@ class SubFamilyForm extends Component {
 
   _save = (subFamily) => {
     this.setState(
-      { lockNew: !subFamily.uuid }, // avoid duplicates
-      (e) => this.props.save(subFamily),
+      { lockNew: !subFamily.uuid,
+        runningMutation : true
+       },
+      (e) => this.props.addSubfamily(subFamily),
     );
+    
   };
 
   onEditedChanged = (subFamily) => {
@@ -184,11 +173,7 @@ class SubFamilyForm extends Component {
     } = this.props;
     const { subFamily, newFamily } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
-    let runningMutation = !!subFamily && !!subFamily.clientMutationId;
-    let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
-    for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
-      runningMutation = contributedMutations[i](state);
-    }
+    let runningMutation = this.state.runningMutation== true;
     let actions = [];
     if (subFamily_uuid || !!subFamily.clientMutationId) {
       actions.push({
@@ -197,7 +182,7 @@ class SubFamilyForm extends Component {
         onlyIfDirty: !readOnly && !runningMutation,
       });
     }
-    const shouldBeLocked = !!runningMutation || subFamily?.validityTo;
+    const shouldBeLocked = this.state.runningMutation ==true
     return (
       <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
@@ -219,7 +204,7 @@ class SubFamilyForm extends Component {
             reset={this.state.reset}
             back={back}
             add={!!add && !newFamily ? this._add : null}
-            readOnly={readOnly || runningMutation || !!subFamily.validityTo}
+            readOnly={readOnly || this.state.runningMutation || !!subFamily.validityTo}
             actions={actions}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
@@ -227,7 +212,7 @@ class SubFamilyForm extends Component {
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
-            family={subFamily}
+            subfamily={subFamily}
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}

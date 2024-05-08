@@ -88,7 +88,6 @@ class FamilyMasterPanel extends FormPanel {
 
   render() {
     const { intl, classes, edited, openFamilyButton = false, readOnly, overview } = this.props;
-    console.log(" family edited ", edited)
     return (
       <Fragment>
         <Grid container className={classes.tableTitle}>
@@ -131,17 +130,20 @@ class FamilyMasterPanel extends FormPanel {
             />
           </Grid>
           {!!overview && this.headSummary()}
-          <Grid item xs={2} className={classes.item}>
-            <PublishedComponent
-              pubRef="insuree.FamilyTypePicker"
-              withNull={true}
-              readOnly={readOnly}
-              required={true}
-              nullLabel={formatMessage(intl, "insuree", "Family.FamilyType.null")}
-              value={!!edited && !!edited.familyType ? edited.familyType.code : null}
-              onChange={(v) => this.updateAttribute("familyType", { code: v })}
-            />
-          </Grid>
+          {!!edited && edited.isSubFamily == true ? (
+            null
+          ) : <Grid item xs={2} className={classes.item}>
+          <PublishedComponent
+            pubRef="insuree.FamilyTypePicker"
+            withNull={true}
+            readOnly={readOnly}
+            required={true}
+            nullLabel={formatMessage(intl, "insuree", "Family.FamilyType.null")}
+            value={!!edited && !!edited.familyType ? edited.familyType.code : null}
+            onChange={(v) => this.updateAttribute("familyType", { code: v })}
+          />
+        </Grid>}
+
           {/* <Grid item xs={2} className={classes.item}>
             <PublishedComponent
               pubRef="insuree.ConfirmationTypePicker"

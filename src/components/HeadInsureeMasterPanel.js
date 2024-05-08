@@ -19,7 +19,7 @@ class HeadInsureeMasterPanel extends Component {
   };
 
   render() {
-    const { intl, edited, canShowSubfamily } = this.props;
+    const { intl, edited } = this.props;
 
     
 
@@ -28,6 +28,7 @@ class HeadInsureeMasterPanel extends Component {
         <InsureeMasterPanel
           {...this.props}
           edited={!!edited ? edited.headInsuree : null}
+          isSubFamily={!!edited ? edited.isSubFamily : null}
           onEditedChanged={this.onEditedChanged}
           title="insuree.HeadInsureeMasterPanel.title"
           // actions={actions}
