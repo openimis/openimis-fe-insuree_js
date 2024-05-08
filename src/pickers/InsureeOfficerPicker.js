@@ -5,6 +5,7 @@ import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
 import { fetchInsureeOfficers } from "../actions";
 import { formatMessage, AutoSuggestion, ProgressOrError, withModulesManager, decodeId } from "@openimis/fe-core";
+import { DEFAULT } from "../constants";
 
 const styles = (theme) => ({
   label: {
@@ -16,6 +17,11 @@ class InsureeOfficer extends Component {
   constructor(props) {
     super(props);
     this.selectThreshold = props.modulesManager.getConf("fe-insuree", "InsureeOfficer.selectThreshold", 10);
+    this.renderLastNameFirst = props.modulesManager.getConf(
+      "fe-insuree",
+      "renderLastNameFirst",
+      DEFAULT.RENDER_LAST_NAME_FIRST,
+    );
   }
 
   componentDidMount() {
@@ -28,7 +34,15 @@ class InsureeOfficer extends Component {
     }
   }
 
-  formatSuggestion = (a) => (!a ? "" : `${a.code} ${a.lastName} ${a.otherName || ""}`);
+  formatSuggestion = (a) => {
+    if (!a) return "";
+
+    const fullName = this.renderLastNameFirst
+      ? `${a.lastName} ${a.otherName || ""}`.trim()
+      : `${a.otherName || ""} ${a.lastName}`.trim();
+
+    return `${a.code} ${fullName}`.trim();
+  };
 
   onSuggestionSelected = (v) => this.props.onChange(v, this.formatSuggestion(v));
 

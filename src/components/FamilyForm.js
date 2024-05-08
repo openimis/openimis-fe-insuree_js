@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { injectIntl } from "react-intl";
+
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
+
 import {
   formatMessageWithValues,
   withModulesManager,
@@ -16,15 +18,13 @@ import {
   parseData,
   Helmet,
 } from "@openimis/fe-core";
-import { RIGHT_FAMILY, RIGHT_FAMILY_EDIT } from "../constants";
-import FamilyMasterPanel from "./FamilyMasterPanel";
-
 import { fetchFamily, newFamily, createFamily, fetchFamilyMutation } from "../actions";
+import { INSUREE_ACTIVE_STRING, RIGHT_FAMILY } from "../constants";
+import { insureeLabel, isValidInsuree } from "../utils/utils";
+import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
+import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
 import SubFamiliesSummary from "./SubFamiliesSummary";
-import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
-
-import { insureeLabel, isValidInsuree } from "../utils/utils";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -41,11 +41,16 @@ class FamilyForm extends Component {
     family: this._newFamily(),
     newFamily: true,
     confirmedAction: null,
+    isSaved: false,
   };
 
   _newFamily() {
-    let family = {};
-    family.jsonExt = {};
+    let family = {
+      jsonExt: {},
+      headInsuree: {
+        status: INSUREE_ACTIVE_STRING,
+      },
+    };
     return family;
   }
 
@@ -92,34 +97,41 @@ class FamilyForm extends Component {
     );
   };
 
-  reload = () => {
-    const { family } = this.state;
-    const { clientMutationId, familyUuid } = this.props.mutation;
-    if (clientMutationId && !familyUuid) {
-      // creation, we need to fetch the new family uuid from mutations logs and redirect to family overview
-      this.props.fetchFamilyMutation(this.props.modulesManager, clientMutationId).then((res) => {
-        const mutationLogs = parseData(res.payload.data.mutationLogs);
-        if (
-          mutationLogs &&
-          mutationLogs[0] &&
-          mutationLogs[0].families &&
-          mutationLogs[0].families[0] &&
-          mutationLogs[0].families[0].family
-        ) {
-          const uuid = parseData(res.payload.data.mutationLogs)[0].families[0].family.uuid;
-          if (uuid) {
-            historyPush(this.props.modulesManager, this.props.history, "insuree.route.familyOverview", [uuid]);
-          }
-        }
-      });
-    } else {
-      this.props.fetchFamily(
-        this.props.modulesManager,
-        familyUuid,
-        !!family.headInsuree ? family.headInsuree.chfId : null,
-        family.clientMutationId,
-      );
+  reload = async () => {
+    const { isSaved } = this.state;
+    const { modulesManager, history, mutation, fetchFamilyMutation, family_uuid: familyUuid, fetchFamily } = this.props;
+
+    if (familyUuid) {
+      try {
+        await fetchFamily(modulesManager, familyUuid);
+      } catch (error) {
+        console.error(`[RELOAD_FAMILY]: Fetching family details failed. ${error}`);
+      }
+      return;
     }
+
+    if (isSaved) {
+      try {
+        const { clientMutationId } = mutation;
+        const response = await fetchFamilyMutation(modulesManager, clientMutationId);
+        const createdFamilyUuid = parseData(response.payload.data.mutationLogs)[0].families[0].family.uuid;
+
+        await fetchFamily(modulesManager, createdFamilyUuid);
+        historyPush(modulesManager, history, "insuree.route.familyOverview", [createdFamilyUuid]);
+      } catch (error) {
+        console.error(`[RELOAD_FAMILY]: Fetching family details failed. ${error}`);
+      }
+      return;
+    }
+
+    this.setState({
+      lockNew: false,
+      reset: 0,
+      family: this._newFamily(),
+      newFamily: true,
+      confirmedAction: null,
+      isSaved: false,
+    });
   };
 
   canSave = () => {
@@ -130,10 +142,7 @@ class FamilyForm extends Component {
   };
 
   _save = (family) => {
-    this.setState(
-      { lockNew: !family.uuid }, // avoid duplicates
-      (e) => this.props.save(family),
-    );
+    this.setState({ lockNew: !family.uuid, isSaved: true }, (e) => this.props.save(family));
   };
 
   onEditedChanged = (family) => {
@@ -161,23 +170,21 @@ class FamilyForm extends Component {
       add,
       save,
       back,
-      mutation,
     } = this.props;
-    const { family, newFamily } = this.state;
+    const { family, newFamily, isSaved } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
     for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
       runningMutation = contributedMutations[i](state);
     }
-    let actions = [];
-    if (family_uuid || !!family.clientMutationId) {
-      actions.push({
+    let actions = [
+      {
         doIt: this.reload,
         icon: <ReplayIcon />,
-        onlyIfDirty: !readOnly && !runningMutation,
-      });
-    }
+        onlyIfDirty: !readOnly && !runningMutation && !isSaved,
+      },
+    ];
     const shouldBeLocked = !!runningMutation || family?.validityTo;
     return (
       <div className={shouldBeLocked ? classes.lockedPage : null}>
