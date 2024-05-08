@@ -19,7 +19,7 @@ import {
 import { RIGHT_FAMILY, RIGHT_FAMILY_EDIT } from "../constants";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 
-import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, addSubfamily } from "../actions";
+import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, } from "../actions";
 
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 
@@ -46,6 +46,7 @@ class SubFamilyForm extends Component {
 
   _newFamily() {
     let subFamily = {};
+    subFamily.parentFamily = this.props.family_id
     subFamily.jsonExt = {};
     subFamily.isSubFamily = true;
     return subFamily;
@@ -140,7 +141,7 @@ class SubFamilyForm extends Component {
       { lockNew: !subFamily.uuid,
         runningMutation : true
        },
-      (e) => this.props.addSubfamily(subFamily),
+      (e) => this.props.save(subFamily),
     );
     
   };
@@ -172,6 +173,7 @@ class SubFamilyForm extends Component {
       back
     } = this.props;
     const { subFamily, newFamily } = this.state;
+    console.log('subfamily state ', this.state );
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = this.state.runningMutation== true;
     let actions = [];
@@ -242,7 +244,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, addSubfamily, journalize, coreConfirm },
+    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm },
     dispatch,
   );
 };

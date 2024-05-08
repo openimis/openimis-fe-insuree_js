@@ -340,7 +340,7 @@ export function formatFamilyGQL(mm, family) {
     ${!!family.address ? `address: "${formatGQLString(family.address)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
-
+    ${!!family.parentFamily ? `parentFamily: ${decodeId(family.parentFamily)}` : ""}
   `;
 }
 

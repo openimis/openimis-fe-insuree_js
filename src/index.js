@@ -146,7 +146,7 @@ const DEFAULT_CONFIG = {
   "core.Router": [
     { path: ROUTE_INSUREE_FAMILIES, component: FamiliesPage },
     { path: ROUTE_INSUREE_FAMILY + "/:family_uuid?", component: FamilyPage },
-    { path: ROUTE_INSUREE_SUBFAMILY + "/:family_uuid?", component:  SubFamilyPage},
+    { path: ROUTE_INSUREE_SUBFAMILY + "/:family_id?", component:  SubFamilyPage},
     { path: ROUTE_INSUREE_FAMILY_OVERVIEW + "/:family_uuid", component: FamilyOverviewPage },
     { path: ROUTE_INSUREE_INSUREES, component: InsureesPage },
     { path: ROUTE_INSUREE_INSUREE + "/:insuree_uuid?/:family_uuid?", component: InsureePage },

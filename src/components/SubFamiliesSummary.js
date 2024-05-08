@@ -299,7 +299,7 @@ class SubFamiliesSummary extends PagedDataHandler {
   };
 
   onAdd = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily");
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family?.id,]);
   };
 
   deleteInsureeAction = (i) => (
@@ -355,6 +355,7 @@ class SubFamiliesSummary extends PagedDataHandler {
       familiesTotalCount,
       clearSubFamily
     } = this.props;
+    console.log('subfamilysummary props ', this.props)
     var formatters = [
       (family) => (!!family.headInsuree ? family.headInsuree.chfId : ""),
       (family) => (!!family.headInsuree ? family.headInsuree.lastName : ""),
