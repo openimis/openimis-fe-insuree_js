@@ -2,7 +2,16 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Grid, IconButton, Tooltip } from "@material-ui/core";
+import {
+  Grid,
+  IconButton,
+  Button,
+  Tooltip,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@material-ui/core";
 import { Search as SearchIcon, People as PeopleIcon, Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import {
   withModulesManager,
@@ -15,13 +24,11 @@ import {
   journalize,
   Searcher,
   PublishedComponent,
+  downloadExport,
 } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
-import {
-  RIGHT_INSUREE_DELETE,
-  INSUREE_MARITAL_STATUS
-} from "../constants";
-import { fetchInsureeSummaries, deleteInsuree } from "../actions";
+import { RIGHT_INSUREE_DELETE, INSUREE_MARITAL_STATUS, DEFAULT } from "../constants";
+import { fetchInsureeSummaries, deleteInsuree, downloadWorkers, clearWorkersExport } from "../actions";
 
 import InsureeFilter from "./InsureeFilter";
 import { insureeLabel } from "../utils/utils";
@@ -34,6 +41,7 @@ class InsureeSearcher extends Component {
     chfid: null,
     confirmedAction: null,
     reset: 0,
+    failedExport: false,
   };
 
   constructor(props) {
@@ -45,9 +53,25 @@ class InsureeSearcher extends Component {
     );
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "insureeFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
+    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
+    this.renderLastNameFirst = props.modulesManager.getConf(
+      "fe-insuree",
+      "renderLastNameFirst",
+      DEFAULT.RENDER_LAST_NAME_FIRST,
+    );
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!prevProps.errorWorkersExport && this.props.errorWorkersExport) {
+      this.setState({ failedExport: true });
+    }
+
+    if (prevProps.workersExport !== this.props.workersExport && this.props.workersExport) {
+      const { clearWorkersExport, workersExport, intl } = this.props;
+      downloadExport(workersExport, `${formatMessage(intl, "insuree", "workers.filename")}.csv`)();
+      clearWorkersExport();
+    }
+
     if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
       this.setState({ reset: this.state.reset + 1 });
@@ -57,7 +81,7 @@ class InsureeSearcher extends Component {
   }
 
   fetch = (prms) => {
-    this.props.fetchInsureeSummaries(this.props.modulesManager, prms);
+    this.props.fetchInsureeSummaries(this.props.modulesManager, prms, this.isWorker);
   };
 
   rowIdentifier = (r) => r.uuid;
@@ -86,16 +110,16 @@ class InsureeSearcher extends Component {
   headers = (filters) => {
     var h = [
       "insuree.insureeSummaries.insuranceNo",
-      "insuree.insureeSummaries.lastName",
-      "insuree.insureeSummaries.otherNames",
-      "insuree.insureeSummaries.maritalStatus",
-      "insuree.insureeSummaries.gender",
-      "insuree.insureeSummaries.email",
-      "insuree.insureeSummaries.phone",
-      "insuree.insureeSummaries.dob",
-      ...Array.from(Array(this.locationLevels)).map((_, i) => `location.locationType.${i}`),
-      "insuree.insureeSummaries.validityFrom",
-      filters.showHistory && "insuree.insureeSummaries.validityTo",
+      this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
+      !this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
+      this.isWorker ? null : "insuree.insureeSummaries.maritalStatus",
+      this.isWorker ? null : "insuree.insureeSummaries.gender",
+      this.isWorker ? null : "insuree.insureeSummaries.email",
+      this.isWorker ? null : "insuree.insureeSummaries.phone",
+      this.isWorker ? null : "insuree.insureeSummaries.dob",
+      ...Array.from(Array(this.locationLevels)).map((_, i) => (this.isWorker ? null : `location.locationType.${i}`)),
+      filters?.showHistory?.value ? "insuree.insureeSummaries.validityFrom" : null,
+      filters?.showHistory?.value ? "insuree.insureeSummaries.validityTo" : null,
       "",
     ];
     return h.filter(Boolean);
@@ -104,18 +128,21 @@ class InsureeSearcher extends Component {
   sorts = (filters) => {
     var results = [
       ["chfId", true],
-      ["lastName", true],
-      ["otherNames", true],
+      this.renderLastNameFirst ? ["lastName", true] : ["otherNames", true],
+      !this.renderLastNameFirst ? ["lastName", true] : ["otherNames", true],
       ["marital", true],
       ["gender__code", true],
       ["email", true],
       ["phone", true],
       ["dob", true],
+      filters?.showHistory?.value ? ["validityFrom", false] : null,
+      filters?.showHistory?.value ? ["validityTo", false] : null,
     ];
     _.times(this.locationLevels, () => results.push(null));
-    results.push(["validityFrom", false], ["validityTo", false]);
     return results;
   };
+
+  rowSecondaryHighlighted = (insuree) => !insuree?.family;
 
   parentLocation = (location, level) => {
     if (!location) return "";
@@ -129,6 +156,10 @@ class InsureeSearcher extends Component {
 
   handleClose = () => {
     this.setState({ open: false, chfid: null });
+  };
+
+  handleExportErrorDialogClose = () => {
+    this.setState({ failedExport: false });
   };
 
   confirmDelete = (i) => {
@@ -152,51 +183,61 @@ class InsureeSearcher extends Component {
   itemFormatters = (filters) => {
     var formatters = [
       (insuree) => insuree.chfId,
-      (insuree) => insuree.lastName,
-      (insuree) => insuree.otherNames,
-      (insuree) => (
-        <PublishedComponent
-          pubRef="insuree.InsureeMaritalStatusPicker"
-          withLabel={false}
-          readOnly={true}
-          value={insuree.marital || INSUREE_MARITAL_STATUS[0]}
-        />
-      ),
-      (insuree) => (
-        <PublishedComponent
-          pubRef="insuree.InsureeGenderPicker"
-          withLabel={false}
-          readOnly={true}
-          value={!!insuree.gender ? insuree.gender.code : null}
-        />
-      ),
-      (insuree) => insuree.email,
-      (insuree) => insuree.phone,
-      (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
+      (insuree) => (this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
+      (insuree) => (!this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
+      this.isWorker
+        ? null
+        : (insuree) => (
+            <PublishedComponent
+              pubRef="insuree.InsureeMaritalStatusPicker"
+              withLabel={false}
+              readOnly={true}
+              value={insuree.marital || INSUREE_MARITAL_STATUS[0]}
+            />
+          ),
+      this.isWorker
+        ? null
+        : (insuree) => (
+            <PublishedComponent
+              pubRef="insuree.InsureeGenderPicker"
+              withLabel={false}
+              readOnly={true}
+              value={!!insuree.gender ? insuree.gender.code : null}
+            />
+          ),
+      this.isWorker ? null : (insuree) => insuree.email,
+      this.isWorker ? null : (insuree) => insuree.phone,
+      this.isWorker ? null : (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
     ];
-    for (var i = 0; i < this.locationLevels; i++) {
-      // need a fixed variable to refer to as parentLocation argument
-      let j = i + 0;
-      formatters.push((insuree) =>
-        this.parentLocation(insuree.currentVillage || (!!insuree.family && insuree.family.location), j),
-      );
+    if (!this.isWorker) {
+      for (var i = 0; i < this.locationLevels; i++) {
+        // need a fixed variable to refer to as parentLocation argument
+        let j = i + 0;
+        formatters.push((insuree) =>
+          this.parentLocation(insuree.currentVillage || (!!insuree.family && insuree.family.location), j),
+        );
+      }
     }
     formatters.push(
-      (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom),
-      filters.showHistory &&
-      ((insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)),
+      filters?.showHistory?.value
+        ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom)
+        : null,
+      filters?.showHistory?.value
+        ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)
+        : null,
       (insuree) => (
         <Grid container wrap="nowrap" spacing="2">
-          <Grid item>
-            <IconButton
-              size="small"
-              onClick={(e) => !insuree.clientMutationId && this.setState({ open: true, chfid: insuree.chfId })}
-            >
-              <SearchIcon />
-            </IconButton>
-          </Grid>
-
-          {insuree.family && (
+          {!this.isWorker && (
+            <Grid item>
+              <IconButton
+                size="small"
+                onClick={(e) => !insuree.clientMutationId && this.setState({ open: true, chfid: insuree.chfId })}
+              >
+                <SearchIcon />
+              </IconButton>
+            </Grid>
+          )}
+          {!this.isWorker && insuree.family && (
             <Grid item>
               <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
                 <IconButton
@@ -252,9 +293,12 @@ class InsureeSearcher extends Component {
       filterPaneContributionsKey,
       cacheFiltersKey,
       onDoubleClick,
+      errorWorkersExport,
+      downloadWorkers,
     } = this.props;
+    const { failedExport } = this.state;
 
-    let count = insureesPageInfo.totalCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    let count = (insureesPageInfo?.totalCount || 0).toLocaleString();
 
     return (
       <Fragment>
@@ -275,6 +319,7 @@ class InsureeSearcher extends Component {
           defaultPageSize={this.defaultPageSize}
           fetch={this.fetch}
           rowIdentifier={this.rowIdentifier}
+          rowSecondaryHighlighted={this.rowSecondaryHighlighted}
           filtersToQueryParams={this.filtersToQueryParams}
           defaultOrderBy="chfId"
           headers={this.headers}
@@ -284,7 +329,30 @@ class InsureeSearcher extends Component {
           rowLocked={this.rowLocked}
           onDoubleClick={(i) => !i.clientMutationId && onDoubleClick(i)}
           reset={this.state.reset}
+          exportable={this.isWorker}
+          exportFetch={downloadWorkers}
+          exportFields={["chf_id", "last_name", "other_names"]}
+          exportFieldsColumns={{
+            chf_id: formatMessage(intl, "insuree", "Insuree.chfId"),
+            last_name: formatMessage(intl, "insuree", "Insuree.lastName"),
+            other_names: formatMessage(intl, "insuree", "Insuree.otherNames"),
+          }}
+          exportFieldLabel={formatMessage(intl, "insuree", "workers.export")}
+          chooseExportableColumns
         />
+        {failedExport && (
+          <Dialog open={failedExport} fullWidth maxWidth="sm">
+            <DialogTitle> {errorWorkersExport?.message} </DialogTitle>
+            <DialogContent>
+              <strong> {`${errorWorkersExport?.code}:`} </strong> {errorWorkersExport?.detail}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => this.handleExportErrorDialogClose()} color="primary" variant="contained">
+                {formatMessage(intl, null, "close")}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
       </Fragment>
     );
   }
@@ -300,10 +368,22 @@ const mapStateToProps = (state) => ({
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   confirmed: state.core.confirmed,
+  workersExport: state.insuree.workersExport,
+  errorWorkersExport: state.insuree.errorWorkersExport,
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ fetchInsureeSummaries, deleteInsuree, journalize, coreConfirm }, dispatch);
+  return bindActionCreators(
+    {
+      fetchInsureeSummaries,
+      deleteInsuree,
+      journalize,
+      coreConfirm,
+      clearWorkersExport,
+      downloadWorkers,
+    },
+    dispatch,
+  );
 };
 
 export default withModulesManager(
