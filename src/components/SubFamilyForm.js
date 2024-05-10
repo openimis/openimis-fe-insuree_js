@@ -19,7 +19,7 @@ import {
 import { RIGHT_FAMILY, RIGHT_FAMILY_EDIT } from "../constants";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 
-import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, } from "../actions";
+import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, fetchSubFamily } from "../actions";
 
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 
@@ -46,18 +46,24 @@ class SubFamilyForm extends Component {
 
   _newFamily() {
     let subFamily = {};
-    subFamily.parentFamily = this.props.family_id
+    subFamily.parentFamily = this.props.family && this.props.family.id ? this.props.family.id : "";
     subFamily.jsonExt = {};
-    subFamily.isSubFamily = true;
+    subFamily.issubFamily = true;
     return subFamily;
   }
 
   componentDidMount() {
-    if (this.props.subFamily) {
+    if (this.props.subFamily_uuid) {
       this.setState(
         (state, props) => ({ subFamily_uuid: props.subFamily_uuid }),
-        (e) => this.props.fetchFamily(this.props.modulesManager, this.props.subFamily_uuid),
+        (e) => this.props.fetchSubFamily(this.props.modulesManager, this.props.subFamily_uuid),
       );
+      if (this.props.family_uuid) {
+        this.setState(
+          (state, props) => ({ family_uuid: props.family_uuid }),
+          (e) => this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid),
+        );
+      }
     }
   }
 
@@ -78,7 +84,6 @@ class SubFamilyForm extends Component {
     } else if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
     }
-   
   }
 
   _add = () => {
@@ -128,7 +133,7 @@ class SubFamilyForm extends Component {
 
   canSave = () => {
     if (!this.state.subFamily.location) return false;
-    // if (!this.state.subFamily.uuid && !this.props.isChfIdValid) return false;
+    // if (!this.state.subFamilie.uuid && !this.props.isChfIdValid) return false;
     if (this.state.subFamily.validityTo) return false;
 
     return (
@@ -137,13 +142,7 @@ class SubFamilyForm extends Component {
   };
 
   _save = (subFamily) => {
-    this.setState(
-      { lockNew: !subFamily.uuid,
-        runningMutation : true
-       },
-      (e) => this.props.save(subFamily),
-    );
-    
+    this.setState({ lockNew: !subFamily.uuid, runningMutation: true }, (e) => this.props.save(subFamily));
   };
 
   onEditedChanged = (subFamily) => {
@@ -170,12 +169,11 @@ class SubFamilyForm extends Component {
       readOnly = false,
       add,
       save,
-      back
+      back,
     } = this.props;
     const { subFamily, newFamily } = this.state;
-    console.log('subfamily state ', this.state );
     if (!rights.includes(RIGHT_FAMILY)) return null;
-    let runningMutation = this.state.runningMutation== true;
+    let runningMutation = this.state.runningMutation == true;
     let actions = [];
     if (subFamily_uuid || !!subFamily.clientMutationId) {
       actions.push({
@@ -184,7 +182,7 @@ class SubFamilyForm extends Component {
         onlyIfDirty: !readOnly && !runningMutation,
       });
     }
-    const shouldBeLocked = this.state.runningMutation ==true
+    const shouldBeLocked = this.state.runningMutation == true;
     return (
       <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
@@ -214,7 +212,7 @@ class SubFamilyForm extends Component {
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
-            subfamily={subFamily}
+            subFamily={subFamily}
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
@@ -233,18 +231,19 @@ const mapStateToProps = (state, props) => ({
   fetchingSubFamily: state.insuree.fetchingSubFamily,
   errorSubFamily: state.insuree.errorSubFamily,
   fetchedSubFamily: state.insuree.fetchedSubFamily,
-  subFamily: state.insuree.subFamily,
+  family: state.insuree.family,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   insuree: state.insuree.insuree,
   confirmed: state.core.confirmed,
   state: state,
+  subFamily: state.insuree.subFamily,
   isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm },
+    { fetchSubFamily, fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm },
     dispatch,
   );
 };

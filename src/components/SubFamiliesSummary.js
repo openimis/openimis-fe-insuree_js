@@ -42,7 +42,7 @@ import {
   setFamilyHead,
   changeFamily,
   checkCanAddInsuree,
-  fetchSubFamily,
+  fetchSubFamilySummary,
   clearSubFamily
 } from "../actions";
 import { RIGHT_INSUREE_DELETE, EMPTY_STRING } from "../constants";
@@ -61,7 +61,6 @@ const styles = (theme) => ({
 
 class SubFamiliesSummary extends PagedDataHandler {
   state = {
-    isAddSubFamilyModalOpen: false,
     chfid: null,
     confirmedAction: null,
     removeInsuree: null,
@@ -71,7 +70,7 @@ class SubFamiliesSummary extends PagedDataHandler {
     checkedCanAdd: false,
     filters: {},
     showIFamilySearcher: false,
-    subFamily: [],
+    subFamilies: [],
   };
 
   constructor(props) {
@@ -160,8 +159,8 @@ class SubFamiliesSummary extends PagedDataHandler {
     historyPush(
       this.props.modulesManager,
       this.props.history,
-      "family.route.family",
-      [i.uuid, this.props.family.uuid],
+      "insuree.route.subFamilyOverview",
+      [i.uuid ,this.props.family.uuid, i.headInsuree.uuid],
       newTab,
     );
   };
@@ -299,7 +298,7 @@ class SubFamiliesSummary extends PagedDataHandler {
   };
 
   onAdd = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family?.id,]);
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family?.uuid,]);
   };
 
   deleteInsureeAction = (i) => (
@@ -345,17 +344,16 @@ class SubFamiliesSummary extends PagedDataHandler {
       classes,
       pageInfo,
       family,
-      subFamily,
-      fetchingSubFamily,
-      fetchedSubFamily,
-      errorSubFamily,
+      subFamilies,
+      fetchingSubFamilies,
+      fetchedSubFamilies,
+      errorSubFamilies,
       readOnly,
       checkingCanAddInsuree,
       errorCanAddInsuree,
       familiesTotalCount,
       clearSubFamily
     } = this.props;
-    console.log('subfamilysummary props ', this.props)
     var formatters = [
       (family) => (!!family.headInsuree ? family.headInsuree.chfId : ""),
       (family) => (!!family.headInsuree ? family.headInsuree.lastName : ""),
@@ -475,8 +473,8 @@ class SubFamiliesSummary extends PagedDataHandler {
                 id="Family.families"
                 values={{
                   count:
-                    this.props.subFamily && this.props.subFamily.length > 0
-                      ? this.props.subFamily.length
+                    this.props.subFamilies && this.props.subFamilies.length > 0
+                      ? this.props.subFamilies.length
                       : familiesTotalCount,
                 }}
               />
@@ -502,9 +500,9 @@ class SubFamiliesSummary extends PagedDataHandler {
           headers={headers}
           headerActions={this.headerActions}
           itemFormatters={formatters}
-          items={subFamily ? subFamily : []}
-          fetching={fetchingSubFamily}
-          error={errorSubFamily}
+          items={subFamilies ? subFamilies : []}
+          fetching={fetchingSubFamilies}
+          error={errorSubFamilies}
           onDoubleClick={this.onDoubleClick}
           withSelection={"single"}
           onChangeSelection={this.onChangeSelection}
@@ -527,12 +525,12 @@ const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   alert: !!state.core ? state.core.alert : null,
   family: state.insuree.family,
-  fetchingSubFamily: state.insuree.fetchingSubFamily,
-  fetchedSubFamily: state.insuree.fetchedSubFamily,
-  subFamily: state.insuree.subFamily,
+  fetchingSubFamilies: state.insuree.fetchingSubFamilies,
+  fetchedSubFamilies: state.insuree.fetchedSubFamilies,
+  subFamilies: state.insuree.subFamilies,
   pageInfo: state.insuree.familyMembersPageInfo,
-  familiesTotalCount: state.insuree.subFamilyTotalCount,
-  errorSubFamily: state.insuree.errorSubFamily,
+  familiesTotalCount: state.insuree.subFamiliesTotalCount,
+  errorSubFamilies: state.insuree.errorSubFamilies,
   checkingCanAddInsuree: state.insuree.checkingCanAddInsuree,
   checkedCanAddInsuree: state.insuree.checkedCanAddInsuree,
   canAddInsureeWarnings: state.insuree.canAddInsureeWarnings,
@@ -544,7 +542,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      fetch: fetchSubFamily,
+      fetch: fetchSubFamilySummary,
       selectFamilyMember,
       deleteInsuree,
       removeInsuree,
