@@ -212,7 +212,7 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={(overview && (family.headInsuree && family.headInsuree.marital == 'P'))? [ SubFamiliesSummary]  : [HeadInsureeMasterPanel]}
+            Panels={(overview && (!!family.familyType && family.familyType.code == 'P'))? [ SubFamiliesSummary]  : [HeadInsureeMasterPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }

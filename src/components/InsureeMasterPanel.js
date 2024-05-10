@@ -134,7 +134,7 @@ class InsureeMasterPanel extends FormPanel {
                   />
                 </Grid>
               )}
-              <Grid item xs={4} className={classes.item}>
+              {/* <Grid item xs={4} className={classes.item}>
                 <TextInput
                   module="insuree"
                   label="Insuree.lastName"
@@ -144,7 +144,7 @@ class InsureeMasterPanel extends FormPanel {
                   edited_id={edited_id}
                   onChange={(v) => this.updateAttribute("chfId", v)}
                 />
-              </Grid>
+              </Grid> */}
               {this.renderLastNameFirst ? (
                 <>
                   {this.renderLastNameField(edited, classes, readOnly)}

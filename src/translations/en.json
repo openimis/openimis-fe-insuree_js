@@ -115,7 +115,7 @@
   "insuree.FamilyType.C": "Family",
   "insuree.FamilyType.H": "Household",
   "insuree.FamilyType.O": "Other",
-  "insuree.FamilyType.P": "Priests",
+  "insuree.FamilyType.P": "Polygamy",
   "insuree.FamilyType.S": "Students",
   "insuree.FamilyType.T": "Teachers",
   "insuree.EducationPicker.label": "Education",
