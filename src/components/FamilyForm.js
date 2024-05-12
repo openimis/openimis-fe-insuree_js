@@ -138,7 +138,11 @@ class FamilyForm extends Component {
     if (!this.state.family.location) return false;
     if (!this.state.family.familyType) return false;
     if (this.state.family.validityTo) return false;
-    return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
+    if (!!this.state.family.familyType &&  this.state.family.familyType.code !== "P" ){
+      return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
+    }
+    return true;
+   
   };
 
   _save = (family) => {
