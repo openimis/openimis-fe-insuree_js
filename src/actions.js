@@ -13,7 +13,7 @@ import { INSUREE_ACTIVE_STRING } from "./constants";
 
 //NOTE: Fetching all INSUREE_FULL_PROJECTION fields except family.
 const FAMILY_HEAD_PROJECTION =
-  "headInsuree{id,uuid,chfId,lastName,marital,otherNames,email,phone,dob,gender{code},education{id},profession{id},marital,cardIssued,currentAddress,typeOfId{code},passport,relationship{id},head,status,statusDate,statusReason{code,insureeStatusReason},email,phone, incomeLevel{id, frenchVersion, englishVersion},photo{id,uuid,date,folder,filename,officerId,photo}, preferredPaymentMethod, bankCoordinates, coordinates}";
+  "headInsuree{id,uuid,chfId,lastName,marital,otherNames,email,phone,dob,gender{code},education{id},profession{id},marital,cardIssued,currentAddress,typeOfId{code},passport,relationship{id},head,status,statusDate,statusReason{code,insureeStatusReason},email,phone, incomeLevel{id, frenchVersion, englishVersion},photo{id,uuid,date,folder,filename,officerId,photo}, preferredPaymentMethod, bankCoordinates, coordinates,professionalSituation}";
 
 const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
@@ -29,6 +29,7 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   FAMILY_HEAD_PROJECTION,
   "location" + mm.getProjection("location.Location.FlatProjection"),
   "clientMutationId",
+  "parent{id}",
 ];
 
 export const FAMILY_PICKER_PROJECTION = ["id", "uuid", "headInsuree{id chfId uuid lastName otherNames}"];
@@ -132,6 +133,7 @@ export function fetchFamilySummaries(mm, filters) {
     "confirmationNo",
     "validityFrom",
     "validityTo",
+    "parent{id}",
     "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone, dob}",
     "location" + mm.getProjection("location.Location.FlatProjection"),
   ];
@@ -311,7 +313,7 @@ function formatInsureePhoto(photo) {
 export function formatInsureeGQL(mm, insuree) {
   return `
     ${insuree.uuid !== undefined && insuree.uuid !== null ? `uuid: "${insuree.uuid}"` : ""}
-    ${ `chfId: "${formatGQLString("23350")}"`}
+    ${`chfId: "${formatGQLString("23361")}"`}
     ${!!insuree.lastName ? `lastName: "${formatGQLString(insuree.lastName)}"` : ""}
     ${!!insuree.otherNames ? `otherNames: "${formatGQLString(insuree.otherNames)}"` : ""}
     ${!!insuree.gender && !!insuree.gender.code ? `genderId: "${insuree.gender.code}"` : ""}

@@ -142,6 +142,7 @@ class SubFamilyForm extends Component {
   };
 
   _save = (subFamily) => {
+    subFamily.parentFamily = this.props.family && this.props.family.id ? this.props.family.id : "";
     this.setState({ lockNew: !subFamily.uuid, runningMutation: true }, (e) => this.props.save(subFamily));
   };
 

@@ -75,6 +75,7 @@ class FamilySearcher extends Component {
     if (!!state.orderBy) {
       prms.push(`orderBy: ["${state.orderBy}"]`);
     }
+    prms.push(`parent_Id: "${null}" `);
     return prms;
   };
 
