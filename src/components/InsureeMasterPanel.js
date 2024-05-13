@@ -77,7 +77,8 @@ class InsureeMasterPanel extends FormPanel {
       titleParams = { label: "" },
       readOnly = true,
       actions,
-      editedId,
+      edited_id,
+      isSubFamily,
     } = this.props;
     return (
       <Grid container>
@@ -119,18 +120,31 @@ class InsureeMasterPanel extends FormPanel {
             </Grid>
             <Divider />
             <Grid container className={classes.item}>
-              <Grid item xs={4} className={classes.item}>
-                <PublishedComponent
-                  pubRef="insuree.InsureeNumberInput"
+              {(!!edited && !edited.chfId) || !edited ? null : (
+                <Grid item xs={4} className={classes.item}>
+                  <PublishedComponent
+                    pubRef="insuree.InsureeNumberInput"
+                    module="insuree"
+                    label="Insuree.chfId"
+                    required={true}
+                    readOnly={true}
+                    value={edited?.chfId}
+                    edited_id={edited_id}
+                    onChange={(v) => this.updateAttribute("chfId", v)}
+                  />
+                </Grid>
+              )}
+              {/* <Grid item xs={4} className={classes.item}>
+                <TextInput
                   module="insuree"
-                  label="Insuree.chfId"
+                  label="Insuree.lastName"
                   required={true}
                   readOnly={readOnly}
                   value={edited?.chfId}
-                  editedId={editedId}
+                  edited_id={edited_id}
                   onChange={(v) => this.updateAttribute("chfId", v)}
                 />
-              </Grid>
+              </Grid> */}
               {this.renderLastNameFirst ? (
                 <>
                   {this.renderLastNameField(edited, classes, readOnly)}
@@ -167,16 +181,19 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("gender", { code: v })}
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.item}>
-                    <PublishedComponent
-                      pubRef="insuree.InsureeMaritalStatusPicker"
-                      value={!!edited && !!edited.marital ? edited.marital : ""}
-                      module="insuree"
-                      readOnly={readOnly}
-                      withNull={false}
-                      onChange={(v) => this.updateAttribute("marital", v)}
-                    />
-                  </Grid>
+                  {!!isSubFamily && isSubFamily == true ? null : (
+                    <Grid item xs={3} className={classes.item}>
+                      <PublishedComponent
+                        pubRef="insuree.InsureeMaritalStatusPicker"
+                        value={!!edited && !!edited.marital ? edited.marital : ""}
+                        module="insuree"
+                        readOnly={readOnly}
+                        withNull={true}
+                        nullLabel="InsureeMaritalStatus.null"
+                        onChange={(v) => this.updateAttribute("marital", v)}
+                      />
+                    </Grid>
+                  )}
                   {edited?.marital == "P" ? (
                     <Grid item xs={3} className={classes.item}>
                       <TextInput
@@ -244,6 +261,7 @@ class InsureeMasterPanel extends FormPanel {
                       module="insuree"
                       value={!!edited && !!edited.profession ? edited.profession.id : null}
                       readOnly={readOnly}
+                      required={true}
                       withNull={false}
                       onChange={(v) => this.updateAttribute("profession", { id: v })}
                     />
@@ -268,7 +286,7 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
                     />
                   </Grid>
-                  
+
                   <Grid item xs={3} className={classes.item}>
                     <TextInput
                       module="insuree"

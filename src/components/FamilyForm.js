@@ -24,6 +24,7 @@ import { insureeLabel, isValidInsuree } from "../utils/utils";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
+import SubFamiliesSummary from "./SubFamiliesSummary";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -135,10 +136,8 @@ class FamilyForm extends Component {
 
   canSave = () => {
     if (!this.state.family.location) return false;
-    // if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
+    if (!this.state.family.familyType) return false;
     if (this.state.family.validityTo) return false;
-    if (this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
-      return false;
     return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
   };
 
@@ -213,7 +212,7 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview] : [HeadInsureeMasterPanel]}
+            Panels={(overview && (!!family.familyType && family.familyType.code == 'P'))? [HeadInsureeMasterPanel, SubFamiliesSummary]  : [HeadInsureeMasterPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }

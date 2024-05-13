@@ -12,35 +12,8 @@ import {
 import { INSUREE_ACTIVE_STRING } from "./constants";
 
 //NOTE: Fetching all INSUREE_FULL_PROJECTION fields except family.
-const FAMILY_HEAD_PROJECTION = (mm) => [
-  "id",
-  "uuid",
-  "chfId",
-  "lastName",
-  "otherNames",
-  "dob",
-  "age",
-  "validityFrom",
-  "validityTo",
-  `photo{id,uuid,date,folder,filename,officerId,photo}`,
-  "gender{code, gender}",
-  "education{id}",
-  "profession{id}",
-  "marital",
-  "cardIssued",
-  "currentVillage" + mm.getProjection("location.Location.FlatProjection"),
-  "currentAddress",
-  "typeOfId{code}",
-  "passport",
-  "relationship{id}",
-  "head",
-  "status",
-  "statusDate",
-  "statusReason{code,insureeStatusReason}",
-  "email",
-  "phone",
-  "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
-];
+const FAMILY_HEAD_PROJECTION = "headInsuree{id,uuid,chfId,lastName,marital,otherNames,email,phone,dob,gender{code}}";
+
 
 const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
@@ -50,9 +23,10 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "confirmationType{code, isConfirmationNumberRequired}",
   "familyType{code}",
   "address",
+  "parent{id}",
   "validityFrom",
   "validityTo",
-  `headInsuree{${FAMILY_HEAD_PROJECTION(mm).join(",")}}`,
+  FAMILY_HEAD_PROJECTION,
   "location" + mm.getProjection("location.Location.FlatProjection"),
   "clientMutationId",
 ];
@@ -145,6 +119,11 @@ export function clearInsuree() {
   };
 }
 
+export function clearSubFamily() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_SUB_FAMILY_CLEAR" });
+  };
+}
 export function fetchFamilySummaries(mm, filters) {
   let projections = [
     "id",
@@ -164,6 +143,31 @@ export function fetchFamilyMembers(mm, filters) {
   let projections = ["uuid", "chfId", "otherNames", "lastName", "head", "phone", "gender{code}", "dob", "cardIssued"];
   const payload = formatPageQueryWithCount("familyMembers", filters, projections);
   return graphql(payload, "INSUREE_FAMILY_MEMBERS");
+}
+export function fetchSubFamily(mm, filters) {
+  let projections =[ 
+    "id",
+    "uuid",
+    "poverty",
+    "confirmationNo",
+    "confirmationType{code}",
+    "familyType{code}",
+    "address",
+    "parent{id}",
+    "validityFrom",
+    "validityTo",
+    FAMILY_HEAD_PROJECTION,
+    "location" + mm.getProjection("location.Location.FlatProjection"),
+    "clientMutationId",] ;
+  const payload = formatPageQueryWithCount("families", filters, projections);
+  return graphql(payload, "INSUREE_SUB_FAMILY");
+}
+
+export function addSubfamily(subfamily){
+  let payload = subfamily
+  return(dispatch)=>{
+    dispatch({ type: "ADD_SUB_FAMILY", payload: payload})
+  }
 }
 
 export function checkCanAddInsuree(family) {
@@ -295,7 +299,7 @@ function formatInsureePhoto(photo) {
 export function formatInsureeGQL(mm, insuree) {
   return `
     ${insuree.uuid !== undefined && insuree.uuid !== null ? `uuid: "${insuree.uuid}"` : ""}
-    ${!!insuree.chfId ? `chfId: "${formatGQLString(insuree.chfId)}"` : ""}
+    ${ `chfId: "${formatGQLString("23346")}"`}
     ${!!insuree.lastName ? `lastName: "${formatGQLString(insuree.lastName)}"` : ""}
     ${!!insuree.otherNames ? `otherNames: "${formatGQLString(insuree.otherNames)}"` : ""}
     ${!!insuree.gender && !!insuree.gender.code ? `genderId: "${insuree.gender.code}"` : ""}
