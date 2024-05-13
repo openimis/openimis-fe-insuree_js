@@ -118,7 +118,7 @@ class FamilyMasterPanel extends FormPanel {
   };
 
   render() {
-    const { intl, classes, edited, openFamilyButton = false, readOnly, overview } = this.props;
+    const { intl, classes, edited, openFamilyButton = false, readOnly, overview , subFamily} = this.props;
     return (
       <Fragment>
         <Grid container className={classes.tableTitle}>
@@ -161,7 +161,7 @@ class FamilyMasterPanel extends FormPanel {
             />
           </Grid>
           {!!overview && this.headSummary()}
-          {!!edited && edited.isSubFamily == true ? (
+          {!!subFamily && subFamily.issubFamily == true ? (
             null
           ) : <Grid item xs={2} className={classes.item}>
           <PublishedComponent
