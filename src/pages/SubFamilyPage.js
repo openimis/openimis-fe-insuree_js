@@ -19,7 +19,8 @@ class SubFamilyPage extends Component {
   };
 
   save = (family) => {
-    if (!family.uuid) {
+    if (!family.uuid ) {
+      
       this.props.createFamily(
         this.props.modulesManager,
         family,
@@ -43,7 +44,7 @@ class SubFamilyPage extends Component {
   };
 
   render() {
-    const { classes, modulesManager, history, rights, family_uuid, overview } = this.props;
+    const { classes, modulesManager, history, rights, family_uuid, overview, subFamily_uuid } = this.props;
     if (!rights.includes(RIGHT_FAMILY)) return null;
 
     return (
@@ -51,6 +52,7 @@ class SubFamilyPage extends Component {
         <SubFamilyForm
           overview={overview}
           family_uuid={family_uuid}
+          subFamily_uuid={subFamily_uuid}
           back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
           add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
           save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
