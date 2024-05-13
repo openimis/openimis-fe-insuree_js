@@ -161,7 +161,7 @@ class FamilyMasterPanel extends FormPanel {
             />
           </Grid>
           {!!overview && this.headSummary()}
-          {!!subFamily && subFamily.issubFamily == true ? (
+          {!!subFamily && (subFamily.issubFamily == true || !!subFamily.uuid ) ? (
             null
           ) : <Grid item xs={2} className={classes.item}>
           <PublishedComponent
