@@ -42,6 +42,7 @@ class FamilyForm extends Component {
     newFamily: true,
     confirmedAction: null,
     isSaved: false,
+    isButtonDisabled : false
   };
 
   _newFamily() {
@@ -138,7 +139,12 @@ class FamilyForm extends Component {
     if (!this.state.family.location) return false;
     if (!this.state.family.familyType) return false;
     if (this.state.family.validityTo) return false;
-    return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
+    if (!!this.state.family.familyType &&  this.state.family.familyType.code !== "P" ){
+      return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
+    }
+    if(!!this.state.isButtonDisabled && this.state.isButtonDisabled == true) return false
+    return true;
+   
   };
 
   _save = (family) => {
@@ -152,6 +158,9 @@ class FamilyForm extends Component {
   onActionToConfirm = (title, message, confirmedAction) => {
     this.setState({ confirmedAction }, this.props.coreConfirm(title, message));
   };
+  disableSaveButton = () =>{
+    this.setState({isButtonDisabled: true});
+  }
 
   render() {
     const {
@@ -171,7 +180,7 @@ class FamilyForm extends Component {
       save,
       back,
     } = this.props;
-    const { family, newFamily, isSaved } = this.state;
+    const { family, newFamily, isSaved, isButtonDisabled } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
@@ -221,6 +230,7 @@ class FamilyForm extends Component {
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
             save={!!save ? this._save : null}
+            disableSaveButton={this.disableSaveButton}
             onActionToConfirm={this.onActionToConfirm}
             openDirty={save}
           />
