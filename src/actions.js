@@ -131,11 +131,16 @@ export function fetchFamilySummaries(mm, filters) {
     "uuid",
     "poverty",
     "confirmationNo",
+    "confirmationType{code, isConfirmationNumberRequired}",
+    "familyType{code}",
+    "address",
+    "parent{id}",
     "validityFrom",
     "validityTo",
-    "parent{id}",
-    "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone, dob}",
+    FAMILY_HEAD_PROJECTION,
     "location" + mm.getProjection("location.Location.FlatProjection"),
+    "clientMutationId",
+    "parent{id}",
   ];
   const payload = formatPageQueryWithCount("families", filters, projections);
   return graphql(payload, "INSUREE_FAMILIES");
@@ -386,6 +391,8 @@ export function createFamily(mm, family, clientMutationLabel) {
 }
 
 export function updateFamily(mm, family, clientMutationLabel) {
+  let formated = formatFamilyGQL( mm ,family)
+  console.log("formated family",  formated);
   let mutation = formatMutation("updateFamily", formatFamilyGQL(mm, family), clientMutationLabel);
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UPDATE_FAMILY_RESP", "INSUREE_MUTATION_ERR"], {

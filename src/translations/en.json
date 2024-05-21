@@ -268,5 +268,6 @@
   "insuree.FamilyMembersTable.InsuranceNo": "Insurance No.",
   "insuree.FamilyMembersTable.memberName": "Family Member",
   "insuree.FamilyMembersTable.phone": "Phone",
-  "insuree.FamilyMembersTable.noMembers": "Family not registered."
+  "insuree.FamilyMembersTable.noMembers": "Family not registered.",
+  "insuree.familySummaries.selectParent": "Select Parent Family"
 }
