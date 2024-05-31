@@ -6,6 +6,7 @@ import { InputBase } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { formatMessage } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
+import { INSUREE_NUMBER_MAX_LENGTH } from "../constants";
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -57,8 +58,20 @@ const Enquiry = (props) => {
   const classes = useStyles();
 
   const handleKeyPress = (event) => {
-    if (event.charCode === 13 && event.target.value) {
-      setChfid(event.target.value);
+    const value = event.target.value;
+    const charCode = event.charCode;
+
+    const isAlphaNumeric = /^[a-zA-Z0-9]*$/.test(value + String.fromCharCode(charCode));
+    const isLengthValid = value.length < INSUREE_NUMBER_MAX_LENGTH || charCode === 8;
+    const isEnterKey = charCode === INSUREE_NUMBER_MAX_LENGTH + 1;
+
+    if (!isAlphaNumeric || !isLengthValid) {
+      event.preventDefault();
+      return;
+    }
+
+    if (isEnterKey && value) {
+      setChfid(value);
     }
   };
 
