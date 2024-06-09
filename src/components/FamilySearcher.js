@@ -257,7 +257,8 @@ class FamilySearcher extends Component {
       actions,
       classes,
       shouldBeLocked,
-      canSelectMutiple
+      canSelectMutiple,
+      selectParent
     } = this.props;
     let count = familiesPageInfo.totalCount;
     return (
@@ -289,9 +290,9 @@ class FamilySearcher extends Component {
             headers={this.headers}
             itemFormatters={this.itemFormatters}
             sorts={this.sorts}
-            rowDisabled={this.rowDisabled}
+            rowDisabled={shouldBeLocked == true ? shouldBeLocked :this.rowDisabled}
             rowLocked={shouldBeLocked == true ? () => true: this.rowLocked}
-            onDoubleClick={(f) => !f.clientMutationId && onDoubleClick(f)}
+            onDoubleClick={(f) => !f.clientMutationId  && !selectParent && onDoubleClick(f)}
             reset={this.state.reset}
             actions={actions}
             actionsContributionKey={actionsContributionKey}
