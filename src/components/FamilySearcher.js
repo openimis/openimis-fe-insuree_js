@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Checkbox, IconButton, Tooltip } from "@material-ui/core";
+import { Checkbox, IconButton, Tooltip, Paper } from "@material-ui/core";
 import TabIcon from "@material-ui/icons/Tab";
 import {
   withModulesManager,
@@ -19,13 +19,23 @@ import FamilyFilter from "./FamilyFilter";
 import { DEFAULT, RIGHT_FAMILY_DELETE } from "../constants";
 import { familyLabel } from "../utils/utils";
 import DeleteFamilyDialog from "./DeleteFamilyDialog";
+import { withTheme, withStyles } from "@material-ui/core/styles";
 
 const FAMILY_SEARCHER_CONTRIBUTION_KEY = "insuree.FamilySearcher";
-
+const styles = (theme) => ({
+  paper: theme.paper.paper,
+  paperHeader: theme.paper.header,
+  paperHeaderAction: theme.paper.action,
+  tableTitle: theme.table.title,
+  lockedPage: theme.page.locked,
+});
 class FamilySearcher extends Component {
   state = {
     deleteFamily: null,
+    parentFamily: null,
+    parentFamilySet: false,
     reset: 0,
+    canSelectParent: false,
   };
 
   constructor(props) {
@@ -43,7 +53,6 @@ class FamilySearcher extends Component {
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
   }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
@@ -75,6 +84,9 @@ class FamilySearcher extends Component {
     if (!!state.orderBy) {
       prms.push(`orderBy: ["${state.orderBy}"]`);
     }
+    if(!!state.canSelectParent && state.canSelectParent == true){
+      prms.push(`familyType : "P"`)
+    }
     return prms;
   };
 
@@ -87,6 +99,9 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.phone",
       "insuree.familySummaries.dob",
     ];
+    if (this.props.selectParent && this.props.selectParent === true) {
+      h.unshift("insuree.familySummaries.selectParent");
+    }
     for (var i = 0; i < this.locationLevels; i++) {
       h.push(`location.locationType.${i}`);
     }
@@ -135,6 +150,23 @@ class FamilySearcher extends Component {
         </IconButton>
       </Tooltip>
     );
+  canCheckParentFamily = (i) => this.state.parentFamily != null && i == this.state.parentFamily;
+
+  selectParentFamily = (i) => {
+    const { parentFamily } = this.state;
+    if (parentFamily !== i) {
+      this.setState({
+        parentFamily: i,
+        parentFamilySet: true,
+      });
+      this.props.OnFamilySelect(i);
+    } else {
+      this.setState({
+        parentFamily: null,
+        parentFamilySet: false,
+      });
+    }
+  };
 
   deleteFamily = (deleteMembers) => {
     let family = this.state.deleteFamily;
@@ -168,6 +200,16 @@ class FamilySearcher extends Component {
           ? formatDateFromISO(this.props.modulesManager, this.props.intl, family.headInsuree.dob)
           : "",
     ];
+    if (this.props.selectParent && this.props.selectParent === true) {
+      formatters.unshift((family) => (
+        <Checkbox
+          color="primary"
+          checked={this.state.parentFamily === family}
+          onClick={(e) => this.selectParentFamily(family)}
+          readOnly
+        />
+      ));
+    }
     for (var i = 0; i < this.locationLevels; i++) {
       // need a fixed variable to refer to as parentLocation argument
       let j = i + 0;
@@ -198,7 +240,7 @@ class FamilySearcher extends Component {
   };
 
   rowDisabled = (selection, i) => !!i.validityTo;
-  rowLocked = (selection, i) => !!i.clientMutationId;
+  rowLocked = (selection, i) => !!i.clientMutationId ;
 
   render() {
     const {
@@ -212,44 +254,51 @@ class FamilySearcher extends Component {
       cacheFiltersKey,
       onDoubleClick,
       actionsContributionKey,
+      actions,
+      classes,
+      shouldBeLocked,
+      canSelectMutiple,
+      selectParent
     } = this.props;
     let count = familiesPageInfo.totalCount;
     return (
-      <Fragment>
-        <DeleteFamilyDialog
-          family={this.state.deleteFamily}
-          onConfirm={this.deleteFamily}
-          onCancel={(e) => this.setState({ deleteFamily: null })}
-        />
-        <Searcher
-          module="insuree"
-          cacheFiltersKey={cacheFiltersKey}
-          FilterPane={FamilyFilter}
-          filterPaneContributionsKey={filterPaneContributionsKey}
-          items={families}
-          itemsPageInfo={familiesPageInfo}
-          fetchingItems={fetchingFamilies}
-          fetchedItems={fetchedFamilies}
-          errorItems={errorFamilies}
-          contributionKey={FAMILY_SEARCHER_CONTRIBUTION_KEY}
-          tableTitle={formatMessageWithValues(intl, "insuree", "familySummaries", { count })}
-          rowsPerPageOptions={this.rowsPerPageOptions}
-          defaultPageSize={this.defaultPageSize}
-          fetch={this.fetch}
-          rowIdentifier={this.rowIdentifier}
-          filtersToQueryParams={this.filtersToQueryParams}
-          defaultOrderBy="-validityFrom"
-          headers={this.headers}
-          itemFormatters={this.itemFormatters}
-          sorts={this.sorts}
-          rowDisabled={this.rowDisabled}
-          rowLocked={this.rowLocked}
-          onDoubleClick={(f) => !f.clientMutationId && onDoubleClick(f)}
-          reset={this.state.reset}
-          actions={[]}
-          actionsContributionKey={actionsContributionKey}
-        />
-      </Fragment>
+      
+        <Fragment >
+          <DeleteFamilyDialog
+            family={this.state.deleteFamily}
+            onConfirm={this.deleteFamily}
+            onCancel={(e) => this.setState({ deleteFamily: null })}
+          />
+          <Searcher
+            module="insuree"
+            cacheFiltersKey={cacheFiltersKey}
+            FilterPane={FamilyFilter}
+            filterPaneContributionsKey={filterPaneContributionsKey}
+            items={families}
+            itemsPageInfo={familiesPageInfo}
+            fetchingItems={fetchingFamilies}
+            fetchedItems={fetchedFamilies}
+            errorItems={errorFamilies}
+            contributionKey={FAMILY_SEARCHER_CONTRIBUTION_KEY}
+            tableTitle={formatMessageWithValues(intl, "insuree", "familySummaries", { count })}
+            rowsPerPageOptions={this.rowsPerPageOptions}
+            defaultPageSize={this.defaultPageSize}
+            fetch={this.fetch}
+            rowIdentifier={this.rowIdentifier}
+            filtersToQueryParams={this.filtersToQueryParams}
+            defaultOrderBy="-validityFrom"
+            headers={this.headers}
+            itemFormatters={this.itemFormatters}
+            sorts={this.sorts}
+            rowDisabled={shouldBeLocked == true ? shouldBeLocked :this.rowDisabled}
+            rowLocked={shouldBeLocked == true ? () => true: this.rowLocked}
+            onDoubleClick={(f) => !f.clientMutationId  && !selectParent && onDoubleClick(f)}
+            reset={this.state.reset}
+            actions={actions}
+            actionsContributionKey={actionsContributionKey}
+            withSelection={canSelectMutiple == false  ? null : "multiple"}
+          />
+        </Fragment>
     );
   }
 }
@@ -269,4 +318,6 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchFamilySummaries, deleteFamily, journalize }, dispatch);
 };
 
-export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(FamilySearcher)));
+export default withModulesManager(
+  withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(injectIntl(FamilySearcher))),
+);

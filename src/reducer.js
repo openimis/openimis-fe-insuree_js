@@ -62,11 +62,21 @@ function reducer(
     submittingMutation: false,
     headSelected: false,
     mutation: {},
+    fetchingSubFamilies: false,
+    fetchedSubFamilies: false,
+    subFamilies: null,
+    errorSubFamilies: null,
+    subFamiliesPageInfo: null,
+    subFamiliesTotalCount : 0,
     fetchingWorkersExport: false,
     fetchedWorkersExport: false,
     workersExport: null,
     workersExportPageInfo: {},
     errorWorkersExport: null,
+    fetchingSubFamily: false,
+    fetchedSubFamily: false,
+    subFamily: null,
+    errorSubfamily: null
   },
   action,
 ) {
@@ -149,6 +159,43 @@ function reducer(
         familyMembersPageInfo: pageInfo(action.payload.data.familyMembers),
         errorFamilyMembers: formatGraphQLError(action.payload),
       };
+    case "INSUREE_SUB_FAMILY_REQ":
+      return {
+        ...state,
+        fetchingSubFamilies: true,
+        fetchedSubFamilies: false,
+        subFamilies: null,
+        errorSubFamilies: null,
+        subFamiliesPageInfo: null,
+        subFamiliesTotalCount : 0,
+      };
+    case "INSUREE_SUB_FAMILY_RESP":
+      return {
+        ...state,
+        fetchingSubFamilies: false,
+        fetchedSubFamilies: true,
+        subFamilies: parseData(action.payload.data.families),
+        errorSubFamilies: formatGraphQLError(action.payload),
+        subFamiliesPageInfo: pageInfo(action.payload.data.families),
+        subFamiliesTotalCount : action.payload.data.families.totalCount
+      };
+    case "INSUREE_SUB_FAMILY_ERR":
+      return {
+        ...state,
+        fetchingSubFamilies: false,
+        errorSubFamilies: formatGraphQLError(action.payload),
+        subFamiliesTotalCount : 0,
+      }
+    case "INSUREE_SUB_FAMILY_CLEAR":
+      return{
+        ...state,
+        fetchingSubFamilies: false,
+        fetchedSubFamilies: false,
+        subFamilies: null,
+        errorSubFamilies: null,
+        subFamiliesPageInfo: null,
+        subFamiliesTotalCount : 0
+      }
     case "INSUREE_FAMILY_CAN_ADD_INSUREE_REQ":
       return {
         ...state,
@@ -318,6 +365,27 @@ function reducer(
         fetchingFamilyTypes: false,
         errorFamilyTypes: formatServerError(action.payload),
       };
+    case "INSUREE_FAMILY_INCOME_LEVEL_REQ":
+      return {
+        ...state,
+        fetchingIncomeLevels: true,
+        fetchedIncomeLevels: false,
+        incomeLevels: null,
+      };
+    case "INSUREE_FAMILY_INCOME_LEVEL_RESP":
+      return {
+        ...state,
+        fetchingIncomeLevels: false,
+        fetchedIncomeLevels: true,
+        incomeLevels: action.payload.data.incomeLevels.map((t) => t),
+        errorIncomeLevels: formatServerError(action.payload),
+      };
+    case "INSUREE_FAMILY_INCOME_LEVEL_ERR":
+      return {
+        ...state,
+        fetchingIncomeLevels: false,
+        errorIncomeLevels: formatServerError(action.payload),
+      };
     case "INSUREE_FAMILY_OVERVIEW_REQ":
       return {
         ...state,
@@ -340,6 +408,30 @@ function reducer(
         ...state,
         fetchingFamily: false,
         errorFamily: formatServerError(action.payload),
+      };
+    case "INSUREE_SUBFAMILY_OVERVIEW_REQ":
+      return{
+        ...state,
+        fetchingSubFamily: true,
+        fetchedSubFamily: false,
+        subFamily: null,
+        errorSubfamily: null
+      };
+    case "INSUREE_SUBFAMILY_OVERVIEW_RESP":
+      var families = parseData(action.payload.data.families);
+      return{
+          ...state,
+          fetchingSubFamily: false,
+          fetchedSubFamily: true,
+          subFamily: !!families && families.length > 0 ? families[0]: null,
+          errorSubfamily: formatServerError(action.payload),
+      };
+    case "INSUREE_SUBFAMILY_OVERVIEW_ERR":
+      return{
+          ...state,
+          fetchingSubFamily: false,
+          subFamily: null,
+          errorSubfamily: formatGraphQLError(action.payload)
       };
     case "INSUREE_EDUCATIONS_REQ":
       return {

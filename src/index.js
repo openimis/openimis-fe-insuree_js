@@ -2,10 +2,12 @@ import InsureeMainMenu from "./menus/InsureeMainMenu";
 import FamiliesPage from "./pages/FamiliesPage";
 import InsureePage from "./pages/InsureePage";
 import FamilyPage from "./pages/FamilyPage";
+import SubFamilyPage from "./pages/SubFamilyPage";
 import { CappedItemServicePage } from "./pages/CappedItemServicePage";
 import InsureesPage from "./pages/InsureesPage";
 import ProfilePage from "./pages/ProfilePage";
 import FamilyOverviewPage from "./pages/FamilyOverviewPage";
+import SubFamilyOverviewPage from "./pages/SubFamilyOverviewPage";
 import Enquiry from "./components/Enquiry";
 import InsureeOfficerPicker from "./pickers/InsureeOfficerPicker";
 import FamilyPicker from "./pickers/FamilyPicker";
@@ -16,11 +18,13 @@ import EducationPicker from "./pickers/EducationPicker";
 import ProfessionPicker from "./pickers/ProfessionPicker";
 import IdentificationTypePicker from "./pickers/IdentificationTypePicker";
 import InsureeMaritalStatusPicker from "./pickers/InsureeMaritalStatusPicker";
+import PaymentMethodPicker from "./pickers/PaymentMethodPicker";
 import InsureeStatusPicker from "./pickers/InsureeStatusPicker";
 import InsureeStatusReasonPicker from "./pickers/InsureeStatusReasonPicker";
 import FamilyPovertyStatusPicker from "./pickers/FamilyPovertyStatusPicker";
 import ConfirmationTypePicker from "./pickers/ConfirmationTypePicker";
 import FamilyTypePicker from "./pickers/FamilyTypePicker";
+import InsureIncomeLevelPicker from "./pickers/InsureIncomeLevelPicker";
 import PhotoStatusPicker from "./pickers/PhotoStatusPicker";
 import FamilyStatusPicker from "./pickers/FamilyStatusPicker";
 import RelationPicker from "./pickers/RelationPicker";
@@ -32,9 +36,11 @@ import InsureeSummary from "./components/InsureeSummary";
 import InsureeFirstServicePointDisplay from "./components/InsureeFirstServicePointDisplay";
 import InsureeFirstServicePointPanel from "./components/InsureeFirstServicePointPanel";
 import InsureeAddress from "./components/InsureeAddress";
+import SubFamilyForm from "./components/SubFamilyForm";
 import FamilyDisplayPanel from "./components/FamilyDisplayPanel";
 import { familyLabel } from "./utils/utils";
 import messages_en from "./translations/en.json";
+import messages_fr from "./translations/fr.json";
 import reducer from "./reducer";
 import { FAMILY_PICKER_PROJECTION, INSUREE_PICKER_PROJECTION } from "./actions";
 import { decodeId } from "@openimis/fe-core";
@@ -45,13 +51,16 @@ import InsureePendingEnrollmentReport from "./reports/InsureePendingEnrollmentRe
 
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
 const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
+const ROUTE_INSUREE_SUBFAMILY_OVERVIEW = "insuree/subfamilies/subFamilyOverview";
 const ROUTE_INSUREE_FAMILY = "insuree/family";
 const ROUTE_INSUREE_PROFILE = "insuree/profile";
 const ROUTE_INSUREE_INSUREES = "insuree/insurees";
 const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
+const ROUTE_INSUREE_SUBFAMILY = "insuree/subfamily";
+
 
 const DEFAULT_CONFIG = {
-  "translations": [{ key: "en", messages: messages_en }],
+  "translations": [{ key: "en", messages: messages_en}, {key: 'fr', messages: messages_fr}],
   "reducers": [{ key: "insuree", reducer }],
   "reports": [
     {
@@ -121,14 +130,18 @@ const DEFAULT_CONFIG = {
     { key: "insuree.FamilyPovertyStatusPicker", ref: FamilyPovertyStatusPicker },
     { key: "insuree.ConfirmationTypePicker", ref: ConfirmationTypePicker },
     { key: "insuree.FamilyTypePicker", ref: FamilyTypePicker },
+    { key: "insuree.InsureIncomeLevelPicker", ref: InsureIncomeLevelPicker },
     { key: "insuree.PhotoStatusPicker", ref: PhotoStatusPicker },
     { key: "insuree.FamilyStatusPicker", ref: FamilyStatusPicker },
     { key: "insuree.RelationPicker", ref: RelationPicker },
     { key: "insuree.InsureeNumberInput", ref: InsureeNumberInput },
+    { key: "insuree.PaymentMethodPicker", ref: PaymentMethodPicker},
 
     { key: "insuree.route.families", ref: ROUTE_INSUREE_FAMILIES },
     { key: "insuree.route.familyOverview", ref: ROUTE_INSUREE_FAMILY_OVERVIEW },
+    { key: "insuree.route.subFamilyOverview", ref: ROUTE_INSUREE_SUBFAMILY_OVERVIEW },
     { key: "insuree.route.family", ref: ROUTE_INSUREE_FAMILY },
+    { key: "insuree.route.subfamily", ref: ROUTE_INSUREE_SUBFAMILY },
     { key: "insuree.route.insurees", ref: ROUTE_INSUREE_INSUREES },
     { key: "insuree.route.insuree", ref: ROUTE_INSUREE_INSUREE },
     { key: "insuree.route.insureeProfile", ref: ROUTE_INSUREE_PROFILE },
@@ -144,7 +157,9 @@ const DEFAULT_CONFIG = {
   "core.Router": [
     { path: ROUTE_INSUREE_FAMILIES, component: FamiliesPage },
     { path: ROUTE_INSUREE_FAMILY + "/:family_uuid?", component: FamilyPage },
+    { path: ROUTE_INSUREE_SUBFAMILY + "/:family_uuid?", component:  SubFamilyPage},
     { path: ROUTE_INSUREE_FAMILY_OVERVIEW + "/:family_uuid", component: FamilyOverviewPage },
+    { path: ROUTE_INSUREE_SUBFAMILY_OVERVIEW + "/:subFamily_uuid?/:family_uuid?/:insuree_uuid?", component: SubFamilyOverviewPage },
     { path: ROUTE_INSUREE_INSUREES, component: InsureesPage },
     { path: ROUTE_INSUREE_INSUREE + "/:insuree_uuid?/:family_uuid?", component: InsureePage },
     { path: "insuree/cappedItemService", component: CappedItemServicePage },

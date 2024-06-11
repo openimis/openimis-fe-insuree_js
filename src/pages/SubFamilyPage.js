@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
-import FamilyForm from "../components/FamilyForm";
+import SubFamilyForm from "../components/SubFamilyForm";
 import { createFamily, updateFamily, clearInsuree } from "../actions";
 import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants";
 import { familyLabel } from "../utils/utils";
@@ -13,13 +13,14 @@ const styles = (theme) => ({
   page: theme.page,
 });
 
-class FamilyPage extends Component {
+class SubFamilyPage extends Component {
   add = () => {
     historyPush(this.props.modulesManager, this.props.history, "insuree.route.family");
   };
 
   save = (family) => {
-    if (!family.uuid) {
+    if (!family.uuid ) {
+      
       this.props.createFamily(
         this.props.modulesManager,
         family,
@@ -43,14 +44,15 @@ class FamilyPage extends Component {
   };
 
   render() {
-    const { classes, modulesManager, history, rights, family_uuid, overview } = this.props;
+    const { classes, modulesManager, history, rights, family_uuid, overview, subFamily_uuid } = this.props;
     if (!rights.includes(RIGHT_FAMILY)) return null;
 
     return (
       <div className={classes.page}>
-        <FamilyForm
+        <SubFamilyForm
           overview={overview}
           family_uuid={family_uuid}
+          subFamily_uuid={subFamily_uuid}
           back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
           add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
           save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
@@ -73,6 +75,6 @@ const mapDispatchToProps = (dispatch) => {
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(FamilyPage)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(SubFamilyPage)))),
   ),
 );
