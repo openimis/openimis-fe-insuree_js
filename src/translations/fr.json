@@ -20,6 +20,6 @@
     "insuree.familyAddNewSubFamily.tooltip": "Créer une nouvelle sous famille ",
     "insuree.familySummaries.includeHeadOfFamily": "Inclure Chef de Famille",
     "insuree.familySummaries.RemoveSubFamily": "Supprimer une Sous Famille",
-    "insuree.FamilyType.P": "Polygamie"
-    
+    "insuree.FamilyType.P": "Polygamie",
+    "insuree.familySummaries.selectParent":"Selectionnez la famille parente "
 }
