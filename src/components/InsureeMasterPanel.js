@@ -291,7 +291,7 @@ class InsureeMasterPanel extends FormPanel {
                     <TextInput
                       module="insuree"
                       label="Insuree.passport"
-                      error={edited && edited.passport && edited.passport.length > 7 ? true : false}
+                      error={edited && edited.passport && (edited.passport.length > 7 || edited.passport.length < 7) ? true : false}
                       readOnly={readOnly}
                       required={true}
                       value={!!edited && !!edited.passport ? edited.passport : ""}
