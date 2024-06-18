@@ -21,7 +21,23 @@ class HeadInsureeMasterPanel extends Component {
   render() {
     const { intl, edited } = this.props;
 
-    
+    let actions = [
+      !!edited && !!edited.familyType && edited.familyType.code == "P"
+        ? []
+        : {
+            button: (
+              <div>
+                <PublishedComponent //div needed for the tooltip style!!
+                  pubRef="insuree.InsureePicker"
+                  IconRender={AddExistingIcon}
+                  forcedFilter={["head: false"]}
+                  onChange={this.onEditedChanged}
+                />
+              </div>
+            ),
+            tooltip: formatMessage(intl, "insuree", "selectHeadInsuree.tooltip"),
+          },
+    ];
 
     return (
       <Fragment>
@@ -31,8 +47,8 @@ class HeadInsureeMasterPanel extends Component {
           isSubFamily={!!edited ? edited.isSubFamily : null}
           onEditedChanged={this.onEditedChanged}
           title="insuree.HeadInsureeMasterPanel.title"
-          // actions={actions}
-        /> 
+          actions={actions}
+        />
 
         <Contributions
           {...this.props}
