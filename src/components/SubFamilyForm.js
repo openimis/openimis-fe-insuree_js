@@ -173,6 +173,8 @@ class SubFamilyForm extends Component {
       back,
     } = this.props;
     const { subFamily, newFamily } = this.state;
+    console.log('propriété ', subFamily)
+    console.log(' this.props ', this.props)
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = this.state.runningMutation == true;
     let actions = [];
@@ -213,7 +215,7 @@ class SubFamilyForm extends Component {
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
-            subFamily={subFamily}
+            Family={subFamily}
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}

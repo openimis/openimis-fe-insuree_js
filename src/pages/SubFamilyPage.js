@@ -66,7 +66,7 @@ class SubFamilyPage extends Component {
 
 const mapStateToProps = (state, props) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
-  family_uuid: props.match.params.family_uuid,
+  family_uuid: props.match.params.subFamily_uuid,
 });
 
 const mapDispatchToProps = (dispatch) => {
