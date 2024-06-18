@@ -380,6 +380,21 @@ export function formatFamilyGQL(mm, family) {
   `;
 }
 
+export function formatLinkFamily (familyUuid, familyUuids, cancelPolicies){
+  return `
+  ${familyUuids !== undefined && familyUuids !==null ? `familyUuids: "${familyUuids}"`: ""}
+  ${familyUuid !== undefined && familyUuid !==null ? `familyUuid: "${familyUuid}"`: ""}
+  ${cancelPolicies !== undefined && cancelPolicies !==null ? `cancelPolicies: ${cancelPolicies}`: ""}  
+  `
+}
+
+export function formatUnlinFamily (familyUuids, cancelPolicies){
+  return `
+  ${familyUuids !== undefined && familyUuids !==null ? `familyUuids: "${familyUuids}"`: ""}
+  ${cancelPolicies !== undefined && cancelPolicies !==null ? `cancelPolicies: ${cancelPolicies}`: ""}  
+  `
+}
+
 export function createFamily(mm, family, clientMutationLabel) {
   let mutation = formatMutation("createFamily", formatFamilyGQL(mm, family), clientMutationLabel);
   var requestedDateTime = new Date();
@@ -401,6 +416,28 @@ export function updateFamily(mm, family, clientMutationLabel) {
     requestedDateTime,
     familyUuid: family.uuid,
   });
+}
+
+export function linkFamily (familyUuid, familyUuids, clientMutationLabel, cancelPolicies){
+  let mutation = formatMutation("moveFamiliesToParentMutation", formatLinkFamily(familyUuid, familyUuids, cancelPolicies) )
+  var requestedDateTime = new Date();
+  return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_LINK_FAMILY_RESP", "INSUREE_LINK_FAMILY_ERR"], {
+    clientMutationId: mutation.clientMutationId,
+    clientMutationLabel,
+    requestedDateTime
+  })
+  
+}
+
+export function unLinkFamily ( familyUuids, clientMutationLabel, cancelPolicies){
+  let mutation = formatMutation("deleteFamiliesFromParentMutation", formatUnlinFamily(familyUuids, cancelPolicies) )
+  var requestedDateTime = new Date();
+  return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UNLINK_FAMILY_RESP", "INSUREE_UNLINK_FAMILY_ERR"], {
+    clientMutationId: mutation.clientMutationId,
+    clientMutationLabel,
+    requestedDateTime
+  })
+  
 }
 
 export function deleteFamily(mm, family, deleteMembers, clientMutationLabel) {

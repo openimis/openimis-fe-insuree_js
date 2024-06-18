@@ -35,7 +35,7 @@ export const isValidInsuree = (insuree, modulesManager) => {
   if (!insuree.dob) return false;
   if (!insuree.gender || !insuree.gender?.code) return false;
   if (!!insuree.photo && (!insuree.photo.date || !insuree.photo.officerId)) return false;
-  // if (!insuree.incomeLevel ) return false;
+  if (!insuree.incomeLevel ) return false;
   if (!insuree.passport  || (!!insuree.passport && (insuree.passport.length < PASSPORT_LENGTH || insuree.passport.length > PASSPORT_LENGTH) ) ) return false;
   if (!!insuree.preferredPaymentMethod && insuree.preferredPaymentMethod == "PB" && !insuree.bankCoordinates ) return false
   if (!insuree.photo) return false

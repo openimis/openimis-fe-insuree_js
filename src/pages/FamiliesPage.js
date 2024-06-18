@@ -18,7 +18,7 @@ import {
 } from "@openimis/fe-core";
 import { Dialog, Button, DialogActions, DialogContent } from "@material-ui/core";
 import FamilySearcher from "../components/FamilySearcher";
-import { updateFamily, fetchSubFamilySummary } from "../actions";
+import { linkFamily, fetchSubFamilySummary } from "../actions";
 import { RIGHT_FAMILY_ADD } from "../constants";
 import { familyLabel } from "../utils/utils";
 
@@ -35,7 +35,7 @@ const FAMILY_ACTION_CONTRIBUTION_KEY = "insuree.FamilyActions";
 class FamiliesPage extends Component {
   state = {
     open: false,
-    familyId: null,
+    familyUuid: null,
     selections: [],
     shouldbeLocked: false,
     disabled: true,
@@ -69,7 +69,7 @@ class FamiliesPage extends Component {
     }
 
     this.setState({
-      familyId: f.id,
+      familyUuid: f.uuid,
     });
   };
 
@@ -82,20 +82,19 @@ class FamiliesPage extends Component {
     if (module !== moduleName) this.props.clearCurrentPaginationPage();
   };
   linkFamilyToParent = () => {
-    const { selections, familyId, shouldbeLocked } = this.state;
+    const { selections, familyUuid, shouldbeLocked } = this.state;
     this.setState({
       shouldbeLocked: true,
     });
-    for (let i = 0; i < selections.length; i++) {
-      selections[i].parentFamily = decodeId(familyId);
-    }
+  
     const updatePromises = selections.map((selection) => {
-      return this.props.updateFamily(
-        this.props.modulesManager,
-        selection,
-        formatMessageWithValues(this.props.intl, "insuree", "UpdateFamily.mutationLabel", {
-          label: familyLabel(selection),
+      return this.props.linkFamily(
+        familyUuid,        
+        selection.uuid,
+        formatMessageWithValues(this.props.intl, "insuree", "linkFamily.mutationLabel", {
+          label: familyLabel(familyUuid,selection.uuid),
         }),
+        true,
       );
     });
 
@@ -140,6 +139,7 @@ class FamiliesPage extends Component {
   render() {
     const { intl, classes, rights } = this.props;
     const { disabled } = this.state;
+    console.log('')
     var actions = [];
     actions.push({
       label: "insuree.familySummaries.selectParent",
@@ -205,7 +205,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ clearCurrentPaginationPage, updateFamily, fetchSubFamilySummary }, dispatch);
+  bindActionCreators({ clearCurrentPaginationPage, linkFamily, fetchSubFamilySummary }, dispatch);
 
 export default injectIntl(
   withModulesManager(

@@ -44,7 +44,7 @@ import {
   checkCanAddInsuree,
   fetchSubFamilySummary,
   clearSubFamily,
-  updateFamily
+  unLinkFamily
 } from "../actions";
 import { RIGHT_INSUREE_DELETE, EMPTY_STRING } from "../constants";
 import { insureeLabel, familyLabel } from "../utils/utils";
@@ -259,13 +259,14 @@ class SubFamiliesSummary extends PagedDataHandler {
       shouldBeLocked: true,
     })
     subFamily.parent.id = "";
-    this.props.updateFamily(
-      this.props.modulesManager,
-      subFamily,
-      formatMessageWithValues(this.props.intl, "insuree", "UpdateFamily.mutationLabel", {
+    this.props.unLinkFamily(
+      subFamily.uuid,
+      formatMessageWithValues(this.props.intl, "insuree", "unlinkFamily.mutationLabel", {
         label: familyLabel(subFamily),
       }),
+      true
     );
+
   }
 
   removeInsuree = (cancelPolicies) => {
@@ -568,7 +569,7 @@ const mapDispatchToProps = (dispatch) => {
       changeFamily,
       clearSubFamily,
       checkCanAddInsuree,
-      updateFamily,
+      unLinkFamily,
       coreAlert,
     },
     dispatch,
