@@ -44,7 +44,7 @@ class SubFamilyPage extends Component {
   };
 
   render() {
-    const { classes, modulesManager, history, rights, family_uuid, overview, subFamily_uuid } = this.props;
+    const { classes, modulesManager, history, rights, family_uuid, overview, subFamily_uuid, parent_uuid } = this.props;
     if (!rights.includes(RIGHT_FAMILY)) return null;
 
     return (
@@ -53,7 +53,7 @@ class SubFamilyPage extends Component {
           overview={overview}
           family_uuid={family_uuid}
           subFamily_uuid={subFamily_uuid}
-          back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
+          back={(e) => historyPush(modulesManager, history, "insuree.route.familyOverview", [parent_uuid])}
           add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
           save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
           readOnly={!rights.includes(RIGHT_FAMILY_EDIT) || !rights.includes(RIGHT_FAMILY_ADD)}
@@ -67,6 +67,7 @@ class SubFamilyPage extends Component {
 const mapStateToProps = (state, props) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   family_uuid: props.match.params.subFamily_uuid,
+  parent_uuid: props.match.params.family_uuid
 });
 
 const mapDispatchToProps = (dispatch) => {
