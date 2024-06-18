@@ -20,7 +20,7 @@ const styles = (theme) => ({
     height: "100%",
   },
 });
-import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
+import { DEFAULT, INSUREE_ACTIVE_STRING, PASSPORT_LENGTH } from "../constants";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
@@ -324,7 +324,7 @@ class InsureeMasterPanel extends FormPanel {
                     <TextInput
                       module="insuree"
                       label="Insuree.passport"
-                      error={edited && edited.passport && (edited.passport.length > 7 || edited.passport.length < 7) ? true : false}
+                      error={edited && edited.passport && (edited.passport.length > PASSPORT_LENGTH || edited.passport.length < PASSPORT_LENGTH) ? true : false}
                       readOnly={readOnly}
                       required={true}
                       value={!!edited && !!edited.passport ? edited.passport : ""}

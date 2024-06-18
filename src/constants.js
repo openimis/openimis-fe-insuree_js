@@ -24,7 +24,7 @@ export const RIGHT_INSUREE_ADD = 101102;
 export const RIGHT_INSUREE_EDIT = 101103;
 export const RIGHT_INSUREE_DELETE = 101104;
 export const RIGHT_INSUREE_ENQUIRE = 101105;
-
+export const PASSPORT_LENGTH = 7
 export const DEFAULT = {
   SHOW_INSUREE_PROFILE: false,
   SHOW_INSUREE_SUMMARY_ADDRESS: false,
