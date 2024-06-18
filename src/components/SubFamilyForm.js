@@ -21,7 +21,9 @@ import FamilyMasterPanel from "./FamilyMasterPanel";
 
 import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, fetchSubFamily } from "../actions";
 
+import FamilyInsureesOverview from "./FamilyInsureesOverview";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
+
 
 import { insureeLabel, isValidInsuree } from "../utils/utils";
 
@@ -209,11 +211,11 @@ class SubFamilyForm extends Component {
             actions={actions}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={[HeadInsureeMasterPanel]}
+            Panels={overview && (!!subFamily.familyType && (subFamily.familyType.code !== 'P'))  ? [FamilyInsureesOverview]  :overview && (!subFamily.familyType)  ? [FamilyInsureesOverview]  : [HeadInsureeMasterPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
-            subFamily={subFamily}
+            Family={subFamily}
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
