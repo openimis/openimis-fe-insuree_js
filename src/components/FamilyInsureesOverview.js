@@ -376,7 +376,6 @@ class FamilyInsureesOverview extends PagedDataHandler {
       checkingCanAddInsuree,
       errorCanAddInsuree,
     } = this.props;
-    console.log('insuree props', this.props);
     let actions =
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []

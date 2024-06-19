@@ -25,7 +25,9 @@
     "insuree.linkFamily.mutationLabel": "Déplacer {familly} dans la  famille {Family}",
     "insuree.unlinkFamily.mutationLabel": "Supprimer le parent sur la famille{familly}",
     "insuree.Relation.9": "Mère",
-    "insuree.Relation.2": "Père"
+    "insuree.Relation.2": "Père",
+    "insuree.RemoveSubFamilyDialog.title": "Supprimer  sous family - {family}?",
+    "insuree.RemoveSubFamilyDialog.message": "Êtes-vous sûr de vouloir supprimer  la sous famille {family}"
 
 
 }

@@ -234,6 +234,8 @@
   "insuree.changeInsureeFamilyDialog.message": "Are you sure you want to move insuree {insuree} into family {family}?",
   "insuree.changeInsureeFamilyDialog.cancelPolicies.button": "Move and cancel Policies",
   "insuree.changeInsureeFamilyDialog.keepPolicies.button": "Move and keep Policies",
+  "insuree.RemoveSubFamilyDialog.title": "Remove Subfamily - {family}?",
+  "insuree.RemoveSubFamilyDialog.message": "Are you sure you want to Remove subfamily {family}",
   "insuree.removeInsureeFromFamilyDialog.title": "Remove insuree - {insuree}?",
   "insuree.removeInsureeFromFamilyDialog.message": "Are you sure you want to remove insuree {insuree} from family {family}?",
   "insuree.removeInsureeFromFamilyDialog.cancelPolicies.button": "Remove and cancel Policies",

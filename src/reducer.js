@@ -73,10 +73,10 @@ function reducer(
     workersExport: null,
     workersExportPageInfo: {},
     errorWorkersExport: null,
-    fetchingSubFamily: false,
-    fetchedSubFamily: false,
-    subFamily: null,
-    errorSubfamily: null
+    fetchingParentFamily: false, 
+    fetchedParentFamily: false,
+    parentFamily: null,
+    errorParentfamily: null
   },
   action,
 ) {
@@ -111,6 +111,14 @@ function reducer(
         insuree: null,
         errorInsuree: null,
       };
+    case "INSUREE_FAMILY_CLEAR":
+      return {
+          ...state,
+          fetchedFamily: false,
+          fetchedFamily: false,
+          family: null,
+          errorFamily: null,
+        };
     case "INSUREE_FAMILY_NEW":
       return {
         ...state,
@@ -409,29 +417,29 @@ function reducer(
         fetchingFamily: false,
         errorFamily: formatServerError(action.payload),
       };
-    case "INSUREE_SUBFAMILY_OVERVIEW_REQ":
+    case "INSUREE_PARENTFAMILY_OVERVIEW_REQ":
       return{
         ...state,
-        fetchingSubFamily: true,
-        fetchedSubFamily: false,
-        subFamily: null,
-        errorSubfamily: null
+        fetchingParentFamily: true,
+        fetchedParentFamily: false,
+        parentFamily: null,
+        errorParentfamily: null
       };
-    case "INSUREE_SUBFAMILY_OVERVIEW_RESP":
+    case "INSUREE_PARENTFAMILY_OVERVIEW_RESP":
       var families = parseData(action.payload.data.families);
       return{
           ...state,
-          fetchingSubFamily: false,
-          fetchedSubFamily: true,
-          subFamily: !!families && families.length > 0 ? families[0]: null,
-          errorSubfamily: formatServerError(action.payload),
+          fetchingParentFamily: false,
+          fetchedParentFamily: true,
+          parentFamily: !!families && families.length > 0 ? families[0]: null,
+          errorParentfamily: formatServerError(action.payload),
       };
-    case "INSUREE_SUBFAMILY_OVERVIEW_ERR":
+    case "INSUREE_PARENTFAMILY_OVERVIEW_ERR":
       return{
           ...state,
-          fetchingSubFamily: false,
-          subFamily: null,
-          errorSubfamily: formatGraphQLError(action.payload)
+          fetchingParentFamily: false,
+          parentFamily: null,
+          errorParentfamily: formatGraphQLError(action.payload)
       };
     case "INSUREE_EDUCATIONS_REQ":
       return {

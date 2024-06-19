@@ -120,6 +120,12 @@ export function clearInsuree() {
   };
 }
 
+export function clearFamily() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_FAMILY_CLEAR" });
+  };
+}
+
 export function clearSubFamily() {
   return (dispatch) => {
     dispatch({ type: "INSUREE_SUB_FAMILY_CLEAR" });
@@ -245,15 +251,16 @@ export function fetchFamily(mm, familyUuid, headInsureeChfId) {
   return graphql(payload, "INSUREE_FAMILY_OVERVIEW");
 }
 
-export function fetchSubFamily(mm, subFamilyUuid, headInsureeChfId) {
+
+export function fetchParentFamily(mm, parentFamilyUuid, headInsureeChfId) {
   let filters = [];
-  if (!!subFamilyUuid) {
-    filters.push(`uuid: "${subFamilyUuid}"`, "showHistory: true");
+  if (!!parentFamilyUuid) {
+    filters.push(`uuid: "${parentFamilyUuid}"`, "showHistory: true");
   } else {
     filters.push(`headInsuree_ChfId: "${headInsureeChfId}"`);
   }
   const payload = formatPageQuery("families", filters, FAMILY_FULL_PROJECTION(mm));
-  return graphql(payload, "INSUREE_SUBFAMILY_OVERVIEW");
+  return graphql(payload, "INSUREE_PARENTFAMILY_OVERVIEW");
 }
 
 export function fetchEducations(mm) {
@@ -407,7 +414,6 @@ export function createFamily(mm, family, clientMutationLabel) {
 
 export function updateFamily(mm, family, clientMutationLabel) {
   let formated = formatFamilyGQL( mm ,family)
-  console.log("formated family",  formated);
   let mutation = formatMutation("updateFamily", formatFamilyGQL(mm, family), clientMutationLabel);
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UPDATE_FAMILY_RESP", "INSUREE_MUTATION_ERR"], {
