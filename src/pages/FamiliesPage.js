@@ -18,6 +18,8 @@ import {
 } from "@openimis/fe-core";
 import { Dialog, Button, DialogActions, DialogContent } from "@material-ui/core";
 import FamilySearcher from "../components/FamilySearcher";
+import LinkFamilyToParentDialog from "../components/LinkFamilyToParentDialog";
+
 import { linkFamily, fetchSubFamilySummary } from "../actions";
 import { RIGHT_FAMILY_ADD } from "../constants";
 import { familyLabel } from "../utils/utils";
@@ -35,10 +37,11 @@ const FAMILY_ACTION_CONTRIBUTION_KEY = "insuree.FamilyActions";
 class FamiliesPage extends Component {
   state = {
     open: false,
-    familyUuid: null,
+    family: null,
     selections: [],
     shouldbeLocked: false,
     disabled: true,
+    parentLinked:null,
   };
   onDoubleClick = (f, newTab = false) => {
     historyPush(this.props.modulesManager, this.props.history, "insuree.route.familyOverview", [f.uuid], newTab);
@@ -69,7 +72,7 @@ class FamiliesPage extends Component {
     }
 
     this.setState({
-      familyUuid: f.uuid,
+      family: f,
     });
   };
 
@@ -81,30 +84,34 @@ class FamiliesPage extends Component {
     const { module } = this.props;
     if (module !== moduleName) this.props.clearCurrentPaginationPage();
   };
-  linkFamilyToParent = () => {
-    const { selections, familyUuid, shouldbeLocked } = this.state;
+  linkFamilyToParent = (cancelPolicies) => {
+    const { selections, family, shouldbeLocked } = this.state;
     this.setState({
       shouldbeLocked: true,
+      parentLinked: null,
+    }, (e)=>{
+      const updatePromises = selections.map((selection) => {
+        return this.props.linkFamily(
+          family.uuid,        
+          selection.uuid,
+          formatMessageWithValues(this.props.intl, "insuree", "linkFamily.mutationLabel", {
+            label: familyLabel(family.uuid,selection.uuid),
+          }),
+          cancelPolicies,
+        );
+      });
+  
+      Promise.all(updatePromises)
+        .then(() => {
+          this.closeModal();
+        })
+        .catch((error) => {
+          this.closeModal();
+        });
+
     });
   
-    const updatePromises = selections.map((selection) => {
-      return this.props.linkFamily(
-        familyUuid,        
-        selection.uuid,
-        formatMessageWithValues(this.props.intl, "insuree", "linkFamily.mutationLabel", {
-          label: familyLabel(familyUuid,selection.uuid),
-        }),
-        true,
-      );
-    });
-
-    Promise.all(updatePromises)
-      .then(() => {
-        this.closeModal();
-      })
-      .catch((error) => {
-        this.closeModal();
-      });
+   
   };
   openModal = (selection) => {
     this.setState({
@@ -126,6 +133,11 @@ class FamiliesPage extends Component {
     }
     return false;
   };
+  setParentFamily = ()=>{
+    this.setState({
+      parentLinked: this.state.family
+    })
+  }
 
   componentWillUnmount = () => {
     const { location, history } = this.props;
@@ -139,7 +151,6 @@ class FamiliesPage extends Component {
   render() {
     const { intl, classes, rights } = this.props;
     const { disabled } = this.state;
-    console.log('')
     var actions = [];
     actions.push({
       label: "insuree.familySummaries.selectParent",
@@ -155,6 +166,12 @@ class FamiliesPage extends Component {
           filterPaneContributionsKey={FAMILY_FILTERS_CONTRIBUTION_KEY}
           actionsContributionKey={FAMILY_ACTION_CONTRIBUTION_KEY}
           actions={actions}
+        />
+        <LinkFamilyToParentDialog 
+          family={this.state.parentLinked}
+          selectedFamily={this.state.selections}
+          onConfirm={this.linkFamilyToParent}
+          onCancel={(e) => this.setState({ parentLinked: null })}
         />
         <Dialog maxWidth="xl" fullWidth open={this.state.open} onClose={this.closeModal}>
           <DialogContent>
@@ -174,7 +191,7 @@ class FamiliesPage extends Component {
             </Button>
             <Button
               autoFocus
-              onClick={this.linkFamilyToParent}
+              onClick={this.setParentFamily}
               disabled={disabled}
               className={disabled === true ? classes.secondaryButton : classes.primaryButton}
             >

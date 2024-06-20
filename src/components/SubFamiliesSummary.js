@@ -320,7 +320,7 @@ class SubFamiliesSummary extends PagedDataHandler {
   changeInsureeFamily = (cancelPolicies) => {
     let insuree = this.state.changeInsureeFamily;
     let family = this.state.linkedFamily;
-    this.setState({ changeInsureeFamily: null }, (e) => {
+    this.setState({ changeInsureeFamily: null, shouldBeLocked:true }, (e) => {
       this.props.changeFamily(
         this.props.modulesManager,
         this.state.linkedFamily.uuid,
@@ -403,6 +403,7 @@ class SubFamiliesSummary extends PagedDataHandler {
               linkedFamily: family,
             })
           }
+          disabled={this.state.shouldBeLocked}
         >
           {" "}
           <LinkIcon color="primary" readOnly />
@@ -415,6 +416,7 @@ class SubFamiliesSummary extends PagedDataHandler {
               removeSubFamily: family,
             })
           }
+          disabled={this.state.shouldBeLocked}
         >
           <ArrowRightIcon color="primary" readOnly />
         </IconButton>

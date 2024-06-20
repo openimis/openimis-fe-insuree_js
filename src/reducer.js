@@ -364,7 +364,7 @@ function reducer(
         ...state,
         fetchingFamilyTypes: false,
         fetchedFamilyTypes: true,
-        familyTypes: action.payload.data.familyTypes.map((t) => t.code),
+        familyTypes: action.payload.data.familyTypes.filter(t => t.code !== 'C' && t.code !=='O').map((t) => t.code),
         errorFamilyTypes: formatGraphQLError(action.payload),
       };
     case "INSUREE_FAMILY_TYPES_ERR":
@@ -498,7 +498,7 @@ function reducer(
         ...state,
         fetchingRelations: false,
         fetchedRelations: true,
-        relations: action.payload.data.relations.map((p) => p.id),
+        relations: action.payload.data.relations.filter((p) => p.id !==10).map((p) => p.id),
         errorRelations: formatGraphQLError(action.payload),
       };
     case "INSUREE_RELATIONS_ERR":
