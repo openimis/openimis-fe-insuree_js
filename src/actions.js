@@ -12,35 +12,8 @@ import {
 import { INSUREE_ACTIVE_STRING } from "./constants";
 
 //NOTE: Fetching all INSUREE_FULL_PROJECTION fields except family.
-const FAMILY_HEAD_PROJECTION = (mm) => [
-  "id",
-  "uuid",
-  "chfId",
-  "lastName",
-  "otherNames",
-  "dob",
-  "age",
-  "validityFrom",
-  "validityTo",
-  `photo{id,uuid,date,folder,filename,officerId,photo}`,
-  "gender{code, gender}",
-  "education{id}",
-  "profession{id}",
-  "marital",
-  "cardIssued",
-  "currentVillage" + mm.getProjection("location.Location.FlatProjection"),
-  "currentAddress",
-  "typeOfId{code}",
-  "passport",
-  "relationship{id}",
-  "head",
-  "status",
-  "statusDate",
-  "statusReason{code,insureeStatusReason}",
-  "email",
-  "phone",
-  "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
-];
+const FAMILY_HEAD_PROJECTION =
+  "headInsuree{id,uuid,chfId,lastName,marital,otherNames,email,phone,dob,gender{code},education{id},profession{id},marital,cardIssued,currentAddress,typeOfId{code},passport,relationship{id},head,status,statusDate,statusReason{code,insureeStatusReason},email,phone, incomeLevel{id, frenchVersion, englishVersion},photo{id,uuid,date,folder,filename,officerId,photo}, preferredPaymentMethod, bankCoordinates, coordinates,professionalSituation}";
 
 const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
@@ -50,11 +23,13 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "confirmationType{code, isConfirmationNumberRequired}",
   "familyType{code}",
   "address",
+  "parent{id}",
   "validityFrom",
   "validityTo",
-  `headInsuree{${FAMILY_HEAD_PROJECTION(mm).join(",")}}`,
+  FAMILY_HEAD_PROJECTION,
   "location" + mm.getProjection("location.Location.FlatProjection"),
   "clientMutationId",
+  "parent{id}",
 ];
 
 export const FAMILY_PICKER_PROJECTION = ["id", "uuid", "headInsuree{id chfId uuid lastName otherNames}"];
@@ -69,6 +44,11 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "age",
   "validityFrom",
   "validityTo",
+  "professionalSituation",
+  "bankCoordinates",
+  "coordinates",
+  "incomeLevel{id, frenchVersion, englishVersion}",
+  "preferredPaymentMethod",
   `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
   `photo{id,uuid,date,folder,filename,officerId,photo}`,
   "gender{code, gender}",
@@ -140,16 +120,33 @@ export function clearInsuree() {
   };
 }
 
+export function clearFamily() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_FAMILY_CLEAR" });
+  };
+}
+
+export function clearSubFamily() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_SUB_FAMILY_CLEAR" });
+  };
+}
 export function fetchFamilySummaries(mm, filters) {
   let projections = [
     "id",
     "uuid",
     "poverty",
     "confirmationNo",
+    "confirmationType{code, isConfirmationNumberRequired}",
+    "familyType{code}",
+    "address",
+    "parent{id}",
     "validityFrom",
     "validityTo",
-    "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone, dob}",
+    FAMILY_HEAD_PROJECTION,
     "location" + mm.getProjection("location.Location.FlatProjection"),
+    "clientMutationId",
+    "parent{id}",
   ];
   const payload = formatPageQueryWithCount("families", filters, projections);
   return graphql(payload, "INSUREE_FAMILIES");
@@ -159,6 +156,32 @@ export function fetchFamilyMembers(mm, filters) {
   let projections = ["uuid", "chfId", "otherNames", "lastName", "head", "phone", "gender{code}", "dob", "cardIssued"];
   const payload = formatPageQueryWithCount("familyMembers", filters, projections);
   return graphql(payload, "INSUREE_FAMILY_MEMBERS");
+}
+export function fetchSubFamilySummary(mm, filters) {
+  let projections = [
+    "id",
+    "uuid",
+    "poverty",
+    "confirmationNo",
+    "confirmationType{code}",
+    "familyType{code}",
+    "address",
+    "parent{id}",
+    "validityFrom",
+    "validityTo",
+    FAMILY_HEAD_PROJECTION,
+    "location" + mm.getProjection("location.Location.FlatProjection"),
+    "clientMutationId",
+  ];
+  const payload = formatPageQueryWithCount("families", filters, projections);
+  return graphql(payload, "INSUREE_SUB_FAMILY");
+}
+
+export function addSubfamily(subfamily) {
+  let payload = subfamily;
+  return (dispatch) => {
+    dispatch({ type: "ADD_SUB_FAMILY", payload: payload });
+  };
 }
 
 export function checkCanAddInsuree(family) {
@@ -181,6 +204,11 @@ export function fetchConfirmationTypes() {
 export function fetchFamilyTypes() {
   const payload = formatQuery("familyTypes", null, ["code"]);
   return graphql(payload, "INSUREE_FAMILY_TYPES");
+}
+
+export function fetchIncomeLevels() {
+  const payload = formatQuery("incomeLevels", null, ["id", "frenchVersion", "englishVersion"]);
+  return graphql(payload, "INSUREE_FAMILY_INCOME_LEVEL");
 }
 
 export function newFamily() {
@@ -223,6 +251,18 @@ export function fetchFamily(mm, familyUuid, headInsureeChfId) {
   return graphql(payload, "INSUREE_FAMILY_OVERVIEW");
 }
 
+
+export function fetchParentFamily(mm, parentFamilyUuid, headInsureeChfId) {
+  let filters = [];
+  if (!!parentFamilyUuid) {
+    filters.push(`uuid: "${parentFamilyUuid}"`, "showHistory: true");
+  } else {
+    filters.push(`headInsuree_ChfId: "${headInsureeChfId}"`);
+  }
+  const payload = formatPageQuery("families", filters, FAMILY_FULL_PROJECTION(mm));
+  return graphql(payload, "INSUREE_PARENTFAMILY_OVERVIEW");
+}
+
 export function fetchEducations(mm) {
   const payload = formatQuery("educations", null, ["id"]);
   return graphql(payload, "INSUREE_EDUCATIONS");
@@ -256,6 +296,11 @@ export function fetchInsureeSummaries(mm, filters, ignoreLocation = false) {
     "phone",
     "gender{code}",
     "dob",
+    "professionalSituation",
+    "bankCoordinates",
+    "coordinates",
+    "incomeLevel{id, frenchVersion, englishVersion}",
+    "preferredPaymentMethod",
     "marital",
     "status",
     "family{uuid,location" + mm.getProjection("location.Location.FlatProjection") + "}",
@@ -280,7 +325,7 @@ function formatInsureePhoto(photo) {
 export function formatInsureeGQL(mm, insuree) {
   return `
     ${insuree.uuid !== undefined && insuree.uuid !== null ? `uuid: "${insuree.uuid}"` : ""}
-    ${!!insuree.chfId ? `chfId: "${formatGQLString(insuree.chfId)}"` : ""}
+    ${!!insuree.chfId ? `chfId: "${formatGQLString(insuree.chfId)}"`: ''}
     ${!!insuree.lastName ? `lastName: "${formatGQLString(insuree.lastName)}"` : ""}
     ${!!insuree.otherNames ? `otherNames: "${formatGQLString(insuree.otherNames)}"` : ""}
     ${!!insuree.gender && !!insuree.gender.code ? `genderId: "${insuree.gender.code}"` : ""}
@@ -314,8 +359,14 @@ export function formatInsureeGQL(mm, insuree) {
       !!insuree.healthFacility && !!insuree.healthFacility.id
         ? `healthFacilityId: ${decodeId(insuree.healthFacility.id)}`
         : ""
-    }
+    } 
     ${!!insuree.jsonExt ? `jsonExt: ${formatJsonField(insuree.jsonExt)}` : ""}
+    ${!!insuree.preferredPaymentMethod ? `preferredPaymentMethod: "${insuree.preferredPaymentMethod}"` : ""}
+    ${!!insuree.professionalSituation ? `professionalSituation: "${insuree.professionalSituation}"` : ""}
+    ${!!insuree.coordinates ? `coordinates: "${insuree.coordinates}"` : ""}
+    ${!!insuree.bankCoordinates ? `bankCoordinates: "${formatGQLString(insuree.bankCoordinates)}"` : ""}
+    ${!!insuree.incomeLevel ? `incomeLevelId: ${decodeId(insuree.incomeLevel.id)}` : ""}
+
   `;
 }
 
@@ -328,16 +379,27 @@ export function formatFamilyGQL(mm, family) {
     ${!!family.location ? `locationId: ${decodeId(family.location.id)}` : ""}
     poverty: ${!!family.poverty}
     ${!!family.familyType && !!family.familyType.code ? `familyTypeId: "${family.familyType.code}"` : ""}
+    confirmationNo: ""
     ${!!family.address ? `address: "${formatGQLString(family.address)}"` : ""}
-    ${
-      !!family.confirmationType && !!family.confirmationType.code
-        ? `confirmationTypeId: "${family.confirmationType.code}"`
-        : ""
-    }
-    ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
+    ${!!family.parentFamily ? `parentId: ${decodeId(family.parentFamily)}` : ""}
   `;
+}
+
+export function formatLinkFamily (familyUuid, familyUuids, cancelPolicies){
+  return `
+  ${familyUuids !== undefined && familyUuids !==null ? `familyUuids: "${familyUuids}"`: ""}
+  ${familyUuid !== undefined && familyUuid !==null ? `familyUuid: "${familyUuid}"`: ""}
+  ${cancelPolicies !== undefined && cancelPolicies !==null ? `cancelPolicies: ${cancelPolicies}`: ""}  
+  `
+}
+
+export function formatUnlinFamily (familyUuids, cancelPolicies){
+  return `
+  ${familyUuids !== undefined && familyUuids !==null ? `familyUuids: "${familyUuids}"`: ""}
+  ${cancelPolicies !== undefined && cancelPolicies !==null ? `cancelPolicies: ${cancelPolicies}`: ""}  
+  `
 }
 
 export function createFamily(mm, family, clientMutationLabel) {
@@ -351,6 +413,7 @@ export function createFamily(mm, family, clientMutationLabel) {
 }
 
 export function updateFamily(mm, family, clientMutationLabel) {
+  let formated = formatFamilyGQL( mm ,family)
   let mutation = formatMutation("updateFamily", formatFamilyGQL(mm, family), clientMutationLabel);
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UPDATE_FAMILY_RESP", "INSUREE_MUTATION_ERR"], {
@@ -359,6 +422,28 @@ export function updateFamily(mm, family, clientMutationLabel) {
     requestedDateTime,
     familyUuid: family.uuid,
   });
+}
+
+export function linkFamily (familyUuid, familyUuids, clientMutationLabel, cancelPolicies){
+  let mutation = formatMutation("moveFamiliesToParentMutation", formatLinkFamily(familyUuid, familyUuids, cancelPolicies) )
+  var requestedDateTime = new Date();
+  return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_LINK_FAMILY_RESP", "INSUREE_LINK_FAMILY_ERR"], {
+    clientMutationId: mutation.clientMutationId,
+    clientMutationLabel,
+    requestedDateTime
+  })
+  
+}
+
+export function unLinkFamily ( familyUuids, clientMutationLabel, cancelPolicies){
+  let mutation = formatMutation("deleteFamiliesFromParentMutation", formatUnlinFamily(familyUuids, cancelPolicies) )
+  var requestedDateTime = new Date();
+  return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UNLINK_FAMILY_RESP", "INSUREE_UNLINK_FAMILY_ERR"], {
+    clientMutationId: mutation.clientMutationId,
+    clientMutationLabel,
+    requestedDateTime
+  })
+  
 }
 
 export function deleteFamily(mm, family, deleteMembers, clientMutationLabel) {

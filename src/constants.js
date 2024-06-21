@@ -1,4 +1,5 @@
-export const INSUREE_MARITAL_STATUS = ["N", "W", "S", "D", "M"];
+export const INSUREE_MARITAL_STATUS = ["W", "S", "D", "M", "P"]; 
+export const INSUREE_PAYMENT_METHOD = ["MO", "PB", "TP"];
 export const FAMILY_POVERTY_STATUS = [true, false];
 export const PHOTO_STATUS = ["with", "without"];
 export const FAMILY_STATUS = ["with", "without"];
@@ -23,7 +24,7 @@ export const RIGHT_INSUREE_ADD = 101102;
 export const RIGHT_INSUREE_EDIT = 101103;
 export const RIGHT_INSUREE_DELETE = 101104;
 export const RIGHT_INSUREE_ENQUIRE = 101105;
-
+export const PASSPORT_LENGTH = 7
 export const DEFAULT = {
   SHOW_INSUREE_PROFILE: false,
   SHOW_INSUREE_SUMMARY_ADDRESS: false,
