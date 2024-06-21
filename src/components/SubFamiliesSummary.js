@@ -13,8 +13,8 @@ import {
   Delete as DeleteIcon,
   Clear as RemoveIcon,
   Remove as CloseIcon,
-  Link as LinkIcon ,
-  ArrowRightAlt as ArrowRightIcon
+  Link as LinkIcon,
+  ArrowRightAlt as ArrowRightIcon,
 } from "@material-ui/icons";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 
@@ -44,11 +44,12 @@ import {
   checkCanAddInsuree,
   fetchSubFamilySummary,
   clearSubFamily,
-  unLinkFamily
+  unLinkFamily,
 } from "../actions";
 import { RIGHT_INSUREE_DELETE, EMPTY_STRING } from "../constants";
 import { insureeLabel, familyLabel } from "../utils/utils";
 import ChangeInsureeFamilyDialog from "./ChangeInsureeFamilyDialog";
+import RemoveSubFamilyDialog from "./RemoveSubFamilyDialog";
 import EnquiryDialog from "./EnquiryDialog";
 import FamilyInsureesSearcher from "./FamilyInsureesSearcher";
 import RemoveInsureeFromFamilyDialog from "./RemoveInsureeFromFamilyDialog";
@@ -73,7 +74,9 @@ class SubFamiliesSummary extends PagedDataHandler {
     filters: {},
     showIFamilySearcher: false,
     subFamilies: [],
-    shouldBeLocked : false
+    shouldBeLocked: false,
+    linkedFamily: null,
+    removeSubFamily: null,
   };
 
   constructor(props) {
@@ -163,7 +166,7 @@ class SubFamiliesSummary extends PagedDataHandler {
       this.props.modulesManager,
       this.props.history,
       "insuree.route.subFamilyOverview",
-      [i.uuid ,this.props.family.uuid, i.headInsuree.uuid],
+      [i.uuid, this.props.family.uuid, i.headInsuree.uuid],
       newTab,
     );
   };
@@ -184,7 +187,6 @@ class SubFamiliesSummary extends PagedDataHandler {
     "insuree.familySummaries.confirmationNo",
     // "insuree.familySummaries.validityFrom",
     // "insuree.familySummaries.validityTo",
-
   ];
 
   sorter = (attr, asc = true) => [
@@ -253,28 +255,12 @@ class SubFamiliesSummary extends PagedDataHandler {
     </Tooltip>
   );
 
-  removeParentFamily = (subFamily) =>{
-    this.props.disableSaveButton();
-    this.setState({
-      shouldBeLocked: true,
-    })
-    subFamily.parent.id = "";
-    this.props.unLinkFamily(
-      subFamily.uuid,
-      formatMessageWithValues(this.props.intl, "insuree", "unlinkFamily.mutationLabel", {
-        label: familyLabel(subFamily),
-      }),
-      true
-    );
-
-  }
-
   removeInsuree = (cancelPolicies) => {
     let insuree = this.state.removeInsuree;
     this.setState({ removeInsuree: null }, (e) => {
       this.props.removeInsuree(
         this.props.modulesManager,
-        this.props.family.uuid,
+        this.state.family.uuid,
         insuree,
         cancelPolicies,
         formatMessageWithValues(
@@ -317,7 +303,7 @@ class SubFamiliesSummary extends PagedDataHandler {
   };
 
   onAdd = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family?.uuid,]);
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family?.uuid]);
   };
 
   deleteInsureeAction = (i) => (
@@ -333,16 +319,30 @@ class SubFamiliesSummary extends PagedDataHandler {
 
   changeInsureeFamily = (cancelPolicies) => {
     let insuree = this.state.changeInsureeFamily;
-    this.setState({ changeInsureeFamily: null }, (e) => {
+    let family = this.state.linkedFamily;
+    this.setState({ changeInsureeFamily: null, shouldBeLocked:true }, (e) => {
       this.props.changeFamily(
         this.props.modulesManager,
-        this.props.family.uuid,
+        this.state.linkedFamily.uuid,
         insuree,
         cancelPolicies,
         formatMessageWithValues(this.props.intl, "insuree", "insureeChangeFamily.mutationLabel", {
-          family: familyLabel(this.props.family),
+          family: familyLabel(family),
           insuree: insureeLabel(insuree),
         }),
+      );
+    });
+  };
+
+  removeSubFamily = (cancelPolicies) => {
+    let subFamily = this.state.removeSubFamily;
+    this.setState({ removeSubFamily: null, shouldBeLocked: true }, (e) => {
+      this.props.unLinkFamily(
+        subFamily.uuid,
+        formatMessageWithValues(this.props.intl, "insuree", "unlinkFamily.mutationLabel", {
+          label: familyLabel(subFamily),
+        }),
+        cancelPolicies,
       );
     });
   };
@@ -371,9 +371,9 @@ class SubFamiliesSummary extends PagedDataHandler {
       checkingCanAddInsuree,
       errorCanAddInsuree,
       familiesTotalCount,
-      clearSubFamily
+      clearSubFamily,
     } = this.props;
-    const {shouldBeLocked } = this.state;
+    const { shouldBeLocked } = this.state;
     var formatters = [
       (family) => (!!family.headInsuree ? family.headInsuree.chfId : ""),
       (family) => (!!family.headInsuree ? family.headInsuree.lastName : ""),
@@ -395,8 +395,32 @@ class SubFamiliesSummary extends PagedDataHandler {
       (family) => family.confirmationNo,
       (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom),
       (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityTo),
-      (family) => <IconButton >  <LinkIcon color="primary"  readOnly /></IconButton>,
-      (family) => <IconButton onClick={(e)=> this.removeParentFamily(family)}> <ArrowRightIcon color="primary"  readOnly /></IconButton> 
+      (family) => (
+        <IconButton
+          onClick={(e) =>
+            this.setState({
+              changeInsureeFamily: this.props.family.headInsuree,
+              linkedFamily: family,
+            })
+          }
+          disabled={this.state.shouldBeLocked}
+        >
+          {" "}
+          <LinkIcon color="primary" readOnly />
+        </IconButton>
+      ),
+      (family) => (
+        <IconButton
+          onClick={(e) =>
+            this.setState({
+              removeSubFamily: family,
+            })
+          }
+          disabled={this.state.shouldBeLocked}
+        >
+          <ArrowRightIcon color="primary" readOnly />
+        </IconButton>
+      ),
     );
     var headers = [
       "insuree.familySummaries.insuranceNo",
@@ -418,14 +442,18 @@ class SubFamiliesSummary extends PagedDataHandler {
       "insuree.familySummaries.RemoveSubFamily",
       "insuree.familySummaries.openNewTab",
     );
-    
+
     let actions =
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []
         : [
             {
               button: (
-                <IconButton onClick={(e) =>{this.onAdd()}}>
+                <IconButton
+                  onClick={(e) => {
+                    this.onAdd();
+                  }}
+                >
                   <AddIcon />
                 </IconButton>
               ),
@@ -457,8 +485,8 @@ class SubFamiliesSummary extends PagedDataHandler {
       });
     }
     return (
-      <Paper className={shouldBeLocked == true  ?classes.lockedPage : classes.paper}>
-         <EnquiryDialog
+      <Paper className={shouldBeLocked == true ? classes.lockedPage : classes.paper}>
+        <EnquiryDialog
           open={this.state.enquiryOpen}
           chfid={this.state.chfid}
           onClose={() => {
@@ -466,10 +494,16 @@ class SubFamiliesSummary extends PagedDataHandler {
           }}
         />
         <ChangeInsureeFamilyDialog
-          family={family}
+          family={this.state.linkedFamily}
           insuree={this.state.changeInsureeFamily}
           onConfirm={this.changeInsureeFamily}
           onCancel={(e) => this.setState({ changeInsureeFamily: null })}
+        />
+
+        <RemoveSubFamilyDialog
+          family={this.state.removeSubFamily}
+          onConfirm={this.removeSubFamily}
+          onCancel={(e) => this.setState({ removeSubFamily: null })}
         />
         <RemoveInsureeFromFamilyDialog
           family={family}

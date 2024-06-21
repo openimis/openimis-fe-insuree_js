@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
 import FamilyForm from "../components/FamilyForm";
-import { createFamily, updateFamily, clearInsuree } from "../actions";
+import { createFamily, updateFamily, clearInsuree, clearFamily } from "../actions";
 import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants";
 import { familyLabel } from "../utils/utils";
 
@@ -40,6 +40,7 @@ class FamilyPage extends Component {
 
   componentWillUnmount = () => {
     this.props.clearInsuree();
+    this.props.clearFamily();
   };
 
   render() {
@@ -68,7 +69,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ createFamily, updateFamily, clearInsuree }, dispatch);
+  return bindActionCreators({ createFamily, updateFamily, clearInsuree, clearFamily }, dispatch);
 };
 
 export default withHistory(
