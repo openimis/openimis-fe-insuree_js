@@ -43,6 +43,11 @@ const ProfilePage = () => {
 
   const hasAvatarContribution = !!modulesManager.getContribs(INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY);
   const hasExtContributions = !!modulesManager.getContribs(INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY);
+  const renderLastNameFirst = modulesManager.getConf(
+    "fe-insuree",
+    "renderLastNameFirst",
+    DEFAULT.RENDER_LAST_NAME_FIRST,
+  );
 
   const showInsureeSummaryAddress = modulesManager.getConf(
     "fe-insuree",
@@ -85,12 +90,25 @@ const ProfilePage = () => {
                   <Typography variant="h6">
                     {insuree && (
                       <Fragment>
-                        <ControlledField
-                          module="insuree"
-                          id="InsureeSummary.otherNames"
-                          field={`${insuree?.otherNames} `}
-                        />
-                        <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree?.lastName} />
+                        {renderLastNameFirst ? (
+                          <>
+                            <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree.lastName} />{" "}
+                            <ControlledField
+                              module="insuree"
+                              id="InsureeSummary.otherNames"
+                              field={`${insuree.otherNames}`}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <ControlledField
+                              module="insuree"
+                              id="InsureeSummary.otherNames"
+                              field={`${insuree.otherNames}`}
+                            />{" "}
+                            <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree.lastName} />
+                          </>
+                        )}
                       </Fragment>
                     )}
                   </Typography>
@@ -131,7 +149,9 @@ const ProfilePage = () => {
                         <Grid item xs={12}>
                           <Typography>
                             {formatMessageWithValues("InsureeSummary.insureeLocation", {
-                              location: `${formatLocationString(insuree?.family?.location)}`,
+                              location: insuree?.family
+                                ? `${formatLocationString(insuree.family)}`
+                                : formatMessage("notFound"),
                             })}
                           </Typography>
                         </Grid>

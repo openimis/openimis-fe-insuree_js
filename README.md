@@ -27,6 +27,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 - `core.Router`: registering the `insuree/create`, `insuree/families`, `insuree/insurees`, `insuree/cappedItemService` and `insuree/profile` routes in openIMIS client-side router
 - `invoice.SubjectAndThirdpartyPicker`, providing Insuree picker and Family picker for Invoice module
 - `isWorker`: Specifies whether the individual should be classified and managed as a worker or a standard insuree. In Moldova, the Insuree entity is also used to represent workers. When set to true, the system displays 'Workers and Vouchers' instead of the default 'Insurees and Policies', aligning the interface with the specific needs of worker representation. Default: __false__.
+- `renderLastNameFirst`: This setting allows for the customization of name display order, specifically toggling between displaying the given name first or the last name first. Default: __true__. When setting is turned off, given name is displayed before the last name.
 
 ## Available Contribution Points
 
@@ -51,6 +52,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 - `insuree.FamilyPovertyStatusPicker`, picker (drop down) for available poverty status
 - `insuree.FamilyTypePicker`, picker (drop down) for available family types
 - `insuree.PhotoStatusPicker`, picker (drop down) for available photo status
+- `insuree.FamilyStatusPicker`, picker (drop down) for available family status (with/without)
 - `insuree.RelationPicker`, picker (drop down) for available relation in family (spouse,...)
 - `insuree.Avatar`, loading insuree Avatar (from legacy openIMIS, via `/photo/:insuree.photo.folder/:insuree.photo.filename` URL). This component is the default contribution to `insuree.InsureeSummaryAvatar`
 - `insuree.Summary`: component displaying an insuree summary (highly extensible via contribution point). Known usage: Enquiry dialog
@@ -96,3 +98,4 @@ None
 - `insureeForm.isInsureeFirstServicePointRequired`, allow to set FSP to required while creating new insuree, default false.
 - `showInsureeSummaryAddress`, show insuree address information in enquire, default false.
 - `insureeForm.isInsureeStatusRequired`, make insuree status dropdown mandatory, default false.
+- `insureeForm.isInsureePhotoRequired`, make photo upload of an insuree mandatory, default false.

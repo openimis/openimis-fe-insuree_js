@@ -13,6 +13,7 @@ import {
   ControlledField,
   TextInput,
 } from "@openimis/fe-core";
+import { DEFAULT } from "../constants";
 
 const styles = (theme) => ({
   dialogTitle: theme.dialog.title,
@@ -33,7 +34,12 @@ class FamilyFilter extends Component {
 
   constructor(props) {
     super(props);
-    this.filterFamiliesOnMembers = this.props.modulesManager.getConf("fe-insuree", "filterFamiliesOnMembers", true);
+    this.filterFamiliesOnMembers = props.modulesManager.getConf("fe-insuree", "filterFamiliesOnMembers", true);
+    this.renderLastNameFirst = props.modulesManager.getConf(
+      "fe-insuree",
+      "renderLastNameFirst",
+      DEFAULT.RENDER_LAST_NAME_FIRST,
+    );
   }
 
   debouncedOnChangeFilters = _debounce(
@@ -62,6 +68,58 @@ class FamilyFilter extends Component {
     this.props.onChangeFilters(filters);
   };
 
+  renderLastNameField = (anchor, classes) => (
+    <ControlledField
+      module="insuree"
+      id={`FamilyFilter.${anchor}.lastName`}
+      field={
+        <Grid item xs={2} className={classes.item}>
+          <TextInput
+            module="insuree"
+            label={`Family.${anchor}.lastName`}
+            name={`${anchor}_lastName`}
+            value={this._filterTextFieldValue(`${anchor}.lastName`)}
+            onChange={(v) =>
+              this.debouncedOnChangeFilters([
+                {
+                  id: `${anchor}.lastName`,
+                  value: v,
+                  filter: !!v ? `${anchor}_LastName_Icontains: "${v}"` : null,
+                },
+              ])
+            }
+          />
+        </Grid>
+      }
+    />
+  );
+
+  renderGivenNameField = (anchor, classes) => (
+    <ControlledField
+      module="insuree"
+      id={`FamilyFilter.${anchor}.givenName`}
+      field={
+        <Grid item xs={2} className={classes.item}>
+          <TextInput
+            module="insuree"
+            label={`Family.${anchor}.otherNames`}
+            name={`${anchor}_givenName`}
+            value={this._filterTextFieldValue(`${anchor}.givenName`)}
+            onChange={(v) =>
+              this.debouncedOnChangeFilters([
+                {
+                  id: `${anchor}.givenName`,
+                  value: v,
+                  filter: !!v ? `${anchor}_OtherNames_Icontains: "${v}"` : null,
+                },
+              ])
+            }
+          />
+        </Grid>
+      }
+    />
+  );
+
   personFilter = (anchor) => {
     const { classes, onChangeFilters } = this.props;
     return (
@@ -89,52 +147,17 @@ class FamilyFilter extends Component {
             </Grid>
           }
         />
-        <ControlledField
-          module="insuree"
-          id={`FamilyFilter.${anchor}.lastName`}
-          field={
-            <Grid item xs={2} className={classes.item}>
-              <TextInput
-                module="insuree"
-                label={`Family.${anchor}.lastName`}
-                name={`${anchor}_lastName`}
-                value={this._filterTextFieldValue(`${anchor}.lastName`)}
-                onChange={(v) =>
-                  this.debouncedOnChangeFilters([
-                    {
-                      id: `${anchor}.lastName`,
-                      value: v,
-                      filter: !!v ? `${anchor}_LastName_Icontains: "${v}"` : null,
-                    },
-                  ])
-                }
-              />
-            </Grid>
-          }
-        />
-        <ControlledField
-          module="insuree"
-          id={`FamilyFilter.${anchor}.givenName`}
-          field={
-            <Grid item xs={2} className={classes.item}>
-              <TextInput
-                module="insuree"
-                label={`Family.${anchor}.otherNames`}
-                name={`${anchor}_givenName`}
-                value={this._filterTextFieldValue(`${anchor}.givenName`)}
-                onChange={(v) =>
-                  this.debouncedOnChangeFilters([
-                    {
-                      id: `${anchor}.givenName`,
-                      value: v,
-                      filter: !!v ? `${anchor}_OtherNames_Icontains: "${v}"` : null,
-                    },
-                  ])
-                }
-              />
-            </Grid>
-          }
-        />
+        {this.renderLastNameFirst ? (
+          <>
+            {this.renderLastNameField(anchor, classes)}
+            {this.renderGivenNameField(anchor, classes)}
+          </>
+        ) : (
+          <>
+            {this.renderGivenNameField(anchor, classes)}
+            {this.renderLastNameField(anchor, classes)}
+          </>
+        )}
         <ControlledField
           module="insuree"
           id={`InsureeFilter.${anchor}.gender`}

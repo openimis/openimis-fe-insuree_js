@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Grid } from "@material-ui/core";
 import { injectIntl } from "react-intl";
-import { fetchInsureesForPicker, checkIfHeadSelected} from "../actions";
-import { TextInput, Picker, withModulesManager } from "@openimis/fe-core";
 import _ from "lodash";
+
+import { Grid } from "@material-ui/core";
+import { withTheme, withStyles } from "@material-ui/core/styles";
+
+import { TextInput, Picker, withModulesManager } from "@openimis/fe-core";
+import { fetchInsureesForPicker, checkIfHeadSelected } from "../actions";
+import { DEFAULT } from "../constants";
 
 const styles = (theme) => ({
   label: {
@@ -18,6 +21,15 @@ const styles = (theme) => ({
 });
 
 class RawFilter extends Component {
+  constructor(props) {
+    super(props);
+    this.renderLastNameFirst = props.modulesManager.getConf(
+      "fe-insuree",
+      "renderLastNameFirst",
+      DEFAULT.RENDER_LAST_NAME_FIRST,
+    );
+  }
+
   state = {
     chfId: "",
     lastName: "",
@@ -42,6 +54,28 @@ class RawFilter extends Component {
     this.setState({ [a]: v }, (e) => this.props.onChange(this.stateToFilters()));
   };
 
+  renderLastNameField = (classes) => (
+    <Grid item xs={4} className={classes.item}>
+      <TextInput
+        module="insuree"
+        label="Insuree.lastName"
+        value={this.state.lastName}
+        onChange={(v) => this._onChange("lastName", v)}
+      />
+    </Grid>
+  );
+
+  renderGivenNameField = (classes) => (
+    <Grid item xs={4} className={classes.item}>
+      <TextInput
+        module="insuree"
+        label="Insuree.otherNames"
+        value={this.state.otherNames}
+        onChange={(v) => this._onChange("otherNames", v)}
+      />
+    </Grid>
+  );
+
   render() {
     const { classes } = this.props;
     return (
@@ -55,28 +89,23 @@ class RawFilter extends Component {
             onChange={(v) => this._onChange("chfId", v)}
           />
         </Grid>
-        <Grid item xs={4} className={classes.item}>
-          <TextInput
-            module="insuree"
-            label="Insuree.lastName"
-            value={this.state.lastName}
-            onChange={(v) => this._onChange("lastName", v)}
-          />
-        </Grid>
-        <Grid item xs={4} className={classes.item}>
-          <TextInput
-            module="insuree"
-            label="Insuree.otherNames"
-            value={this.state.otherNames}
-            onChange={(v) => this._onChange("otherNames", v)}
-          />
-        </Grid>
+        {this.renderLastNameFirst ? (
+          <>
+            {this.renderLastNameField(classes)}
+            {this.renderGivenNameField(classes)}
+          </>
+        ) : (
+          <>
+            {this.renderGivenNameField(classes)}
+            {this.renderLastNameField(classes)}
+          </>
+        )}
       </Grid>
     );
   }
 }
 
-const Filter = withTheme(withStyles(styles)(RawFilter));
+const Filter = withModulesManager(withTheme(withStyles(styles)(RawFilter)));
 
 const INIT_STATE = {
   page: 0,
@@ -88,6 +117,15 @@ const INIT_STATE = {
 };
 
 class InsureePicker extends Component {
+  constructor(props) {
+    super(props);
+    this.renderLastNameFirst = props.modulesManager.getConf(
+      "fe-insuree",
+      "renderLastNameFirst",
+      DEFAULT.RENDER_LAST_NAME_FIRST,
+    );
+  }
+
   state = INIT_STATE;
 
   componentDidMount() {
@@ -107,7 +145,15 @@ class InsureePicker extends Component {
     }
   }
 
-  formatSuggestion = (a) => (!!a ? `${a.lastName} ${a.otherNames} (${a.chfId})` : "");
+  formatSuggestion = (a) => {
+    if (!a) return "";
+
+    const fullName = this.renderLastNameFirst
+      ? `${a.lastName} ${a.otherNames}`.trim()
+      : `${a.otherNames} ${a.lastName}`.trim();
+
+    return `${fullName} (${a.chfId})`.trim();
+  };
 
   filtersToQueryParams = () => {
     let prms = [...(this.props.forcedFilter || []), ...this.state.filters];

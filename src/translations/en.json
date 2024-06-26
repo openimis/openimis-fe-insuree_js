@@ -6,6 +6,8 @@
   "insuree.menu.familiesOrGroups": "Families/Groups",
   "insuree.menu.insurees": "Insurees",
   "insuree.menu.workers": "Workers",
+  "insuree.workers.filename": "workers_export",
+  "insuree.workers.export": "DOWNLOAD WORKERS",
   "insuree.ageUnit": "Years",
   "insuree.label.regionFSP": "Region of FSP",
   "insuree.label.districtFSP": "District of FSP",
@@ -19,7 +21,7 @@
   "insuree.link.cappedItemService": "Capped Items/Services",
   "insuree.link.profile": "Profile",
   "insuree.notFound": "Not Found",
-  "insuree.chfidNotFound": "No insuree with chfid {chfid} found.",
+  "insuree.chfIdNotFound": "No insuree with chfid {chfid} found.",
   "insuree.noFSP": "First Service Point not registered.",
   "insuree.FSP.title": "First Service Point",
   "insuree.Insuree.searchCriteria": "Search Criteria",
@@ -187,6 +189,10 @@
   "insuree.PhotoStatus.null": "Any",
   "insuree.PhotoStatus.with": "With",
   "insuree.PhotoStatus.without": "Without",
+  "insuree.FamilyStatus": "Family status",
+  "insuree.FamilyStatus.null": "Any",
+  "insuree.FamilyStatus.with": "With family",
+  "insuree.FamilyStatus.without": "Without family",
   "insuree.CreateFamily.mutationLabel": "Create family - {label}",
   "insuree.UpdateFamily.mutationLabel": "Update family - {label}",
   "insuree.DeleteFamilies.mutationLabel": "Delete family - {label}",
@@ -248,5 +254,6 @@
   "insuree.InsureeReasonPicker.placeholder": "Search reason…",
   "insuree.FamilyMembersTable.InsuranceNo": "Insurance No.",
   "insuree.FamilyMembersTable.memberName": "Family Member",
-  "insuree.FamilyMembersTable.phone": "Phone"
+  "insuree.FamilyMembersTable.phone": "Phone",
+  "insuree.FamilyMembersTable.noMembers": "Family not registered."
 }

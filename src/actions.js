@@ -40,7 +40,7 @@ const FAMILY_HEAD_PROJECTION = (mm) => [
   "email",
   "phone",
   "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
-]
+];
 
 const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
@@ -113,7 +113,7 @@ export function fetchInsuree(mm, chfid) {
       "validityTo",
       "gender{code}",
       "status",
-      `family{id, uuid, address location{name, parent{name, parent{name}}}}`,
+      `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
       "photo{folder,filename,photo}",
       "gender{code, gender, altLanguage}",
       "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
@@ -122,9 +122,9 @@ export function fetchInsuree(mm, chfid) {
   return graphql(payload, "INSUREE_INSUREE");
 }
 
-export function fetchInsureeFull(mm, uuid, ignoreLocation=false) {
+export function fetchInsureeFull(mm, uuid, ignoreLocation = false) {
   let args = [`uuid:"${uuid}"`];
-  if (ignoreLocation) args.push('ignoreLocation: true');
+  if (ignoreLocation) args.push("ignoreLocation: true");
   let payload = formatPageQuery("insurees", args, INSUREE_FULL_PROJECTION(mm), "clientMutationId");
   return graphql(payload, "INSUREE_INSUREE");
 }
@@ -243,8 +243,8 @@ export function fetchRelations(mm) {
   return graphql(payload, "INSUREE_RELATIONS");
 }
 
-export function fetchInsureeSummaries(mm, filters, ignoreLocation=false) {
-  if (ignoreLocation) filters.push('ignoreLocation: true');
+export function fetchInsureeSummaries(mm, filters, ignoreLocation = false) {
+  if (ignoreLocation) filters.push("ignoreLocation: true");
   var projections = [
     "id",
     "uuid",
@@ -304,11 +304,7 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.family && !!insuree.family.id ? `familyId: ${decodeId(insuree.family.id)}` : ""}
     ${!!insuree.relationship && !!insuree.relationship.id ? `relationshipId: ${insuree.relationship.id}` : ""}
     ${!!insuree.status ? `status: "${insuree.status}"` : ""}
-    ${
-      !!insuree.statusDate && !!insuree.status != INSUREE_ACTIVE_STRING
-        ? `statusDate: "${insuree.statusDate}"`
-        : ""
-    }
+    ${!!insuree.statusDate && !!insuree.status != INSUREE_ACTIVE_STRING ? `statusDate: "${insuree.statusDate}"` : ""}
     ${
       !!insuree.statusReason && !!insuree.status != INSUREE_ACTIVE_STRING
         ? `statusReason: "${insuree.statusReason.code}"`
@@ -501,5 +497,21 @@ export function checkIfHeadSelected(insuree) {
 
   return (dispatch) => {
     dispatch({ type: "INSUREE_CHECK_IS_HEAD_SELECTED", payload: { headSelected } });
+  };
+}
+
+export function downloadWorkers(params) {
+  const payload = `
+  {
+    insureesExport${!!params && params.length ? `(${params.join(",")})` : ""}
+  }`;
+  return graphql(payload, "WORKERS_EXPORT");
+}
+
+export function clearWorkersExport() {
+  return (dispatch) => {
+    dispatch({
+      type: "WORKERS_EXPORT_CLEAR",
+    });
   };
 }

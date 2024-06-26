@@ -32,7 +32,8 @@ const INSUREE_FILTER_CONTRIBUTION_KEY = "insuree.Filter";
 class InsureeFilter extends Component {
     constructor(props) {
         super(props);
-        this.isWorker = props.modulesManager.getConf("fe-insuree", "isWorker", DEFAULT.IS_WORKER);
+        this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
+        this.renderLastNameFirst = props.modulesManager.getConf("fe-insuree", "renderLastNameFirst", DEFAULT.RENDER_LAST_NAME_FIRST);
     }
   debouncedOnChangeFilter = _debounce(
     this.props.onChangeFilters,
@@ -59,6 +60,64 @@ class InsureeFilter extends Component {
     ];
     this.props.onChangeFilters(filters);
   };
+
+  renderLastNameField = () => {
+    const { classes } = this.props;
+    return (
+      <ControlledField
+        module="insuree"
+        id="InsureeFilter.lastName"
+        field={
+          <Grid item xs={3} className={classes.item}>
+            <TextInput
+              module="insuree"
+              label="Insuree.lastName"
+              name="lastName"
+              value={this._filterTextFieldValue("lastName")}
+              onChange={(v) =>
+                this.debouncedOnChangeFilter([
+                  {
+                    id: "lastName",
+                    value: v,
+                    filter: `lastName_Icontains: "${v}"`,
+                  },
+                ])
+              }
+            />
+          </Grid>
+        }
+      />
+    );
+  }
+
+  renderGivenNameField = () => {
+    const { classes } = this.props;
+    return (
+      <ControlledField
+        module="insuree"
+        id="InsureeFilter.givenName"
+        field={
+          <Grid item xs={3} className={classes.item}>
+            <TextInput
+              module="insuree"
+              label="Insuree.otherNames"
+              name="givenName"
+              value={this._filterTextFieldValue("givenName")}
+              onChange={(v) =>
+                this.debouncedOnChangeFilter([
+                  {
+                    id: "givenName",
+                    value: v,
+                    filter: `otherNames_Icontains: "${v}"`,
+                  },
+                ])
+              }
+            />
+          </Grid>
+        }
+      />
+    );
+  }
 
   render() {
     const { intl, classes, filters, onChangeFilters } = this.props;
@@ -102,52 +161,17 @@ class InsureeFilter extends Component {
             </Grid>
           }
         />
-        <ControlledField
-          module="insuree"
-          id="InsureeFilter.lastName"
-          field={
-            <Grid item xs={3} className={classes.item}>
-              <TextInput
-                module="insuree"
-                label="Insuree.lastName"
-                name="lastName"
-                value={this._filterTextFieldValue("lastName")}
-                onChange={(v) =>
-                  this.debouncedOnChangeFilter([
-                    {
-                      id: "lastName",
-                      value: v,
-                      filter: `lastName_Icontains: "${v}"`,
-                    },
-                  ])
-                }
-              />
-            </Grid>
-          }
-        />
-        <ControlledField
-          module="insuree"
-          id="InsureeFilter.givenName"
-          field={
-            <Grid item xs={3} className={classes.item}>
-              <TextInput
-                module="insuree"
-                label="Insuree.otherNames"
-                name="givenName"
-                value={this._filterTextFieldValue("givenName")}
-                onChange={(v) =>
-                  this.debouncedOnChangeFilter([
-                    {
-                      id: "givenName",
-                      value: v,
-                      filter: `otherNames_Icontains: "${v}"`,
-                    },
-                  ])
-                }
-              />
-            </Grid>
-          }
-        />
+        {this.renderLastNameFirst ? (
+          <>
+            {this.renderLastNameField()}
+            {this.renderGivenNameField()}
+          </>
+        ) : (
+          <>
+            {this.renderGivenNameField()}
+            {this.renderLastNameField()}
+          </>
+        )}
           {!this.isWorker && (<Grid item xs={3}>
               <Grid container>
                   <ControlledField
@@ -242,6 +266,27 @@ class InsureeFilter extends Component {
               }
           />)}
           {!this.isWorker && (<ControlledField
+            module="insuree"
+            id="InsureeFilter.familyStatus"
+            field={
+                <Grid item xs={6} className={classes.item}>
+                    <PublishedComponent
+                        pubRef="insuree.FamilyStatusPicker"
+                        value={this._filterValue("familyStatus")}
+                        onChange={(s) =>
+                            onChangeFilters([
+                                {
+                                    id: "familyStatus",
+                                    value: s,
+                                    filter: `family_Isnull: ${s === WITHOUT_STR}`,
+                                },
+                            ])
+                        }
+                    />
+                </Grid>
+              }
+          />)}
+          {!this.isWorker && (<ControlledField
               module="insuree"
               id="InsureeFilter.dob"
               field={
@@ -253,6 +298,7 @@ class InsureeFilter extends Component {
                                   value={this._filterValue("dobFrom")}
                                   module="insuree"
                                   label="Insuree.dobFrom"
+                                  {...(filters.dobTo ? { maxDate: filters.dobTo.value } : null)}
                                   onChange={(d) =>
                                       onChangeFilters([
                                           {
@@ -270,7 +316,7 @@ class InsureeFilter extends Component {
                                   value={this._filterValue("dobTo")}
                                   module="insuree"
                                   label="Insuree.dobTo"
-                                  minDate={filters?.dobFrom}
+                                  {...(filters.dobFrom ? { minDate: filters.dobFrom.value } : null)}
                                   onChange={(d) =>
                                       onChangeFilters([
                                           {

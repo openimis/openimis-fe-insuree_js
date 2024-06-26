@@ -1,8 +1,10 @@
 import React, { Fragment } from "react";
-import { withTheme, withStyles } from "@material-ui/core/styles";
 import { injectIntl } from "react-intl";
+
 import { Grid, FormControlLabel, Checkbox, Typography, Divider, Tooltip, IconButton } from "@material-ui/core";
+import { withTheme, withStyles } from "@material-ui/core/styles";
 import { People as PeopleIcon } from "@material-ui/icons";
+
 import {
   historyPush,
   withHistory,
@@ -14,6 +16,7 @@ import {
   FormPanel,
   Contributions,
 } from "@openimis/fe-core";
+import { DEFAULT } from "../constants";
 
 const FAMILY_MASTER_PANEL_CONTRIBUTION_KEY = "insuree.Family.master";
 
@@ -26,6 +29,39 @@ const styles = (theme) => ({
 });
 
 class FamilyMasterPanel extends FormPanel {
+  constructor(props) {
+    super(props);
+    this.renderLastNameFirst = props.modulesManager.getConf(
+      "fe-insuree",
+      "renderLastNameFirst",
+      DEFAULT.RENDER_LAST_NAME_FIRST,
+    );
+  }
+
+  renderLastNameField = (edited, classes) => {
+    return (
+      <Grid item xs={3} className={classes.item}>
+        <TextInput
+          module="insuree"
+          label="Family.headInsuree.lastName"
+          readOnly={true}
+          value={!edited || !edited.headInsuree ? "" : edited.headInsuree.lastName}
+        />
+      </Grid>
+    );
+  };
+
+  renderGivenNameField = (edited, classes) => (
+    <Grid item xs={3} className={classes.item}>
+      <TextInput
+        module="insuree"
+        label="Family.headInsuree.otherNames"
+        readOnly={true}
+        value={!edited || !edited.headInsuree ? "" : edited.headInsuree.otherNames}
+      />
+    </Grid>
+  );
+
   headSummary = () => {
     const { classes, edited } = this.props;
     return (
@@ -38,22 +74,17 @@ class FamilyMasterPanel extends FormPanel {
             value={!edited || !edited.headInsuree ? "" : edited.headInsuree.chfId}
           />
         </Grid>
-        <Grid item xs={3} className={classes.item}>
-          <TextInput
-            module="insuree"
-            label="Family.headInsuree.lastName"
-            readOnly={true}
-            value={!edited || !edited.headInsuree ? "" : edited.headInsuree.lastName}
-          />
-        </Grid>
-        <Grid item xs={3} className={classes.item}>
-          <TextInput
-            module="insuree"
-            label="Family.headInsuree.otherNames"
-            readOnly={true}
-            value={!edited || !edited.headInsuree ? "" : edited.headInsuree.otherNames}
-          />
-        </Grid>
+        {this.renderLastNameFirst ? (
+          <>
+            {this.renderLastNameField(edited, classes)}
+            {this.renderGivenNameField(edited, classes)}
+          </>
+        ) : (
+          <>
+            {this.renderGivenNameField(edited, classes)}
+            {this.renderLastNameField(edited, classes)}
+          </>
+        )}
         <Grid item xs={2} className={classes.item}>
           <PublishedComponent
             pubRef="core.DatePicker"
@@ -133,9 +164,8 @@ class FamilyMasterPanel extends FormPanel {
           <Grid item xs={2} className={classes.item}>
             <PublishedComponent
               pubRef="insuree.FamilyTypePicker"
-              withNull={true}
+              withNull={false}
               readOnly={readOnly}
-              nullLabel={formatMessage(intl, "insuree", "Family.FamilyType.null")}
               value={!!edited && !!edited.familyType ? edited.familyType.code : null}
               onChange={(v) => this.updateAttribute("familyType", { code: v })}
             />
@@ -143,9 +173,8 @@ class FamilyMasterPanel extends FormPanel {
           <Grid item xs={2} className={classes.item}>
             <PublishedComponent
               pubRef="insuree.ConfirmationTypePicker"
-              withNull={true}
+              withNull={false}
               readOnly={readOnly}
-              nullLabel={formatMessage(intl, "insuree", "Family.ConfirmationType.null")}
               value={edited?.confirmationType ?? null}
               onChange={(v) => this.updateAttribute("confirmationType", v)}
             />
@@ -165,7 +194,6 @@ class FamilyMasterPanel extends FormPanel {
               module="insuree"
               label="Family.address"
               multiline
-              rows={2}
               readOnly={readOnly}
               value={!edited ? "" : edited.address}
               onChange={(v) => this.updateAttribute("address", v)}

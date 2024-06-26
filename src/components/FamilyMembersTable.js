@@ -4,9 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { TableContainer, TableHead, TableBody, Table, TableCell, TableRow, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 
-import { useModulesManager, ProgressOrError, useTranslations } from "@openimis/fe-core";
+import { useModulesManager, useTranslations } from "@openimis/fe-core";
 import { fetchFamilyMembers } from "../actions";
-import { HYPHEN, MODULE_NAME } from "../constants";
+import { DEFAULT, HYPHEN, MODULE_NAME } from "../constants";
 
 const useStyles = makeStyles((theme) => ({
   footer: {
@@ -20,19 +20,28 @@ const useStyles = makeStyles((theme) => ({
   header: theme.table.header,
 }));
 
-const FAMILY_MEMBERS_HEADERS = ["FamilyMembersTable.InsuranceNo", "FamilyMembersTable.memberName", "FamilyMembersTable.phone"];
+const FAMILY_MEMBERS_HEADERS = [
+  "FamilyMembersTable.InsuranceNo",
+  "FamilyMembersTable.memberName",
+  "FamilyMembersTable.phone",
+];
 
 const FamilyMembersTable = () => {
   const dispatch = useDispatch();
   const modulesManager = useModulesManager();
   const classes = useStyles();
   const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
-  const { fetchingFamilyMembers, familyMembers, errorFamilyMembers, insuree } = useSelector((store) => store.insuree);
+  const { familyMembers, insuree } = useSelector((store) => store.insuree);
+  const renderLastNameFirst = modulesManager.getConf(
+    "fe-insuree",
+    "renderLastNameFirst",
+    DEFAULT.RENDER_LAST_NAME_FIRST,
+  );
 
   useEffect(() => {
     if (!insuree) return;
 
-    dispatch(fetchFamilyMembers(modulesManager, [`familyUuid: "${insuree.family.uuid}"`]));
+    dispatch(fetchFamilyMembers(modulesManager, [`familyUuid: "${insuree?.family?.uuid}"`]));
   }, [insuree]);
 
   return (
@@ -46,14 +55,23 @@ const FamilyMembersTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <ProgressOrError progress={fetchingFamilyMembers} error={errorFamilyMembers} />
-          {familyMembers?.map((familyMember) => (
-            <TableRow key={familyMember?.uuid}>
-              <TableCell> {familyMember?.chfId} </TableCell>
-              <TableCell> {`${familyMember?.otherNames} ${familyMember?.lastName}`} </TableCell>
-              <TableCell> {familyMember?.phone ?? HYPHEN} </TableCell>
+          {familyMembers?.length !== 0 ? (
+            familyMembers?.map((familyMember) => (
+              <TableRow key={familyMember?.uuid}>
+                <TableCell> {familyMember?.chfId} </TableCell>
+                <TableCell>
+                  {renderLastNameFirst
+                    ? `${familyMember?.lastName} ${familyMember?.otherNames}`
+                    : `${familyMember?.otherNames} ${familyMember?.lastName}`}
+                </TableCell>
+                <TableCell> {familyMember?.phone ?? HYPHEN} </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell> {formatMessage("insuree.FamilyMembersTable.noMembers")} </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>

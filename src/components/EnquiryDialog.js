@@ -1,10 +1,11 @@
 import React, { useEffect, Fragment, useRef } from "react";
-import { injectIntl } from "react-intl";
-import { Dialog, Button, DialogActions, DialogContent } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchInsuree } from "../actions";
+import { injectIntl } from "react-intl";
+
+import { Dialog, Button, DialogActions, DialogContent } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+
 import {
   formatMessage,
   formatMessageWithValues,
@@ -14,6 +15,7 @@ import {
   withModulesManager,
   withHistory,
 } from "@openimis/fe-core";
+import { fetchInsuree } from "../actions";
 import InsureeSummary from "./InsureeSummary";
 
 const useStyles = makeStyles(() => ({
@@ -22,8 +24,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const EnquiryDialog = (props) => {
-  const { intl, modulesManager, fetchInsuree, fetching, fetched, insuree, error, onClose, open, chfid, match } = props;
+const EnquiryDialog = ({
+  intl,
+  modulesManager,
+  fetchInsuree,
+  fetching,
+  fetched,
+  insuree,
+  error,
+  onClose,
+  open,
+  chfid,
+  match,
+}) => {
   const classes = useStyles();
   const prevMatchUrl = useRef(null);
 
@@ -39,7 +52,6 @@ const EnquiryDialog = (props) => {
     if (!!match?.url) {
       prevMatchUrl.current = match.url;
     }
-
   }, [open, chfid, match?.url]);
 
   return (
@@ -50,14 +62,19 @@ const EnquiryDialog = (props) => {
           <Error
             error={{
               code: formatMessage(intl, "insuree", "notFound"),
-              detail: formatMessageWithValues(intl, "insuree", "chfidNotFound", { chfid }),
+              detail: formatMessageWithValues(intl, "insuree", "chfIdNotFound", { chfid }),
             }}
           />
         )}
         {!fetching && insuree && (
           <Fragment>
             <InsureeSummary modulesManager={modulesManager} insuree={insuree} className={classes.summary} />
-            <Contributions contributionKey="insuree.EnquiryDialog" insuree={insuree} hideAddPolicyButton />
+            <Contributions
+              contributionKey="insuree.EnquiryDialog"
+              insuree={insuree}
+              disableSelection
+              hideAddPolicyButton
+            />
           </Fragment>
         )}
       </DialogContent>

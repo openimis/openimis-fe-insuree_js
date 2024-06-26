@@ -11,7 +11,12 @@ const WORKER_MAIN_MENU_CONTRIBUTION_KEY = "worker.MainMenu";
 class InsureeMainMenu extends Component {
   constructor(props) {
     super(props);
-    this.isWorker = props.modulesManager.getConf("fe-insuree", "isWorker", DEFAULT.IS_WORKER);
+    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
+    this.genericVoucherEnabled = props.modulesManager.getConf(
+      "fe-worker_voucher",
+      "genericVoucherEnabled",
+      DEFAULT.GENERIC_VOUCHER_ENABLED,
+    );
   }
 
   render() {
@@ -19,6 +24,8 @@ class InsureeMainMenu extends Component {
     let entries = [];
 
     if (this.isWorker) {
+      const config = { genericVoucherEnabled: this.genericVoucherEnabled };
+
       if (rights.includes(RIGHT_WORKER)) {
         entries.push({
           text: formatMessage(this.props.intl, "insuree", "menu.workers"),
@@ -26,10 +33,11 @@ class InsureeMainMenu extends Component {
           route: `/${modulesManager.getRef("insuree.route.insurees")}`,
         });
       }
+      
       entries.push(
         ...this.props.modulesManager
           .getContribs(WORKER_MAIN_MENU_CONTRIBUTION_KEY)
-          .filter((c) => !c.filter || c.filter(rights)),
+          .filter((c) => !c.filter || c.filter(rights, config)),
       );
 
       if (!entries) return null;
