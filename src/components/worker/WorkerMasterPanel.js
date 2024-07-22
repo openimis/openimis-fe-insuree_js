@@ -1,6 +1,7 @@
 import React from "react";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import { Paper, Grid, Typography, Divider } from "@material-ui/core";
+import { withTheme, withStyles } from "@material-ui/core/styles";
 
 import {
   FormattedMessage,
@@ -8,7 +9,10 @@ import {
   FormPanel,
   TextInput,
   withModulesManager,
+  createFieldsBasedOnJSON,
+  renderInputComponent,
 } from "@openimis/fe-core";
+import { MODULE_NAME } from "../../constants";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -22,14 +26,16 @@ const styles = (theme) => ({
 class WorkerMasterPanel extends FormPanel {
   render() {
     const {
-      intl,
       classes,
       edited,
       title = "Insuree.title",
       titleParams = { label: "" },
       readOnly = true,
-      editedId
+      editedId,
     } = this.props;
+
+    const createdFields = createFieldsBasedOnJSON(edited?.jsonExt, "additional_fields");
+
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -75,6 +81,11 @@ class WorkerMasterPanel extends FormPanel {
                   onChange={(v) => this.updateAttribute("otherNames", v)}
                 />
               </Grid>
+              {createdFields.map((field, index) => (
+                <Grid item xs={4} className={classes.item} key={index}>
+                  {renderInputComponent(MODULE_NAME, field, true)}
+                </Grid>
+              ))}
             </Grid>
           </Paper>
         </Grid>

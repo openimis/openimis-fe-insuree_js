@@ -83,6 +83,7 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "relationship{id}",
   "head",
   "status",
+  "jsonExt",
   "statusDate",
   "statusReason{code,insureeStatusReason}",
   "email",
