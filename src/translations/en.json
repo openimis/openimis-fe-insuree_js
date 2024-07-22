@@ -255,5 +255,8 @@
   "insuree.FamilyMembersTable.InsuranceNo": "Insurance No.",
   "insuree.FamilyMembersTable.memberName": "Family Member",
   "insuree.FamilyMembersTable.phone": "Phone",
-  "insuree.FamilyMembersTable.noMembers": "Family not registered."
+  "insuree.FamilyMembersTable.noMembers": "Family not registered.",
+  "insuree.additionalFields.activity_name": "Activity Name",
+  "insuree.additionalFields.activity_place": "Activity Type",
+  "insuree.additionalFields.negotiated_remuneration": "Negotiated Remuneration"
 }
