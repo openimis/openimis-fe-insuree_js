@@ -516,3 +516,9 @@ export function clearWorkersExport() {
     });
   };
 }
+
+export function fetchWorkerVoucherCount(workerId) {
+  //TODO: OM-227 - Implement this function to fetch worker voucher, now this is just a placeholder
+  const payload = formatQuery("professions", null, ["id"]);
+  return graphql(payload, "INSUREE_PROFESSIONS");
+}

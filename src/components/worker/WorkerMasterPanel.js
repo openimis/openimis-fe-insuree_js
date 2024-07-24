@@ -1,4 +1,6 @@
 import React from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
 import { Paper, Grid, Typography, Divider } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
@@ -8,11 +10,16 @@ import {
   PublishedComponent,
   FormPanel,
   TextInput,
+  NumberInput,
   withModulesManager,
   createFieldsBasedOnJSON,
   renderInputComponent,
+  WarningBox,
+  formatMessage,
+  formatMessageWithValues,
 } from "@openimis/fe-core";
-import { MODULE_NAME } from "../../constants";
+import { DEFAULT, MODULE_NAME } from "../../constants";
+import { fetchWorkerVoucherCount } from "../../actions";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -24,6 +31,29 @@ const styles = (theme) => ({
 });
 
 class WorkerMasterPanel extends FormPanel {
+  constructor(props) {
+    super(props);
+    this.state = { workerVoucherCount: 0 };
+    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
+    this.workerVoucherCountLimit = props.modulesManager.getConf(
+      "fe-insuree",
+      "workerVoucherCountLimit",
+      DEFAULT.WORKER_VOUCHER_COUNT_LIMIT,
+    );
+  }
+
+  componentDidMount() {
+    const { fetchWorkerVoucherCount, edited_id: editedId } = this.props;
+
+    if (this.isWorker && editedId) {
+      // TODO: OM-227 - Adjust the algorithm here
+      fetchWorkerVoucherCount(editedId).then((response) => {
+        const workerVoucherCount = response?.payload?.data?.professions?.length ?? 0;
+        this.setState((prevState) => ({ ...prevState, workerVoucherCount }));
+      });
+    }
+  }
+
   render() {
     const {
       classes,
@@ -31,9 +61,10 @@ class WorkerMasterPanel extends FormPanel {
       title = "Insuree.title",
       titleParams = { label: "" },
       readOnly = true,
-      editedId,
+      edited_id: editedId,
+      intl,
     } = this.props;
-
+    const { workerVoucherCount } = this.state;
     const createdFields = createFieldsBasedOnJSON(edited?.jsonExt, "additional_fields");
 
     return (
@@ -48,6 +79,21 @@ class WorkerMasterPanel extends FormPanel {
               </Grid>
             </Grid>
             <Divider />
+            {/* TODO: OM-227 - Adjust the condition here */}
+            {workerVoucherCount <= this.workerVoucherCountLimit && (
+              <>
+                <Grid container className={classes.item}>
+                  <WarningBox
+                    title={formatMessage(intl, MODULE_NAME, "insuree.warning.limit")}
+                    description={formatMessageWithValues(intl, MODULE_NAME, "insuree.warning.limitReached", {
+                      limit: this.workerVoucherCountLimit,
+                    })}
+                    xs={12}
+                  />
+                </Grid>
+                <Divider />
+              </>
+            )}
             <Grid container className={classes.item}>
               <Grid item xs={4} className={classes.item}>
                 <PublishedComponent
@@ -81,6 +127,9 @@ class WorkerMasterPanel extends FormPanel {
                   onChange={(v) => this.updateAttribute("otherNames", v)}
                 />
               </Grid>
+              <Grid item xs={4} className={classes.item}>
+                <NumberInput module="insuree" label="Insuree.assignedVouchers" readOnly value={workerVoucherCount} />
+              </Grid>
               {createdFields.map((field, index) => (
                 <Grid item xs={4} className={classes.item} key={index}>
                   {renderInputComponent(MODULE_NAME, field, true)}
@@ -94,4 +143,12 @@ class WorkerMasterPanel extends FormPanel {
   }
 }
 
-export default withModulesManager(withTheme(withStyles(styles)(WorkerMasterPanel)));
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      fetchWorkerVoucherCount,
+    },
+    dispatch,
+  );
+
+export default withModulesManager(connect(null, mapDispatchToProps)(withTheme(withStyles(styles)(WorkerMasterPanel))));
