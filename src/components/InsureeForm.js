@@ -17,7 +17,7 @@ import {
   ProgressOrError,
   Helmet,
 } from "@openimis/fe-core";
-import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation } from "../actions";
+import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation, fetchWorkerVoucherCount } from "../actions";
 import { DEFAULT, INSUREE_ACTIVE_STRING, RIGHT_INSUREE } from "../constants";
 import { insureeLabel, isValidInsuree, isValidWorker } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
@@ -41,6 +41,7 @@ class InsureeForm extends Component {
       insuree: this._newInsuree(),
       newInsuree: true,
       isSaved: false,
+      workerVoucherCount: 0,
     };
   }
 
@@ -70,6 +71,15 @@ class InsureeForm extends Component {
   }
 
   componentDidMount() {
+    // TODO: OM-227 - Adjust the implementation here after BE's ready
+    // Fetch the current worker voucher count if the user is a worker.
+    if (this.isWorker && !!this.props.insuree_uuid) {
+      this.props.fetchWorkerVoucherCount(this.props.insuree_uuid).then((response) => {
+        const workerVoucherCount = response?.payload?.data?.workerVoucherCount ?? 0;
+        this.setState((prevState) => ({ ...prevState, workerVoucherCount }));
+      });
+    }
+
     if (!!this.props.insuree_uuid) {
       if (!!this.props.family_uuid) {
         this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid);
@@ -277,6 +287,7 @@ class InsureeForm extends Component {
               actions={actions}
               HeadPanel={FamilyDisplayPanel}
               Panels={[this.isWorker ? WorkerMasterPanel : InsureeMasterPanel]}
+              workerVoucherCount={this.state.workerVoucherCount}
               contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
               insuree={this.state.insuree}
               onEditedChanged={this.onEditedChanged}
@@ -307,8 +318,13 @@ const mapStateToProps = (state, props) => ({
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation, journalize })(
-      injectIntl(withTheme(withStyles(styles)(InsureeForm))),
-    ),
+    connect(mapStateToProps, {
+      fetchInsureeFull,
+      fetchWorkerVoucherCount,
+      fetchFamily,
+      clearInsuree,
+      fetchInsureeMutation,
+      journalize,
+    })(injectIntl(withTheme(withStyles(styles)(InsureeForm)))),
   ),
 );

@@ -33,25 +33,11 @@ const styles = (theme) => ({
 class WorkerMasterPanel extends FormPanel {
   constructor(props) {
     super(props);
-    this.state = { workerVoucherCount: 0 };
-    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
     this.workerVoucherCountLimit = props.modulesManager.getConf(
       "fe-insuree",
       "workerVoucherCountLimit",
       DEFAULT.WORKER_VOUCHER_COUNT_LIMIT,
     );
-  }
-
-  componentDidMount() {
-    const { fetchWorkerVoucherCount, edited_id: editedId } = this.props;
-
-    if (this.isWorker && editedId) {
-      // TODO: OM-227 - Adjust the algorithm here
-      fetchWorkerVoucherCount(editedId).then((response) => {
-        const workerVoucherCount = response?.payload?.data?.professions?.length ?? 0;
-        this.setState((prevState) => ({ ...prevState, workerVoucherCount }));
-      });
-    }
   }
 
   render() {
@@ -63,8 +49,8 @@ class WorkerMasterPanel extends FormPanel {
       readOnly = true,
       edited_id: editedId,
       intl,
+      workerVoucherCount = 0,
     } = this.props;
-    const { workerVoucherCount } = this.state;
     const createdFields = createFieldsBasedOnJSON(edited?.jsonExt, "additional_fields");
 
     return (
@@ -128,7 +114,13 @@ class WorkerMasterPanel extends FormPanel {
                 />
               </Grid>
               <Grid item xs={4} className={classes.item}>
-                <NumberInput module="insuree" label="Insuree.assignedVouchers" readOnly value={workerVoucherCount} />
+                <NumberInput
+                  module="insuree"
+                  label="Insuree.assignedVouchers"
+                  displayZero
+                  readOnly
+                  value={workerVoucherCount}
+                />
               </Grid>
               {createdFields.map((field, index) => (
                 <Grid item xs={4} className={classes.item} key={index}>
