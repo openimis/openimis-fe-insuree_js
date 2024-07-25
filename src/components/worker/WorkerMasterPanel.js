@@ -35,7 +35,7 @@ class WorkerMasterPanel extends FormPanel {
     } = this.props;
 
     const createdFields = createFieldsBasedOnJSON(
-      typeof edited?.jsonExt === "object" ? "" : edited?.jsonExt,
+      typeof edited?.jsonExt === "object" || !edited?.jsonExt ? "" : edited.jsonExt,
       "additional_fields",
     );
 
