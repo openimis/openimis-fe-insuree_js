@@ -51,7 +51,11 @@ class WorkerMasterPanel extends FormPanel {
       intl,
       workerVoucherCount = 0,
     } = this.props;
-    const createdFields = createFieldsBasedOnJSON(edited?.jsonExt, "additional_fields");
+
+    const createdFields = createFieldsBasedOnJSON(
+      typeof edited?.jsonExt === "object" || !edited?.jsonExt ? "" : edited.jsonExt,
+      "additional_fields",
+    );
 
     return (
       <Grid container>
@@ -76,6 +80,21 @@ class WorkerMasterPanel extends FormPanel {
                     })}
                     xs={12}
                   />
+                </Grid>
+                <Divider />
+              </>
+            )}
+            {editedId && (
+              <>
+                <Grid container className={classes.item}>
+                  <Grid item xs={4} className={classes.item}>
+                    <PublishedComponent
+                      pubRef="insuree.Avatar"
+                      photo={edited?.photo ?? null}
+                      readOnly
+                      withMeta={false}
+                    />
+                  </Grid>
                 </Grid>
                 <Divider />
               </>
@@ -122,11 +141,12 @@ class WorkerMasterPanel extends FormPanel {
                   value={workerVoucherCount}
                 />
               </Grid>
-              {createdFields.map((field, index) => (
-                <Grid item xs={4} className={classes.item} key={index}>
-                  {renderInputComponent(MODULE_NAME, field, true)}
-                </Grid>
-              ))}
+              {editedId &&
+                createdFields.map((field, index) => (
+                  <Grid item xs={4} className={classes.item} key={index}>
+                    {renderInputComponent(MODULE_NAME, field, true)}
+                  </Grid>
+                ))}
             </Grid>
           </Paper>
         </Grid>
