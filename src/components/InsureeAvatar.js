@@ -52,9 +52,21 @@ const InsureeAvatar = (props) => {
   return (
     <Grid container className={className} direction="row" wrap="nowrap" spacing={1}>
       <div>
-        <IconButton variant="contained" component="label" size="small" edge="start">
+        <IconButton
+          variant="contained"
+          component="label"
+          size="small"
+          edge="start"
+          style={{ cursor: readOnly ? "default" : "pointer" }}
+        >
           <Avatar src={getUrl(photo)} className={classes.bigAvatar} />
-          <input type="file" className={classes.hiddenInput} onChange={onFileSelect} accept="image/*" />
+          <input
+            type="file"
+            disabled={readOnly}
+            className={classes.hiddenInput}
+            onChange={onFileSelect}
+            accept="image/*"
+          />
         </IconButton>
       </div>
       {withMeta && (
