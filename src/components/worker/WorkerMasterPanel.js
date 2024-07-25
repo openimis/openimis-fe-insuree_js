@@ -50,6 +50,12 @@ class WorkerMasterPanel extends FormPanel {
             <Divider />
             <Grid container className={classes.item}>
               <Grid item xs={4} className={classes.item}>
+                <PublishedComponent pubRef="insuree.Avatar" photo={edited?.photo ?? null} readOnly withMeta={false} />
+              </Grid>
+            </Grid>
+            <Divider />
+            <Grid container className={classes.item}>
+              <Grid item xs={4} className={classes.item}>
                 <PublishedComponent
                   pubRef="insuree.InsureeNumberInput"
                   module="insuree"
