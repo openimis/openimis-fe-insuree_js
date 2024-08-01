@@ -516,3 +516,21 @@ export function clearWorkersExport() {
     });
   };
 }
+
+export function fetchWorkerVoucherCount(workerId) {
+  return graphqlWithVariables(
+    `
+      query ($workerId: String!) {
+        worker(uuid: $workerId) {
+          edges {
+            node {
+              vouchersThisYear
+            }
+          }
+        } 
+      }
+    `,
+    { workerId },
+    `WORKER_VOUCHER_COUNT_CHECK`,
+  );
+}

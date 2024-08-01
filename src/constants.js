@@ -31,6 +31,7 @@ export const DEFAULT = {
   IS_WORKER: false,
   RENDER_LAST_NAME_FIRST: true,
   GENERIC_VOUCHER_ENABLED: false,
+  WORKER_VOUCHER_COUNT_LIMIT: 120,
 };
 
 export const WITHOUT_STR = "without"

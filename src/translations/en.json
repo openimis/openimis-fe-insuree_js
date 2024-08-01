@@ -46,6 +46,7 @@
   "insuree.Insuree.currentVillage.sameAsFamily": "Same Village as Family",
   "insuree.Insuree.currentAddress": "Address",
   "insuree.Insuree.currentAddress.sameAsFamily": "Same Address as Family",
+  "insuree.Insuree.assignedVouchers": "Vouchers This Year",
   "insuree.InsureeGenderPicker.label": "Gender",
   "insuree.InsureeGender.null": "Any",
   "insuree.InsureeGender.M": "Male",
@@ -258,5 +259,7 @@
   "insuree.FamilyMembersTable.noMembers": "Family not registered.",
   "insuree.additionalFields.activity_name": "Activity Name",
   "insuree.additionalFields.activity_place": "Activity Type",
-  "insuree.additionalFields.negotiated_remuneration": "Negotiated Remuneration"
+  "insuree.additionalFields.negotiated_remuneration": "Negotiated Remuneration",
+  "insuree.warning.limit": "WARNING",
+  "insuree.warning.limitReached": "The worker has reached the maximum number of vouchers assigned for this calendar year, which is {limit}."
 }

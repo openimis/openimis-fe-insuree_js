@@ -8,11 +8,15 @@ import {
   PublishedComponent,
   FormPanel,
   TextInput,
+  NumberInput,
   withModulesManager,
   createFieldsBasedOnJSON,
   renderInputComponent,
+  WarningBox,
+  formatMessage,
+  formatMessageWithValues,
 } from "@openimis/fe-core";
-import { MODULE_NAME } from "../../constants";
+import { DEFAULT, MODULE_NAME } from "../../constants";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -24,6 +28,15 @@ const styles = (theme) => ({
 });
 
 class WorkerMasterPanel extends FormPanel {
+  constructor(props) {
+    super(props);
+    this.workerVoucherCountLimit = props.modulesManager.getConf(
+      "fe-insuree",
+      "workerVoucherCountLimit",
+      DEFAULT.WORKER_VOUCHER_COUNT_LIMIT,
+    );
+  }
+
   render() {
     const {
       classes,
@@ -32,12 +45,16 @@ class WorkerMasterPanel extends FormPanel {
       titleParams = { label: "" },
       readOnly = true,
       edited_id: editedId,
+      intl,
+      workerVoucherCount = 0,
     } = this.props;
 
     const createdFields = createFieldsBasedOnJSON(
       typeof edited?.jsonExt === "object" || !edited?.jsonExt ? "" : edited.jsonExt,
       "additional_fields",
     );
+
+    const limitReached = workerVoucherCount >= this.workerVoucherCountLimit;
 
     return (
       <Grid container>
@@ -51,6 +68,20 @@ class WorkerMasterPanel extends FormPanel {
               </Grid>
             </Grid>
             <Divider />
+            {limitReached && (
+              <>
+                <Grid container className={classes.item}>
+                  <WarningBox
+                    title={formatMessage(intl, MODULE_NAME, "insuree.warning.limit")}
+                    description={formatMessageWithValues(intl, MODULE_NAME, "insuree.warning.limitReached", {
+                      limit: this.workerVoucherCountLimit,
+                    })}
+                    xs={12}
+                  />
+                </Grid>
+                <Divider />
+              </>
+            )}
             {editedId && (
               <>
                 <Grid container className={classes.item}>
@@ -97,6 +128,15 @@ class WorkerMasterPanel extends FormPanel {
                   readOnly={readOnly}
                   value={edited?.otherNames ?? ""}
                   onChange={(v) => this.updateAttribute("otherNames", v)}
+                />
+              </Grid>
+              <Grid item xs={4} className={classes.item}>
+                <NumberInput
+                  module="insuree"
+                  label="Insuree.assignedVouchers"
+                  displayZero
+                  readOnly
+                  value={workerVoucherCount}
                 />
               </Grid>
               {editedId &&
