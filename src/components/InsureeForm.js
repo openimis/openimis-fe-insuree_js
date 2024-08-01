@@ -71,11 +71,9 @@ class InsureeForm extends Component {
   }
 
   componentDidMount() {
-    // TODO: OM-227 - Adjust the implementation here after BE's ready
-    // Fetch the current worker voucher count if the user is a worker.
     if (this.isWorker && !!this.props.insuree_uuid) {
       this.props.fetchWorkerVoucherCount(this.props.insuree_uuid).then((response) => {
-        const workerVoucherCount = response?.payload?.data?.workerVoucherCount ?? 0;
+        const workerVoucherCount = parseData(response.payload.data.worker)[0].vouchersThisYear;
         this.setState((prevState) => ({ ...prevState, workerVoucherCount }));
       });
     }

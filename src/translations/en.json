@@ -46,7 +46,7 @@
   "insuree.Insuree.currentVillage.sameAsFamily": "Same Village as Family",
   "insuree.Insuree.currentAddress": "Address",
   "insuree.Insuree.currentAddress.sameAsFamily": "Same Address as Family",
-  "insuree.Insuree.assignedVouchers": "Assigned Vouchers",
+  "insuree.Insuree.assignedVouchers": "Vouchers This Year",
   "insuree.InsureeGenderPicker.label": "Gender",
   "insuree.InsureeGender.null": "Any",
   "insuree.InsureeGender.M": "Male",

@@ -1,6 +1,4 @@
 import React from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
 
 import { Paper, Grid, Typography, Divider } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
@@ -19,7 +17,6 @@ import {
   formatMessageWithValues,
 } from "@openimis/fe-core";
 import { DEFAULT, MODULE_NAME } from "../../constants";
-import { fetchWorkerVoucherCount } from "../../actions";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -57,6 +54,8 @@ class WorkerMasterPanel extends FormPanel {
       "additional_fields",
     );
 
+    const limitReached = workerVoucherCount <= this.workerVoucherCountLimit;
+
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -69,8 +68,7 @@ class WorkerMasterPanel extends FormPanel {
               </Grid>
             </Grid>
             <Divider />
-            {/* TODO: OM-227 - Adjust the condition here */}
-            {workerVoucherCount <= this.workerVoucherCountLimit && (
+            {limitReached && (
               <>
                 <Grid container className={classes.item}>
                   <WarningBox
@@ -155,12 +153,4 @@ class WorkerMasterPanel extends FormPanel {
   }
 }
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      fetchWorkerVoucherCount,
-    },
-    dispatch,
-  );
-
-export default withModulesManager(connect(null, mapDispatchToProps)(withTheme(withStyles(styles)(WorkerMasterPanel))));
+export default withModulesManager(withTheme(withStyles(styles)(WorkerMasterPanel)));

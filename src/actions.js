@@ -518,13 +518,16 @@ export function clearWorkersExport() {
 }
 
 export function fetchWorkerVoucherCount(workerId) {
-  //TODO: OM-227 - Implement this function to fetch worker voucher, now this is just a placeholder
   return graphqlWithVariables(
     `
       query ($workerId: String!) {
-        workerVoucher(workerId: $workerId) {
-          workerVoucherCount
-        }
+        worker(uuid: $workerId) {
+          edges {
+            node {
+              vouchersThisYear
+            }
+          }
+        } 
       }
     `,
     { workerId },
