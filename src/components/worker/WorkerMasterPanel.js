@@ -54,7 +54,7 @@ class WorkerMasterPanel extends FormPanel {
       "additional_fields",
     );
 
-    const limitReached = workerVoucherCount <= this.workerVoucherCountLimit;
+    const limitReached = workerVoucherCount >= this.workerVoucherCountLimit;
 
     return (
       <Grid container>
