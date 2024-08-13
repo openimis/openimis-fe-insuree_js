@@ -53,7 +53,7 @@ class InsureeMasterPanel extends FormPanel {
     age = Math.abs(year - 1970);
 
     this.setState({ age: age });
-  }
+  };
 
   renderLastNameField = (edited, classes, readOnly) => {
     return (
@@ -106,7 +106,7 @@ class InsureeMasterPanel extends FormPanel {
     } else {
       age = this.state.age;
     }
-    
+
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -127,6 +127,7 @@ class InsureeMasterPanel extends FormPanel {
                         <PublishedComponent
                           pubRef="insuree.RelationPicker"
                           withNull={true}
+                          required={true}
                           nullLabel={formatMessage(this.props.intl, "insuree", `Relation.none`)}
                           readOnly={readOnly}
                           value={!!edited && !!edited.relationship ? edited.relationship.id : ""}
@@ -302,13 +303,13 @@ class InsureeMasterPanel extends FormPanel {
                         pubRef="insuree.EducationPicker"
                         module="insuree"
                         value={!!edited && !!edited.education ? edited.education.id : ""}
+                        required={!!edited && !!edited.relationship && edited.relationship.id == 4 ? true : false}
                         readOnly={readOnly}
                         withNull={false}
                         onChange={(v) => this.updateAttribute("education", { id: v })}
                       />
                     </Grid>
-                  )
-                  }
+                  )}
                   <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
                       pubRef="insuree.IdentificationTypePicker"
@@ -324,7 +325,13 @@ class InsureeMasterPanel extends FormPanel {
                     <TextInput
                       module="insuree"
                       label="Insuree.passport"
-                      error={edited && edited.passport && (edited.passport.length > PASSPORT_LENGTH || edited.passport.length < PASSPORT_LENGTH) ? true : false}
+                      error={
+                        edited &&
+                        edited.passport &&
+                        (edited.passport.length > PASSPORT_LENGTH || edited.passport.length < PASSPORT_LENGTH)
+                          ? true
+                          : false
+                      }
                       readOnly={readOnly}
                       required={true}
                       value={!!edited && !!edited.passport ? edited.passport : ""}
@@ -342,17 +349,19 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("incomeLevel", v)}
                     />
                   </Grid>
-                  <Grid item xs={3} className={classes.item}>
-                    <PublishedComponent
-                      pubRef="insuree.PaymentMethodPicker"
-                      module="insuree"
-                      value={!!edited && !!edited.preferredPaymentMethod ? edited.preferredPaymentMethod : ""}
-                      readOnly={readOnly}
-                      withNull={true}
-                      nullLabel={formatMessage(intl, "insuree", "insuree.Payment.none")}
-                      onChange={(v) => this.updateAttribute("preferredPaymentMethod", v)}
-                    />
-                  </Grid>
+                  {(!!edited && !!edited.family && !!edited.family.headInsuree  && edited?.head == true) || (!!edited && !edited.family)? (
+                    <Grid item xs={3} className={classes.item}>
+                      <PublishedComponent
+                        pubRef="insuree.PaymentMethodPicker"
+                        module="insuree"
+                        value={!!edited && !!edited.preferredPaymentMethod ? edited.preferredPaymentMethod : ""}
+                        readOnly={readOnly}
+                        withNull={true}
+                        nullLabel={formatMessage(intl, "insuree", "insuree.Payment.none")}
+                        onChange={(v) => this.updateAttribute("preferredPaymentMethod", v)}
+                      />
+                    </Grid>
+                  ):null}
                   {edited?.preferredPaymentMethod == "PB" && (
                     <Grid item xs={3} className={classes.item}>
                       <TextInput
