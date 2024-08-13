@@ -20,7 +20,6 @@ class HeadInsureeMasterPanel extends Component {
 
   render() {
     const { intl, edited } = this.props;
-    console.log('head insuree edited ',edited)
 
     let actions = [
       !!edited && !!edited.familyType && edited.familyType.code == "P"
