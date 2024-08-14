@@ -297,7 +297,7 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("profession", { id: v })}
                     />
                   </Grid>
-                  {!!edited && !!edited.dob && age < 18 && (
+                  {!!edited && !!edited.relationship && edited.relationship.id == 4 && (
                     <Grid item xs={3} className={classes.item}>
                       <PublishedComponent
                         pubRef="insuree.EducationPicker"
