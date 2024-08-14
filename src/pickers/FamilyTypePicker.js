@@ -42,8 +42,17 @@ class FamilyTypePicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      isActiveFilterFamilyType,
     } = this.props;
-    let options = !!familyTypes ? familyTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) })) : [];
+    let options = !!familyTypes 
+    ? (isActiveFilterFamilyType == false 
+        ? familyTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) })) 
+        : familyTypes
+            .filter((v) => v !== "P")
+            .map((v) => ({ value: v, label: this.formatSuggestion(v) }))
+      )
+    : [];
+
     if (withNull) {
       options.unshift({ value: null, label: this.formatSuggestion(null) });
     }
