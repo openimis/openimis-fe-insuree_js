@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { AssignmentInd, GroupAdd, People, Person } from "@material-ui/icons";
 import { formatMessage, MainMenuContribution, withModulesManager } from "@openimis/fe-core";
-import { DEFAULT, RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE, RIGHT_WORKER } from "../constants";
+import { DEFAULT, RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE } from "../constants";
 
 const INSUREE_MAIN_MENU_CONTRIBUTION_KEY = "insuree.MainMenu";
 const WORKER_MAIN_MENU_CONTRIBUTION_KEY = "worker.MainMenu";
@@ -26,14 +26,6 @@ class InsureeMainMenu extends Component {
     if (this.isWorker) {
       const config = { genericVoucherEnabled: this.genericVoucherEnabled };
 
-      if (rights.includes(RIGHT_WORKER)) {
-        entries.push({
-          text: formatMessage(this.props.intl, "insuree", "menu.workers"),
-          icon: <People />,
-          route: `/${modulesManager.getRef("insuree.route.insurees")}`,
-        });
-      }
-      
       entries.push(
         ...this.props.modulesManager
           .getContribs(WORKER_MAIN_MENU_CONTRIBUTION_KEY)

@@ -17,12 +17,11 @@ import {
   ProgressOrError,
   Helmet,
 } from "@openimis/fe-core";
-import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation, fetchWorkerVoucherCount } from "../actions";
+import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation } from "../actions";
 import { DEFAULT, INSUREE_ACTIVE_STRING, RIGHT_INSUREE } from "../constants";
-import { insureeLabel, isValidInsuree, isValidWorker } from "../utils/utils";
+import { insureeLabel, isValidInsuree } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
-import WorkerMasterPanel from "./worker/WorkerMasterPanel";
 
 const styles = (theme) => ({
   page: theme.page,
@@ -34,36 +33,17 @@ const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";
 class InsureeForm extends Component {
   constructor(props) {
     super(props);
-    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
     this.state = {
       lockNew: false,
       reset: 0,
       insuree: this._newInsuree(),
       newInsuree: true,
       isSaved: false,
-      workerVoucherCount: 0,
     };
   }
 
   _newInsuree() {
     let insuree = {};
-
-    // NOTE: This is a placeholder data for the worker entity,
-    // as the worker itself does not have the same fields as the insuree.
-    if (this.isWorker) {
-      const dateOfBirthPlaceholder = "2000-01-01";
-      const genderCodePlaceholder = "O";
-
-      const insureeWithPlaceholderData = {
-        dob: dateOfBirthPlaceholder,
-        gender: {
-          code: genderCodePlaceholder,
-        },
-      };
-
-      insuree = { ...insuree, ...insureeWithPlaceholderData };
-    }
-
     insuree.jsonExt = {};
     insuree.status = INSUREE_ACTIVE_STRING;
     insuree.statusReason = null;
@@ -71,13 +51,6 @@ class InsureeForm extends Component {
   }
 
   componentDidMount() {
-    if (this.isWorker && !!this.props.insuree_uuid) {
-      this.props.fetchWorkerVoucherCount(this.props.insuree_uuid).then((response) => {
-        const workerVoucherCount = parseData(response.payload.data.worker)[0].vouchersThisYear;
-        this.setState((prevState) => ({ ...prevState, workerVoucherCount }));
-      });
-    }
-
     if (!!this.props.insuree_uuid) {
       if (!!this.props.family_uuid) {
         this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid);
@@ -85,7 +58,7 @@ class InsureeForm extends Component {
 
       this.setState(
         (state, props) => ({ insuree_uuid: props.insuree_uuid }),
-        (e) => this.props.fetchInsureeFull(this.props.modulesManager, this.props.insuree_uuid, this.isWorker),
+        (e) => this.props.fetchInsureeFull(this.props.modulesManager, this.props.insuree_uuid),
       );
     } else if (!!this.props.family_uuid && (!this.props.family || this.props.family.uuid !== this.props.family_uuid)) {
       this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid);
@@ -162,7 +135,7 @@ class InsureeForm extends Component {
 
     if (insureeUuid) {
       try {
-        await fetchInsureeFull(modulesManager, insureeUuid, this.isWorker);
+        await fetchInsureeFull(modulesManager, insureeUuid);
       } catch (error) {
         console.error(`[RELOAD_INSUREE]: Fetching insuree details failed. ${error}`);
       } finally {
@@ -180,7 +153,7 @@ class InsureeForm extends Component {
         const response = await fetchInsureeMutation(modulesManager, clientMutationId);
         const createdInsureeUuid = parseData(response.payload.data.mutationLogs)[0].insurees[0].insuree.uuid;
 
-        await fetchInsureeFull(modulesManager, createdInsureeUuid, this.isWorker);
+        await fetchInsureeFull(modulesManager, createdInsureeUuid);
         historyPush(modulesManager, history, "insuree.route.insuree", [
           createdInsureeUuid,
           familyUuid ? familyUuid : null,
@@ -220,9 +193,7 @@ class InsureeForm extends Component {
     if (this.state.lockNew) return false;
     if (!this.props.isChfIdValid) return false;
 
-    return this.isWorker
-      ? isValidWorker(this.state.insuree)
-      : isValidInsuree(this.state.insuree, this.props.modulesManager);
+    return isValidInsuree(this.state.insuree, this.props.modulesManager);
   };
 
   _save = (insuree) => {
@@ -284,8 +255,7 @@ class InsureeForm extends Component {
               readOnly={readOnly || runningMutation || !!insuree.validityTo}
               actions={actions}
               HeadPanel={FamilyDisplayPanel}
-              Panels={[this.isWorker ? WorkerMasterPanel : InsureeMasterPanel]}
-              workerVoucherCount={this.state.workerVoucherCount}
+              Panels={[InsureeMasterPanel]}
               contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
               insuree={this.state.insuree}
               onEditedChanged={this.onEditedChanged}
@@ -318,7 +288,6 @@ export default withHistory(
   withModulesManager(
     connect(mapStateToProps, {
       fetchInsureeFull,
-      fetchWorkerVoucherCount,
       fetchFamily,
       clearInsuree,
       fetchInsureeMutation,

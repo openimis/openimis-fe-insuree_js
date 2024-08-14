@@ -500,37 +500,3 @@ export function checkIfHeadSelected(insuree) {
     dispatch({ type: "INSUREE_CHECK_IS_HEAD_SELECTED", payload: { headSelected } });
   };
 }
-
-export function downloadWorkers(params) {
-  const payload = `
-  {
-    insureesExport${!!params && params.length ? `(${params.join(",")})` : ""}
-  }`;
-  return graphql(payload, "WORKERS_EXPORT");
-}
-
-export function clearWorkersExport() {
-  return (dispatch) => {
-    dispatch({
-      type: "WORKERS_EXPORT_CLEAR",
-    });
-  };
-}
-
-export function fetchWorkerVoucherCount(workerId) {
-  return graphqlWithVariables(
-    `
-      query ($workerId: String!) {
-        worker(uuid: $workerId) {
-          edges {
-            node {
-              vouchersThisYear
-            }
-          }
-        } 
-      }
-    `,
-    { workerId },
-    `WORKER_VOUCHER_COUNT_CHECK`,
-  );
-}
