@@ -5,12 +5,7 @@ import { injectIntl } from "react-intl";
 import {
   Grid,
   IconButton,
-  Button,
   Tooltip,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
 } from "@material-ui/core";
 import { Search as SearchIcon, People as PeopleIcon, Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import {
@@ -24,11 +19,10 @@ import {
   journalize,
   Searcher,
   PublishedComponent,
-  downloadExport,
 } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
 import { RIGHT_INSUREE_DELETE, INSUREE_MARITAL_STATUS, DEFAULT } from "../constants";
-import { fetchInsureeSummaries, deleteInsuree, downloadWorkers, clearWorkersExport } from "../actions";
+import { fetchInsureeSummaries, deleteInsuree } from "../actions";
 
 import InsureeFilter from "./InsureeFilter";
 import { insureeLabel } from "../utils/utils";
@@ -53,7 +47,6 @@ class InsureeSearcher extends Component {
     );
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "insureeFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
-    this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
     this.renderLastNameFirst = props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
@@ -62,16 +55,6 @@ class InsureeSearcher extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!prevProps.errorWorkersExport && this.props.errorWorkersExport) {
-      this.setState({ failedExport: true });
-    }
-
-    if (prevProps.workersExport !== this.props.workersExport && this.props.workersExport) {
-      const { clearWorkersExport, workersExport, intl } = this.props;
-      downloadExport(workersExport, `${formatMessage(intl, "insuree", "workers.filename")}.csv`)();
-      clearWorkersExport();
-    }
-
     if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
       this.setState({ reset: this.state.reset + 1 });
@@ -81,7 +64,7 @@ class InsureeSearcher extends Component {
   }
 
   fetch = (prms) => {
-    this.props.fetchInsureeSummaries(this.props.modulesManager, prms, this.isWorker);
+    this.props.fetchInsureeSummaries(this.props.modulesManager, prms);
   };
 
   rowIdentifier = (r) => r.uuid;
@@ -112,12 +95,12 @@ class InsureeSearcher extends Component {
       "insuree.insureeSummaries.insuranceNo",
       this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
       !this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
-      this.isWorker ? null : "insuree.insureeSummaries.maritalStatus",
-      this.isWorker ? null : "insuree.insureeSummaries.gender",
-      this.isWorker ? null : "insuree.insureeSummaries.email",
-      this.isWorker ? null : "insuree.insureeSummaries.phone",
-      this.isWorker ? null : "insuree.insureeSummaries.dob",
-      ...Array.from(Array(this.locationLevels)).map((_, i) => (this.isWorker ? null : `location.locationType.${i}`)),
+      "insuree.insureeSummaries.maritalStatus",
+      "insuree.insureeSummaries.gender",
+      "insuree.insureeSummaries.email",
+      "insuree.insureeSummaries.phone",
+      "insuree.insureeSummaries.dob",
+      ...Array.from(Array(this.locationLevels)).map((_, i) => (`location.locationType.${i}`)),
       filters?.showHistory?.value ? "insuree.insureeSummaries.validityFrom" : null,
       filters?.showHistory?.value ? "insuree.insureeSummaries.validityTo" : null,
       "",
@@ -185,9 +168,7 @@ class InsureeSearcher extends Component {
       (insuree) => insuree.chfId,
       (insuree) => (this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
       (insuree) => (!this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
-      this.isWorker
-        ? null
-        : (insuree) => (
+      (insuree) => (
             <PublishedComponent
               pubRef="insuree.InsureeMaritalStatusPicker"
               withLabel={false}
@@ -195,9 +176,7 @@ class InsureeSearcher extends Component {
               value={insuree.marital || INSUREE_MARITAL_STATUS[0]}
             />
           ),
-      this.isWorker
-        ? null
-        : (insuree) => (
+          (insuree) => (
             <PublishedComponent
               pubRef="insuree.InsureeGenderPicker"
               withLabel={false}
@@ -205,11 +184,10 @@ class InsureeSearcher extends Component {
               value={!!insuree.gender ? insuree.gender.code : null}
             />
           ),
-      this.isWorker ? null : (insuree) => insuree.email,
-      this.isWorker ? null : (insuree) => insuree.phone,
-      this.isWorker ? null : (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
+      (insuree) => insuree.email,
+      (insuree) => insuree.phone,
+      (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
     ];
-    if (!this.isWorker) {
       for (var i = 0; i < this.locationLevels; i++) {
         // need a fixed variable to refer to as parentLocation argument
         let j = i + 0;
@@ -217,7 +195,6 @@ class InsureeSearcher extends Component {
           this.parentLocation(insuree.currentVillage || (!!insuree.family && insuree.family.location), j),
         );
       }
-    }
     formatters.push(
       filters?.showHistory?.value
         ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom)
@@ -227,7 +204,6 @@ class InsureeSearcher extends Component {
         : null,
       (insuree) => (
         <Grid container wrap="nowrap" spacing="2">
-          {!this.isWorker && (
             <Grid item>
               <IconButton
                 size="small"
@@ -236,8 +212,7 @@ class InsureeSearcher extends Component {
                 <SearchIcon />
               </IconButton>
             </Grid>
-          )}
-          {!this.isWorker && insuree.family && (
+          {insuree.family && (
             <Grid item>
               <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
                 <IconButton
@@ -293,11 +268,7 @@ class InsureeSearcher extends Component {
       filterPaneContributionsKey,
       cacheFiltersKey,
       onDoubleClick,
-      errorWorkersExport,
-      downloadWorkers,
     } = this.props;
-    const { failedExport } = this.state;
-
     let count = (insureesPageInfo?.totalCount || 0).toLocaleString();
 
     return (
@@ -329,30 +300,7 @@ class InsureeSearcher extends Component {
           rowLocked={this.rowLocked}
           onDoubleClick={(i) => !i.clientMutationId && onDoubleClick(i)}
           reset={this.state.reset}
-          exportable={this.isWorker}
-          exportFetch={downloadWorkers}
-          exportFields={["chf_id", "last_name", "other_names"]}
-          exportFieldsColumns={{
-            chf_id: formatMessage(intl, "insuree", "Insuree.chfId"),
-            last_name: formatMessage(intl, "insuree", "Insuree.lastName"),
-            other_names: formatMessage(intl, "insuree", "Insuree.otherNames"),
-          }}
-          exportFieldLabel={formatMessage(intl, "insuree", "workers.export")}
-          chooseExportableColumns
         />
-        {failedExport && (
-          <Dialog open={failedExport} fullWidth maxWidth="sm">
-            <DialogTitle> {errorWorkersExport?.message} </DialogTitle>
-            <DialogContent>
-              <strong> {`${errorWorkersExport?.code}:`} </strong> {errorWorkersExport?.detail}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => this.handleExportErrorDialogClose()} color="primary" variant="contained">
-                {formatMessage(intl, null, "close")}
-              </Button>
-            </DialogActions>
-          </Dialog>
-        )}
       </Fragment>
     );
   }
@@ -368,8 +316,6 @@ const mapStateToProps = (state) => ({
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   confirmed: state.core.confirmed,
-  workersExport: state.insuree.workersExport,
-  errorWorkersExport: state.insuree.errorWorkersExport,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -379,8 +325,6 @@ const mapDispatchToProps = (dispatch) => {
       deleteInsuree,
       journalize,
       coreConfirm,
-      clearWorkersExport,
-      downloadWorkers,
     },
     dispatch,
   );
