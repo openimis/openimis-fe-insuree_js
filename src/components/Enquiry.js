@@ -58,21 +58,22 @@ const Enquiry = (props) => {
   const classes = useStyles();
 
   const handleKeyPress = (event) => {
+    if (charCode === 13 && event.target.value) {
+      setChfid(event.target.value);
+    }
     const value = event.target.value;
     const charCode = event.charCode;
 
+
     const isAlphaNumeric = /^[a-zA-Z0-9]*$/.test(value + String.fromCharCode(charCode));
     const isLengthValid = value.length < INSUREE_NUMBER_MAX_LENGTH || charCode === 8;
-    const isEnterKey = charCode === 13; // 13 is the Enter key code[1]
 
     if (!isAlphaNumeric || !isLengthValid) {
       event.preventDefault();
       return;
     }
 
-    if (isEnterKey && value) {
-      setChfid(value);
-    }
+
   };
 
   const handleClose = () => {
