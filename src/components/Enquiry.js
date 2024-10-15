@@ -63,7 +63,7 @@ const Enquiry = (props) => {
 
     const isAlphaNumeric = /^[a-zA-Z0-9]*$/.test(value + String.fromCharCode(charCode));
     const isLengthValid = value.length < INSUREE_NUMBER_MAX_LENGTH || charCode === 8;
-    const isEnterKey = charCode === INSUREE_NUMBER_MAX_LENGTH + 1;
+    const isEnterKey = charCode === 13; // 13 is the Enter key code[1]
 
     if (!isAlphaNumeric || !isLengthValid) {
       event.preventDefault();
