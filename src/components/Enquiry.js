@@ -58,22 +58,18 @@ const Enquiry = (props) => {
   const classes = useStyles();
 
   const handleKeyPress = (event) => {
-    if (charCode === 13 && event.target.value) {
+    if (event.charCode === 13 && event.target.value) {
       setChfid(event.target.value);
+    } else {
+      const value = event.target.value;
+      const charCode = event.charCode;
+      const isAlphaNumeric = /^[a-zA-Z0-9]*$/.test(value + String.fromCharCode(charCode));
+      const isLengthValid = value.length < INSUREE_NUMBER_MAX_LENGTH || charCode === 50;
+      if (!isAlphaNumeric || !isLengthValid) {
+        event.preventDefault();
+        return;
+      }
     }
-    const value = event.target.value;
-    const charCode = event.charCode;
-
-
-    const isAlphaNumeric = /^[a-zA-Z0-9]*$/.test(value + String.fromCharCode(charCode));
-    const isLengthValid = value.length < INSUREE_NUMBER_MAX_LENGTH || charCode === 8;
-
-    if (!isAlphaNumeric || !isLengthValid) {
-      event.preventDefault();
-      return;
-    }
-
-
   };
 
   const handleClose = () => {
