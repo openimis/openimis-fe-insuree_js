@@ -19,7 +19,11 @@ export const isValidInsuree = (insuree, modulesManager) => {
     false,
   );
 
-  const isInsureePhotoRequired = modulesManager.getConf("fe-insuree", "insureeForm.isInsureePhotoRequired", false);
+  const isInsureePhotoRequired = modulesManager.getConf(
+    "fe-insuree",
+    "insureeForm.isInsureePhotoRequired",
+    false,
+  );
 
   const isInsureeStatusRequired = modulesManager.getConf("fe-insuree", "insureeForm.isInsureeStatusRequired", false);
   const passportLength = modulesManager.getConf("fe-insuree", "passportLength", 7);

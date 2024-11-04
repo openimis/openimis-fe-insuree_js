@@ -140,7 +140,7 @@
   "insuree.Relation.null": "Any",
   "insuree.Relation.none": "None",
   "insuree.Relation.1": "Brother/Sister",
-  "insuree.Relation.2": "Father",
+  "insuree.Relation.2": "Father/Mother",
   "insuree.Relation.3": "Uncle/Aunt",
   "insuree.Relation.4": "Son/Daughter",
   "insuree.Relation.5": "Grand parent",
