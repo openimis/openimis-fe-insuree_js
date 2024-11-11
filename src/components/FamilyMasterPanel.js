@@ -181,7 +181,8 @@ class FamilyMasterPanel extends FormPanel {
                 nullLabel={formatMessage(intl, "insuree", "Family.FamilyType.null")}
                 value={!!edited && !!edited.familyType ? edited.familyType.code : null}
                 onChange={(v) => this.updateAttribute("familyType", { code: v })}
-                isActiveFilterFamilyType={!!isActiveFilterFamilyType && isActiveFilterFamilyType == true ? true : false}
+                isActiveFilterFamilyType={!!isActiveFilterFamilyType && isActiveFilterFamilyType == true ? true : 
+                  !!edited && !!edited.parent && edited.parent?.id != null ? true : false}
               />
             </Grid>
           )}

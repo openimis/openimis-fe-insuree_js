@@ -23,7 +23,6 @@ class linkFamilyToParentDialog extends Component {
 
   render() {
     const { classes, family, selectedFamily, onCancel, onConfirm } = this.props;
-    console.log('this.props ', this.props)
     return (
       <Dialog open={!!family} onClose={onCancel}>
         <DialogTitle>
