@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { INSUREE_ACTIVE_STRING, INSUREE_PREFERRED_PAYMENT_METHOD } from "../constants";
+import { FIELD_MANDATORY_CONFIG, INSUREE_ACTIVE_STRING, INSUREE_PREFERRED_PAYMENT_METHOD } from "../constants";
 
 export function insureeLabel(insuree) {
   if (!insuree) return "";
@@ -38,7 +38,7 @@ export const isValidInsuree = (insuree, modulesManager) => {
   if (!insuree.gender || !insuree.gender?.code) return false;
   if (!!insuree.photo && (!insuree.photo.date || !insuree.photo.officerId || !insuree.photo.photo)) return false;
   if (!insuree.incomeLevel) return false;
-  if (!insuree.family && !insuree.hasOwnProperty('isFamily') && isPhoneNumberMandatory.phoneNoHead != "H"  ){
+  if (!insuree.family && !insuree.hasOwnProperty('isFamily') && isPhoneNumberMandatory.phoneNoHead != FIELD_MANDATORY_CONFIG  ){
     if(!insuree.phone){
       return false
     }

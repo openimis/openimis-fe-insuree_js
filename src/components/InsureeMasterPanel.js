@@ -20,7 +20,7 @@ const styles = (theme) => ({
     height: "100%",
   },
 });
-import { DEFAULT, FAMILY_TYPE_POLYGAMY_CODE, INSUREE_PREFERRED_PAYMENT_METHOD } from "../constants";
+import { DEFAULT, FAMILY_TYPE_POLYGAMY_CODE, INSUREE_PREFERRED_PAYMENT_METHOD, REQUIRED_FIELD_CONFIG } from "../constants";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
@@ -234,7 +234,7 @@ class InsureeMasterPanel extends FormPanel {
                       readOnly={readOnly}
                       required={
                         (!insuree || insuree == null || (!!insuree && insuree.head == true)) &&
-                        this.fields.phoneNoHead == "M"
+                        this.fields.phoneNoHead == REQUIRED_FIELD_CONFIG
                           ? true
                           : false
                       }

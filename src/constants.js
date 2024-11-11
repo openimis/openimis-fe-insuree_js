@@ -36,3 +36,6 @@ export const FAMILY_TYPE_POLYGAMY_CODE = "P";
 export const INSUREE_PREFERRED_PAYMENT_METHOD = "PB"
 
 export const WITHOUT_STR = "without"
+export const HIDE_FIELD_CONFIG = "N"
+export const FIELD_MANDATORY_CONFIG = "H"
+export const REQUIRED_FIELD_CONFIG = "M"

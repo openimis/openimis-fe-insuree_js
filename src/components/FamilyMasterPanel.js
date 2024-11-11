@@ -16,7 +16,7 @@ import {
   FormPanel,
   Contributions,
 } from "@openimis/fe-core";
-import { DEFAULT } from "../constants";
+import { DEFAULT, HIDE_FIELD_CONFIG } from "../constants";
 
 const FAMILY_MASTER_PANEL_CONTRIBUTION_KEY = "insuree.Family.master";
 
@@ -185,7 +185,7 @@ class FamilyMasterPanel extends FormPanel {
               />
             </Grid>
           )}
-          {this.fields.confirmationType !== "N" && (
+          {this.fields.confirmationType !== HIDE_FIELD_CONFIG && (
             <>
               <Grid item xs={2} className={classes.item}>
                 <PublishedComponent
