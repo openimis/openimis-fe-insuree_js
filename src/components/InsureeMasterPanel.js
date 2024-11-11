@@ -38,11 +38,8 @@ class InsureeMasterPanel extends FormPanel {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
-    this.passportLength = props.modulesManager.getConf(
-      "fe-insuree",
-      "passportLength",
-      7,
-    );
+    this.fields = props.modulesManager.getConf("fe-insuree", "fields", "{}");
+    this.passportLength = props.modulesManager.getConf("fe-insuree", "passportLength", 7);
     this.insureeChildId = props.modulesManager.getConf(
       "fe-insuree", 
       "insureeForm.insureeChildId", 
@@ -89,6 +86,7 @@ class InsureeMasterPanel extends FormPanel {
       actions,
       edited_id,
       isSubFamily,
+      insuree,
     } = this.props;
 
     return (
@@ -228,15 +226,23 @@ class InsureeMasterPanel extends FormPanel {
                       onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
                     />
                   </Grid>
+
                   <Grid item xs={6} className={classes.item}>
                     <TextInput
                       module="insuree"
                       label="Insuree.phone"
                       readOnly={readOnly}
+                      required={
+                        (!insuree || insuree == null || (!!insuree && insuree.head == true)) &&
+                        this.fields.phoneNoHead == "M"
+                          ? true
+                          : false
+                      }
                       value={!!edited && !!edited.phone ? edited.phone : ""}
                       onChange={(v) => this.updateAttribute("phone", v)}
                     />
                   </Grid>
+
                   <Grid item xs={6} className={classes.item}>
                     <TextInput
                       module="insuree"
@@ -317,7 +323,8 @@ class InsureeMasterPanel extends FormPanel {
                       onChange={(v) => this.updateAttribute("incomeLevel", v)}
                     />
                   </Grid>
-                  {(!!edited && !!edited.family && !!edited.family.headInsuree  && edited?.head == true) || (!!edited && !edited.family)? (
+                  {(!!edited && !!edited.family && !!edited.family.headInsuree && edited?.head == true) ||
+                  (!!edited && !edited.family) ? (
                     <Grid item xs={3} className={classes.item}>
                       <PublishedComponent
                         pubRef="insuree.PaymentMethodPicker"
@@ -329,7 +336,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("preferredPaymentMethod", v)}
                       />
                     </Grid>
-                  ):null}
+                  ) : null}
                   {edited?.preferredPaymentMethod == INSUREE_PREFERRED_PAYMENT_METHOD && (
                     <Grid item xs={3} className={classes.item}>
                       <TextInput

@@ -66,6 +66,7 @@ class InsureeForm extends Component {
     insuree.jsonExt = {};
     insuree.status = INSUREE_ACTIVE_STRING;
     insuree.statusReason = null;
+    insuree.isFamily = false
     return insuree;
   }
 
