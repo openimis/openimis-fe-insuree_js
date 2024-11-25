@@ -26,7 +26,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 - `insuree.InsureePage.panels`: `[InsureeMasterPanel, InsureeFirstServicePointPanel]`, contributing to own contribution point and register the defaults MasterPanel and First Service Point as panels of Insuree Page
 - `core.Router`: registering the `insuree/create`, `insuree/families`, `insuree/insurees`, `insuree/cappedItemService` and `insuree/profile` routes in openIMIS client-side router
 - `invoice.SubjectAndThirdpartyPicker`, providing Insuree picker and Family picker for Invoice module
-- `isWorker`: Specifies whether the individual should be classified and managed as a worker or a standard insuree. In Moldova, the Insuree entity is also used to represent workers. When set to true, the system displays 'Workers and Vouchers' instead of the default 'Insurees and Policies', aligning the interface with the specific needs of worker representation. Default: __false__.
+- `isWorker`: Specifies whether insuree should be replaced with Moldovan worker. In Moldova, the Insuree entity is replaced by the Worker. When set to true, the system displays 'Workers and Vouchers' instead of the default 'Insurees and Policies', aligning the interface with the specific needs of worker representation. Default: __false__.
 - `renderLastNameFirst`: This setting allows for the customization of name display order, specifically toggling between displaying the given name first or the last name first. Default: __true__. When setting is turned off, given name is displayed before the last name.
 
 ## Available Contribution Points

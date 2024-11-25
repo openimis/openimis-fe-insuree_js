@@ -81,7 +81,3 @@ export const formatLocationString = (family) => {
     .filter(Boolean)
     .join(", ");
 };
-
-export const isValidWorker = (worker) => {
-  return worker?.chfId;
-};

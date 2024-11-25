@@ -77,6 +77,7 @@ function reducer(
     fetchedParentFamily: false,
     parentFamily: null,
     errorParentfamily: null
+
   },
   action,
 ) {
@@ -597,39 +598,6 @@ function reducer(
       return {
         ...state,
         headSelected: action.payload?.headSelected,
-      };
-    case "WORKERS_EXPORT_REQ":
-      return {
-        ...state,
-        fetchingWorkersExport: true,
-        fetchedWorkersExport: false,
-        workersExport: null,
-        workersExportPageInfo: {},
-        errorWorkersExport: null,
-      };
-    case "WORKERS_EXPORT_RESP":
-      return {
-        ...state,
-        fetchingWorkersExport: false,
-        fetchedWorkersExport: true,
-        workersExport: action.payload.data.insureesExport,
-        workersExportPageInfo: pageInfo(action.payload.data.insureesExportPageInfo),
-        errorWorkersExport: formatGraphQLError(action.payload),
-      };
-    case "WORKERS_EXPORT_ERR":
-      return {
-        ...state,
-        fetchingWorkersExport: false,
-        errorWorkersExport: formatServerError(action.payload),
-      };
-    case "WORKERS_EXPORT_CLEAR":
-      return {
-        ...state,
-        fetchingWorkersExport: false,
-        fetchedWorkersExport: false,
-        workersExport: null,
-        workersExportPageInfo: {},
-        errorWorkersExport: null,
       };
     case "INSUREE_MUTATION_REQ":
       return dispatchMutationReq(state, action);

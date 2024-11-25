@@ -94,6 +94,7 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "relationship{id}",
   "head",
   "status",
+  "jsonExt",
   "statusDate",
   "statusReason{code,insureeStatusReason}",
   "email",
@@ -616,21 +617,5 @@ export function checkIfHeadSelected(insuree) {
 
   return (dispatch) => {
     dispatch({ type: "INSUREE_CHECK_IS_HEAD_SELECTED", payload: { headSelected } });
-  };
-}
-
-export function downloadWorkers(params) {
-  const payload = `
-  {
-    insureesExport${!!params && params.length ? `(${params.join(",")})` : ""}
-  }`;
-  return graphql(payload, "WORKERS_EXPORT");
-}
-
-export function clearWorkersExport() {
-  return (dispatch) => {
-    dispatch({
-      type: "WORKERS_EXPORT_CLEAR",
-    });
   };
 }
