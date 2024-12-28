@@ -170,17 +170,13 @@ class InsureeSearcher extends Component {
       (insuree) => (!this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
       (insuree) => (
             <PublishedComponent
-              pubRef="insuree.InsureeMaritalStatusPicker"
-              withLabel={false}
-              readOnly={true}
+              pubRef="insuree.InsureeMaritalStatusLabel"
               value={insuree.marital || INSUREE_MARITAL_STATUS[0]}
             />
           ),
           (insuree) => (
             <PublishedComponent
-              pubRef="insuree.InsureeGenderPicker"
-              withLabel={false}
-              readOnly={true}
+              pubRef="insuree.InsureeGenderLabel"
               value={!!insuree.gender ? insuree.gender.code : null}
             />
           ),

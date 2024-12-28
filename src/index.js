@@ -12,10 +12,12 @@ import FamilyPicker from "./pickers/FamilyPicker";
 import InsureePicker from "./pickers/InsureePicker";
 import InsureeChfIdPicker from "./pickers/InsureeChfIdPicker";
 import InsureeGenderPicker from "./pickers/InsureeGenderPicker";
+import InsureeGenderLabel from "./components/InsureeGenderLabel";
 import EducationPicker from "./pickers/EducationPicker";
 import ProfessionPicker from "./pickers/ProfessionPicker";
 import IdentificationTypePicker from "./pickers/IdentificationTypePicker";
 import InsureeMaritalStatusPicker from "./pickers/InsureeMaritalStatusPicker";
+import InsureeMaritalStatusLabel from "./components/InsureeMaritalStatusLabel"
 import InsureeStatusPicker from "./pickers/InsureeStatusPicker";
 import InsureeStatusReasonPicker from "./pickers/InsureeStatusReasonPicker";
 import FamilyPovertyStatusPicker from "./pickers/FamilyPovertyStatusPicker";
@@ -114,7 +116,9 @@ const DEFAULT_CONFIG = {
     { key: "insuree.FamilyPicker.sort", ref: "family__head_insuree__lastName" },
     { key: "insuree.familyLabel", ref: familyLabel },
     { key: "insuree.InsureeGenderPicker", ref: InsureeGenderPicker },
+    { key: "insuree.InsureeGenderLabel", ref: InsureeGenderLabel },
     { key: "insuree.InsureeMaritalStatusPicker", ref: InsureeMaritalStatusPicker },
+    { key: "insuree.InsureeMaritalStatusLabel", ref: InsureeMaritalStatusLabel },
     { key: "insuree.EducationPicker", ref: EducationPicker },
     { key: "insuree.ProfessionPicker", ref: ProfessionPicker },
     { key: "insuree.IdentificationTypePicker", ref: IdentificationTypePicker },
