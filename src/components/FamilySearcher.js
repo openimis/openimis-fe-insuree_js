@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Checkbox, IconButton, Tooltip } from "@material-ui/core";
 import TabIcon from "@material-ui/icons/Tab";
+import CheckIcon from '@mui/icons-material/Check';
 import {
   withModulesManager,
   formatMessageWithValues,
@@ -174,7 +175,7 @@ class FamilySearcher extends Component {
       formatters.push((family) => this.parentLocation(family.location, j));
     }
     formatters.push(
-      (family) => <Checkbox color="primary" checked={family.poverty} readOnly />,
+      (family) => (family.poverty ? <CheckIcon/> : ""),
       (family) => family.confirmationNo,
       filters?.showHistory?.value
         ? (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom)
