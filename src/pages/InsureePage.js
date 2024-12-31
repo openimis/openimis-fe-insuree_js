@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
+import { useToast, formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
 import InsureeForm from "../components/InsureeForm";
 import { createInsuree, updateInsuree } from "../actions";
 import { RIGHT_INSUREE, RIGHT_INSUREE_ADD, RIGHT_INSUREE_EDIT } from "../constants";
@@ -35,6 +35,8 @@ class InsureePage extends Component {
         }),
       );
     }
+    alert('Changes are going to be saved. Check List of insurees or the notification bar whether the changes were accepted.')
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.insurees");
   };
 
   render() {

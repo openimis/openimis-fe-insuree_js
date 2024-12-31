@@ -296,6 +296,8 @@ class InsureeSearcher extends Component {
           rowLocked={this.rowLocked}
           onDoubleClick={(i) => !i.clientMutationId && onDoubleClick(i)}
           reset={this.state.reset}
+          withSelection={true}
+          
         />
       </Fragment>
     );

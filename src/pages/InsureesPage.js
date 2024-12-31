@@ -50,7 +50,7 @@ class InsureesPage extends Component {
     const { intl, classes, rights } = this.props;
     return (
       <div className={classes.page}>
-        <InsureeSearcher cacheFiltersKey="insureeInsureesPageFiltersCache" onDoubleClick={this.onDoubleClick} />
+        <InsureeSearcher cacheFiltersKey="insureeInsureesPageFiltersCache" onDoubleClick={this.onDoubleClick}/>
         {rights.includes(RIGHT_INSUREE_ADD) &&
           withTooltip(
             <div className={classes.fab}>
