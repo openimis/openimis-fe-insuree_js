@@ -17,7 +17,7 @@ import {
   ProgressOrError,
   Helmet,
 } from "@openimis/fe-core";
-import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation } from "../actions";
+import { fetchInsureeFull, fetchFamily, clearInsuree, clearFamily, fetchInsureeMutation } from "../actions";
 import { DEFAULT, INSUREE_ACTIVE_STRING, RIGHT_INSUREE } from "../constants";
 import { insureeLabel, isValidInsuree } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
@@ -47,6 +47,7 @@ class InsureeForm extends Component {
     insuree.jsonExt = {};
     insuree.status = INSUREE_ACTIVE_STRING;
     insuree.statusReason = null;
+    insuree.isFamily = false
     return insuree;
   }
 
@@ -104,6 +105,7 @@ class InsureeForm extends Component {
 
   componentWillUnmount = () => {
     this.props.clearInsuree();
+    this.props.clearFamily();
   };
 
   _add = () => {
@@ -199,7 +201,7 @@ class InsureeForm extends Component {
     const doesInsureeChange = this.doesInsureeChange();
     if (!doesInsureeChange) return false;
     if (this.state.lockNew) return false;
-    if (!this.props.isChfIdValid) return false;
+    // if (!this.props.isChfIdValid) return false;
 
     return isValidInsuree(this.state.insuree, this.props.modulesManager);
   };
@@ -298,12 +300,10 @@ const mapStateToProps = (state, props) => ({
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, {
-      fetchInsureeFull,
-      fetchFamily,
-      clearInsuree,
-      fetchInsureeMutation,
-      journalize,
-    })(injectIntl(withTheme(withStyles(styles)(InsureeForm)))),
+
+    connect(mapStateToProps, { fetchInsureeFull, fetchFamily, clearInsuree, clearFamily, fetchInsureeMutation, journalize })(
+      injectIntl(withTheme(withStyles(styles)(InsureeForm))),
+    ),
+
   ),
 );

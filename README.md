@@ -99,3 +99,4 @@ None
 - `showInsureeSummaryAddress`, show insuree address information in enquire, default false.
 - `insureeForm.isInsureeStatusRequired`, make insuree status dropdown mandatory, default false.
 - `insureeForm.isInsureePhotoRequired`, make photo upload of an insuree mandatory, default false.
+' `"insureeForm.insureeChildId"`, the id of son/daugther relation in database, default 4.

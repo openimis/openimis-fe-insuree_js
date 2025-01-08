@@ -6,6 +6,7 @@ import { formatMessage, SelectInput, withModulesManager } from "@openimis/fe-cor
 import { fetchFamilyTypes } from "../actions";
 import _debounce from "lodash/debounce";
 import _ from "lodash";
+import { FAMILY_TYPE_POLYGAMY_CODE } from "../constants";
 
 class FamilyTypePicker extends Component {
   componentDidMount() {
@@ -42,8 +43,17 @@ class FamilyTypePicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      isActiveFilterFamilyType,
     } = this.props;
-    let options = !!familyTypes ? familyTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) })) : [];
+    let options = !!familyTypes 
+    ? (isActiveFilterFamilyType == false
+        ? familyTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) })) 
+        : familyTypes
+            .filter((v) => v !== FAMILY_TYPE_POLYGAMY_CODE)
+            .map((v) => ({ value: v, label: this.formatSuggestion(v) }))
+      )
+    : [];
+
     if (withNull) {
       options.unshift({ value: null, label: this.formatSuggestion(null) });
     }

@@ -1,4 +1,5 @@
-export const INSUREE_MARITAL_STATUS = ["N", "W", "S", "D", "M"];
+export const INSUREE_MARITAL_STATUS = ["N","W", "S", "D", "M", "P"]; 
+export const INSUREE_PAYMENT_METHOD = ["MO", "PB", "TP"];
 export const FAMILY_POVERTY_STATUS = [true, false];
 export const PHOTO_STATUS = ["with", "without"];
 export const FAMILY_STATUS = ["with", "without"];
@@ -31,5 +32,11 @@ export const DEFAULT = {
   RENDER_LAST_NAME_FIRST: true,
   GENERIC_VOUCHER_ENABLED: false,
 };
+export const FAMILY_TYPE_POLYGAMY_CODE = "P";
+export const INSUREE_PREFERRED_PAYMENT_METHOD = "PB"
 
-export const WITHOUT_STR = "without";
+export const WITHOUT_STR = "without"
+export const HIDE_FIELD_CONFIG = "N"
+export const FIELD_MANDATORY_CONFIG = "H"
+export const REQUIRED_FIELD_CONFIG = "M"
+
