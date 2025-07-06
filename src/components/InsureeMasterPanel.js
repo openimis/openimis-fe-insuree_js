@@ -41,7 +41,7 @@ class InsureeMasterPanel extends FormPanel {
     this.isPhotoRequired = props.modulesManager.getConf(
       "fe-insuree",
       "insureeForm.isPhotoRequired",
-      true,
+      false,
     );
   }
 
