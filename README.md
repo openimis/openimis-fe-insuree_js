@@ -101,3 +101,4 @@ None
 - `insureeForm.isInsureePhotoRequired`, make photo upload of an insuree mandatory, default false.
 - ' `"isCurrentAdminEnrollmentOfficerActive"`, Enables automatic assignment of 
   the current user as the enrolment officer during family or insuree creation. If 'True', the officer is inferred from session; if 'False', manual selection remains available. (default: 'False)
+- '`"isPhotoRequired"`', Make photo upload of an insuree mandatory. (default: 'False)
