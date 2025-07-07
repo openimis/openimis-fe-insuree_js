@@ -36,6 +36,8 @@ class InsureeSearcher extends Component {
     confirmedAction: null,
     reset: 0,
     failedExport: false,
+    searchInitiated: false,
+    initialFitlers: this.props.defaultFilters,
   };
 
   constructor(props) {
@@ -52,6 +54,15 @@ class InsureeSearcher extends Component {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
+    this.isDefaultFetchInsureeActivated = this.props.modulesManager.getConf(
+      "fe-insuree",
+      "isDefaultFetchInsureeActivated",
+      true
+    );
+  }
+
+  componentDidMount() {
+    this.scheduleCanInsureeDetails();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -61,10 +72,32 @@ class InsureeSearcher extends Component {
     } else if (!prevProps.confirmed && this.props.confirmed && !!this.state.confirmedAction) {
       this.state.confirmedAction();
     }
+    if (
+      prevState.searchInitiated !== this.state.searchInitiated ||
+      prevState.initialFitlers !== this.state.initialFitlers
+    ) {
+      this.scheduleCanInsureeDetails();
+    }
   }
 
   fetch = (prms) => {
     this.props.fetchInsureeSummaries(this.props.modulesManager, prms);
+  };
+
+  canFetchInsureeDetails = () => {
+    if (this.state.searchInitiated === false && !!this.state.initialFitlers) {
+      this.onFiltersApplied(this.state.initialFitlers);
+    }
+  };
+
+  scheduleCanInsureeDetails = () => {
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
+    }
+
+    this.debounceTimeout = setTimeout(() => {
+      this.canFetchInsureeDetails();
+    }, 100);
   };
 
   rowIdentifier = (r) => r.uuid;
@@ -254,6 +287,13 @@ class InsureeSearcher extends Component {
     return formatters.filter(Boolean);
   };
 
+  onFiltersApplied = (filters) => {
+    this.setState({
+      searchInitiated: true,
+      filters, // Update the active filters
+    });
+  };
+
   rowDisabled = (selection, i) => !!i.validityTo;
   rowLocked = (selection, i) => !!i.clientMutationId;
 
@@ -269,6 +309,7 @@ class InsureeSearcher extends Component {
       cacheFiltersKey,
       onDoubleClick,
     } = this.props;
+    const { searchInitiated } = this.state;
     let count = (insureesPageInfo?.totalCount || 0).toLocaleString();
 
     return (
@@ -288,7 +329,7 @@ class InsureeSearcher extends Component {
           tableTitle={formatMessageWithValues(intl, "insuree", "insureeSummaries", { count })}
           rowsPerPageOptions={this.rowsPerPageOptions}
           defaultPageSize={this.defaultPageSize}
-          fetch={this.fetch}
+          fetch={this.isDefaultFetchInsureeActivated == false  && searchInitiated ? this.fetch : this.isDefaultFetchInsureeActivated == true ? this.fetch : () => {}}
           rowIdentifier={this.rowIdentifier}
           rowSecondaryHighlighted={this.rowSecondaryHighlighted}
           filtersToQueryParams={this.filtersToQueryParams}
