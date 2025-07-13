@@ -2,12 +2,8 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import {
-  Grid,
-  IconButton,
-  Tooltip,
-} from "@material-ui/core";
-import { Search as SearchIcon, People as PeopleIcon, Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import { Grid, IconButton, Tooltip } from "@mui/material";
+import { Search as SearchIcon, People as PeopleIcon, Tab as TabIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import {
   withModulesManager,
   formatMessageWithValues,

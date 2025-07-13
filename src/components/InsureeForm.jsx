@@ -3,8 +3,8 @@ import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import _ from "lodash";
 
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import ReplayIcon from "@material-ui/icons/Replay";
+import { withTheme, withStyles } from "@mui/material/styles";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
   formatMessageWithValues,

@@ -4,8 +4,8 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 import _ from "lodash";
 
-import { Grid } from "@material-ui/core";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import { Grid } from "@mui/material";
+import { withTheme, withStyles } from "@mui/material/styles";
 
 import { TextInput, Picker, withModulesManager } from "@openimis/fe-core";
 import { fetchInsureesForPicker, checkIfHeadSelected } from "../actions";

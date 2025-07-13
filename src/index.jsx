@@ -1,5 +1,5 @@
 import React from 'react';
-import { AssignmentInd, GroupAdd, People, Person } from "@material-ui/icons";
+import { AssignmentInd, GroupAdd, People, Person } from "@mui/icons-material";
 import { FormattedMessage } from "@openimis/fe-core";
 import InsureeMainMenu from "./menus/InsureeMainMenu";
 import FamiliesPage from "./pages/FamiliesPage";

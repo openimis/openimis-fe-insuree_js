@@ -1,6 +1,6 @@
 import React from "react";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Paper, Grid, Typography, Divider, Checkbox, FormControlLabel } from "@material-ui/core";
+import { withTheme, withStyles } from "@mui/material/styles";
+import { Paper, Grid, Typography, Divider, Checkbox, FormControlLabel } from "@mui/material";
 import {
   formatMessage,
   withTooltip,

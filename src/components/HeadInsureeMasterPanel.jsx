@@ -3,7 +3,7 @@ import InsureeMasterPanel from "./InsureeMasterPanel";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Contributions, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
-import { PersonAdd as AddExistingIcon } from "@material-ui/icons";
+import { PersonAdd as AddExistingIcon } from "@mui/icons-material";
 import { fetchInsureeFull } from "../actions";
 
 const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels";

@@ -4,26 +4,9 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 import _ from "lodash";
 
-import {
-  Checkbox,
-  Paper,
-  IconButton,
-  Grid,
-  Divider,
-  Typography,
-  Tooltip,
-  Collapse,
-} from "@material-ui/core";
-import {
-  Search as SearchIcon,
-  Add as AddIcon,
-  PersonAdd as AddExistingIcon,
-  PersonPin as SetHeadIcon,
-  Delete as DeleteIcon,
-  Clear as RemoveIcon,
-  Remove as CloseIcon,
-} from "@material-ui/icons";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@mui/material";
+import { Search as SearchIcon, Add as AddIcon, PersonAdd as AddExistingIcon, PersonPin as SetHeadIcon, Delete as DeleteIcon, Clear as RemoveIcon, Remove as CloseIcon } from "@mui/icons-material";
+import { withTheme, withStyles } from "@mui/material/styles";
 
 import {
   formatMessage,

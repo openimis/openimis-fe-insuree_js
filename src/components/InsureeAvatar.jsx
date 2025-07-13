@@ -1,6 +1,6 @@
 import React from "react";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Avatar, Grid, IconButton } from "@material-ui/core";
+import { withTheme, withStyles } from "@mui/material/styles";
+import { Avatar, Grid, IconButton } from "@mui/material";
 import { toISODate, useModulesManager, useTranslations, PublishedComponent } from "@openimis/fe-core";
 import _ from "lodash";
 import moment from "moment";

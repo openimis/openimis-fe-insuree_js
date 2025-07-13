@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { injectIntl } from "react-intl";
-import { alpha, makeStyles } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@mui/material/styles";
 import clsx from "clsx";
-import { InputBase } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
+import { InputBase } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { formatMessage } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
 import { INSUREE_NUMBER_MAX_LENGTH } from "../constants";

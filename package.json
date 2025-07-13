@@ -34,7 +34,11 @@
     "react-autosuggest": "^10.0.2",
     "redux": "^4.0.5",
     "redux-api-middleware": "^3.2.1",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "@mui/material": "^5.15.14",
+    "@mui/icons-material": "^5.14.17",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0"
   },
   "files": [
     "dist"
