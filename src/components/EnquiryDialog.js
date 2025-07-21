@@ -15,7 +15,7 @@ import {
   withModulesManager,
   withHistory,
 } from "@openimis/fe-core";
-import { fetchInsuree } from "../actions";
+import { fetchInsureeEnquiry, clearInsureeEnquiry } from "../actions";
 import InsureeSummary from "./InsureeSummary";
 
 const useStyles = makeStyles(() => ({
@@ -27,7 +27,8 @@ const useStyles = makeStyles(() => ({
 const EnquiryDialog = ({
   intl,
   modulesManager,
-  fetchInsuree,
+  fetchInsureeEnquiry,
+  clearInsureeEnquiry,
   fetching,
   fetched,
   insuree,
@@ -40,12 +41,18 @@ const EnquiryDialog = ({
   const classes = useStyles();
   const prevMatchUrl = useRef(null);
 
+  const handleClose = () => {
+    clearInsureeEnquiry();
+    onClose();
+  };
+
   useEffect(() => {
     if (open && insuree?.id !== chfid) {
-      fetchInsuree(modulesManager, chfid);
+      fetchInsureeEnquiry(modulesManager, chfid);
     }
 
     if (!!match?.url && match.url !== prevMatchUrl.current) {
+      clearInsureeEnquiry();
       onClose();
     }
 
@@ -79,7 +86,7 @@ const EnquiryDialog = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={handleClose} color="primary">
           {formatMessage(intl, "insuree", "close")}
         </Button>
       </DialogActions>
@@ -88,11 +95,11 @@ const EnquiryDialog = ({
 };
 
 const mapStateToProps = (state) => ({
-  fetching: state.insuree.fetchingInsuree,
-  fetched: state.insuree.fetchedInsuree,
-  insuree: state.insuree.insuree,
-  error: state.insuree.errorInsuree,
+  fetching: state.insuree?.fetchingInsureeEnquiry,
+  fetched: state.insuree?.fetchedInsureeEnquiry,
+  insuree: state.insuree?.insureeEnquiry,
+  error: state.insuree?.errorInsureeEnquiry,
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchInsuree }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchInsureeEnquiry, clearInsureeEnquiry }, dispatch);
 export default withModulesManager(withHistory(connect(mapStateToProps, mapDispatchToProps)(injectIntl(EnquiryDialog))));

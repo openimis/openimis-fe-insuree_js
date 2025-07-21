@@ -24,6 +24,8 @@ const FAMILY_SEARCHER_CONTRIBUTION_KEY = "insuree.FamilySearcher";
 
 class FamilySearcher extends Component {
   state = {
+    searchInitiated: false,
+    initialFitlers: this.props.defaultFilters,
     deleteFamily: null,
     reset: 0,
   };
@@ -42,6 +44,15 @@ class FamilySearcher extends Component {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
+    this.isDefaultFetchFamilyActivated = this.props.modulesManager.getConf(
+      "fe-insuree",
+      "isDefaultFetchFamilyActivated",
+      true
+    );
+  }
+
+  componentDidMount() {
+    this.scheduleCanFetchFamilyDetails();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -49,10 +60,32 @@ class FamilySearcher extends Component {
       this.props.journalize(this.props.mutation);
       this.setState({ reset: this.state.reset + 1 });
     }
+    if (
+      prevState.searchInitiated !== this.state.searchInitiated ||
+      prevState.initialFitlers !== this.state.initialFitlers
+    ) {
+      this.scheduleCanFetchFamilyDetails();
+    }
   }
 
   fetch = (prms) => {
     this.props.fetchFamilySummaries(this.props.modulesManager, prms);
+  };
+
+  canFetchFamilyDetails = () => {
+    if (this.state.searchInitiated === false && !!this.state.initialFitlers) {
+      this.onFiltersApplied(this.state.initialFitlers);
+    }
+  };
+
+  scheduleCanFetchFamilyDetails = () => {
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
+    }
+
+    this.debounceTimeout = setTimeout(() => {
+      this.canFetchFamilyDetails();
+    }, 100);
   };
 
   rowIdentifier = (r) => r.uuid;
@@ -197,6 +230,13 @@ class FamilySearcher extends Component {
     return formatters;
   };
 
+  onFiltersApplied = (filters) => {
+    this.setState({
+      searchInitiated: true,
+      filters, // Update the active filters
+    });
+  };
+  
   rowDisabled = (selection, i) => !!i.validityTo;
   rowLocked = (selection, i) => !!i.clientMutationId;
 
@@ -213,6 +253,7 @@ class FamilySearcher extends Component {
       onDoubleClick,
       actionsContributionKey,
     } = this.props;
+    const { searchInitiated } = this.state;
     let count = familiesPageInfo.totalCount;
     return (
       <Fragment>
@@ -235,7 +276,7 @@ class FamilySearcher extends Component {
           tableTitle={formatMessageWithValues(intl, "insuree", "familySummaries", { count })}
           rowsPerPageOptions={this.rowsPerPageOptions}
           defaultPageSize={this.defaultPageSize}
-          fetch={this.fetch}
+          fetch={this.isDefaultFetchFamilyActivated == false  && searchInitiated ? this.fetch : this.isDefaultFetchFamilyActivated == true ? this.fetch : () => {}}
           rowIdentifier={this.rowIdentifier}
           filtersToQueryParams={this.filtersToQueryParams}
           defaultOrderBy="-validityFrom"

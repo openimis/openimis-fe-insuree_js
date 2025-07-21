@@ -49,7 +49,7 @@ const mapStateToProps = (state, props) => ({
   fetchingFamily: state.insuree.fetchingFamily,
   errorFamily: state.insuree.errorFamily,
   fetchedFamily: state.insuree.fetchedFamily,
-  family: state.insuree.family,
+  family: state.insuree?.insuree?.family,
 });
 
 const mapDispatchToProps = (dispatch) => {

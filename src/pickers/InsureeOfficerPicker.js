@@ -23,7 +23,6 @@ class InsureeOfficer extends Component {
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
     this.isCurrentAdminEnrollmentOfficerActive = props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", false);
-
   }
 
   componentDidMount() {
@@ -37,6 +36,11 @@ class InsureeOfficer extends Component {
       }, Math.floor(Math.random() * 300));
     }
   }
+  isEnrollmentAdminOfficer = (user, insureeOfficers) => {
+    if (!insureeOfficers || !user) return false;
+    if (user.username.trim() === insureeOfficers[0].code.trim()) return true;
+    else return false
+  } 
 
     componentDidUpdate(prevProps) {
     // Recharger les données si locationId change

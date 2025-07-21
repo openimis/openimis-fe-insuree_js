@@ -26,6 +26,15 @@ const FAMILY_FILTERS_CONTRIBUTION_KEY = "insuree.FamilyFilters";
 const FAMILY_ACTION_CONTRIBUTION_KEY = "insuree.FamilyActions";
 
 class FamiliesPage extends Component {
+
+  constructor(props) {
+    super(props);
+    let defaultFilters = {};
+    this.state = {
+      defaultFilters,
+    };
+  }
+
   onDoubleClick = (f, newTab = false) => {
     historyPush(this.props.modulesManager, this.props.history, "insuree.route.familyOverview", [f.uuid], newTab);
   };
@@ -58,6 +67,7 @@ class FamiliesPage extends Component {
           onDoubleClick={this.onDoubleClick}
           filterPaneContributionsKey={FAMILY_FILTERS_CONTRIBUTION_KEY}
           actionsContributionKey={FAMILY_ACTION_CONTRIBUTION_KEY}
+          defaultFilters = {this.state.defaultFilters}
         />
         {rights.includes(RIGHT_FAMILY_ADD) &&
           withTooltip(

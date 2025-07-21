@@ -38,6 +38,11 @@ class InsureeMasterPanel extends FormPanel {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
+    this.isPhotoRequired = props.modulesManager.getConf(
+      "fe-insuree",
+      "insureeForm.isPhotoRequired",
+      false,
+    );
   }
 
   renderLastNameField = (edited, classes, readOnly) => {
@@ -326,6 +331,7 @@ class InsureeMasterPanel extends FormPanel {
                   pubRef="insuree.Avatar"
                   photo={!!edited ? edited.photo : null}
                   readOnly={readOnly}
+                  required={this.isPhotoRequired ==  true ? true : false}
                   withMeta={true}
                   onChange={(v) => this.updateAttribute("photo", !!v ? v : null)}
                   locationId={locationId}
