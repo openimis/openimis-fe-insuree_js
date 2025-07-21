@@ -68,6 +68,22 @@ class InsureeMasterPanel extends FormPanel {
     </Grid>
   );
 
+  getLocationId = (insuree, family) => {
+    const { sameLocation } = this.props.edited || {};
+    const { edited } = this.props || {}
+    if (sameLocation == false) {
+      if (insuree?.currentVillage?.id) return insuree.currentVillage.id;
+      if (family?.headInsuree?.currentVillage?.id) return family.headInsuree.currentVillage.id;
+      if (edited?.currentVillage?.id) return edited.currentVillage.id;
+    }
+
+    if (family?.location?.id) return family.location.id;
+    if (insuree?.family?.location?.id) return insuree.family.location.id;
+
+    return "";
+  };
+
+
   render() {
     const {
       intl,
@@ -78,7 +94,10 @@ class InsureeMasterPanel extends FormPanel {
       readOnly = true,
       actions,
       editedId,
+      insuree,
+      family
     } = this.props;
+    const locationId = this.getLocationId(insuree, family);
 
     return (
       <Grid container>
@@ -199,6 +218,8 @@ class InsureeMasterPanel extends FormPanel {
                       readOnly={readOnly}
                       onChangeLocation={(v) => this.updateAttribute("currentVillage", v)}
                       onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
+                      onChangeSameLocationCheckbox={(v) =>this.updateAttribute("sameLocation", v)}
+
                     />
                   </Grid>
                   <Grid item xs={6} className={classes.item}>
@@ -307,6 +328,7 @@ class InsureeMasterPanel extends FormPanel {
                   readOnly={readOnly}
                   withMeta={true}
                   onChange={(v) => this.updateAttribute("photo", !!v ? v : null)}
+                  locationId={locationId}
                 />
               </Grid>
               <Contributions
