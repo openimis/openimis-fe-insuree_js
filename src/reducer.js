@@ -14,6 +14,7 @@ function reducer(
     fetchedInsuree: false,
     errorInsuree: null,
     insuree: null,
+    insureeEnquiry: null,
     fetchingInsureeFamilyMembers: false,
     fetchedInsureeFamilyMembers: false,
     errorInsureeFamilyMembers: null,
@@ -95,6 +96,36 @@ function reducer(
         fetchedInsuree: false,
         insuree: null,
         errorInsuree: null,
+      };
+    case "ENQUIRY_INSUREE_REQ":
+      return {
+        ...state,
+        fetchingInsureeEnquiry: true,
+        fetchedInsureeEnquiry: false,
+        insureeEnquiry: null,
+        errorInsureeEnquiry: null,
+      };
+    case "ENQUIRY_INSUREE_RESP":
+      return {
+        ...state,
+        fetchingInsureeEnquiry: false,
+        fetchedInsureeEnquiry: true,
+        insureeEnquiry: parseData(action.payload.data.insurees)[0],
+        errorInsureeEnquiry: formatGraphQLError(action.payload),
+      };
+    case "ENQUIRY_INSUREE_ERR":
+      return {
+        ...state,
+        fetchedInsureeEnquiry: false,
+        errorInsureeEnquiry: formatServerError(action.payload),
+      };
+    case "ENQUIRY_INSUREE_CLEAR":
+      return {
+        ...state,
+        fetchingInsureeEnquiry: false,
+        fetchedInsureeEnquiry: false,
+        insureeEnquiry: null,
+        errorInsureeEnquiry: null,
       };
     case "INSUREE_FAMILY_NEW":
       return {

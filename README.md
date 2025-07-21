@@ -99,5 +99,10 @@ None
 - `showInsureeSummaryAddress`, show insuree address information in enquire, default false.
 - `insureeForm.isInsureeStatusRequired`, make insuree status dropdown mandatory, default false.
 - `insureeForm.isInsureePhotoRequired`, make photo upload of an insuree mandatory, default false.
+- `isPhotoRequired`, Make photo upload of an insuree mandatory. (default: 'False)
+- ' `"isCurrentAdminEnrollmentOfficerActive"`, Enables automatic assignment of 
+  the current user as the enrolment officer during family or insuree creation. If 'True', the officer is inferred from session; if 'False', manual selection remains available. (default: 'False)
+- `isDefaultFetchInsureeActivated`, manage default fetch behavior of insuree searcher ; default: true
+- `isDefaultFetchFamilyActivated`, manage default fetch behavior of family searcher ; default: true
 - `isCurrentAdminEnrollmentOfficerActive`, make the Insuree Officer dropdown read-only and automatically select the currently logged-in user if they have the Enrollment Officer role.
 

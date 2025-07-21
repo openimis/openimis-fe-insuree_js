@@ -187,6 +187,14 @@ class InsureeForm extends Component {
     return true;
   };
 
+  doesPhotoChange = () => {
+    const { insuree } = this.props;
+    if (_.isEqual(insuree.photo, this.state.insuree.photo)) {
+      return false;
+    }
+    return true;
+  };
+
   canSave = () => {
     const doesInsureeChange = this.doesInsureeChange();
     if (!doesInsureeChange) return false;
@@ -197,7 +205,11 @@ class InsureeForm extends Component {
   };
 
   _save = (insuree) => {
-    this.setState({ lockNew: !insuree.id, isSaved: true }, (e) => this.props.save(insuree));
+    if (insuree.uuid) {
+      if (!this.doesPhotoChange()) delete insuree.photo
+    }
+    this.setState({ lockNew: !insuree.id, isSaved: true }, 
+    (e) => this.props.save(insuree));
   };
 
   onEditedChanged = (insuree) => {

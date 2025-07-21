@@ -40,6 +40,7 @@ class InsureeMainMenu extends Component {
           header={formatMessage(this.props.intl, "insuree", "workersMainMenu")}
           icon={<AssignmentInd />}
           entries={entries}
+          menuId="InsureeMainMenu"
         />
       );
     }
@@ -50,6 +51,7 @@ class InsureeMainMenu extends Component {
         icon: <GroupAdd />,
         route: "/" + modulesManager.getRef("insuree.route.family"),
         withDivider: true,
+        id: "insuree.addFamilyOrGroup", 
       });
     }
     if (rights.includes(RIGHT_FAMILY)) {
@@ -57,6 +59,7 @@ class InsureeMainMenu extends Component {
         text: formatMessage(this.props.intl, "insuree", "menu.familiesOrGroups"),
         icon: <People />,
         route: "/" + modulesManager.getRef("insuree.route.families"),
+        id: "insuree.familiesOrGroups", 
       });
     }
     if (rights.includes(RIGHT_INSUREE)) {
@@ -64,6 +67,7 @@ class InsureeMainMenu extends Component {
         text: formatMessage(this.props.intl, "insuree", "menu.insurees"),
         icon: <Person />,
         route: "/" + modulesManager.getRef("insuree.route.insurees"),
+        id: "insuree.insurees", 
       });
     }
     entries.push(
@@ -79,6 +83,7 @@ class InsureeMainMenu extends Component {
         header={formatMessage(this.props.intl, "insuree", "mainMenu")}
         icon={<AssignmentInd />}
         entries={entries}
+        menuId="InsureeMainMenu"
       />
     );
   }
