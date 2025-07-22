@@ -17,7 +17,8 @@ const styles = (theme) => ({
 });
 
 const InsureeAvatar = (props) => {
-  const { photo, classes, className, withMeta = false, readOnly, onChange, locationId } = props;
+  const { photo, classes, className, withMeta = false, readOnly, onChange , required, locationId} = props;
+
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations("insuree", modulesManager);
 
@@ -48,7 +49,7 @@ const InsureeAvatar = (props) => {
     }
   };
 
-  const isRequired = Boolean(photo?.thumbnail || photo?.photo);
+  const isRequired = Boolean(photo?.thumbnail || photo?.photo) || required;
   return (
     <Grid container className={className} direction="row" wrap="nowrap" spacing={1}>
       <div>

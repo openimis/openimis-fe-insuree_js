@@ -22,6 +22,7 @@ class InsureeOfficer extends Component {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
+    this.isCurrentAdminEnrollmentOfficerActive = props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", false);
   }
 
   componentDidMount() {
@@ -29,11 +30,20 @@ class InsureeOfficer extends Component {
       const filters = [];
       !!this.props.locationId && this.props.locationId != "" ? filters.push(`locationId:"${decodeId(this.props.locationId)}"`) : filters;
 
+      // prevent loading multiple times the cache when component is
+      // several times on tha page
+
       setTimeout(() => {
         !this.props.fetchingInsureeOfficers && this.props.fetchInsureeOfficers(this.props.modulesManager, filters);
       }, Math.floor(Math.random() * 300));
     }
   }
+
+  isEnrollmentAdminOfficer = (user, insureeOfficers) => {
+    if (!insureeOfficers || !user) return false;
+    if (user.username.trim() === insureeOfficers[0].code.trim()) return true;
+    else return false
+  } 
 
     componentDidUpdate(prevProps) {
     // Recharger les données si locationId change
@@ -44,7 +54,7 @@ class InsureeOfficer extends Component {
         filters.push(`locationId:"${decodeId(locationId)}"`)
       }
       this.props.fetchInsureeOfficers(this.props.modulesManager, filters);
-    }
+      }
 
     if (this.isCurrentAdminEnrollmentOfficerActive == true &&
       this.props.insureeOfficers !== prevProps.insureeOfficers &&
