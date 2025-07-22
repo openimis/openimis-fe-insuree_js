@@ -25,12 +25,35 @@ class InsureeOfficer extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.fetchedInsureeOfficers) {
-      // prevent loading multiple times the cache when component is
-      // several times on tha page
+   if (!this.props.fetchedInsureeOfficers || !this.isCurrentAdminEnrollmentOfficerActive == false) {
+      const filters = [];
+      !!this.props.locationId && this.props.locationId != "" ? filters.push(`locationId:"${decodeId(this.props.locationId)}"`) : filters;
+
       setTimeout(() => {
-        !this.props.fetchingInsureeOfficers && this.props.fetchInsureeOfficers(this.props.modulesManager);
+        !this.props.fetchingInsureeOfficers && this.props.fetchInsureeOfficers(this.props.modulesManager, filters);
       }, Math.floor(Math.random() * 300));
+    }
+  }
+
+    componentDidUpdate(prevProps) {
+    // Recharger les données si locationId change
+    if (this.props.locationId !== prevProps.locationId) {
+      const { locationId } = this.props
+      const filters = [];
+      if (locationId != undefined && locationId != "" ) {
+        filters.push(`locationId:"${decodeId(locationId)}"`)
+      }
+      this.props.fetchInsureeOfficers(this.props.modulesManager, filters);
+    }
+
+    if (this.isCurrentAdminEnrollmentOfficerActive == true &&
+      this.props.insureeOfficers !== prevProps.insureeOfficers &&
+      this.props.insureeOfficers &&
+      this.props.insureeOfficers.length > 0 && this.isEnrollmentAdminOfficer(this.props.user, this.props.insureeOfficers)) {
+      this.props.onChange(
+        this.props.insureeOfficers[0],
+        this.formatSuggestion(this.props.insureeOfficers[0])
+      );
     }
   }
 
@@ -44,6 +67,11 @@ class InsureeOfficer extends Component {
     return `${a.code} ${fullName}`.trim();
   };
 
+  isEnrollmentAdminOfficer = (user, insureeOfficers) => {
+    if (!insureeOfficers || !user) return false;
+    if (user.username.trim() === insureeOfficers[0].code.trim()) return true;
+    else return false
+  }
   onSuggestionSelected = (v) => this.props.onChange(v, this.formatSuggestion(v));
 
   render() {
@@ -61,8 +89,9 @@ class InsureeOfficer extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      user,
     } = this.props;
-    let v = insureeOfficers ? insureeOfficers.filter((o) => parseInt(decodeId(o.id)) === value) : [];
+    let v = (insureeOfficers ? insureeOfficers.filter((o) => parseInt(decodeId(o.id)) === value) : []);
     v = v.length ? v[0] : null;
     return (
       <Fragment>
@@ -75,9 +104,9 @@ class InsureeOfficer extends Component {
             getSuggestions={this.insureeOfficers}
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
-            value={v}
+            value={this.isCurrentAdminEnrollmentOfficerActive == true && this.isEnrollmentAdminOfficer(user, insureeOfficers) ? insureeOfficers[0] : v}
             reset={reset}
-            readOnly={readOnly}
+            readOnly={this.isCurrentAdminEnrollmentOfficerActive == true && this.isEnrollmentAdminOfficer(user, insureeOfficers) ? true : readOnly}
             required={required}
             selectThreshold={this.selectThreshold}
             withNull={withNull}
@@ -94,6 +123,7 @@ const mapStateToProps = (state) => ({
   fetchingInsureeOfficers: state.insuree.fetchingInsureeOfficers,
   fetchedInsureeOfficers: state.insuree.fetchedInsureeOfficers,
   errorInsureeOfficers: state.insuree.errorInsureeOfficers,
+  user: state.core.user
 });
 
 const mapDispatchToProps = (dispatch) => {
