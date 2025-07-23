@@ -28,8 +28,9 @@ class InsureeOfficer extends Component {
   componentDidMount() {
    if (!this.props.fetchedInsureeOfficers || !this.isCurrentAdminEnrollmentOfficerActive == false) {
       const filters = [];
-      !!this.props.locationId && this.props.locationId != "" ? filters.push(`locationId:"${decodeId(this.props.locationId)}"`) : filters;
-
+      if(!!this.props.locationId && this.props.locationId != ""){
+        filters.push(`locationId:"${decodeId(this.props.locationId)}"`)
+      }
       // prevent loading multiple times the cache when component is
       // several times on tha page
 
