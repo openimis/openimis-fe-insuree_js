@@ -6,7 +6,7 @@ import _ from "lodash";
 
 import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@mui/material";
 import { Search as SearchIcon, Add as AddIcon, PersonAdd as AddExistingIcon, PersonPin as SetHeadIcon, Delete as DeleteIcon, Clear as RemoveIcon, Remove as CloseIcon } from "@mui/icons-material";
-import { withTheme, withStyles } from "@mui/material/styles";
+import { withTheme, withStyles } from "@mui/styles";
 
 import {
   formatMessage,

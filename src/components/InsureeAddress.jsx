@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Grid, FormControlLabel, Checkbox } from "@mui/material";
-import { makeStyles } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
 
 import {
   PublishedComponent,

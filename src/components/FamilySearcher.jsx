@@ -2,8 +2,8 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Checkbox, IconButton, Tooltip } from "@material-ui/core";
-import TabIcon from "@material-ui/icons/Tab";
+import { Checkbox, IconButton, Tooltip } from "@mui/material";
+import TabIcon from "@mui/icons-material/Tab";
 import {
   withModulesManager,
   formatMessageWithValues,
@@ -14,7 +14,7 @@ import {
 } from "@openimis/fe-core";
 
 import { fetchFamilySummaries, deleteFamily } from "../actions";
-import { Delete as DeleteIcon } from "@material-ui/icons";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import FamilyFilter from "./FamilyFilter";
 import { DEFAULT, RIGHT_FAMILY_DELETE } from "../constants";
 import { familyLabel } from "../utils/utils";

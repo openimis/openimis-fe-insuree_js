@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Link, Grid } from "@material-ui/core";
+import { withTheme, withStyles } from "@mui/styles";
+import { Link, Grid } from "@mui/material";
 import { FormattedMessage } from "@openimis/fe-core";
 
 const styles = (theme) => ({

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Paper, Grid, Typography, Divider } from "@material-ui/core";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import { Paper, Grid, Typography, Divider } from "@mui/material";
+import { withTheme, withStyles } from "@mui/styles";
 
 import { FormattedMessage, PublishedComponent, FormPanel } from "@openimis/fe-core";
 

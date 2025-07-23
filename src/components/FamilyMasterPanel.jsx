@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import { injectIntl } from "react-intl";
 
-import { Grid, FormControlLabel, Checkbox, Typography, Divider, Tooltip, IconButton } from "@material-ui/core";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { People as PeopleIcon } from "@material-ui/icons";
+import { Grid, FormControlLabel, Checkbox, Typography, Divider, Tooltip, IconButton } from "@mui/material";
+import { withTheme, withStyles } from "@mui/styles";
+import { People as PeopleIcon } from "@mui/icons-material";
 
 import {
   historyPush,

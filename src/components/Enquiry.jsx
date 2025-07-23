@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { injectIntl } from "react-intl";
-import { alpha, makeStyles } from "@mui/material/styles";
+import { alpha } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
 import clsx from "clsx";
 import { InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";

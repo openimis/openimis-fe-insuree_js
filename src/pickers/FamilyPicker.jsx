@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { FormControl, TextField } from "@material-ui/core";
+import { withTheme, withStyles } from "@mui/styles";
+import { FormControl, TextField } from "@mui/material";
 import { injectIntl } from "react-intl";
 import { familyLabel } from "../utils/utils";
 import _ from "lodash";

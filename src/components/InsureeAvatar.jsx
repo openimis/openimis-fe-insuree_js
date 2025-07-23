@@ -1,5 +1,5 @@
 import React from "react";
-import { withTheme, withStyles } from "@mui/material/styles";
+import { withTheme, withStyles } from "@mui/styles";
 import { Avatar, Grid, IconButton } from "@mui/material";
 import { toISODate, useModulesManager, useTranslations, PublishedComponent } from "@openimis/fe-core";
 import _ from "lodash";

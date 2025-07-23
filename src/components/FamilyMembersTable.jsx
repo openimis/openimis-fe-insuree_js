@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { TableContainer, TableHead, TableBody, Table, TableCell, TableRow, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { TableContainer, TableHead, TableBody, Table, TableCell, TableRow, Paper } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 import { useModulesManager, useTranslations } from "@openimis/fe-core";
 import { fetchFamilyMembers } from "../actions";

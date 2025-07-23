@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import { injectIntl } from "react-intl";
 
-import { Grid, Box, Typography, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { People } from "@material-ui/icons";
+import { Grid, Box, Typography, Button } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { People } from "@mui/icons-material";
 
 import {
   formatMessage,

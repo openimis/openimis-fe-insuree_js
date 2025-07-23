@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Button } from "@mui/material";
-import { makeStyles } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
 import { Person } from "@mui/icons-material";
 
 import { useModulesManager, useTranslations, useHistory, historyPush } from "@openimis/fe-core";

@@ -5,7 +5,7 @@ import { injectIntl } from "react-intl";
 import _ from "lodash";
 
 import { Grid } from "@mui/material";
-import { withTheme, withStyles } from "@mui/material/styles";
+import { withTheme, withStyles } from "@mui/styles";
 
 import { TextInput, Picker, withModulesManager } from "@openimis/fe-core";
 import { fetchInsureesForPicker, checkIfHeadSelected } from "../actions";

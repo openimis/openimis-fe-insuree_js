@@ -1,6 +1,6 @@
 import React from "react";
 import { decodeId, FormattedMessage, PublishedComponent } from "@openimis/fe-core";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 const InsureeFirstServicePointDisplay = ({ insuree }) => {
   if (!insuree?.healthFacility) return <FormattedMessage module="insuree" id="insuree.noFSP" />;

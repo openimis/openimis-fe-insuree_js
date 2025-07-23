@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import _ from "lodash";
 
-import { withTheme, withStyles } from "@mui/material/styles";
+import { withTheme, withStyles } from "@mui/styles";
 import ReplayIcon from "@mui/icons-material/Replay";
 
 import {

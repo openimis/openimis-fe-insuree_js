@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Box, Typography, Grid, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { Box, Typography, Grid, Paper } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 import {
   useParams,

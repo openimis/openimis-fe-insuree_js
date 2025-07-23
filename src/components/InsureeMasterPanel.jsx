@@ -1,5 +1,5 @@
 import React from "react";
-import { withTheme, withStyles } from "@mui/material/styles";
+import { withTheme, withStyles } from "@mui/styles";
 import { Paper, Grid, Typography, Divider, Checkbox, FormControlLabel } from "@mui/material";
 import {
   formatMessage,

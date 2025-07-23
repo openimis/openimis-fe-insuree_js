@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 
 import { Dialog, Button, DialogActions, DialogContent } from "@mui/material";
-import { makeStyles } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
 
 import {
   formatMessage,

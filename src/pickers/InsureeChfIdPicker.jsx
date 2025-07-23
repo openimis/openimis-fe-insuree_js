@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 import { withModulesManager, TextInput, ProgressOrError, formatMessage } from "@openimis/fe-core";
 
 import { fetchInsuree } from "../actions";

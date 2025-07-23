@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import _debounce from "lodash/debounce";
 
 import { Typography, Grid, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
 import { YoutubeSearchedFor as ResetFilterIcon } from "@mui/icons-material";
 
 import {
