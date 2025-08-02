@@ -1,47 +1,49 @@
 import React from "react";
 
 import { Paper, Grid, Typography, Divider } from "@mui/material";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
 import { FormattedMessage, PublishedComponent, FormPanel } from "@openimis/fe-core";
 
-const styles = (theme) => ({
-  paper: theme.paper.paper,
-  title: theme.paper.title,
-  item: theme.paper.item,
-});
+const StyledInsureeFirstServicePointPanel = styled('div')(({ theme }) => ({
+  '& .paper': theme.paper.paper,
+  '& .title': theme.paper.title,
+  '& .item': theme.paper.item,
+}));
 
 class InsureeFirstServicePointPanel extends FormPanel {
   render() {
-    const { classes, updateAttribute, readOnly, edited } = this.props;
+    const { updateAttribute, readOnly, edited } = this.props;
     let isInsureeFirstServicePointRequired = this.props.modulesManager.getConf("fe-insuree", "insureeForm.isInsureeFirstServicePointRequired", false);
     return (
-      <Grid container>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Typography className={classes.title}>
-              <FormattedMessage module="insuree" id="insuree.InsureeFirstServicePointPanel.title" />
-            </Typography>
-            <Divider />
-            <Grid container item xs={12} className={classes.item}>
-              {readOnly && !edited.healthFacility ? (
-                <FormattedMessage module="insuree" id="insuree.noFSP" />
-              ) : (
-                <PublishedComponent
-                  pubRef="location.DetailedHealthFacility"
-                  value={edited?.healthFacility ?? null}
-                  readOnly={readOnly}
-                  required={isInsureeFirstServicePointRequired}
-                  onChange={(hf) => updateAttribute("healthFacility", hf)}
-                  ignoreLocation={true}
-                />
-              )}
-            </Grid>
-          </Paper>
+      <StyledInsureeFirstServicePointPanel>
+        <Grid container>
+          <Grid item xs={12}>
+            <Paper className="paper">
+              <Typography className="title">
+                <FormattedMessage module="insuree" id="insuree.InsureeFirstServicePointPanel.title" />
+              </Typography>
+              <Divider />
+              <Grid container item xs={12} className="item">
+                {readOnly && !edited.healthFacility ? (
+                  <FormattedMessage module="insuree" id="insuree.noFSP" />
+                ) : (
+                  <PublishedComponent
+                    pubRef="location.DetailedHealthFacility"
+                    value={edited?.healthFacility ?? null}
+                    readOnly={readOnly}
+                    required={isInsureeFirstServicePointRequired}
+                    onChange={(hf) => updateAttribute("healthFacility", hf)}
+                    ignoreLocation={true}
+                  />
+                )}
+              </Grid>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      </StyledInsureeFirstServicePointPanel>
     );
   }
 }
 
-export default withTheme(withStyles(styles)(InsureeFirstServicePointPanel));
+export default InsureeFirstServicePointPanel;

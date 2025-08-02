@@ -6,7 +6,7 @@ import _ from "lodash";
 
 import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@mui/material";
 import { Search as SearchIcon, Add as AddIcon, PersonAdd as AddExistingIcon, PersonPin as SetHeadIcon, Delete as DeleteIcon, Clear as RemoveIcon, Remove as CloseIcon } from "@mui/icons-material";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
 import {
   formatMessage,
@@ -40,12 +40,12 @@ import EnquiryDialog from "./EnquiryDialog";
 import FamilyInsureesSearcher from "./FamilyInsureesSearcher";
 import RemoveInsureeFromFamilyDialog from "./RemoveInsureeFromFamilyDialog";
 
-const styles = (theme) => ({
-  paper: theme.paper.paper,
-  paperHeader: theme.paper.header,
-  paperHeaderAction: theme.paper.action,
-  tableTitle: theme.table.title,
-});
+const StyledFamilyInsureesOverview = styled('div')(({ theme }) => ({
+  '& .paper': theme.paper.paper,
+  '& .paperHeader': theme.paper.header,
+  '& .paperHeaderAction': theme.paper.action,
+  '& .tableTitle': theme.table.title,
+}));
 
 class FamilyInsureesOverview extends PagedDataHandler {
   state = {
@@ -349,7 +349,6 @@ class FamilyInsureesOverview extends PagedDataHandler {
   render() {
     const {
       intl,
-      classes,
       pageInfo,
       family,
       familyMembers,
@@ -411,76 +410,78 @@ class FamilyInsureesOverview extends PagedDataHandler {
       });
     }
     return (
-      <Paper className={classes.paper}>
-        <EnquiryDialog
-          open={this.state.enquiryOpen}
-          chfid={this.state.chfid}
-          onClose={() => {
-            this.setState({ enquiryOpen: false, chfid: null });
-          }}
-        />
-        <ChangeInsureeFamilyDialog
-          family={family}
-          insuree={this.state.changeInsureeFamily}
-          onConfirm={this.changeInsureeFamily}
-          onCancel={(e) => this.setState({ changeInsureeFamily: null })}
-        />
-        <RemoveInsureeFromFamilyDialog
-          family={family}
-          insuree={this.state.removeInsuree}
-          onConfirm={this.removeInsuree}
-          onCancel={(e) => this.setState({ removeInsuree: null })}
-        />
-        <Collapse in={this.state.showInsureeSearcher}>
-          <FamilyInsureesSearcher
-            filters={this.state.filters}
-            onChangeFilters={this.onChangeFilters}
-            resetFilters={this.resetFilters}
+      <StyledFamilyInsureesOverview>
+        <Paper className="paper">
+          <EnquiryDialog
+            open={this.state.enquiryOpen}
+            chfid={this.state.chfid}
+            onClose={() => {
+              this.setState({ enquiryOpen: false, chfid: null });
+            }}
           />
-        </Collapse>
-        <Grid container alignItems="center" direction="row" className={classes.paperHeader}>
-          <Grid item xs={8}>
-            <Typography className={classes.tableTitle}>
-              <FormattedMessage module="insuree" id="Family.insurees" values={{ count: pageInfo.totalCount }} />
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Grid container justify="flex-end">
-              {actions.map((a, idx) => {
-                return (
-                  <Grid item key={`form-action-${idx}`} className={classes.paperHeaderAction}>
-                    {withTooltip(a.button, a.tooltip)}
-                  </Grid>
-                );
-              })}
+          <ChangeInsureeFamilyDialog
+            family={family}
+            insuree={this.state.changeInsureeFamily}
+            onConfirm={this.changeInsureeFamily}
+            onCancel={(e) => this.setState({ changeInsureeFamily: null })}
+          />
+          <RemoveInsureeFromFamilyDialog
+            family={family}
+            insuree={this.state.removeInsuree}
+            onConfirm={this.removeInsuree}
+            onCancel={(e) => this.setState({ removeInsuree: null })}
+          />
+          <Collapse in={this.state.showInsureeSearcher}>
+            <FamilyInsureesSearcher
+              filters={this.state.filters}
+              onChangeFilters={this.onChangeFilters}
+              resetFilters={this.resetFilters}
+            />
+          </Collapse>
+          <Grid container alignItems="center" direction="row" className="paperHeader">
+            <Grid item xs={8}>
+              <Typography className="tableTitle">
+                <FormattedMessage module="insuree" id="Family.insurees" values={{ count: pageInfo.totalCount }} />
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Grid container justify="flex-end">
+                {actions.map((a, idx) => {
+                  return (
+                    <Grid item key={`form-action-${idx}`} className="paperHeaderAction">
+                      {withTooltip(a.button, a.tooltip)}
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Divider />
             </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Divider />
-          </Grid>
-        </Grid>
-        <Table
-          module="insuree"
-          headers={this.headers}
-          headerActions={this.headerActions}
-          itemFormatters={this.formatters}
-          items={(!!family && familyMembers) || []}
-          fetching={fetchingFamilyMembers}
-          error={errorFamilyMembers}
-          onDoubleClick={this.onDoubleClick}
-          withSelection={"single"}
-          onChangeSelection={this.onChangeSelection}
-          withPagination={true}
-          rowsPerPageOptions={this.rowsPerPageOptions}
-          defaultPageSize={this.defaultPageSize}
-          page={this.currentPage()}
-          pageSize={this.currentPageSize()}
-          count={pageInfo.totalCount}
-          onChangePage={this.onChangePage}
-          onChangeRowsPerPage={this.onChangeRowsPerPage}
-          rowLocked={this.rowLocked}
-        />
-      </Paper>
+          <Table
+            module="insuree"
+            headers={this.headers}
+            headerActions={this.headerActions}
+            itemFormatters={this.formatters}
+            items={(!!family && familyMembers) || []}
+            fetching={fetchingFamilyMembers}
+            error={errorFamilyMembers}
+            onDoubleClick={this.onDoubleClick}
+            withSelection={"single"}
+            onChangeSelection={this.onChangeSelection}
+            withPagination={true}
+            rowsPerPageOptions={this.rowsPerPageOptions}
+            defaultPageSize={this.defaultPageSize}
+            page={this.currentPage()}
+            pageSize={this.currentPageSize()}
+            count={pageInfo.totalCount}
+            onChangePage={this.onChangePage}
+            onChangeRowsPerPage={this.onChangeRowsPerPage}
+            rowLocked={this.rowLocked}
+          />
+        </Paper>
+      </StyledFamilyInsureesOverview>
     );
   }
 }
@@ -519,5 +520,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withModulesManager(
-  injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FamilyInsureesOverview)))),
+  injectIntl(connect(mapStateToProps, mapDispatchToProps)(FamilyInsureesOverview)),
 );

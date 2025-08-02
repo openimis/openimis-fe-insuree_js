@@ -1,21 +1,20 @@
 import React from "react";
 
 import { Button } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { Person } from "@mui/icons-material";
 
 import { useModulesManager, useTranslations, useHistory, historyPush } from "@openimis/fe-core";
 import { MODULE_NAME } from "../constants";
 
-const useStyles = makeStyles(() => ({
-  label: {
+const StyledInsureeProfileLink = styled('div')(({ theme }) => ({
+  '& .label': {
     marginLeft: "8px",
   },
 }));
 
 const InsureeProfileLink = ({ insureeUuid }) => {
   const modulesManager = useModulesManager();
-  const classes = useStyles();
   const history = useHistory();
   const { formatMessage } = useTranslations(MODULE_NAME);
 
@@ -23,14 +22,16 @@ const InsureeProfileLink = ({ insureeUuid }) => {
     historyPush(modulesManager, history, "insuree.route.insureeProfile", [uuid], showInAnotherTab);
 
   return (
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={() => goToInsureeProfile(modulesManager, history, insureeUuid)}
-    >
-      <Person />
-      <span className={classes.label}> {formatMessage("insureeSummaries.goToTheProfile")} </span>
-    </Button>
+    <StyledInsureeProfileLink>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => goToInsureeProfile(modulesManager, history, insureeUuid)}
+      >
+        <Person />
+        <span className="label"> {formatMessage("insureeSummaries.goToTheProfile")} </span>
+      </Button>
+    </StyledInsureeProfileLink>
   );
 };
 

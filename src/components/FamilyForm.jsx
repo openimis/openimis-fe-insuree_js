@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
@@ -25,9 +25,9 @@ import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
 
-const styles = (theme) => ({
-  lockedPage: theme.page.locked,
-});
+const StyledFamilyForm = styled('div')(({ theme }) => ({
+  '& .lockedPage': theme.page.locked,
+}));
 
 const INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY = "insuree.Family.panels";
 const INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY = "insuree.FamilyOverview.panels";
@@ -157,7 +157,6 @@ class FamilyForm extends Component {
   render() {
     const {
       modulesManager,
-      classes,
       state,
       rights,
       family_uuid,
@@ -188,45 +187,47 @@ class FamilyForm extends Component {
     ];
     const shouldBeLocked = !!runningMutation || family?.validityTo;
     return (
-      <div className={shouldBeLocked ? classes.lockedPage : null}>
-        <Helmet
-          title={formatMessageWithValues(
-            this.props.intl,
-            "insuree",
-            !!this.props.overview ? "FamilyOverview.title" : "Family.title",
-            { label: insureeLabel(this.state.family.headInsuree) },
-          )}
-        />
-        <ProgressOrError progress={fetchingFamily} error={errorFamily} />
-        {((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
-          <Form
-            module="insuree"
-            title="FamilyOverview.title"
-            titleParams={{ label: insureeLabel(this.state.family.headInsuree) }}
-            edited_id={family_uuid}
-            edited={family}
-            reset={this.state.reset}
-            back={back}
-            add={!!add && !newFamily ? this._add : null}
-            readOnly={readOnly || runningMutation || !!family.validityTo}
-            actions={actions}
-            openFamilyButton={openFamilyButton}
-            overview={overview}
-            HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview] : [HeadInsureeMasterPanel]}
-            contributedPanelsKey={
-              overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
-            }
-            family={family}
-            insuree={insuree}
-            onEditedChanged={this.onEditedChanged}
-            canSave={this.canSave}
-            save={!!save ? this._save : null}
-            onActionToConfirm={this.onActionToConfirm}
-            openDirty={save}
+      <StyledFamilyForm>
+        <div className={shouldBeLocked ? 'lockedPage' : null}>
+          <Helmet
+            title={formatMessageWithValues(
+              this.props.intl,
+              "insuree",
+              !!this.props.overview ? "FamilyOverview.title" : "Family.title",
+              { label: insureeLabel(this.state.family.headInsuree) },
+            )}
           />
-        )}
-      </div>
+          <ProgressOrError progress={fetchingFamily} error={errorFamily} />
+          {((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
+            <Form
+              module="insuree"
+              title="FamilyOverview.title"
+              titleParams={{ label: insureeLabel(this.state.family.headInsuree) }}
+              edited_id={family_uuid}
+              edited={family}
+              reset={this.state.reset}
+              back={back}
+              add={!!add && !newFamily ? this._add : null}
+              readOnly={readOnly || runningMutation || !!family.validityTo}
+              actions={actions}
+              openFamilyButton={openFamilyButton}
+              overview={overview}
+              HeadPanel={FamilyMasterPanel}
+              Panels={overview ? [FamilyInsureesOverview] : [HeadInsureeMasterPanel]}
+              contributedPanelsKey={
+                overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
+              }
+              family={family}
+              insuree={insuree}
+              onEditedChanged={this.onEditedChanged}
+              canSave={this.canSave}
+              save={!!save ? this._save : null}
+              onActionToConfirm={this.onActionToConfirm}
+              openDirty={save}
+            />
+          )}
+        </div>
+      </StyledFamilyForm>
     );
   }
 }
@@ -254,6 +255,6 @@ const mapDispatchToProps = (dispatch) => {
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(FamilyForm)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(FamilyForm)),
   ),
 );

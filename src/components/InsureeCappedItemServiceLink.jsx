@@ -1,25 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { Link, Grid } from "@mui/material";
 import { FormattedMessage } from "@openimis/fe-core";
 
-const styles = (theme) => ({
-  lnk: {
+const StyledInsureeCappedItemServiceLink = styled('div')(({ theme }) => ({
+  '& .lnk': {
     textAlign: "center",
   },
-});
+}));
 
 class InsureeCappedItemServiceLink extends Component {
   render() {
-    const { classes, insuree } = this.props;
+    const { insuree } = this.props;
     return (
-      <Grid item xs={12} className={classes.lnk}>
-        <Link href={`${process.env.PUBLIC_URL || ""}/insuree/cappedItemService?nshid=${insuree.chfId}`}>
-          <FormattedMessage module="insuree" id="link.cappedItemService" />
-        </Link>
-      </Grid>
+      <StyledInsureeCappedItemServiceLink>
+        <Grid item xs={12} className="lnk">
+          <Link href={`${process.env.PUBLIC_URL || ""}/insuree/cappedItemService?nshid=${insuree.chfId}`}>
+            <FormattedMessage module="insuree" id="link.cappedItemService" />
+          </Link>
+        </Grid>
+      </StyledInsureeCappedItemServiceLink>
     );
   }
 }
@@ -28,4 +30,4 @@ const mapStateToProps = (state) => ({
   insuree: state.insuree.insuree,
 });
 
-export default injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps)(InsureeCappedItemServiceLink))));
+export default injectIntl(connect(mapStateToProps)(InsureeCappedItemServiceLink));

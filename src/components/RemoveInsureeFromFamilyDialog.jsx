@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { withModulesManager } from "@openimis/fe-core";
-
-const styles = (theme) => ({
-  primaryButton: theme.dialog.primaryButton,
-  secondaryButton: theme.dialog.secondaryButton,
-});
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 import { FormattedMessage } from "@openimis/fe-core";
 
 import { familyLabel, insureeLabel } from "../utils/utils";
+
+const StyledRemoveInsureeFromFamilyDialog = styled('div')(({ theme }) => ({
+  '& .primaryButton': theme.dialog.primaryButton,
+  '& .secondaryButton': theme.dialog.secondaryButton,
+}));
 
 class RemoveInsureeFromFamilyDialog extends Component {
   constructor(props) {
@@ -22,43 +22,45 @@ class RemoveInsureeFromFamilyDialog extends Component {
   }
 
   render() {
-    const { classes, family, insuree, onCancel, onConfirm } = this.props;
+    const { family, insuree, onCancel, onConfirm } = this.props;
     return (
-      <Dialog open={!!insuree} onClose={onCancel}>
-        <DialogTitle>
-          <FormattedMessage
-            module="insuree"
-            id="removeInsureeFromFamilyDialog.title"
-            values={{ insuree: insureeLabel(insuree), family: familyLabel(family) }}
-          />
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
+      <StyledRemoveInsureeFromFamilyDialog>
+        <Dialog open={!!insuree} onClose={onCancel}>
+          <DialogTitle>
             <FormattedMessage
               module="insuree"
-              id="removeInsureeFromFamilyDialog.message"
+              id="removeInsureeFromFamilyDialog.title"
               values={{ insuree: insureeLabel(insuree), family: familyLabel(family) }}
             />
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          {!!this.canCancel && (
-            <Button onClick={(e) => onConfirm(true)} className={classes.primaryButton} autoFocus>
-              <FormattedMessage module="insuree" id="removeInsureeFromFamilyDialog.cancelPolicies.button" />
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <FormattedMessage
+                module="insuree"
+                id="removeInsureeFromFamilyDialog.message"
+                values={{ insuree: insureeLabel(insuree), family: familyLabel(family) }}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            {!!this.canCancel && (
+              <Button onClick={(e) => onConfirm(true)} className="primaryButton" autoFocus>
+                <FormattedMessage module="insuree" id="removeInsureeFromFamilyDialog.cancelPolicies.button" />
+              </Button>
+            )}
+            {!!this.canKeep && (
+              <Button onClick={(e) => onConfirm(false)} className="secondaryButton">
+                <FormattedMessage module="insuree" id="removeInsureeFromFamilyDialog.keepPolicies.button" />
+              </Button>
+            )}
+            <Button onClick={onCancel} className="secondaryButton">
+              <FormattedMessage module="core" id="cancel" />
             </Button>
-          )}
-          {!!this.canKeep && (
-            <Button onClick={(e) => onConfirm(false)} className={classes.secondaryButton}>
-              <FormattedMessage module="insuree" id="removeInsureeFromFamilyDialog.keepPolicies.button" />
-            </Button>
-          )}
-          <Button onClick={onCancel} className={classes.secondaryButton}>
-            <FormattedMessage module="core" id="cancel" />
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </DialogActions>
+        </Dialog>
+      </StyledRemoveInsureeFromFamilyDialog>
     );
   }
 }
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(RemoveInsureeFromFamilyDialog))));
+export default withModulesManager(injectIntl(RemoveInsureeFromFamilyDialog));

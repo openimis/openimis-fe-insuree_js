@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import {
@@ -17,10 +17,10 @@ import FamilySearcher from "../components/FamilySearcher";
 
 import { RIGHT_FAMILY_ADD } from "../constants";
 
-const styles = (theme) => ({
-  page: theme.page,
-  fab: theme.fab,
-});
+const StyledFamiliesPage = styled('div')(({ theme }) => ({
+  '& .page': theme.page,
+  '& .fab': theme.fab,
+}));
 
 const FAMILY_FILTERS_CONTRIBUTION_KEY = "insuree.FamilyFilters";
 const FAMILY_ACTION_CONTRIBUTION_KEY = "insuree.FamilyActions";
@@ -59,26 +59,28 @@ class FamiliesPage extends Component {
   };
 
   render() {
-    const { intl, classes, rights } = this.props;
+    const { intl, rights } = this.props;
     return (
-      <div className={classes.page}>
-        <FamilySearcher
-          cacheFiltersKey="insureeFamiliesPageFiltersCache"
-          onDoubleClick={this.onDoubleClick}
-          filterPaneContributionsKey={FAMILY_FILTERS_CONTRIBUTION_KEY}
-          actionsContributionKey={FAMILY_ACTION_CONTRIBUTION_KEY}
-          defaultFilters = {this.state.defaultFilters}
-        />
-        {rights.includes(RIGHT_FAMILY_ADD) &&
-          withTooltip(
-            <div className={classes.fab}>
-              <Fab color="primary" onClick={this.onAdd}>
-                <AddIcon />
-              </Fab>
-            </div>,
-            formatMessage(intl, "insuree", "addNewFamilyTooltip"),
-          )}
-      </div>
+      <StyledFamiliesPage>
+        <div className="page">
+          <FamilySearcher
+            cacheFiltersKey="insureeFamiliesPageFiltersCache"
+            onDoubleClick={this.onDoubleClick}
+            filterPaneContributionsKey={FAMILY_FILTERS_CONTRIBUTION_KEY}
+            actionsContributionKey={FAMILY_ACTION_CONTRIBUTION_KEY}
+            defaultFilters = {this.state.defaultFilters}
+          />
+          {rights.includes(RIGHT_FAMILY_ADD) &&
+            withTooltip(
+              <div className="fab">
+                <Fab color="primary" onClick={this.onAdd}>
+                  <AddIcon />
+                </Fab>
+              </div>,
+              formatMessage(intl, "insuree", "addNewFamilyTooltip"),
+            )}
+        </div>
+      </StyledFamiliesPage>
     );
   }
 }
@@ -92,6 +94,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPagina
 
 export default injectIntl(
   withModulesManager(
-    withHistory(connect(mapStateToProps, mapDispatchToProps)(withTheme(withStyles(styles)(FamiliesPage)))),
+    withHistory(connect(mapStateToProps, mapDispatchToProps)(FamiliesPage)),
   ),
 );

@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 
 import { Dialog, Button, DialogActions, DialogContent } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
 import {
   formatMessage,
@@ -18,8 +18,8 @@ import {
 import { fetchInsureeEnquiry, clearInsureeEnquiry } from "../actions";
 import InsureeSummary from "./InsureeSummary";
 
-const useStyles = makeStyles(() => ({
-  summary: {
+const StyledEnquiryDialog = styled('div')(({ theme }) => ({
+  '& .summary': {
     marginBottom: 32,
   },
 }));
@@ -38,7 +38,6 @@ const EnquiryDialog = ({
   chfid,
   match,
 }) => {
-  const classes = useStyles();
   const prevMatchUrl = useRef(null);
 
   const handleClose = () => {
@@ -62,35 +61,37 @@ const EnquiryDialog = ({
   }, [open, chfid, match?.url]);
 
   return (
-    <Dialog maxWidth="xl" fullWidth open={open} onClose={onClose}>
-      <DialogContent>
-        <ProgressOrError progress={fetching} error={error} />
-        {!!fetched && !insuree && (
-          <Error
-            error={{
-              code: formatMessage(intl, "insuree", "notFound"),
-              detail: formatMessageWithValues(intl, "insuree", "chfIdNotFound", { chfid }),
-            }}
-          />
-        )}
-        {!fetching && insuree && (
-          <Fragment>
-            <InsureeSummary modulesManager={modulesManager} insuree={insuree} className={classes.summary} />
-            <Contributions
-              contributionKey="insuree.EnquiryDialog"
-              insuree={insuree}
-              disableSelection
-              hideAddPolicyButton
+    <StyledEnquiryDialog>
+      <Dialog maxWidth="xl" fullWidth open={open} onClose={onClose}>
+        <DialogContent>
+          <ProgressOrError progress={fetching} error={error} />
+          {!!fetched && !insuree && (
+            <Error
+              error={{
+                code: formatMessage(intl, "insuree", "notFound"),
+                detail: formatMessageWithValues(intl, "insuree", "chfIdNotFound", { chfid }),
+              }}
             />
-          </Fragment>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          {formatMessage(intl, "insuree", "close")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          )}
+          {!fetching && insuree && (
+            <Fragment>
+              <InsureeSummary modulesManager={modulesManager} insuree={insuree} className="summary" />
+              <Contributions
+                contributionKey="insuree.EnquiryDialog"
+                insuree={insuree}
+                disableSelection
+                hideAddPolicyButton
+              />
+            </Fragment>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            {formatMessage(intl, "insuree", "close")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </StyledEnquiryDialog>
   );
 };
 

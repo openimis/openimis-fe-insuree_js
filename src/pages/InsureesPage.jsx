@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import {
@@ -17,10 +17,10 @@ import InsureeSearcher from "../components/InsureeSearcher";
 
 import { RIGHT_INSUREE_ADD } from "../constants";
 
-const styles = (theme) => ({
-  page: theme.page,
-  fab: theme.fab,
-});
+const StyledInsureesPage = styled('div')(({ theme }) => ({
+  '& .page': theme.page,
+  '& .fab': theme.fab,
+}));
 
 class InsureesPage extends Component {
   constructor(props) {
@@ -55,20 +55,22 @@ class InsureesPage extends Component {
   };
 
   render() {
-    const { intl, classes, rights } = this.props;
+    const { intl, rights } = this.props;
     return (
-      <div className={classes.page}>
-        <InsureeSearcher cacheFiltersKey="insureeInsureesPageFiltersCache" onDoubleClick={this.onDoubleClick} defaultFilters={this.state.defaultFilters} />
-        {rights.includes(RIGHT_INSUREE_ADD) &&
-          withTooltip(
-            <div className={classes.fab}>
-              <Fab color="primary" onClick={this.onAdd}>
-                <AddIcon />
-              </Fab>
-            </div>,
-            formatMessage(intl, "insuree", "addNewInsureeTooltip"),
-          )}
-      </div>
+      <StyledInsureesPage>
+        <div className="page">
+          <InsureeSearcher cacheFiltersKey="insureeInsureesPageFiltersCache" onDoubleClick={this.onDoubleClick} defaultFilters={this.state.defaultFilters} />
+          {rights.includes(RIGHT_INSUREE_ADD) &&
+            withTooltip(
+              <div className="fab">
+                <Fab color="primary" onClick={this.onAdd}>
+                  <AddIcon />
+                </Fab>
+              </div>,
+              formatMessage(intl, "insuree", "addNewInsureeTooltip"),
+            )}
+        </div>
+      </StyledInsureesPage>
     );
   }
 }
@@ -82,6 +84,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPagina
 
 export default injectIntl(
   withModulesManager(
-    withHistory(connect(mapStateToProps, mapDispatchToProps)(withTheme(withStyles(styles)(InsureesPage)))),
+    withHistory(connect(mapStateToProps, mapDispatchToProps)(InsureesPage)),
   ),
 );
