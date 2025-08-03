@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import _ from "lodash";
 
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
@@ -23,10 +23,9 @@ import { insureeLabel, isValidInsuree } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
 
-const styles = (theme) => ({
-  page: theme.page,
-  lockedPage: theme.page.locked,
-});
+const StyledInsureeForm = styled('div')(({ theme }) => ({
+  '&.lockedPage': theme.page.locked,
+}));
 
 const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";
 
@@ -229,7 +228,6 @@ class InsureeForm extends Component {
       fetchedFamily,
       errorFamily,
       readOnly = false,
-      classes,
       add,
       save,
     } = this.props;
@@ -245,7 +243,7 @@ class InsureeForm extends Component {
     ];
     const shouldBeLocked = !!runningMutation || insuree?.validityTo;
     return (
-      <div className={shouldBeLocked ? classes.lockedPage : null}>
+      <StyledInsureeForm className={shouldBeLocked ? "lockedPage" : null}>
         <Helmet
           title={formatMessageWithValues(this.props.intl, "insuree", "Insuree.title", {
             label: insureeLabel(this.state.insuree),
@@ -276,7 +274,7 @@ class InsureeForm extends Component {
               openDirty={save}
             />
           )}
-      </div>
+      </StyledInsureeForm>
     );
   }
 }
@@ -304,6 +302,6 @@ export default withHistory(
       clearInsuree,
       fetchInsureeMutation,
       journalize,
-    })(injectIntl(withTheme(withStyles(styles)(InsureeForm)))),
+    })(injectIntl(InsureeForm)),
   ),
 );

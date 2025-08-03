@@ -44,6 +44,6 @@
     "dist"
   ],
   "dependencies": {
-    "@mui/styles": "^6.4.8"
+    
   }
 }

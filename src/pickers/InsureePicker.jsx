@@ -5,20 +5,20 @@ import { injectIntl } from "react-intl";
 import _ from "lodash";
 
 import { Grid } from "@mui/material";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 
 import { TextInput, Picker, withModulesManager } from "@openimis/fe-core";
 import { fetchInsureesForPicker, checkIfHeadSelected } from "../actions";
 import { DEFAULT } from "../constants";
 
-const styles = (theme) => ({
-  label: {
+const StyledInsureePicker = styled('div')(({ theme }) => ({
+  '& .label': {
     color: theme.palette.primary.main,
   },
-  item: {
+  '& .item': {
     padding: theme.spacing(1),
   },
-});
+}));
 
 class RawFilter extends Component {
   constructor(props) {
@@ -54,8 +54,8 @@ class RawFilter extends Component {
     this.setState({ [a]: v }, (e) => this.props.onChange(this.stateToFilters()));
   };
 
-  renderLastNameField = (classes) => (
-    <Grid item xs={4} className={classes.item}>
+  renderLastNameField = () => (
+    <Grid item xs={4} className="item">
       <TextInput
         module="insuree"
         label="Insuree.lastName"
@@ -65,8 +65,8 @@ class RawFilter extends Component {
     </Grid>
   );
 
-  renderGivenNameField = (classes) => (
-    <Grid item xs={4} className={classes.item}>
+  renderGivenNameField = () => (
+    <Grid item xs={4} className="item">
       <TextInput
         module="insuree"
         label="Insuree.otherNames"
@@ -77,10 +77,9 @@ class RawFilter extends Component {
   );
 
   render() {
-    const { classes } = this.props;
     return (
       <Grid container>
-        <Grid item xs={4} className={classes.item}>
+        <Grid item xs={4} className="item">
           <TextInput
             autoFocus={true}
             module="insuree"
@@ -91,13 +90,13 @@ class RawFilter extends Component {
         </Grid>
         {this.renderLastNameFirst ? (
           <>
-            {this.renderLastNameField(classes)}
-            {this.renderGivenNameField(classes)}
+            {this.renderLastNameField()}
+            {this.renderGivenNameField()}
           </>
         ) : (
           <>
-            {this.renderGivenNameField(classes)}
-            {this.renderLastNameField(classes)}
+            {this.renderGivenNameField()}
+            {this.renderLastNameField()}
           </>
         )}
       </Grid>
@@ -105,7 +104,7 @@ class RawFilter extends Component {
   }
 }
 
-const Filter = withModulesManager(withTheme(withStyles(styles)(RawFilter)));
+const Filter = withModulesManager(RawFilter);
 
 const INIT_STATE = {
   page: 0,
@@ -234,27 +233,29 @@ class InsureePicker extends Component {
       checked,
     } = this.props;
     return (
-      <Picker
-        module="insuree"
-        label={!!withLabel ? "Insuree.label" : null}
-        title={title}
-        dialogTitle="Insuree.picker.dialog.title"
-        IconRender={IconRender}
-        check={check}
-        checked={checked}
-        filter={<Filter onChange={this.debouncedGetSuggestion} />}
-        suggestions={insurees}
-        suggestionFormatter={this.formatSuggestion}
-        page={this.state.page}
-        pageSize={this.state.pageSize}
-        count={insureesPageInfo.totalCount}
-        onChangePage={this.onChangePage}
-        onChangeRowsPerPage={this.onChangeRowsPerPage}
-        onSelect={this.onSelect}
-        value={this.state.selected}
-        readOnly={readOnly}
-        required={required}
-      />
+      <StyledInsureePicker>
+        <Picker
+          module="insuree"
+          label={!!withLabel ? "Insuree.label" : null}
+          title={title}
+          dialogTitle="Insuree.picker.dialog.title"
+          IconRender={IconRender}
+          check={check}
+          checked={checked}
+          filter={<Filter onChange={this.debouncedGetSuggestion} />}
+          suggestions={insurees}
+          suggestionFormatter={this.formatSuggestion}
+          page={this.state.page}
+          pageSize={this.state.pageSize}
+          count={insureesPageInfo.totalCount}
+          onChangePage={this.onChangePage}
+          onChangeRowsPerPage={this.onChangeRowsPerPage}
+          onSelect={this.onSelect}
+          value={this.state.selected}
+          readOnly={readOnly}
+          required={required}
+        />
+      </StyledInsureePicker>
     );
   }
 }
@@ -269,5 +270,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withModulesManager(
-  connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(InsureePicker)))),
+  connect(mapStateToProps, mapDispatchToProps)(injectIntl(InsureePicker)),
 );

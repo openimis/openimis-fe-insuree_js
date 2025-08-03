@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { withTheme, withStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import { injectIntl } from "react-intl";
 import { fetchInsureeOfficers } from "../actions";
 import { formatMessage, AutoSuggestion, ProgressOrError, withModulesManager, decodeId } from "@openimis/fe-core";
 import { DEFAULT } from "../constants";
 
-const styles = (theme) => ({
-  label: {
+const StyledInsureeOfficer = styled('div')(({ theme }) => ({
+  '& .label': {
     color: theme.palette.primary.main,
   },
-});
+}));
 
 class InsureeOfficer extends Component {
   constructor(props) {
@@ -65,26 +65,28 @@ class InsureeOfficer extends Component {
     let v = insureeOfficers ? insureeOfficers.filter((o) => parseInt(decodeId(o.id)) === value) : [];
     v = v.length ? v[0] : null;
     return (
-      <Fragment>
-        <ProgressOrError progress={fetchingInsureeOfficers} error={errorInsureeOfficers} />
-        {fetchedInsureeOfficers && (
-          <AutoSuggestion
-            module="insuree"
-            items={insureeOfficers}
-            label={!!withLabel && (label || formatMessage(intl, "insuree", "InsureeOfficer.label"))}
-            getSuggestions={this.insureeOfficers}
-            getSuggestionValue={this.formatSuggestion}
-            onSuggestionSelected={this.onSuggestionSelected}
-            value={v}
-            reset={reset}
-            readOnly={readOnly}
-            required={required}
-            selectThreshold={this.selectThreshold}
-            withNull={withNull}
-            nullLabel={nullLabel || formatMessage(intl, "insuree", "insuree.InsureeOfficer.null")}
-          />
-        )}
-      </Fragment>
+      <StyledInsureeOfficer>
+        <Fragment>
+          <ProgressOrError progress={fetchingInsureeOfficers} error={errorInsureeOfficers} />
+          {fetchedInsureeOfficers && (
+            <AutoSuggestion
+              module="insuree"
+              items={insureeOfficers}
+              label={!!withLabel && (label || formatMessage(intl, "insuree", "InsureeOfficer.label"))}
+              getSuggestions={this.insureeOfficers}
+              getSuggestionValue={this.formatSuggestion}
+              onSuggestionSelected={this.onSuggestionSelected}
+              value={v}
+              reset={reset}
+              readOnly={readOnly}
+              required={required}
+              selectThreshold={this.selectThreshold}
+              withNull={withNull}
+              nullLabel={nullLabel || formatMessage(intl, "insuree", "insuree.InsureeOfficer.null")}
+            />
+          )}
+        </Fragment>
+      </StyledInsureeOfficer>
     );
   }
 }
@@ -101,5 +103,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withModulesManager(
-  connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(InsureeOfficer)))),
+  connect(mapStateToProps, mapDispatchToProps)(injectIntl(InsureeOfficer)),
 );
