@@ -102,7 +102,6 @@ None
 - `isPhotoRequired`, Make photo upload of an insuree mandatory. (default: 'False)
 - ' `"isCurrentAdminEnrollmentOfficerActive"`, Enables automatic assignment of 
   the current user as the enrolment officer during family or insuree creation. If 'True', the officer is inferred from session; if 'False', manual selection remains available. (default: 'False)
-- '`"isPhotoRequired"`', Make photo upload of an insuree mandatory. (default: 'False)
 - `isDefaultFetchInsureeActivated`, manage default fetch behavior of insuree searcher ; default: true
 - `isDefaultFetchFamilyActivated`, manage default fetch behavior of family searcher ; default: true
 
