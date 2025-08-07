@@ -123,6 +123,37 @@ export function fetchInsuree(mm, chfid) {
   return graphql(payload, "INSUREE_INSUREE");
 }
 
+export function fetchInsureeEnquiry(mm, chfid) {
+  let payload = formatPageQuery(
+    "insurees",
+    [`chfId:"${chfid}", ignoreLocation:true`],
+    [
+      "id",
+      "uuid",
+      "chfId",
+      "lastName",
+      "otherNames",
+      "dob",
+      "age",
+      "validityFrom",
+      "validityTo",
+      "gender{code}",
+      "status",
+      `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
+      "photo{folder,filename,photo}",
+      "gender{code, gender, altLanguage}",
+      "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
+    ],
+  );
+  return graphql(payload, "ENQUIRY_INSUREE");
+}
+
+export function clearInsureeEnquiry() {
+  return (dispatch) => {
+    dispatch({ type: "ENQUIRY_INSUREE_CLEAR" });
+  };
+}
+
 export function fetchInsureeFull(mm, uuid, ignoreLocation = false) {
   let args = [`uuid:"${uuid}"`];
   if (ignoreLocation) args.push("ignoreLocation: true");

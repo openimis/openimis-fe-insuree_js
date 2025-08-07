@@ -17,7 +17,7 @@ const styles = (theme) => ({
 });
 
 const InsureeAvatar = (props) => {
-  const { photo, classes, className, withMeta = false, readOnly, onChange, required } = props;
+  const { photo, classes, className, withMeta = false, readOnly, onChange , required} = props;
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations("insuree", modulesManager);
 

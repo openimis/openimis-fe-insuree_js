@@ -253,5 +253,16 @@
   "insuree.FamilyMembersTable.InsuranceNo": "Insurance No.",
   "insuree.FamilyMembersTable.memberName": "Family Member",
   "insuree.FamilyMembersTable.phone": "Phone",
-  "insuree.FamilyMembersTable.noMembers": "Family not registered."
+  "insuree.FamilyMembersTable.noMembers": "Family not registered.",
+  "insuree.gql_query_insurees_perms": "Insuree | Query Insurees",
+  "insuree.gql_query_insuree_perms": "Insuree | Query Insuree",
+  "insuree.gql_query_insuree_photo_perms": "Insuree | Query Insuree Photo",
+  "insuree.gql_query_families_perms": "Insuree | Query Families",
+  "insuree.gql_query_insuree_policy_perms": "Insuree | Query Insuree Policy",
+  "insuree.gql_mutation_create_families_perms": "Insuree | Mutation Create Families",
+  "insuree.gql_mutation_update_families_perms": "Insuree | Mutation Update Families",
+  "insuree.gql_mutation_delete_families_perms": "Insuree | Mutation Delete Families",
+  "insuree.gql_mutation_create_insurees_perms": "Insuree | Mutation Create Insurees",
+  "insuree.gql_mutation_update_insurees_perms": "Insuree | Mutation Update Insurees",
+  "insuree.gql_mutation_delete_insurees_perms": "Insuree | Mutation Delete Insurees"
 }

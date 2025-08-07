@@ -1,3 +1,6 @@
+import React from 'react';
+import { AssignmentInd, GroupAdd, People, Person } from "@material-ui/icons";
+import { FormattedMessage } from "@openimis/fe-core";
 import InsureeMainMenu from "./menus/InsureeMainMenu";
 import FamiliesPage from "./pages/FamiliesPage";
 import InsureePage from "./pages/InsureePage";
@@ -42,6 +45,7 @@ import EnrolledFamiliesReport from "./reports/EnrolledFamiliesReport";
 import InsureeFamilyOverviewReport from "./reports/InsureeFamilyOverviewReport";
 import InsureeMissingPhotoReport from "./reports/InsureeMissingPhotoReport";
 import InsureePendingEnrollmentReport from "./reports/InsureePendingEnrollmentReport";
+import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE } from "./constants";
 
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
 const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
@@ -151,7 +155,7 @@ const DEFAULT_CONFIG = {
     { path: ROUTE_INSUREE_PROFILE + "/:insuree_uuid", component: ProfilePage },
   ],
   "core.AppBar": [Enquiry],
-  "core.MainMenu": [InsureeMainMenu],
+  "core.MainMenu": [{ name: 'InsureeMainMenu', component: InsureeMainMenu }],
   "insuree.InsureeSummaryAvatar": [InsureeAvatar],
   "insuree.InsureeSummaryExt": [InsureeFirstServicePointDisplay],
   "insuree.Insuree.panels": [InsureeFirstServicePointPanel],
@@ -167,6 +171,30 @@ const DEFAULT_CONFIG = {
       picker: FamilyPicker,
       pickerProjection: FAMILY_PICKER_PROJECTION,
     },
+  ],
+  "insuree.MainMenu": [
+    {
+      text: <FormattedMessage module="insuree" id="menu.addFamilyOrGroup" />,
+      icon: <GroupAdd />,
+      route: "/" + ROUTE_INSUREE_FAMILY,
+      withDivider: true,
+      id: "insuree.addFamilyOrGroup",
+      filter: (rights) => rights.includes(RIGHT_FAMILY_ADD),
+    },
+    {
+      text: <FormattedMessage module="insuree" id="menu.familiesOrGroups" />,
+      icon: <People />,
+      route: "/" + ROUTE_INSUREE_FAMILIES,
+      id: "insuree.familiesOrGroups",
+      filter: (rights) => rights.includes(RIGHT_FAMILY),
+    },
+    {
+      text: <FormattedMessage module="insuree" id="menu.insurees" />,
+      icon: <Person />,
+      route: "/" + ROUTE_INSUREE_INSUREES,
+      id: "insuree.insurees",
+      filter: (rights) => rights.includes(RIGHT_INSUREE),
+    }
   ],
 };
 
