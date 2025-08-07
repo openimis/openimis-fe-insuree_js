@@ -105,3 +105,4 @@ None
 - '`"isPhotoRequired"`', Make photo upload of an insuree mandatory. (default: 'False)
 - `isDefaultFetchInsureeActivated`, manage default fetch behavior of insuree searcher ; default: true
 - `isDefaultFetchFamilyActivated`, manage default fetch behavior of family searcher ; default: true
+
