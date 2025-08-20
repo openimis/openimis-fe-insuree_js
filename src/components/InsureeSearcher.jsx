@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Grid, IconButton, Tooltip } from "@mui/material";
 import { Search as SearchIcon, People as PeopleIcon, Tab as TabIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import _ from "lodash";
 import {
   withModulesManager,
   formatMessageWithValues,

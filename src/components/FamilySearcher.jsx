@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Checkbox, IconButton, Tooltip } from "@mui/material";
 import TabIcon from "@mui/icons-material/Tab";
+import _ from "lodash";
 import {
   withModulesManager,
   formatMessageWithValues,

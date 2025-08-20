@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { AssignmentInd, GroupAdd, People, Person } from "@mui/icons-material";
+import { AssignmentInd, GroupAdd, People, Person, Business } from "@mui/icons-material";
 import { formatMessage, MainMenuContribution, withModulesManager } from "@openimis/fe-core";
 import { DEFAULT, RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE } from "../constants";
 
@@ -70,6 +70,15 @@ class InsureeMainMenu extends Component {
         id: "insuree.insurees", 
       });
     }
+    
+   
+    entries.push({
+      text: "Policy Holders",
+      icon: <Business />,
+      route: "/policyHolders",
+      id: "policyHolder.policyHolders",
+    });
+ 
     entries.push(
       ...this.props.modulesManager
         .getContribs(INSUREE_MAIN_MENU_CONTRIBUTION_KEY)
