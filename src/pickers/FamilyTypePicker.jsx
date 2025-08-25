@@ -62,6 +62,7 @@ class FamilyTypePicker extends Component {
         required={required}
         withNull={withNull}
         nullLabel={this.nullDisplay}
+        fullWidth={true}
       />
     );
   }

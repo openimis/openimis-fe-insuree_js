@@ -61,6 +61,7 @@ class EducationPicker extends Component {
         selectThreshold={this.selectThreshold}
         withNull={withNull}
         nullLabel={this.nullDisplay}
+        fullWidth={true}
       />
     );
   }

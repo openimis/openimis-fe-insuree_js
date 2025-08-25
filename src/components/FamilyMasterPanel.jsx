@@ -94,7 +94,7 @@ class FamilyMasterPanel extends FormPanel {
             readOnly={true}
           />
         </Grid>
-        <Grid item xs={1} className="item">
+        <Grid item xs={2} className="item">
           <PublishedComponent
             pubRef="insuree.InsureeGenderPicker"
             value={!edited || !edited.headInsuree || !edited.headInsuree.gender ? null : edited.headInsuree.gender.code}
@@ -162,7 +162,7 @@ class FamilyMasterPanel extends FormPanel {
               />
             </Grid>
             {!!overview && this.headSummary()}
-            <Grid item xs={2} className="item">
+            <Grid item xs={3} className="item">
               <PublishedComponent
                 pubRef="insuree.FamilyTypePicker"
                 withNull={false}
@@ -171,7 +171,7 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("familyType", { code: v })}
               />
             </Grid>
-            <Grid item xs={2} className="item">
+            <Grid item xs={3} className="item">
               <PublishedComponent
                 pubRef="insuree.ConfirmationTypePicker"
                 withNull={false}
@@ -190,7 +190,7 @@ class FamilyMasterPanel extends FormPanel {
                 required={edited?.confirmationType?.isConfirmationNumberRequired ?? false}
               />
             </Grid>
-            <Grid item xs={4} className="item">
+            <Grid item xs={5} className="item">
               <TextInput
                 module="insuree"
                 label="Family.address"
