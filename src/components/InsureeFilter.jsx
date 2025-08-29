@@ -136,6 +136,7 @@ class InsureeFilter extends Component {
                   filters={filters}
                   onChangeFilters={onChangeFilters}
                   anchor="parentLocation"
+                  reset={this.props.reset}
                 />
               </Grid>
             }
@@ -185,6 +186,7 @@ class InsureeFilter extends Component {
                       pubRef="insuree.InsureeGenderPicker"
                       withNull={true}
                       value={this._filterValue("gender")}
+                      reset={this.props.reset}
                       onChange={(v) =>
                         onChangeFilters([
                           {
@@ -206,6 +208,7 @@ class InsureeFilter extends Component {
                     <PublishedComponent
                       pubRef="insuree.InsureeMaritalStatusPicker"
                       value={this._filterValue("maritalStatus")}
+                      reset={this.props.reset}
                       onChange={(v) =>
                         onChangeFilters([
                           {
@@ -275,6 +278,7 @@ class InsureeFilter extends Component {
                 <PublishedComponent
                   pubRef="insuree.FamilyStatusPicker"
                   value={this._filterValue("familyStatus")}
+                  reset={this.props.reset}
                   onChange={(s) =>
                     onChangeFilters([
                       {
@@ -300,6 +304,7 @@ class InsureeFilter extends Component {
                       value={this._filterValue("dobFrom")}
                       module="insuree"
                       label="Insuree.dobFrom"
+                      reset={this.props.reset}
                       {...(filters.dobTo ? { maxDate: filters.dobTo.value } : null)}
                       onChange={(d) =>
                         onChangeFilters([
@@ -318,6 +323,7 @@ class InsureeFilter extends Component {
                       value={this._filterValue("dobTo")}
                       module="insuree"
                       label="Insuree.dobTo"
+                      reset={this.props.reset}
                       {...(filters.dobFrom ? { minDate: filters.dobFrom.value } : null)}
                       onChange={(d) =>
                         onChangeFilters([
@@ -344,6 +350,7 @@ class InsureeFilter extends Component {
                     <PublishedComponent
                       pubRef="insuree.PhotoStatusPicker"
                       value={this._filterValue("photoStatus")}
+                      reset={this.props.reset}
                       onChange={(s) =>
                         onChangeFilters([
                           {

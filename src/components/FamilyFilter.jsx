@@ -168,6 +168,7 @@ class FamilyFilter extends Component {
                 withNull={true}
                 label={`Family.${anchor}.gender`}
                 value={this._filterValue(`${anchor}.gender`)}
+                reset={this.props.reset}
                 onChange={(v) =>
                   onChangeFilters([
                     {
@@ -239,6 +240,7 @@ class FamilyFilter extends Component {
                     value={this._filterValue(`${anchor}.dobFrom`)}
                     module="insuree"
                     label={`Family.${anchor}.dobFrom`}
+                    reset={this.props.reset}
                     onChange={(d) =>
                       onChangeFilters([
                         {
@@ -256,6 +258,7 @@ class FamilyFilter extends Component {
                     value={this._filterValue(`${anchor}.dobTo`)}
                     module="insuree"
                     label={`Family.${anchor}.dobTo`}
+                    reset={this.props.reset}
                     onChange={(d) =>
                       onChangeFilters([
                         {
@@ -324,6 +327,7 @@ class FamilyFilter extends Component {
                   filters={filters}
                   onChangeFilters={onChangeFilters}
                   anchor="parentLocation"
+                  reset={this.props.reset}
                 />
               </Grid>
             }
@@ -338,6 +342,7 @@ class FamilyFilter extends Component {
                 <PublishedComponent
                   pubRef="insuree.FamilyPovertyStatusPicker"
                   value={this._filterValue("poverty")}
+                  reset={this.props.reset}
                   onChange={(v) =>
                     onChangeFilters([
                       {
@@ -383,6 +388,7 @@ class FamilyFilter extends Component {
                   pubRef="policy.PolicyOfficerPicker"
                   withNull={true}
                   value={this._filterValue("officer")}
+                  reset={this.props.reset}
                   onChange={(v) =>
                     onChangeFilters([
                       {
