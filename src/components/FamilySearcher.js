@@ -117,9 +117,9 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.insuranceNo",
       this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
       !this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
-      this.columns.email !== "H" ? "insuree.familySummaries.email" : null,
-      this.columns.phone !== "H" ? "insuree.familySummaries.phone" : null,
-      this.columns.dob !== "H" ? "insuree.familySummaries.dob" : null,
+      this.columns?.email !== "H" ? "insuree.familySummaries.email" : null,
+      this.columns?.phone !== "H" ? "insuree.familySummaries.phone" : null,
+      this.columns?.dob !== "H" ? "insuree.familySummaries.dob" : null,
     ];
     for (var i = 0; i < this.locationLevels; i++) {
       h.push(`location.locationType.${i}`);
