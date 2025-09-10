@@ -132,9 +132,9 @@ class InsureeSearcher extends Component {
       !this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
       "insuree.insureeSummaries.maritalStatus",
       "insuree.insureeSummaries.gender",
-      this.columns?.email === "H" ? null : "insuree.insureeSummaries.email",
-      this.columns?.phone === "H" ? null : "insuree.insureeSummaries.phone",
-      "insuree.insureeSummaries.dob",
+      this.columns.email !== "H" ? "insuree.insureeSummaries.email" : null,
+      this.columns.phone !== "H" ? "insuree.insureeSummaries.phone" : null,
+      this.columns.dob !== "H" ? "insuree.insureeSummaries.dob" : null,
       ...Array.from(Array(this.locationLevels)).map((_, i) => (`location.locationType.${i}`)),
       filters?.showHistory?.value ? "insuree.insureeSummaries.validityFrom" : null,
       filters?.showHistory?.value ? "insuree.insureeSummaries.validityTo" : null,
@@ -219,9 +219,9 @@ class InsureeSearcher extends Component {
               value={!!insuree.gender ? insuree.gender.code : null}
             />
           ),
-      this.columns?.email === "H" ? null : (insuree) => insuree.email,
-      this.columns?.phone === "H" ? null : (insuree) => insuree.phone,
-      (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
+      this.columns?.email !== "H" ? (insuree) => insuree.email : null,
+      this.columns?.phone !== "H" ? (insuree) => insuree.phone : null,
+      this.columns?.dob !== "H" ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob) : null,
     ];
       for (var i = 0; i < this.locationLevels; i++) {
         // need a fixed variable to refer to as parentLocation argument
