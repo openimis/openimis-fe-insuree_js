@@ -37,7 +37,7 @@ class FamilySearcher extends Component {
       "familyFilter.rowsPerPageOptions",
       [10, 20, 50, 100],
     );
-    this.fields = props.modulesManager.getConf("fe-insuree", "fields", {});
+    this.columns = props.modulesManager.getConf("fe-insuree", "columns", {});
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "familyFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
     this.renderLastNameFirst = props.modulesManager.getConf(
@@ -117,16 +117,16 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.insuranceNo",
       this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
       !this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
-      this.fields.headInsureeEmail !== "H" ? "insuree.familySummaries.email" : null,
-      this.fields.headInsureePhone !== "H" ? "insuree.familySummaries.phone" : null,
-      this.fields.headInsureeDob !== "H" ? "insuree.familySummaries.dob" : null,
+      this.columns?.headInsureeEmail === "H" ? null : "insuree.familySummaries.email",
+      this.columns?.headInsureePhone === "H" ? null : "insuree.familySummaries.phone",
+      "insuree.familySummaries.dob",
     ];
     for (var i = 0; i < this.locationLevels; i++) {
       h.push(`location.locationType.${i}`);
     }
     h.push(
-      this.fields.poverty !== "H" ? "insuree.familySummaries.poverty" : null,
-      this.fields.confirmationNo !== "H" ? "insuree.familySummaries.confirmationNo" : null,
+      this.columns?.poverty === "H" ? null : "insuree.familySummaries.poverty",
+      this.columns?.confirmationNo === "H" ? null : "insuree.familySummaries.confirmationNo",
       filters?.showHistory?.value ? "insuree.familySummaries.validityFrom" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityTo" : null,
       "insuree.familySummaries.openNewTab",
@@ -195,8 +195,8 @@ class FamilySearcher extends Component {
         (family.headInsuree && !this.renderLastNameFirst
           ? family.headInsuree.lastName
           : family.headInsuree.otherNames) || "",
-      (family) => (!!family.headInsuree ? family.headInsuree.email : ""),
-      (family) => (!!family.headInsuree ? family.headInsuree.phone : ""),
+      this.columns?.headInsureeEmail === "H" ? null : (family) => (!!family.headInsuree ? family.headInsuree.email : ""),
+      this.columns?.headInsureePhone === "H" ? null : (family) => (!!family.headInsuree ? family.headInsuree.phone : ""),
       (family) =>
         !!family.headInsuree
           ? formatDateFromISO(this.props.modulesManager, this.props.intl, family.headInsuree.dob)
@@ -208,8 +208,8 @@ class FamilySearcher extends Component {
       formatters.push((family) => this.parentLocation(family.location, j));
     }
     formatters.push(
-      this.fields.poverty !== "H" ? (family) => <Checkbox color="primary" checked={family.poverty} readOnly /> : null,
-      this.fields.confirmationNo !== "H" ? (family) => family.confirmationNo : null,
+      this.columns?.poverty === "H" ? null : (family) => <Checkbox color="primary" checked={family.poverty} readOnly />,
+      this.columns?.confirmationNo === "H" ? null : (family) => family.confirmationNo,
       filters?.showHistory?.value
         ? (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom)
         : null,
