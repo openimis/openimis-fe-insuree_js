@@ -37,6 +37,7 @@ class FamilySearcher extends Component {
       "familyFilter.rowsPerPageOptions",
       [10, 20, 50, 100],
     );
+    this.fields = props.modulesManager.getConf("fe-insuree", "fields", {});
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "familyFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
     this.renderLastNameFirst = props.modulesManager.getConf(
@@ -116,16 +117,16 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.insuranceNo",
       this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
       !this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
-      "insuree.familySummaries.email",
-      "insuree.familySummaries.phone",
-      "insuree.familySummaries.dob",
+      this.fields.headInsureeEmail !== "H" ? "insuree.familySummaries.email" : null,
+      this.fields.headInsureePhone !== "H" ? "insuree.familySummaries.phone" : null,
+      this.fields.headInsureeDob !== "H" ? "insuree.familySummaries.dob" : null,
     ];
     for (var i = 0; i < this.locationLevels; i++) {
       h.push(`location.locationType.${i}`);
     }
     h.push(
-      "insuree.familySummaries.poverty",
-      "insuree.familySummaries.confirmationNo",
+      this.fields.poverty !== "H" ? "insuree.familySummaries.poverty" : null,
+      this.fields.confirmationNo !== "H" ? "insuree.familySummaries.confirmationNo" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityFrom" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityTo" : null,
       "insuree.familySummaries.openNewTab",
@@ -207,8 +208,8 @@ class FamilySearcher extends Component {
       formatters.push((family) => this.parentLocation(family.location, j));
     }
     formatters.push(
-      (family) => <Checkbox color="primary" checked={family.poverty} readOnly />,
-      (family) => family.confirmationNo,
+      this.fields.poverty !== "H" ? (family) => <Checkbox color="primary" checked={family.poverty} readOnly /> : null,
+      this.fields.confirmationNo !== "H" ? (family) => family.confirmationNo : null,
       filters?.showHistory?.value
         ? (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom)
         : null,
