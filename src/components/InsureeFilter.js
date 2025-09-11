@@ -32,6 +32,7 @@ const INSUREE_FILTER_CONTRIBUTION_KEY = "insuree.Filter";
 class InsureeFilter extends Component {
   constructor(props) {
     super(props);
+    this.columns = props.modulesManager.getConf("fe-insuree", "columns", {});
     this.renderLastNameFirst = props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
@@ -222,6 +223,7 @@ class InsureeFilter extends Component {
             />
           </Grid>
         </Grid>
+        {!this.columns?.email === "H" && (
         <ControlledField
           module="insuree"
           id="InsureeFilter.email"
@@ -245,6 +247,7 @@ class InsureeFilter extends Component {
             </Grid>
           }
         />
+        )}
         <ControlledField
           module="insuree"
           id="InsureeFilter.phone"
@@ -387,5 +390,9 @@ class InsureeFilter extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+});
 
 export default withModulesManager(injectIntl(withTheme(withStyles(styles)(InsureeFilter))));

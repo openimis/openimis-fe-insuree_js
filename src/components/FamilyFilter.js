@@ -34,6 +34,7 @@ class FamilyFilter extends Component {
 
   constructor(props) {
     super(props);
+    this.columns = props.modulesManager.getConf("fe-insuree", "columns", {});
     this.filterFamiliesOnMembers = props.modulesManager.getConf("fe-insuree", "filterFamiliesOnMembers", true);
     this.renderLastNameFirst = props.modulesManager.getConf(
       "fe-insuree",
@@ -204,6 +205,7 @@ class FamilyFilter extends Component {
             </Grid>
           }
         />
+        {!this.columns?.email === "H" && (
         <ControlledField
           module="insuree"
           id={`FamilyFilter.${anchor}.email`}
@@ -227,6 +229,7 @@ class FamilyFilter extends Component {
             </Grid>
           }
         />
+        )}
         <ControlledField
           module="insuree"
           id={`FamilyFilter.${anchor}.dob`}
@@ -350,6 +353,7 @@ class FamilyFilter extends Component {
             </Grid>
           }
         />
+        {this.columns?.confirmationNo === "H" && (
         <ControlledField
           module="insuree"
           id="FamilyFilter.confirmationNo"
@@ -373,6 +377,7 @@ class FamilyFilter extends Component {
             </Grid>
           }
         />
+        )}
         <ControlledField
           module="insuree"
           id="PolicyFilter.officer"
