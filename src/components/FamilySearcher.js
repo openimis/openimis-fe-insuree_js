@@ -117,16 +117,16 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.insuranceNo",
       this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
       !this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
-      this.columns?.email !== "H" ? "insuree.familySummaries.email" : null,
-      this.columns?.phone !== "H" ? "insuree.familySummaries.phone" : null,
-      this.columns?.dob !== "H" ? "insuree.familySummaries.dob" : null,
+      this.columns.email !== "H" ? "insuree.familySummaries.email" : null,
+      "insuree.familySummaries.phone",
+      "insuree.familySummaries.dob",
     ];
     for (var i = 0; i < this.locationLevels; i++) {
       h.push(`location.locationType.${i}`);
     }
     h.push(
-      this.columns?.poverty !== "H" ? "insuree.familySummaries.poverty" : null,
-      this.columns?.confirmationNo !== "H" ? "insuree.familySummaries.confirmationNo" : null,
+      this.columns.poverty !== "H" ? "insuree.familySummaries.poverty" : null,
+      this.columns.confirmationNo !== "H" ? "insuree.familySummaries.confirmationNo" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityFrom" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityTo" : null,
       "insuree.familySummaries.openNewTab",
@@ -195,12 +195,12 @@ class FamilySearcher extends Component {
         (family.headInsuree && !this.renderLastNameFirst
           ? family.headInsuree.lastName
           : family.headInsuree.otherNames) || "",
-      this.columns?.email !== "H" ? (family) => (!!family.headInsuree ? family.headInsuree.email : "") : null,
-      this.columns?.phone !== "H" ? (family) => (!!family.headInsuree ? family.headInsuree.phone : "") : null,
-      this.columns?.dob !== "H" ? (family) =>
+      this.columns.email !== "H" ? (family) => (!!family.headInsuree ? family.headInsuree.email : "") : null,
+      (family) => (!!family.headInsuree ? family.headInsuree.phone : ""),
+      (family) =>
         !!family.headInsuree
           ? formatDateFromISO(this.props.modulesManager, this.props.intl, family.headInsuree.dob)
-          : "" : null,
+          : "",
     ];
     for (var i = 0; i < this.locationLevels; i++) {
       // need a fixed variable to refer to as parentLocation argument
@@ -208,8 +208,8 @@ class FamilySearcher extends Component {
       formatters.push((family) => this.parentLocation(family.location, j));
     }
     formatters.push(
-      this.columns?.poverty !== "H" ? (family) => <Checkbox color="primary" checked={family.poverty} readOnly /> : null,
-      this.columns?.confirmationNo !== "H" ? (family) => family.confirmationNo : null,
+      this.columns.poverty !== "H" ? (family) => <Checkbox color="primary" checked={family.poverty} readOnly /> : null,
+      this.columns.confirmationNo !== "H" ? (family) => family.confirmationNo : null,
       filters?.showHistory?.value
         ? (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom)
         : null,
