@@ -7,6 +7,8 @@ import { insureeNumberValidationCheck, insureeNumberValidationClear, insureeNumb
 
 const InsureeNumberInput = (props) => {
   const {
+    error,
+    helperText,
     value,
     onChange,
     className,
@@ -33,6 +35,8 @@ const InsureeNumberInput = (props) => {
   return (
     <ValidatedTextInput
       itemQueryIdentifier="insuranceNumber"
+      helperText={helperText}
+      fieldError={error}
       codeTakenLabel={insureeNumberValidationErrorMessage}
       shouldValidate={shouldValidate}
       isValid={isInsureeNumberValid}

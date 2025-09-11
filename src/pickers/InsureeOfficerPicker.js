@@ -65,6 +65,8 @@ class InsureeOfficer extends Component {
 
   render() {
     const {
+      error,
+      helperText,
       intl,
       value,
       reset,
@@ -87,6 +89,8 @@ class InsureeOfficer extends Component {
         <ProgressOrError progress={fetchingInsureeOfficers} error={errorInsureeOfficers} />
         {fetchedInsureeOfficers && (
           <AutoSuggestion
+            error={error}
+            helperText={helperText}
             module="insuree"
             items={insureeOfficers}
             label={!!withLabel && (label || formatMessage(intl, "insuree", "InsureeOfficer.label"))}

@@ -38,10 +38,12 @@ class FamilyMasterPanel extends FormPanel {
     );
   }
 
-  renderLastNameField = (edited, classes) => {
+  renderLastNameField = (edited, classes, fieldErrors) => {
     return (
       <Grid item xs={3} className={classes.item}>
         <TextInput
+          error={fieldErrors?.lastName}
+          // helperText={fieldErrors?.lastName}
           module="insuree"
           label="Family.headInsuree.lastName"
           readOnly={true}
@@ -51,9 +53,11 @@ class FamilyMasterPanel extends FormPanel {
     );
   };
 
-  renderGivenNameField = (edited, classes) => (
+  renderGivenNameField = (edited, classes, fieldErrors) => (
     <Grid item xs={3} className={classes.item}>
       <TextInput
+        error={fieldErrors?.otherNames}
+        // helperText={fieldErrors?.otherNames}
         module="insuree"
         label="Family.headInsuree.otherNames"
         readOnly={true}
@@ -63,11 +67,13 @@ class FamilyMasterPanel extends FormPanel {
   );
 
   headSummary = () => {
-    const { classes, edited } = this.props;
+    const { classes, edited, fieldErrors } = this.props;
     return (
       <Fragment>
         <Grid item xs={3} className={classes.item}>
           <TextInput
+            //error={fieldErrors?.chfId}
+            //helperText={fieldErrors?.chfId}
             module="insuree"
             label="Family.headInsuree.chfId"
             readOnly={true}
@@ -76,17 +82,19 @@ class FamilyMasterPanel extends FormPanel {
         </Grid>
         {this.renderLastNameFirst ? (
           <>
-            {this.renderLastNameField(edited, classes)}
-            {this.renderGivenNameField(edited, classes)}
+            {this.renderLastNameField(edited, classes, fieldErrors)}
+            {this.renderGivenNameField(edited, classes, fieldErrors)}
           </>
         ) : (
           <>
-            {this.renderGivenNameField(edited, classes)}
-            {this.renderLastNameField(edited, classes)}
+            {this.renderGivenNameField(edited, classes, fieldErrors)}
+            {this.renderLastNameField(edited, classes, fieldErrors)}
           </>
         )}
         <Grid item xs={2} className={classes.item}>
           <PublishedComponent
+            error={fieldErrors?.dob}
+            // helperText={fieldErrors?.dob}
             pubRef="core.DatePicker"
             value={!edited || !edited.headInsuree ? null : edited.headInsuree.dob}
             module="insuree"
@@ -96,6 +104,8 @@ class FamilyMasterPanel extends FormPanel {
         </Grid>
         <Grid item xs={1} className={classes.item}>
           <PublishedComponent
+            error={fieldErrors?.gender}
+            // helperText={fieldErrors?.gender}
             pubRef="insuree.InsureeGenderPicker"
             value={!edited || !edited.headInsuree || !edited.headInsuree.gender ? null : edited.headInsuree.gender.code}
             module="insuree"
@@ -118,7 +128,8 @@ class FamilyMasterPanel extends FormPanel {
   };
 
   render() {
-    const { intl, classes, edited, openFamilyButton = false, readOnly, overview } = this.props;
+    console.log("family fieldErrors", this.props.fieldErrors);
+    const { intl, classes, edited, openFamilyButton = false, readOnly, overview, fieldErrors } = this.props;
     return (
       <Fragment>
         <Grid container className={classes.tableTitle}>
@@ -151,6 +162,8 @@ class FamilyMasterPanel extends FormPanel {
         <Grid container className={classes.item}>
           <Grid item xs={12}>
             <PublishedComponent
+              error={!!fieldErrors?.location}
+              // helperText={fieldErrors?.location}
               pubRef="location.DetailedLocation"
               withNull={true}
               readOnly={readOnly}

@@ -1,7 +1,7 @@
 import React from "react";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { Avatar, Grid, IconButton } from "@material-ui/core";
-import { toISODate, useModulesManager, useTranslations, PublishedComponent } from "@openimis/fe-core";
+import { toISODate, useModulesManager, formatMessage, useTranslations, PublishedComponent } from "@openimis/fe-core";
 import _ from "lodash";
 import moment from "moment";
 
@@ -17,7 +17,7 @@ const styles = (theme) => ({
 });
 
 const InsureeAvatar = (props) => {
-  const { photo, classes, className, withMeta = false, readOnly, onChange , required} = props;
+  const { photo, classes, className, withMeta = false, readOnly, onChange , required, fieldErrors} = props;
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations("insuree", modulesManager);
 
@@ -61,6 +61,8 @@ const InsureeAvatar = (props) => {
         >
           <Avatar src={getUrl(photo)} className={classes.bigAvatar} />
           <input
+            error={!!fieldErrors?.photo?.photo}
+            // helperText={fieldErrors?.photo?.photo}
             type="file"
             disabled={readOnly}
             className={classes.hiddenInput}
@@ -73,6 +75,8 @@ const InsureeAvatar = (props) => {
         <Grid container direction="column" item>
           <Grid item className={classes.item}>
             <PublishedComponent
+              error={!!fieldErrors?.photo?.date}
+              // helperText={fieldErrors?.photo?.date}
               pubRef="core.DatePicker"
               value={photo?.date}
               module="insuree"
@@ -84,6 +88,8 @@ const InsureeAvatar = (props) => {
           </Grid>
           <Grid item className={classes.item}>
             <PublishedComponent
+              error={!!fieldErrors?.photo?.officerId}
+              // helperText={fieldErrors?.photo?.officerId}
               pubRef="insuree.InsureeOfficerPicker"
               value={photo?.officerId}
               module="insuree"

@@ -43,9 +43,13 @@ class EducationPicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      error,
+      helperText,
     } = this.props;
     return (
       <AutoSuggestion
+        error={error}
+        helperText={helperText}
         module="insuree"
         items={educations}
         label={!!withLabel && (label || formatMessage(intl, "insuree", "EducationPicker.label"))}

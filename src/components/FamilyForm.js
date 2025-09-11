@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
-
+import { isValidFamily } from "../utils/utils";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
 
 import {
+  coreAlert,
+  formatMessage,
   formatMessageWithValues,
   withModulesManager,
   withHistory,
@@ -35,6 +37,7 @@ const INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY = "insuree.FamilyOvervie
 
 class FamilyForm extends Component {
   state = {
+    fieldErrors: {},
     lockNew: false,
     reset: 0,
     family: this._newFamily(),
@@ -134,20 +137,41 @@ class FamilyForm extends Component {
   };
 
   canSave = () => {
-    if (!this.state.family.location) return false;
-    if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
-    if (this.state.family.validityTo) return false;
-    if (this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
-      return false;
-    return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
+    return true;
   };
 
   _save = (family) => {
-    this.setState({ lockNew: !family.uuid, isSaved: true }, (e) => this.props.save(family));
+    let fieldErrors = {};
+    const { coreAlert, intl } = this.props;
+    
+    isValidFamily(family, this.props.modulesManager, fieldErrors);
+    if (Object.keys(fieldErrors).length > 0) {
+      this.setState({ fieldErrors });
+      if (fieldErrors?.photo?.photo) {
+        coreAlert(
+          formatMessage(intl, "insuree", "insuree.photoAlertTitle"),
+          formatMessage(intl, "insuree", "insuree.photoAlert"),
+        );
+      }
+      return;
+    }
+
+    this.setState({ 
+      fieldErrors: {}, 
+      lockNew: !family.id, 
+      isSaved: true, 
+      clientMutationId: false 
+    }, () => {
+      this.props.save(family);
+    });
   };
 
   onEditedChanged = (family) => {
-    this.setState({ family, newFamily: false });
+    this.setState({ 
+      family, 
+      newFamily: false, 
+      fieldErrors: {} 
+    });
   };
 
   onActionToConfirm = (title, message, confirmedAction) => {
@@ -158,7 +182,7 @@ class FamilyForm extends Component {
     const {
       modulesManager,
       classes,
-      state,
+      state: reduxState,
       rights,
       family_uuid,
       fetchingFamily,
@@ -177,7 +201,7 @@ class FamilyForm extends Component {
     let runningMutation = !!family && !!family.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
     for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
-      runningMutation = contributedMutations[i](state);
+      runningMutation = contributedMutations[i](reduxState);
     }
     let actions = [
       {
@@ -193,13 +217,14 @@ class FamilyForm extends Component {
           title={formatMessageWithValues(
             this.props.intl,
             "insuree",
-            !!this.props.overview ? "FamilyOverview.title" : "Family.title",
-            { label: insureeLabel(this.state.family.headInsuree) },
+            "Family.title",
+            { label: insureeLabel(this.state.family.headInsuree) }
           )}
         />
         <ProgressOrError progress={fetchingFamily} error={errorFamily} />
         {((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
           <Form
+            fieldErrors={this.state.fieldErrors}
             module="insuree"
             title="FamilyOverview.title"
             titleParams={{ label: insureeLabel(this.state.family.headInsuree) }}
@@ -247,7 +272,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm },
+    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm, coreAlert },
     dispatch,
   );
 };

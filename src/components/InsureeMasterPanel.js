@@ -44,11 +44,13 @@ class InsureeMasterPanel extends FormPanel {
       false,
     );
   }
-
-  renderLastNameField = (edited, classes, readOnly) => {
+  renderLastNameField = (edited, classes, readOnly, fieldErrors) => {
+    console.log("fieldErrors: ", fieldErrors);
     return (
       <Grid item xs={4} className={classes.item}>
         <TextInput
+          error={!!fieldErrors?.lastName}
+          // helperText={fieldErrors?.lastName}
           module="insuree"
           label="Insuree.lastName"
           required={true}
@@ -60,9 +62,11 @@ class InsureeMasterPanel extends FormPanel {
     );
   };
 
-  renderGivenNameField = (edited, classes, readOnly) => (
+  renderGivenNameField = (edited, classes, readOnly, fieldErrors) => (
     <Grid item xs={4} className={classes.item}>
       <TextInput
+        error={!!fieldErrors?.otherNames}
+        // helperText={fieldErrors?.otherNames}
         module="insuree"
         label="Insuree.otherNames"
         required={true}
@@ -75,6 +79,7 @@ class InsureeMasterPanel extends FormPanel {
 
   render() {
     const {
+      fieldErrors,
       intl,
       classes,
       edited,
@@ -127,6 +132,8 @@ class InsureeMasterPanel extends FormPanel {
             <Grid container className={classes.item}>
               <Grid item xs={4} className={classes.item}>
                 <PublishedComponent
+                  error={!!fieldErrors?.chfId}
+                  // helperText={fieldErrors?.chfId}
                   pubRef="insuree.InsureeNumberInput"
                   module="insuree"
                   label="Insuree.chfId"
@@ -139,19 +146,21 @@ class InsureeMasterPanel extends FormPanel {
               </Grid>
               {this.renderLastNameFirst ? (
                 <>
-                  {this.renderLastNameField(edited, classes, readOnly)}
-                  {this.renderGivenNameField(edited, classes, readOnly)}
+                  {this.renderLastNameField(edited, classes, readOnly, fieldErrors)}
+                  {this.renderGivenNameField(edited, classes, readOnly, fieldErrors)}
                 </>
               ) : (
                 <>
-                  {this.renderGivenNameField(edited, classes, readOnly)}
-                  {this.renderLastNameField(edited, classes, readOnly)}
+                  {this.renderGivenNameField(edited, classes, readOnly, fieldErrors)}
+                  {this.renderLastNameField(edited, classes, readOnly, fieldErrors)}
                 </>
               )}
               <Grid item xs={8}>
                 <Grid container>
                   <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
+                      error={!!fieldErrors?.dob}
+                      // helperText={formatMessage(intl, "insuree", fieldErrors?.dob)}
                       pubRef="core.DatePicker"
                       value={!!edited ? edited.dob : null}
                       module="insuree"
@@ -164,6 +173,8 @@ class InsureeMasterPanel extends FormPanel {
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
+                      error={!!fieldErrors?.gender}
+                      // helperText={fieldErrors?.gender}
                       pubRef="insuree.InsureeGenderPicker"
                       value={!!edited && !!edited.gender ? edited.gender.code : ""}
                       module="insuree"
@@ -208,6 +219,8 @@ class InsureeMasterPanel extends FormPanel {
                   </Grid>
                   <Grid item xs={6} className={classes.item}>
                     <TextInput
+                      error={!!fieldErrors?.phone}
+                      // helperText={fieldErrors?.phone}
                       module="insuree"
                       label="Insuree.phone"
                       readOnly={readOnly}
@@ -217,6 +230,8 @@ class InsureeMasterPanel extends FormPanel {
                   </Grid>
                   <Grid item xs={6} className={classes.item}>
                     <TextInput
+                      error={!!fieldErrors?.email}
+                      // helperText={fieldErrors?.email}
                       module="insuree"
                       label="Insuree.email"
                       readOnly={readOnly}
@@ -226,6 +241,8 @@ class InsureeMasterPanel extends FormPanel {
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
+                      error={!!fieldErrors?.profession}
+                      // helperText={fieldErrors?.profession}
                       pubRef="insuree.ProfessionPicker"
                       module="insuree"
                       value={!!edited && !!edited.profession ? edited.profession.id : null}
@@ -236,6 +253,8 @@ class InsureeMasterPanel extends FormPanel {
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
+                      error={!!fieldErrors?.education}
+                      // helperText={fieldErrors?.education}
                       pubRef="insuree.EducationPicker"
                       module="insuree"
                       value={!!edited && !!edited.education ? edited.education.id : ""}
@@ -307,6 +326,7 @@ class InsureeMasterPanel extends FormPanel {
               </Grid>
               <Grid item xs={4} className={classes.item}>
                 <PublishedComponent
+                  fieldErrors={fieldErrors}
                   pubRef="insuree.Avatar"
                   photo={!!edited ? edited.photo : null}
                   readOnly={readOnly}

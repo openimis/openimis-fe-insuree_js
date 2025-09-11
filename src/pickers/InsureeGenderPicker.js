@@ -29,6 +29,8 @@ class InsureeGenderPicker extends Component {
 
   render() {
     const {
+      error,
+      helperText,
       intl,
       insureeGenders,
       module = "insuree",
@@ -48,6 +50,8 @@ class InsureeGenderPicker extends Component {
     }
     return (
       <SelectInput
+        error={error}
+        helperText={helperText}
         module={module}
         options={options}
         label={!!withLabel ? label : null}

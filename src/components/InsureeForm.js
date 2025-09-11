@@ -1,12 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import _ from "lodash";
+import { bindActionCreators } from "redux";
 
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
 
 import {
+  PublishedComponent,
+  coreAlert,
+  formatMessage,
   formatMessageWithValues,
   withModulesManager,
   withHistory,
@@ -34,6 +38,7 @@ class InsureeForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      fieldErrors: {},
       lockNew: false,
       reset: 0,
       insuree: this._newInsuree(),
@@ -196,24 +201,37 @@ class InsureeForm extends Component {
   };
 
   canSave = () => {
-    const doesInsureeChange = this.doesInsureeChange();
-    if (!doesInsureeChange) return false;
-    if (this.state.lockNew) return false;
-    if (!this.props.isChfIdValid) return false;
-
-    return isValidInsuree(this.state.insuree, this.props.modulesManager);
+    return true;
   };
 
   _save = (insuree) => {
-    if (insuree.uuid) {
-      if (!this.doesPhotoChange()) delete insuree.photo
+    let fieldErrors = {};
+    const { coreAlert, intl, modulesManager } = this.props;
+    isValidInsuree(insuree, modulesManager, fieldErrors);
+    
+    if (Object.keys(fieldErrors).length > 0) {
+      this.setState({ fieldErrors });
+      if (fieldErrors?.photo?.photo) {
+        coreAlert(
+          formatMessage(intl, "insuree", "insuree.photoAlertTitle"),
+          formatMessage(intl, "insuree", "insuree.photoAlert"),
+        );
+      }
+      return;
     }
-    this.setState({ lockNew: !insuree.id, isSaved: true }, 
-    (e) => this.props.save(insuree));
+
+    this.setState({ 
+      fieldErrors: {}, 
+      lockNew: !family.id, 
+      isSaved: true, 
+      clientMutationId: false 
+    }, () => {
+      this.props.save(insuree);
+    });
   };
 
   onEditedChanged = (insuree) => {
-    this.setState({ insuree, newInsuree: false });
+    this.setState({ insuree, newInsuree: false, fieldErrors: {} });
   };
 
   render() {
@@ -244,7 +262,7 @@ class InsureeForm extends Component {
       },
     ];
     const shouldBeLocked = !!runningMutation || insuree?.validityTo;
-    return (
+    return (  
       <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
           title={formatMessageWithValues(this.props.intl, "insuree", "Insuree.title", {
@@ -255,33 +273,47 @@ class InsureeForm extends Component {
         <ProgressOrError progress={fetchingFamily} error={errorFamily} />
         {((!!fetchedInsuree && !!insuree && insuree.uuid === insuree_uuid) || !insuree_uuid) &&
           ((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
-            <Form
-              module="insuree"
-              title="Insuree.title"
-              titleParams={{ label: insureeLabel(this.state.insuree) }}
-              edited_id={insuree_uuid}
-              edited={this.state.insuree}
-              reset={this.state.reset}
-              back={this.back}
-              add={!!add && !this.state.newInsuree ? this._add : null}
-              readOnly={readOnly || runningMutation || !!insuree.validityTo}
-              actions={actions}
-              HeadPanel={FamilyDisplayPanel}
-              Panels={[InsureeMasterPanel]}
-              contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
-              insuree={this.state.insuree}
-              onEditedChanged={this.onEditedChanged}
-              canSave={this.canSave}
-              save={!!save ? this._save : null}
-              openDirty={save}
-            />
+            <Fragment>
+              <Form
+                fieldErrors={this.state.fieldErrors}
+                module="insuree"
+                title="Insuree.title"
+                titleParams={{ label: insureeLabel(this.state.insuree) }}
+                edited_id={insuree_uuid}
+                edited={this.state.insuree}
+                reset={this.state.reset}
+                back={this.back}
+                add={!!add && !this.state.newInsuree ? this._add : null}
+                readOnly={readOnly || runningMutation || !!insuree.validityTo}
+                actions={actions}
+                HeadPanel={FamilyDisplayPanel}
+                Panels={[InsureeMasterPanel]}
+                contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
+                insuree={this.state.insuree}
+                onEditedChanged={this.onEditedChanged}
+                canSave={this.canSave}
+                save={!!save ? this._save : null}
+                openDirty={save || this.state.forcedDirty}
+                onOpenAttachments={this.handleOpenAttachments}
+              />
+            </Fragment>
           )}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state, props) => ({
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  formatMessage,
+  fetchInsureeFull,
+  fetchFamily,
+  clearInsuree,
+  fetchInsureeMutation,
+  journalize,
+  coreAlert,
+}, dispatch);
+
+const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   fetchingInsuree: state.insuree.fetchingInsuree,
   errorInsuree: state.insuree.errorInsuree,
@@ -298,12 +330,6 @@ const mapStateToProps = (state, props) => ({
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, {
-      fetchInsureeFull,
-      fetchFamily,
-      clearInsuree,
-      fetchInsureeMutation,
-      journalize,
-    })(injectIntl(withTheme(withStyles(styles)(InsureeForm)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(InsureeForm)))),
   ),
 );
