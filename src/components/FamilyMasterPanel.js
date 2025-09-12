@@ -123,7 +123,6 @@ class FamilyMasterPanel extends FormPanel {
   };
 
   render() {
-    console.log("family fieldErrors", this.props.fieldErrors);
     const { intl, classes, edited, openFamilyButton = false, readOnly, overview, fieldErrors } = this.props;
     return (
       <Fragment>

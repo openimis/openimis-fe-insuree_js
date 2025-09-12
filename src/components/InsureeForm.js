@@ -201,8 +201,14 @@ class InsureeForm extends Component {
   };
 
   canSave = () => {
-    return true;
+    const doesInsureeChange = this.doesInsureeChange();
+    if (!doesInsureeChange) return false;
+    if (this.state.lockNew) return false;
+    if (!this.props.isChfIdValid) return false;
+
+    return isValidInsuree(this.state.insuree, this.props.modulesManager);
   };
+
 
   _save = (insuree) => {
     let fieldErrors = {};
@@ -297,7 +303,7 @@ class InsureeForm extends Component {
                 contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
                 insuree={this.state.insuree}
                 onEditedChanged={this.onEditedChanged}
-                canSave={this.canSave}
+                canSave={true}
                 save={!!save ? this._save : null}
                 openDirty={save || this.state.forcedDirty}
                 onOpenAttachments={this.handleOpenAttachments}
