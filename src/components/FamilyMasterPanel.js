@@ -43,7 +43,6 @@ class FamilyMasterPanel extends FormPanel {
       <Grid item xs={3} className={classes.item}>
         <TextInput
           error={fieldErrors?.lastName}
-          // helperText={fieldErrors?.lastName}
           module="insuree"
           label="Family.headInsuree.lastName"
           readOnly={true}
@@ -57,7 +56,6 @@ class FamilyMasterPanel extends FormPanel {
     <Grid item xs={3} className={classes.item}>
       <TextInput
         error={fieldErrors?.otherNames}
-        // helperText={fieldErrors?.otherNames}
         module="insuree"
         label="Family.headInsuree.otherNames"
         readOnly={true}
@@ -72,8 +70,7 @@ class FamilyMasterPanel extends FormPanel {
       <Fragment>
         <Grid item xs={3} className={classes.item}>
           <TextInput
-            //error={fieldErrors?.chfId}
-            //helperText={fieldErrors?.chfId}
+            error={fieldErrors?.chfId}
             module="insuree"
             label="Family.headInsuree.chfId"
             readOnly={true}
@@ -94,7 +91,6 @@ class FamilyMasterPanel extends FormPanel {
         <Grid item xs={2} className={classes.item}>
           <PublishedComponent
             error={fieldErrors?.dob}
-            // helperText={fieldErrors?.dob}
             pubRef="core.DatePicker"
             value={!edited || !edited.headInsuree ? null : edited.headInsuree.dob}
             module="insuree"
@@ -105,7 +101,6 @@ class FamilyMasterPanel extends FormPanel {
         <Grid item xs={1} className={classes.item}>
           <PublishedComponent
             error={fieldErrors?.gender}
-            // helperText={fieldErrors?.gender}
             pubRef="insuree.InsureeGenderPicker"
             value={!edited || !edited.headInsuree || !edited.headInsuree.gender ? null : edited.headInsuree.gender.code}
             module="insuree"
@@ -163,7 +158,6 @@ class FamilyMasterPanel extends FormPanel {
           <Grid item xs={12}>
             <PublishedComponent
               error={!!fieldErrors?.location}
-              // helperText={fieldErrors?.location}
               pubRef="location.DetailedLocation"
               withNull={true}
               readOnly={readOnly}

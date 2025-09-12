@@ -62,7 +62,6 @@ const InsureeAvatar = (props) => {
           <Avatar src={getUrl(photo)} className={classes.bigAvatar} />
           <input
             error={!!fieldErrors?.photo?.photo}
-            // helperText={fieldErrors?.photo?.photo}
             type="file"
             disabled={readOnly}
             className={classes.hiddenInput}
@@ -76,7 +75,6 @@ const InsureeAvatar = (props) => {
           <Grid item className={classes.item}>
             <PublishedComponent
               error={!!fieldErrors?.photo?.date}
-              // helperText={fieldErrors?.photo?.date}
               pubRef="core.DatePicker"
               value={photo?.date}
               module="insuree"
@@ -89,7 +87,6 @@ const InsureeAvatar = (props) => {
           <Grid item className={classes.item}>
             <PublishedComponent
               error={!!fieldErrors?.photo?.officerId}
-              // helperText={fieldErrors?.photo?.officerId}
               pubRef="insuree.InsureeOfficerPicker"
               value={photo?.officerId}
               module="insuree"
