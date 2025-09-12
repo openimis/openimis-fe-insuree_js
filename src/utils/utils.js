@@ -87,6 +87,7 @@ export const isValidInsuree = (insuree, modulesManager, fieldErrors) => {
 
 
 export const isValidFamily = (family, modulesManager, fieldErrors) => {
+  const fields = modulesManager.getConf("fe-insuree", "fields", {}); // config M/N/H
   
   if (!family.headInsuree.chfId) {
     fieldErrors.chfId = "insuree.fieldRequired";
@@ -105,6 +106,18 @@ export const isValidFamily = (family, modulesManager, fieldErrors) => {
   }
   if (!family.location) {
     fieldErrors.location = "insuree.fieldRequired";
+  }
+  if (fields.email === "M" && !family.headInsuree.email) {
+    fieldErrors.email = "insuree.fieldRequired";
+  }
+  if (fields.phone === "M" && !family.headInsuree.phone) {
+    fieldErrors.phone = "insuree.fieldRequired";
+  }
+  if (fields.profession === "M" && !family.headInsuree.profession) {
+    fieldErrors.profession = "insuree.fieldRequired";
+  }
+  if (fields.education === "M" && !family.headInsuree.education) {
+    fieldErrors.education = "insuree.fieldRequired";
   }
 
 };
