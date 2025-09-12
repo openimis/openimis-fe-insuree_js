@@ -55,20 +55,18 @@ export const isValidInsuree = (insuree, modulesManager, fieldErrors) => {
   if (fields.gender === "M" && (!insuree.gender || !insuree.gender?.code)) {
     fieldErrors.gender = "insuree.fieldRequired";
   }
-  // if (fields.email === "M" && !insuree.email) {
-  //   fieldErrors.email = "insuree.fieldRequired";
-  // }
-  // if (fields.phone === "M" && !insuree.phone) {
-  //   fieldErrors.phone = "insuree.fieldRequired";
-  // }
-  // if (fields.profession === "M" && !insuree.profession) {
-  //   fieldErrors.profession = "insuree.fieldRequired";
-  // }
-  // if (fields.education === "M" && !insuree.education) {
-  //   fieldErrors.education = "insuree.fieldRequired";
-  // }
-
-  // Gestion de la photo
+  if (fields.email === "M" && !insuree.email) {
+    fieldErrors.email = "insuree.fieldRequired";
+  }
+  if (fields.phone === "M" && !insuree.phone) {
+    fieldErrors.phone = "insuree.fieldRequired";
+  }
+  if (fields.profession === "M" && !insuree.profession) {
+    fieldErrors.profession = "insuree.fieldRequired";
+  }
+  if (fields.education === "M" && !insuree.education) {
+    fieldErrors.education = "insuree.fieldRequired";
+  }
   if (fields.photo === "M") {
     if (!insuree?.photo?.photo) {
       fieldErrors.photo = {...fieldErrors.photo, photo: "insuree.fieldRequired"};
@@ -94,7 +92,7 @@ export const isValidInsuree = (insuree, modulesManager, fieldErrors) => {
 
 
 export const isValidFamily = (family, modulesManager, fieldErrors) => {
-  const fields = modulesManager.getConf("fe-insuree", "fields", {}); // config M/N/H
+  const fields = modulesManager.getConf("fe-insuree", "fields", {});
 
   if (fields.chfId === "M" && !family.headInsuree.chfId) {
     fieldErrors.chfId = "insuree.fieldRequired";
