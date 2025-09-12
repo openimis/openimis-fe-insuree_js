@@ -268,5 +268,7 @@
   "insuree.photoAlert": "Please upload a photo for the insuree, it's required.",
   "insuree.photoAlertTitle": "Photo Required",
   "insuree.fieldRequired": "Field is required",
-  "insuree.attachments": "Manage attachments"
+  "insuree.attachments": "Manage attachments",
+  "insuree.statusProblem": "This insuree can't be saved because of a status problem.",
+  "insuree.statusProblemTitle": "Status Error"
 }

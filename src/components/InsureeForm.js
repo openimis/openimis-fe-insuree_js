@@ -217,6 +217,12 @@ class InsureeForm extends Component {
           formatMessage(intl, "insuree", "insuree.photoAlert"),
         );
       }
+      if (fieldErrors?.statusProblem) {
+        coreAlert(
+          formatMessage(intl, "insuree", "insuree.statusProblemTitle"),
+          formatMessage(intl, "insuree", "insuree.statusProblem"),
+        );
+      }
       return;
     }
 

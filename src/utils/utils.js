@@ -40,19 +40,19 @@ export const isValidInsuree = (insuree, modulesManager, fieldErrors) => {
   if (insuree.validityTo) {
     fieldErrors.validityTo = "insuree.fieldRequired";
   }
-  if (fields.chfId === "M" && !insuree.chfId) {
+  if (!insuree.chfId) {
     fieldErrors.chfId = "insuree.fieldRequired";
   }
-  if (fields.lastName === "M" && !insuree.lastName) {
+  if (!insuree.lastName) {
     fieldErrors.lastName = "insuree.fieldRequired";
   }
-  if (fields.otherNames === "M" && !insuree.otherNames) {
+  if (!insuree.otherNames) {
     fieldErrors.otherNames = "insuree.fieldRequired";
   }
-  if (fields.dob === "M" && !insuree.dob) {
+  if (!insuree.dob) {
     fieldErrors.dob = "insuree.fieldRequired";
   }
-  if (fields.gender === "M" && (!insuree.gender || !insuree.gender?.code)) {
+  if (!insuree.gender || !insuree.gender?.code) {
     fieldErrors.gender = "insuree.fieldRequired";
   }
   if (fields.email === "M" && !insuree.email) {
@@ -67,7 +67,7 @@ export const isValidInsuree = (insuree, modulesManager, fieldErrors) => {
   if (fields.education === "M" && !insuree.education) {
     fieldErrors.education = "insuree.fieldRequired";
   }
-  if (fields.photo === "M") {
+  if (isInsureePhotoRequired) {
     if (!insuree?.photo?.photo) {
       fieldErrors.photo = {...fieldErrors.photo, photo: "insuree.fieldRequired"};
     }
@@ -79,48 +79,33 @@ export const isValidInsuree = (insuree, modulesManager, fieldErrors) => {
   if (isInsureeStatusRequired && !insuree.status) {
     fieldErrors.status = "insuree.fieldRequired";
   }
-
-  if (
-    fields.status === "M" &&
-    !!insuree.status &&
-    insuree.status !== INSUREE_ACTIVE_STRING &&
-    (!insuree.statusDate || !insuree.statusReason)
-  ) {
-    fieldErrors.statusDate = "insuree.fieldRequired";
+  if (!!insuree.status && insuree.status !== INSUREE_ACTIVE_STRING && (!insuree.statusDate || !insuree.statusReason)) {
+    fieldErrors.statusProblem = "insuree.statusProblem";
   }
+
 };
 
 
 export const isValidFamily = (family, modulesManager, fieldErrors) => {
-  const fields = modulesManager.getConf("fe-insuree", "fields", {});
-
-  if (fields.chfId === "M" && !family.headInsuree.chfId) {
+  
+  if (!family.headInsuree.chfId) {
     fieldErrors.chfId = "insuree.fieldRequired";
   }
-  if (fields.lastName === "M" && !family.headInsuree.lastName) {
+  if (!family.headInsuree.lastName) {
     fieldErrors.lastName = "insuree.fieldRequired";
   }
-  if (fields.otherNames === "M" && !family.headInsuree.otherNames) {
+  if (!family.headInsuree.otherNames) {
     fieldErrors.otherNames = "insuree.fieldRequired";
   }
-  if (fields.gender === "M" && (!family.headInsuree.gender || !family.headInsuree.gender?.code)) {
+  if (!family.headInsuree.gender || !family.headInsuree.gender?.code) {
     fieldErrors.gender = "insuree.fieldRequired";
   }
-  if (fields.dob === "M" && !family.headInsuree.dob) {
+  if (!family.headInsuree.dob) {
     fieldErrors.dob = "insuree.fieldRequired";
   }
-  if (fields.location === "M" && !family.location) {
+  if (!family.location) {
     fieldErrors.location = "insuree.fieldRequired";
   }
-  if (fields.photo === "M") {
-    if (!family?.headInsuree?.photo?.photo) {
-      fieldErrors.photo = {...fieldErrors.photo, photo: "insuree.fieldRequired"};
-    }
-    if (!family?.headInsuree?.photo?.date) {
-      fieldErrors.photo = {...fieldErrors.photo, date: "insuree.fieldRequired"};
-    }
-  }
-
 
 };
 
