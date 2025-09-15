@@ -83,6 +83,7 @@ export const isValidInsuree = (insuree, modulesManager, fieldErrors) => {
     fieldErrors.statusProblem = "insuree.statusProblem";
   }
 
+  return Object.keys(fieldErrors).length === 0;
 };
 
 
@@ -120,6 +121,7 @@ export const isValidFamily = (family, modulesManager, fieldErrors) => {
     fieldErrors.education = "insuree.fieldRequired";
   }
 
+  return Object.keys(fieldErrors).length === 0;
 };
 
 
