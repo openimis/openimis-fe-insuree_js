@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import _debounce from "lodash/debounce";
 
-import { Typography, Grid, IconButton } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { YoutubeSearchedFor as ResetFilterIcon } from "@material-ui/icons";
 
@@ -38,9 +38,9 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
   const actions = [
     {
       button: (
-        <IconButton onClick={resetFilters}>
-          <ResetFilterIcon />
-        </IconButton>
+        <Button startIcon={<ResetFilterIcon />} onClick={resetFilters}>
+          {formatMessage("resetFilters.buttonText")}
+        </Button>
       ),
       tooltip: formatMessage("resetFilters.tooltip"),
     },
