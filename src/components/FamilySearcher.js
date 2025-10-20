@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Checkbox, IconButton, Tooltip } from "@material-ui/core";
+import { Checkbox, Button, Tooltip } from "@material-ui/core";
 import TabIcon from "@material-ui/icons/Tab";
 import {
   withModulesManager,
@@ -163,9 +163,9 @@ class FamilySearcher extends Component {
   deleteFamilyAction = (i) =>
     !!i.validityTo ? null : (
       <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.tooltip")}>
-        <IconButton onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })}>
-          <DeleteIcon />
-        </IconButton>
+          <Button onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })} startIcon={<DeleteIcon />}>
+            {formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.buttonText")}
+          </Button>
       </Tooltip>
     );
 
@@ -217,10 +217,9 @@ class FamilySearcher extends Component {
         : null,
       (family) => (
         <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.openNewTabButton.tooltip")}>
-          <IconButton onClick={(e) => !family.clientMutationId && this.props.onDoubleClick(family, true)}>
-            {" "}
-            <TabIcon />
-          </IconButton>
+          <Button onClick={(e) => !family.clientMutationId && this.props.onDoubleClick(family, true)} startIcon={<TabIcon />}>
+            {formatMessage(this.props.intl, "insuree", "familySummaries.openNewTabButton.buttonText")}
+          </Button>
         </Tooltip>
       ),
     );
