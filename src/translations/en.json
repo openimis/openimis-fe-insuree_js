@@ -1,4 +1,8 @@
 {
+  "insuree.familyAmountsSummary": "Family Amounts Summary",
+  "insuree.totalPoliciesAmount": "Total Policies Amount",
+  "insuree.totalContributions": "Total Contributions",
+  "insuree.balance": "Balance",
   "insuree.appBar.enquiry": "Insuree enquiry…",
   "insuree.mainMenu": "Insurees and Policies",
   "insuree.workersMainMenu": "Workers and Vouchers",

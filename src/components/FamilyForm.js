@@ -24,6 +24,7 @@ import { insureeLabel, isValidInsuree } from "../utils/utils";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
+import FamilySummaryPanel from "./FamilySummaryPanel";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
@@ -171,6 +172,8 @@ class FamilyForm extends Component {
       add,
       save,
       back,
+      totalPoliciesAmount,
+      totalContributions,
     } = this.props;
     const { family, newFamily, isSaved } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
@@ -213,7 +216,9 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={overview ? [FamilyInsureesOverview] : [HeadInsureeMasterPanel]}
+            totalPoliciesAmount={totalPoliciesAmount}
+            totalContributions={totalContributions}
+            Panels={overview ? [FamilyInsureesOverview, FamilySummaryPanel] : [HeadInsureeMasterPanel, FamilySummaryPanel]}
             contributedPanelsKey={
               overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
@@ -243,6 +248,14 @@ const mapStateToProps = (state, props) => ({
   confirmed: state.core.confirmed,
   state: state,
   isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
+  totalPoliciesAmount: state.policy?.policies?.reduce(
+    (sum, policy) => sum + (parseFloat(policy.policyValue) || 0), 
+    0
+  ) || 0,
+  totalContributions: state.contribution?.policiesPremiums?.reduce(
+    (sum, contribution) => sum + (parseFloat(contribution.amount) || 0), 
+    0
+  ) || 0,
 });
 
 const mapDispatchToProps = (dispatch) => {
