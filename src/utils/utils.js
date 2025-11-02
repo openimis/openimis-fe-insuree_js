@@ -1,5 +1,8 @@
 import _ from "lodash";
 import { INSUREE_ACTIVE_STRING } from "../constants";
+import { RSAA } from "redux-api-middleware";
+import { baseApiUrl } from "@openimis/fe-core";
+const REQUESTED_WITH = 'XMLHttpRequest';
 
 export function insureeLabel(insuree) {
   if (!insuree) return "";
@@ -54,3 +57,19 @@ export const formatLocationString = (family) => {
     .filter(Boolean)
     .join(", ");
 };
+
+export function loadCurrentUser(dispatch) {
+  const csrfToken = localStorage.getItem('csrfToken');
+  return dispatch({
+    [RSAA]: {
+      endpoint: `${baseApiUrl}/core/users/current_user/`,
+      method: "GET",
+      types: ["CORE_USERS_CURRENT_USER_REQ", "CORE_USERS_CURRENT_USER_RESP", "CORE_USERS_CURRENT_USER_ERR"],
+      headers: {
+        "Content-Type": "application/json",
+        'X-Requested-With': REQUESTED_WITH,
+        "X-CSRFToken": csrfToken,
+      },
+    },
+  });
+}
