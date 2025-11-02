@@ -1,9 +1,11 @@
 import React from "react";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { Avatar, Grid, IconButton } from "@material-ui/core";
+import { Avatar, Grid, IconButton, Typography, TextField } from "@material-ui/core";
 import { toISODate, useModulesManager, useTranslations, PublishedComponent } from "@openimis/fe-core";
 import _ from "lodash";
 import moment from "moment";
+import { loadCurrentUser } from "../utils/utils";
+import { useDispatch } from "react-redux";
 
 const styles = (theme) => ({
   bigAvatar: theme.bigAvatar,
@@ -17,9 +19,45 @@ const styles = (theme) => ({
 });
 
 const InsureeAvatar = (props) => {
-  const { photo, classes, className, withMeta = false, readOnly, onChange , required} = props;
+  const { photo, classes, className, withMeta = false, readOnly, onChange, required } = props;
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations("insuree", modulesManager);
+  const dispatch = useDispatch();
+  
+  const [currentUser, setCurrentUser] = React.useState(null);
+  const [isEnrollmentOfficer, setIsEnrollmentOfficer] = React.useState(false);
+  const isCreateMode = !photo || (!photo.photo && !photo.filename);
+  
+  React.useEffect(() => {
+    if (isCreateMode && !readOnly) {
+      
+      loadCurrentUser(dispatch).then((response) => {
+        if (response && response.payload) {
+          const data = response.payload;
+          const username = data.username;
+          const userType = data.i_user ? 'i_user' : data.t_user ? 't_user' : 'unknown';
+          
+          // is enrollment officer ??
+          const isOfficer = data.i_user !== null && data.i_user !== undefined;
+          setIsEnrollmentOfficer(isOfficer);
+          
+          console.log("Is Enrollment Officer:", isOfficer);
+          
+          setCurrentUser({
+            username: username,
+            userId: data.i_user?.id || data.t_user?.id,
+            fullData: data
+          });
+          
+          if (isOfficer && data.i_user?.id) {
+            onChange({ ...photo, officerId: data.i_user.id });
+          }
+        }
+      }).catch(error => {
+        console.error(error);
+      });
+    }
+  }, [isCreateMode, readOnly, dispatch]);
 
   const getUrl = (photo) => {
     if (photo?.photo) {
@@ -83,15 +121,26 @@ const InsureeAvatar = (props) => {
             />
           </Grid>
           <Grid item className={classes.item}>
-            <PublishedComponent
-              pubRef="insuree.InsureeOfficerPicker"
-              value={photo?.officerId}
-              module="insuree"
-              label={formatMessage("Insuree.photoOfficer")}
-              readOnly={readOnly}
-              required={isRequired}
-              onChange={(v) => onChange({ ...photo, officerId: v?.id })}
-            />
+            {isCreateMode && !readOnly && isEnrollmentOfficer ? (
+              <TextField
+                fullWidth
+                disabled
+                label={formatMessage("Insuree.photoOfficer")}
+                value={currentUser?.username || "Loading..."}
+                variant="outlined"
+                size="small"
+              />
+            ) : (
+              <PublishedComponent
+                pubRef="insuree.InsureeOfficerPicker"
+                value={photo?.officerId}
+                module="insuree"
+                label={formatMessage("Insuree.photoOfficer")}
+                readOnly={readOnly}
+                required={isRequired}
+                onChange={(v) => onChange({ ...photo, officerId: v?.id })}
+              />
+            )}
           </Grid>
         </Grid>
       )}
