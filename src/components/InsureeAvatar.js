@@ -40,9 +40,7 @@ const InsureeAvatar = (props) => {
           // is enrollment officer ??
           const isOfficer = data.i_user !== null && data.i_user !== undefined;
           setIsEnrollmentOfficer(isOfficer);
-          
-          console.log("Is Enrollment Officer:", isOfficer);
-          
+                    
           setCurrentUser({
             username: username,
             userId: data.i_user?.id || data.t_user?.id,
