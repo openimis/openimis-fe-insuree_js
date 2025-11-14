@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import {
   Grid,
-  IconButton,
+  Button,
   Tooltip,
 } from "@material-ui/core";
 import { Search as SearchIcon, People as PeopleIcon, Tab as TabIcon, Delete as DeleteIcon } from "@material-ui/icons";
@@ -238,17 +238,19 @@ class InsureeSearcher extends Component {
       (insuree) => (
         <Grid container wrap="nowrap" spacing="2">
             <Grid item>
-              <IconButton
+              <Button
+                startIcon={<SearchIcon />}
                 size="small"
                 onClick={(e) => !insuree.clientMutationId && this.setState({ open: true, chfid: insuree.chfId })}
               >
-                <SearchIcon />
-              </IconButton>
+                {formatMessage(this.props.intl, "insuree", "insureeSummaries.openInsureeButton.buttonText")}
+              </Button>
             </Grid>
           {insuree.family && (
             <Grid item>
               <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
-                <IconButton
+                <Button
+                  startIcon={<PeopleIcon />}
                   size="small"
                   onClick={(e) =>
                     !insuree.clientMutationId &&
@@ -257,27 +259,32 @@ class InsureeSearcher extends Component {
                     ])
                   }
                 >
-                  <PeopleIcon />
-                </IconButton>
+                  {formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.buttonText")}
+                </Button>
               </Tooltip>
             </Grid>
           )}
           <Grid item>
             <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openNewTabButton.tooltip")}>
-              <IconButton
+              <Button
+                startIcon={<TabIcon />}
                 size="small"
                 onClick={(e) => !insuree.clientMutationId && this.props.onDoubleClick(insuree, true)}
               >
-                <TabIcon />
-              </IconButton>
+                {formatMessage(this.props.intl, "insuree", "insureeSummaries.openNewTabButton.buttonText")}
+              </Button>
             </Tooltip>
           </Grid>
           {this.props.rights.includes(RIGHT_INSUREE_DELETE) && !insuree.validityTo && (
             <Grid item>
-              <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.deleteFamily.tooltip")}>
-                <IconButton size="small" onClick={(e) => !insuree.clientMutationId && this.confirmDelete(insuree)}>
-                  <DeleteIcon />
-                </IconButton>
+              <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.deleteInsuree.tooltip")}>
+                <Button
+                  startIcon={<DeleteIcon />}
+                  size="small"
+                  onClick={(e) => !insuree.clientMutationId && this.confirmDelete(insuree)}
+                >
+                  {formatMessage(this.props.intl, "insuree", "deleteInsuree.textButton")}
+                </Button>
               </Tooltip>
             </Grid>
           )}
