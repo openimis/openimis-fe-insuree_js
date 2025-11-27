@@ -5,9 +5,14 @@ import '@testing-library/jest-dom';
 import fetchMock from 'jest-fetch-mock';
 fetchMock.enableMocks();
 
-// Configuration de react-intl pour les tests
-import { IntlProvider } from 'react-intl';
-import messages from './translations/en.json';
+// Mock global de react-intl pour Jest
+jest.mock('react-intl', () => ({
+    IntlProvider: ({ children }) => children,
+    useIntl: () => ({
+        formatMessage: ({ defaultMessage }) => defaultMessage,
+    }),
+    FormattedMessage: ({ defaultMessage }) => defaultMessage,
+}));
 
 // Configuration de Redux si nécessaire
 import { configure } from '@testing-library/react';

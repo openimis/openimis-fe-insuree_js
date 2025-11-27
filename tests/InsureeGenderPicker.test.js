@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import InsureeGenderPicker from '../InsureeGenderPicker';
+import InsureeGenderPicker from '../src/pickers/InsureeGenderPicker';
 
 // Mock des dépendances
 jest.mock('@openimis/fe-core', () => ({

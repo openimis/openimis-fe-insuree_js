@@ -8,7 +8,7 @@ module.exports = {
     },
   
     transformIgnorePatterns: [
-      "node_modules/(?!(lodash-es)/)",
+      "node_modules/(?!(lodash-es|@babel/runtime)/)",
     ],
   
     moduleNameMapper: {
