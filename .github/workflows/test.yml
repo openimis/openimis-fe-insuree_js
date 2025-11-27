@@ -8,6 +8,6 @@ on:
 
 jobs:
   run-tests:
-    uses: openimis/openimis-fe_js/.github/workflows/test-module.yml@develop
+    uses: Y-Note-SAS/openimis-fe_js/.github/workflows/test-module.yml@feature-34644
     with:
       module-path: .
