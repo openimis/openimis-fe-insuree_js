@@ -5,6 +5,7 @@ export const FAMILY_STATUS = ["with", "without"];
 export const EMPTY_STRING = "";
 export const MODULE_NAME = "insuree";
 
+export const FAMILY_TYPE_POLYGAMY_CODE = "PL";
 export const INSUREE_ACTIVE_STRING = "AC";
 export const INSUREE_INACTIVE_STRING = "IN";
 export const INSUREE_DEAD_STRING = "DE";

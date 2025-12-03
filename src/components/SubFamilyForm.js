@@ -1,11 +1,9 @@
 import React, { Component } from "react";
+import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
-
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import ReplayIcon from "@material-ui/icons/Replay";
-
 import {
   formatMessageWithValues,
   withModulesManager,
@@ -18,25 +16,26 @@ import {
   parseData,
   Helmet,
 } from "@openimis/fe-core";
-import { fetchFamily, newFamily, createFamily, fetchFamilyMutation } from "../actions";
-import { INSUREE_ACTIVE_STRING, RIGHT_FAMILY, FAMILY_TYPE_POLYGAMY_CODE } from "../constants";
-import { insureeLabel, isValidInsuree } from "../utils/utils";
-import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
+import { RIGHT_FAMILY, RIGHT_FAMILY_EDIT, INSUREE_ACTIVE_STRING, FAMILY_TYPE_POLYGAMY_CODE } from "../constants";
 import FamilyMasterPanel from "./FamilyMasterPanel";
+
+import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, fetchParentFamily } from "../actions";
+
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
-import SubFamiliesSummary from "./SubFamiliesSummary";
-import { formatMessage } from "@openimis/fe-core";
+import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
+
+
+import { insureeLabel, isValidInsuree } from "../utils/utils";
 
 const styles = (theme) => ({
   lockedPage: theme.page.locked,
 });
 
-const FAMILY_POLYGAMOUS_OVERVIEW_PANELS_CONTRIBUTION_KEY = "insuree.PolygamousFamilyOverview.panels";
 const INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY = "insuree.Family.panels";
 const INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY = "insuree.FamilyOverview.panels";
 const INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY = "insuree.FamilyOverview.mutations";
 
-class FamilyForm extends Component {
+class SubFamilyForm extends Component {
   state = {
     lockNew: false,
     reset: 0,
@@ -44,6 +43,7 @@ class FamilyForm extends Component {
     newFamily: true,
     confirmedAction: null,
     isSaved: false,
+    isButtonDisabled : false
   };
 
   _newFamily() {
@@ -61,6 +61,12 @@ class FamilyForm extends Component {
       this.setState(
         (state, props) => ({ family_uuid: props.family_uuid }),
         (e) => this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid),
+      );
+    }
+    if(this.props.parent_uuid){
+      this.setState(
+        (state, props) => ({ parent_uuid: props.parent_uuid }),
+        (e) => this.props.fetchParentFamily(this.props.modulesManager, this.props.parent_uuid),
       );
     }
   }
@@ -156,6 +162,9 @@ class FamilyForm extends Component {
   onActionToConfirm = (title, message, confirmedAction) => {
     this.setState({ confirmedAction }, this.props.coreConfirm(title, message));
   };
+  disableSaveButton = () =>{
+    this.setState({isButtonDisabled: true});
+  }
 
   render() {
     const {
@@ -175,9 +184,7 @@ class FamilyForm extends Component {
       save,
       back,
     } = this.props;
-    const { family, newFamily, isSaved } = this.state;
-    console.log("family", family)
-    console.log("FAMILY_TYPE_POLYGAMY_CODE", FAMILY_TYPE_POLYGAMY_CODE)
+    const { family, newFamily, isSaved, isButtonDisabled } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
@@ -188,7 +195,6 @@ class FamilyForm extends Component {
       {
         doIt: this.reload,
         icon: <ReplayIcon />,
-        buttonText: formatMessage(this.props.intl, "insuree", "FamilyReload.buttonText") || "Reload",
         onlyIfDirty: !readOnly && !runningMutation && !isSaved,
       },
     ];
@@ -219,27 +225,19 @@ class FamilyForm extends Component {
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={
-              overview 
-                ? family.familyType?.code === FAMILY_TYPE_POLYGAMY_CODE 
-                  ? [HeadInsureeMasterPanel,SubFamiliesSummary] 
-                  : [FamilyInsureesOverview]
-                : [HeadInsureeMasterPanel]
-            }
+            Panels={(overview && !family.familyType)? [ FamilyInsureesOverview] : overview &&(!!family.familyType && family.familyType.code !== FAMILY_TYPE_POLYGAMY_CODE) ? [ FamilyInsureesOverview]  : [HeadInsureeMasterPanel]}
             contributedPanelsKey={
-              overview 
-                ? family.familyType?.code === FAMILY_TYPE_POLYGAMY_CODE
-                  ? FAMILY_POLYGAMOUS_OVERVIEW_PANELS_CONTRIBUTION_KEY 
-                  : INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY 
-                : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
+              overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
             }
             family={family}
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
             save={!!save ? this._save : null}
+            disableSaveButton={this.disableSaveButton}
             onActionToConfirm={this.onActionToConfirm}
             openDirty={save}
+            isActiveFilterFamilyType={true}
           />
         )}
       </div>
@@ -252,6 +250,7 @@ const mapStateToProps = (state, props) => ({
   fetchingFamily: state.insuree.fetchingFamily,
   errorFamily: state.insuree.errorFamily,
   fetchedFamily: state.insuree.fetchedFamily,
+  parentFamily: state.insuree.parentFamily,
   family: state.insuree.family,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
@@ -263,13 +262,13 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm },
+    { fetchFamilyMutation, fetchFamily, newFamily, createFamily,fetchParentFamily, journalize, coreConfirm },
     dispatch,
   );
 };
 
 export default withHistory(
   withModulesManager(
-    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(FamilyForm)))),
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(withStyles(styles)(SubFamilyForm)))),
   ),
 );

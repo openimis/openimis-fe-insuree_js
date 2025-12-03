@@ -118,6 +118,7 @@
   "insuree.FamilyType.P": "Priests",
   "insuree.FamilyType.S": "Students",
   "insuree.FamilyType.T": "Teachers",
+  "insuree.FamilyType.PL": "Polygamous",
   "insuree.EducationPicker.label": "Education",
   "insuree.Education.null": "Any",
   "insuree.Education.none": "Not specified",

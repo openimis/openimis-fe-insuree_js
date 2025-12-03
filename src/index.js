@@ -9,6 +9,8 @@ import { CappedItemServicePage } from "./pages/CappedItemServicePage";
 import InsureesPage from "./pages/InsureesPage";
 import ProfilePage from "./pages/ProfilePage";
 import FamilyOverviewPage from "./pages/FamilyOverviewPage";
+import SubFamilyPage from './components/SubFamilyPage';
+import SubFamilyOverviewPage from './pages/SubFamilyOverviewPage';
 import Enquiry from "./components/Enquiry";
 import InsureeOfficerPicker from "./pickers/InsureeOfficerPicker";
 import FamilyPicker from "./pickers/FamilyPicker";
@@ -48,11 +50,13 @@ import InsureePendingEnrollmentReport from "./reports/InsureePendingEnrollmentRe
 import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE } from "./constants";
 
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
+const ROUTE_INSUREE_SUBFAMILY_OVERVIEW = "insuree/subfamilies/subFamilyOverview";
 const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
 const ROUTE_INSUREE_FAMILY = "insuree/family";
 const ROUTE_INSUREE_PROFILE = "insuree/profile";
 const ROUTE_INSUREE_INSUREES = "insuree/insurees";
 const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
+const ROUTE_INSUREE_SUBFAMILY = "insuree/subfamily";
 
 const DEFAULT_CONFIG = {
   "translations": [{ key: "en", messages: messages_en }],
@@ -130,6 +134,8 @@ const DEFAULT_CONFIG = {
     { key: "insuree.RelationPicker", ref: RelationPicker },
     { key: "insuree.InsureeNumberInput", ref: InsureeNumberInput },
 
+    { key: "insuree.route.subfamily", ref: ROUTE_INSUREE_SUBFAMILY },
+    { key: "insuree.route.subFamilyOverview", ref: ROUTE_INSUREE_SUBFAMILY_OVERVIEW },
     { key: "insuree.route.families", ref: ROUTE_INSUREE_FAMILIES },
     { key: "insuree.route.familyOverview", ref: ROUTE_INSUREE_FAMILY_OVERVIEW },
     { key: "insuree.route.family", ref: ROUTE_INSUREE_FAMILY },
@@ -146,7 +152,9 @@ const DEFAULT_CONFIG = {
     { key: "insuree.CappedItemServiceLink", ref: InsureeCappedItemServiceLink },
   ],
   "core.Router": [
+    { path: ROUTE_INSUREE_SUBFAMILY + "/:family_uuid?", component: SubFamilyPage },
     { path: ROUTE_INSUREE_FAMILIES, component: FamiliesPage },
+    { path: ROUTE_INSUREE_SUBFAMILY_OVERVIEW + "/:subFamily_uuid?/:family_uuid?/:insuree_uuid?", component: SubFamilyOverviewPage },
     { path: ROUTE_INSUREE_FAMILY + "/:family_uuid?", component: FamilyPage },
     { path: ROUTE_INSUREE_FAMILY_OVERVIEW + "/:family_uuid", component: FamilyOverviewPage },
     { path: ROUTE_INSUREE_INSUREES, component: InsureesPage },
