@@ -14,7 +14,7 @@ class FamilyTypePicker extends Component {
     this.usePolygamousFamilies = props.modulesManager.getConf(
       "fe-insuree",
       "usePolygamousFamilies",
-      true,
+      false,
     );
   }
   componentDidMount() {

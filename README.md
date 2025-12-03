@@ -104,4 +104,5 @@ None
   the current user as the enrolment officer during family or insuree creation. If 'True', the officer is inferred from session; if 'False', manual selection remains available. (default: 'False)
 - `isDefaultFetchInsureeActivated`, manage default fetch behavior of insuree searcher ; default: true
 - `isDefaultFetchFamilyActivated`, manage default fetch behavior of family searcher ; default: true
+- `usePolygamousFamilies`, manage polygamous families and their sub-families ; default: false
 
