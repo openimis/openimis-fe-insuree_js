@@ -200,6 +200,55 @@ export function fetchParentFamily(mm, parentFamilyUuid, headInsureeChfId) {
   return graphql(payload, "INSUREE_PARENTFAMILY_OVERVIEW");
 }
 
+export function formatLinkFamily (familyUuid, familyUuids, cancelPolicies){
+  return `
+  ${familyUuids !== undefined && familyUuids !==null ? `familyUuids: "${familyUuids}"`: ""}
+  ${familyUuid !== undefined && familyUuid !==null ? `familyUuid: "${familyUuid}"`: ""}
+  ${cancelPolicies !== undefined && cancelPolicies !==null ? `cancelPolicies: ${cancelPolicies}`: ""}  
+  `
+}
+
+export function formatUnlinkFamily (familyUuids, cancelPolicies){
+  return `
+  ${familyUuids !== undefined && familyUuids !==null ? `familyUuids: "${familyUuids}"`: ""}
+  ${cancelPolicies !== undefined && cancelPolicies !==null ? `cancelPolicies: ${cancelPolicies}`: ""}  
+  `
+}
+
+export function linkFamily (familyUuid, familyUuids, clientMutationLabel, cancelPolicies){
+  let mutation = formatMutation("moveFamiliesToParentMutation", formatLinkFamily(familyUuid, familyUuids, cancelPolicies) )
+  var requestedDateTime = new Date();
+  return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_LINK_FAMILY_RESP", "INSUREE_LINK_FAMILY_ERR"], {
+    clientMutationId: mutation.clientMutationId,
+    clientMutationLabel,
+    requestedDateTime
+  })
+  
+}
+
+export function unLinkFamily ( familyUuids, clientMutationLabel, cancelPolicies){
+  let mutation = formatMutation("deleteFamiliesFromParentMutation", formatUnlinkFamily(familyUuids, cancelPolicies) )
+  var requestedDateTime = new Date();
+  return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UNLINK_FAMILY_RESP", "INSUREE_UNLINK_FAMILY_ERR"], {
+    clientMutationId: mutation.clientMutationId,
+    clientMutationLabel,
+    requestedDateTime
+  })
+  
+}
+
+export function clearSubFamily() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_SUB_FAMILY_CLEAR" });
+  };
+}
+
+export function clearFamily() {
+  return (dispatch) => {
+    dispatch({ type: "INSUREE_FAMILY_CLEAR" });
+  };
+}
+
 export function fetchSubFamilySummaries(mm, filters) {
   let projections = [
     "id",
@@ -218,7 +267,6 @@ export function fetchSubFamilySummaries(mm, filters) {
   ];
 
   const payload = formatPageQueryWithCount("families", filters, projections);
-  console.log('[fetchSubFamilySummary] Envoi de la requête avec les filtres:', filters);
   return graphql(payload, "INSUREE_SUB_FAMILY");
 }
 
@@ -232,6 +280,12 @@ export function checkCanAddInsuree(family) {
   let filters = [`familyId:${decodeId(family.id)}`];
   const payload = formatQuery("canAddInsuree", filters, null);
   return graphql(payload, "INSUREE_FAMILY_CAN_ADD_INSUREE");
+}
+
+export function checkCanAddSubFamily(family) {
+  let filters = [`familyId:${decodeId(family.id)}`];
+  const payload = formatQuery("canAddSubFamily", filters, null);
+  return graphql(payload, "INSUREE_FAMILY_CAN_ADD_SUB_FAMILY");
 }
 
 export function selectFamilyMember(member) {

@@ -118,7 +118,7 @@ class FamilyMasterPanel extends FormPanel {
   };
 
   render() {
-    const { intl, classes, edited, openFamilyButton = false, readOnly, overview } = this.props;
+    const { intl, classes, edited, parent_uuid, openFamilyButton = false, readOnly, overview } = this.props;
     return (
       <Fragment>
         <Grid container className={classes.tableTitle}>
@@ -164,6 +164,7 @@ class FamilyMasterPanel extends FormPanel {
           <Grid item xs={2} className={classes.item}>
             <PublishedComponent
               pubRef="insuree.FamilyTypePicker"
+              isSubFamily={!!parent_uuid || !!edited?.parent}
               withNull={false}
               readOnly={readOnly}
               value={!!edited && !!edited.familyType ? edited.familyType.code : null}

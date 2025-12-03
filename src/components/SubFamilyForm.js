@@ -180,6 +180,7 @@ class SubFamilyForm extends Component {
       overview = false,
       openFamilyButton,
       readOnly = false,
+      parent_uuid,
       add,
       save,
       back,
@@ -224,6 +225,7 @@ class SubFamilyForm extends Component {
             actions={actions}
             openFamilyButton={openFamilyButton}
             overview={overview}
+            parent_uuid = {parent_uuid}
             HeadPanel={FamilyMasterPanel}
             Panels={(overview && !family.familyType)? [ FamilyInsureesOverview] : overview &&(!!family.familyType && family.familyType.code !== FAMILY_TYPE_POLYGAMY_CODE) ? [ FamilyInsureesOverview]  : [HeadInsureeMasterPanel]}
             contributedPanelsKey={

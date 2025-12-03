@@ -22,8 +22,6 @@ class SubFamilyPage extends Component {
     if (!family.uuid ) {
       this.props.fetchParentFamily(this.props.modulesManager, this.props.parent_uuid),
       family.parentFamily = !!this.props.parentFamily ? this.props.parentFamily.id : "";
-      console.log("family", family)
-      console.log("parent_uuid", this.props.parent_uuid)
       this.props.createFamily(
         this.props.modulesManager,
         family,

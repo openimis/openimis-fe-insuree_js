@@ -260,6 +260,29 @@ function reducer(
         checkedCanAddInsuree: false,
         errorCanAddInsuree: formatGraphQLError(action.payload),
       };
+    case "INSUREE_FAMILY_CAN_ADD_SUB_FAMILY_REQ":
+      return {
+        ...state,
+        checkingCanAddSubFamily: true,
+        checkedCanAddSubFamily: false,
+        canAddSubFamilyWarnings: [],
+        errorCanAddSubFamily: null,
+      };
+    case "INSUREE_FAMILY_CAN_ADD_SUB_FAMILY_RESP":
+      return {
+        ...state,
+        checkingCanAddSubFamily: false,
+        checkedCanAddSubFamily: true,
+        canAddSubFamilyWarnings: action.payload.data.canAddSubFamily,
+        errorCanAddSubFamily: formatGraphQLError(action.payload),
+      };
+    case "INSUREE_FAMILY_CAN_ADD_SUB_FAMILY_ERR":
+      return {
+        ...state,
+        checkingCanAddSubFamily: false,
+        checkedCanAddSubFamily: false,
+        errorCanAddSubFamily: formatGraphQLError(action.payload),
+      };
     case "INSUREE_FAMILY_MEMBERS_ERR":
       return {
         ...state,

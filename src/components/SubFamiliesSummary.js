@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 import _ from "lodash";
 
-import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@material-ui/core";
+import { Checkbox, Paper, Button, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@material-ui/core";
 import {
   Search as SearchIcon,
   Add as AddIcon,
@@ -40,8 +40,10 @@ import {
   removeInsuree,
   setFamilyHead,
   changeFamily,
-  checkCanAddInsuree,
+  checkCanAddSubFamily,
   fetchSubFamilySummaries,
+  unLinkFamily,
+  clearSubFamily,
 } from "../actions";
 import { RIGHT_INSUREE_DELETE, EMPTY_STRING } from "../constants";
 import { insureeLabel, familyLabel } from "../utils/utils";
@@ -124,13 +126,13 @@ class SubFamiliesSummary extends PagedDataHandler {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.familyChanged(prevProps)) {
       this.query();
-    } else if (!prevProps.checkedCanAddInsuree && !!this.props.checkedCanAddInsuree) {
-      if (_.isEmpty(this.props.canAddInsureeWarnings)) {
+    } else if (!prevProps.checkedCanAddSubFamily && !!this.props.checkedCanAddSubFamily) {
+      if (_.isEmpty(this.props.canAddSubFamilyWarnings)) {
         //this.setState({ checkedCanAdd: true }, (e) => this.state.canAddAction());
       } else {
-        let messages = this.props.canAddInsureeWarnings;
-        messages.push(formatMessage(this.props.intl, "insuree", "addInsuree.alert.message"));
-        this.props.coreAlert(formatMessage(this.props.intl, "insuree", "addInsuree.alert.title"), messages);
+        let messages = this.props.canAddSubFamilyWarnings;
+        messages.push(formatMessage(this.props.intl, "insuree", "addSubFamily.alert.message"));
+        this.props.coreAlert(formatMessage(this.props.intl, "insuree", "addSubFamily.alert.title"), messages);
       }
     } else if (!!prevProps.alert && !this.props.alert) {
       //this.setState({ checkedCanAdd: true }, (e) => this.state.canAddAction());
@@ -139,8 +141,9 @@ class SubFamiliesSummary extends PagedDataHandler {
       this.query();
     }
   }
+
   componentWillUnmount = () => {
-    //this.props.clearSubFamily();
+    this.props.clearSubFamily();
   };
 
   queryPrms = () => {
@@ -285,6 +288,7 @@ class SubFamiliesSummary extends PagedDataHandler {
   };
 
   onAdd = () => {
+
     historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family?.uuid]);
   };
 
@@ -329,13 +333,13 @@ class SubFamiliesSummary extends PagedDataHandler {
     });
   };
 
-  checkCanAddInsuree = (action) => {
+  checkCanAddSubFamily = (action) => {
     this.setState(
       {
         canAddAction: action,
         checkedCanAdd: false,
       },
-      (e) => this.props.checkCanAddInsuree(this.props.family),
+      (e) => this.props.checkCanAddSubFamily(this.props.family),
     );
   };
 
@@ -350,12 +354,11 @@ class SubFamiliesSummary extends PagedDataHandler {
       fetchedSubFamilies,
       errorSubFamilies,
       readOnly,
-      checkingCanAddInsuree,
-      errorCanAddInsuree,
+      checkingCanAddSubFamily,
+      errorCanAddSubFamily,
       familiesTotalCount,
       clearSubFamily,
     } = this.props;
-    console.log("subfamilies", subFamilies)
     const { shouldBeLocked } = this.state;
     var formatters = [
       (family) => (!!family.headInsuree ? family.headInsuree.chfId : ""),
@@ -427,24 +430,25 @@ class SubFamiliesSummary extends PagedDataHandler {
     );
 
     let actions =
-      !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
+      !!readOnly || !!checkingCanAddSubFamily || !!errorCanAddSubFamily
         ? []
         : [
             {
               button: (
-                <IconButton
+                <Button
+                  startIcon={<AddIcon />}
                   onClick={(e) => {
                     this.onAdd();
                   }}
                 >
-                  <AddIcon />
-                </IconButton>
+                  {formatMessage(intl, "insuree", "familyAddNewSubFamily.buttonText")}
+                </Button>
               ),
               tooltip: formatMessage(intl, "insuree", "familyAddNewSubFamily.tooltip"),
             },
             {
               button: this.state.showIFamilySearcher ? (
-                <IconButton onClick={(e) => this.closeInsureeSearcher()}>
+                <IconButton onClick={(e) => this.closeFamilySearcher()}>
                   <CloseIcon />
                 </IconButton>
               ) : (
@@ -457,11 +461,11 @@ class SubFamiliesSummary extends PagedDataHandler {
                 : formatMessage(intl, "insuree", "showInsureeSearchCriteria.tooltip"),
             },
           ];
-    if (!!checkingCanAddInsuree || !!errorCanAddInsuree) {
+    if (!!checkingCanAddSubFamily || !!errorCanAddSubFamily) {
       actions.push({
         button: (
           <div>
-            <ProgressOrError progress={checkingCanAddInsuree} error={errorCanAddInsuree} />
+            <ProgressOrError progress={checkingCanAddSubFamily} error={errorCanAddSubFamily} />
           </div>
         ),
         tooltip: formatMessage(intl, "insuree", "familyCheckCanAdd"),
@@ -567,10 +571,10 @@ const mapStateToProps = (state) => ({
   pageInfo: state.insuree.familyMembersPageInfo,
   familiesTotalCount: state.insuree.subFamiliesTotalCount,
   errorSubFamilies: state.insuree.errorSubFamilies,
-  checkingCanAddInsuree: state.insuree.checkingCanAddInsuree,
-  checkedCanAddInsuree: state.insuree.checkedCanAddInsuree,
-  canAddInsureeWarnings: state.insuree.canAddInsureeWarnings,
-  errorCanAddInsuree: state.insuree.errorCanAddInsuree,
+  checkingCanAddSubFamily: state.insuree.checkingCanAddSubFamily,
+  checkedCanAddSubFamily: state.insuree.checkedCanAddSubFamily,
+  canAddSubFamilyWarnings: state.insuree.canAddSubFamilyWarnings,
+  errorCanAddSubFamily: state.insuree.errorCanAddSubFamily,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
 });
@@ -584,7 +588,9 @@ const mapDispatchToProps = (dispatch) => {
       removeInsuree,
       setFamilyHead,
       changeFamily,
-      checkCanAddInsuree,
+      checkCanAddSubFamily,
+      clearSubFamily,
+      unLinkFamily,
       coreAlert,
     },
     dispatch,
