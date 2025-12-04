@@ -121,14 +121,6 @@ class SubFamiliesSummary extends PagedDataHandler {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.familyChanged(prevProps)) {
       this.query();
-    } else if (!prevProps.checkedCanAddSubFamily && !!this.props.checkedCanAddSubFamily) {
-      if (_.isEmpty(this.props.canAddSubFamilyWarnings)) {
-      } else {
-        let messages = this.props.canAddSubFamilyWarnings;
-        messages.push(formatMessage(this.props.intl, "insuree", "addSubFamily.alert.message"));
-        this.props.coreAlert(formatMessage(this.props.intl, "insuree", "addSubFamily.alert.title"), messages);
-      }
-    } else if (!!prevProps.alert && !this.props.alert) {
     }
     if (this.state.filters !== prevState.filters) {
       this.query();
@@ -141,12 +133,12 @@ class SubFamiliesSummary extends PagedDataHandler {
 
   queryPrms = () => {
     let prms = [];
-    if (!!this.state.orderBy) {
+    if (this.state.orderBy) {
       prms.push(`orderBy: "${this.state.orderBy}"`);
     }
-    if (!!this.props.family && !!this.props.family.uuid) {
+    if (this.props.family && this.props.family.uuid) {
       prms.push(`parent_Uuid:"${this.props.family.uuid}"`);
-      for (const [key, value] of Object.entries(this.state.filters)) {
+      for (const [value] of Object.entries(this.state.filters)) {
         prms.push(value["filter"]);
       }
       return prms;

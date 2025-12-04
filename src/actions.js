@@ -191,10 +191,10 @@ export function fetchFamilySummaries(mm, filters) {
 
 export function fetchParentFamily(mm, parentFamilyUuid, headInsureeChfId) {
   let filters = [];
-  if (parentFamilyUuid != null) {
-    filters.push(`uuid: "${parentFamilyUuid}"`, "showHistory: true");
-  } else {
+  if (parentFamilyUuid == null) {
     filters.push(`headInsuree_ChfId: "${headInsureeChfId}"`);
+  } else {
+    filters.push(`uuid: "${parentFamilyUuid}"`, "showHistory: true");
   }
   const payload = formatPageQuery("families", filters, FAMILY_FULL_PROJECTION(mm));
   return graphql(payload, "INSUREE_PARENTFAMILY_OVERVIEW");
@@ -455,7 +455,7 @@ export function formatFamilyGQL(mm, family) {
         ? `confirmationTypeId: "${family.confirmationType.code}"`
         : ""
     }
-    ${family.parentFamily != null ? `parentId: ${decodeId(family.parentFamily)}` : ""}
+    ${family.parentFamily == null ? "" : `parentId: ${decodeId(family.parentFamily)}`}
     ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}

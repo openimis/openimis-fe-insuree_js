@@ -166,7 +166,7 @@ class SubFamilyForm extends Component {
     this.setState({isButtonDisabled: true});
   }
   _isRunningMutation(family, state, modulesManager) {
-    let runningMutation = family && family.clientMutationId;
+    let runningMutation = family?.clientMutationId;
     const contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
     for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
       runningMutation = contributedMutations[i](state);
@@ -185,9 +185,10 @@ class SubFamilyForm extends Component {
   }
   
   _getPanels(overview, family) {
-    if (overview && (!family.familyType || family.familyType.code !== FAMILY_TYPE_POLYGAMY_CODE)) return [FamilyInsureesOverview];
-    return [HeadInsureeMasterPanel];
-  }
+    return overview && family?.familyType?.code !== FAMILY_TYPE_POLYGAMY_CODE
+      ? [FamilyInsureesOverview]
+      : [HeadInsureeMasterPanel];
+  }  
 
   render() {
     const {
@@ -209,7 +210,7 @@ class SubFamilyForm extends Component {
       back,
       intl,
     } = this.props;
-    const { family, newFamily, isSaved, isButtonDisabled } = this.state;
+    const { family, newFamily, isSaved } = this.state;
   
     if (!rights.includes(RIGHT_FAMILY)) return null;
   

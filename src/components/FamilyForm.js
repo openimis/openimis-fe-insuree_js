@@ -157,7 +157,7 @@ class FamilyForm extends Component {
     this.setState({ confirmedAction }, this.props.coreConfirm(title, message));
   };
   _isRunningMutation(family, state, modulesManager) {
-    let runningMutation = family && family.clientMutationId;
+    let runningMutation = family?.clientMutationId;
     const contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
     for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
       runningMutation = contributedMutations[i](state);
