@@ -56,9 +56,9 @@ const FamilySubFamilySearcher = ({ filters, onChangeFilters, resetFilters }) => 
         </Grid>
         <Grid item xs={4}>
           <Grid container justify="flex-end">
-            {actions.map((a, idx) => {
+            {actions.map((a) => {
               return (
-                <Grid item key={`searcher-action-${idx}`} className={classes.paperHeaderAction}>
+                <Grid item key={`searcher-action-${a.tooltip}`} className={classes.paperHeaderAction}>
                   {withTooltip(a.button, a.tooltip)}
                 </Grid>
               );
@@ -150,7 +150,7 @@ const FamilySubFamilySearcher = ({ filters, onChangeFilters, resetFilters }) => 
                     {
                       id: "gender",
                       value: v,
-                      filter: !!v ? `members_Gender_Code: "${v}"` : null,
+                      filter: v ? `members_Gender_Code: "${v}"` : null,
                     },
                   ])
                 }

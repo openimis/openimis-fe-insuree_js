@@ -156,6 +156,37 @@ class FamilyForm extends Component {
   onActionToConfirm = (title, message, confirmedAction) => {
     this.setState({ confirmedAction }, this.props.coreConfirm(title, message));
   };
+  _isRunningMutation(family, state, modulesManager) {
+    let runningMutation = family && family.clientMutationId;
+    const contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
+    for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
+      runningMutation = contributedMutations[i](state);
+    }
+    return runningMutation;
+  }
+  
+  _getActions(runningMutation, readOnly, isSaved, intl) {
+    return [
+      {
+        doIt: this.reload,
+        icon: <ReplayIcon />,
+        buttonText: formatMessage(intl, "insuree", "FamilyReload.buttonText") || "Reload",
+        onlyIfDirty: !readOnly && !runningMutation && !isSaved,
+      },
+    ];
+  }
+  
+  _getPanels(overview, family) {
+    if (!overview) return [HeadInsureeMasterPanel];
+    if (family.familyType?.code === FAMILY_TYPE_POLYGAMY_CODE) return [HeadInsureeMasterPanel, SubFamiliesSummary];
+    return [FamilyInsureesOverview];
+  }
+  
+  _getContributedPanelsKey(overview, family) {
+    if (!overview) return INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY;
+    if (family.familyType?.code === FAMILY_TYPE_POLYGAMY_CODE) return FAMILY_POLYGAMOUS_OVERVIEW_PANELS_CONTRIBUTION_KEY;
+    return INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY;
+  }
 
   render() {
     const {
@@ -174,70 +205,51 @@ class FamilyForm extends Component {
       add,
       save,
       back,
+      intl,
     } = this.props;
     const { family, newFamily, isSaved } = this.state;
-    console.log("family", family)
-    console.log("FAMILY_TYPE_POLYGAMY_CODE", FAMILY_TYPE_POLYGAMY_CODE)
+  
     if (!rights.includes(RIGHT_FAMILY)) return null;
-    let runningMutation = !!family && !!family.clientMutationId;
-    let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
-    for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
-      runningMutation = contributedMutations[i](state);
-    }
-    let actions = [
-      {
-        doIt: this.reload,
-        icon: <ReplayIcon />,
-        buttonText: formatMessage(this.props.intl, "insuree", "FamilyReload.buttonText") || "Reload",
-        onlyIfDirty: !readOnly && !runningMutation && !isSaved,
-      },
-    ];
-    const shouldBeLocked = !!runningMutation || family?.validityTo;
+  
+    const runningMutation = this._isRunningMutation(family, state, modulesManager);
+    const actions = this._getActions(runningMutation, readOnly, isSaved, intl);
+    const panels = this._getPanels(overview, family);
+    const contributedPanelsKey = this._getContributedPanelsKey(overview, family);
+    const shouldBeLocked = runningMutation || family?.validityTo;
+  
     return (
       <div className={shouldBeLocked ? classes.lockedPage : null}>
         <Helmet
           title={formatMessageWithValues(
-            this.props.intl,
+            intl,
             "insuree",
-            !!this.props.overview ? "FamilyOverview.title" : "Family.title",
-            { label: insureeLabel(this.state.family.headInsuree) },
+            overview ? "FamilyOverview.title" : "Family.title",
+            { label: insureeLabel(family.headInsuree) },
           )}
         />
         <ProgressOrError progress={fetchingFamily} error={errorFamily} />
-        {((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
+        {((fetchedFamily && family && family.uuid === family_uuid) || !family_uuid) && (
           <Form
             module="insuree"
             title="FamilyOverview.title"
-            titleParams={{ label: insureeLabel(this.state.family.headInsuree) }}
+            titleParams={{ label: insureeLabel(family.headInsuree) }}
             edited_id={family_uuid}
             edited={family}
             reset={this.state.reset}
             back={back}
-            add={!!add && !newFamily ? this._add : null}
+            add={add && !newFamily ? this._add : null}
             readOnly={readOnly || runningMutation || !!family.validityTo}
             actions={actions}
             openFamilyButton={openFamilyButton}
             overview={overview}
             HeadPanel={FamilyMasterPanel}
-            Panels={
-              overview 
-                ? family.familyType?.code === FAMILY_TYPE_POLYGAMY_CODE 
-                  ? [HeadInsureeMasterPanel,SubFamiliesSummary] 
-                  : [FamilyInsureesOverview]
-                : [HeadInsureeMasterPanel]
-            }
-            contributedPanelsKey={
-              overview 
-                ? family.familyType?.code === FAMILY_TYPE_POLYGAMY_CODE
-                  ? FAMILY_POLYGAMOUS_OVERVIEW_PANELS_CONTRIBUTION_KEY 
-                  : INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY 
-                : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
-            }
+            Panels={panels}
+            contributedPanelsKey={contributedPanelsKey}
             family={family}
             insuree={insuree}
             onEditedChanged={this.onEditedChanged}
             canSave={this.canSave}
-            save={!!save ? this._save : null}
+            save={save ? this._save : null}
             onActionToConfirm={this.onActionToConfirm}
             openDirty={save}
           />
@@ -245,6 +257,7 @@ class FamilyForm extends Component {
       </div>
     );
   }
+  
 }
 
 const mapStateToProps = (state, props) => ({

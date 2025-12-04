@@ -19,26 +19,31 @@ class SubFamilyPage extends Component {
   };
 
   save = (family) => {
-    if (!family.uuid ) {
-      this.props.fetchParentFamily(this.props.modulesManager, this.props.parent_uuid),
-      family.parentFamily = !!this.props.parentFamily ? this.props.parentFamily.id : "";
-      this.props.createFamily(
-        this.props.modulesManager,
-        family,
-        formatMessageWithValues(this.props.intl, "insuree", "CreateFamily.mutationLabel", {
-          label: familyLabel(family),
-        }),
-      );
-    } else {
+    const { modulesManager, parent_uuid, parentFamily, intl } = this.props;
+  
+    if (family.uuid) {
       this.props.updateFamily(
-        this.props.modulesManager,
+        modulesManager,
         family,
-        formatMessageWithValues(this.props.intl, "insuree", "UpdateFamily.mutationLabel", {
+        formatMessageWithValues(intl, "insuree", "UpdateFamily.mutationLabel", {
           label: familyLabel(family),
         }),
       );
+      return;
     }
-  };
+  
+    this.props.fetchParentFamily(modulesManager, parent_uuid);
+  
+    family.parentFamily = parentFamily ? parentFamily.id : "";
+  
+    this.props.createFamily(
+      modulesManager,
+      family,
+      formatMessageWithValues(intl, "insuree", "CreateFamily.mutationLabel", {
+        label: familyLabel(family),
+      }),
+    );
+  };  
 
   componentWillUnmount = () => {
     this.props.clearInsuree();

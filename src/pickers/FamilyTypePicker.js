@@ -14,7 +14,7 @@ class FamilyTypePicker extends Component {
     this.usePolygamousFamilies = props.modulesManager.getConf(
       "fe-insuree",
       "usePolygamousFamilies",
-      false,
+      true,
     );
   }
   componentDidMount() {
@@ -54,7 +54,7 @@ class FamilyTypePicker extends Component {
       nullLabel = null,
     } = this.props;
 
-    let options = !!familyTypes 
+    let options = familyTypes 
     ? familyTypes
         .filter(v => (this.usePolygamousFamilies && !isSubFamily) || v !== FAMILY_TYPE_POLYGAMY_CODE)
         .map(v => ({ value: v, label: this.formatSuggestion(v) })) 

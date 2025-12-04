@@ -7,7 +7,7 @@ import SubFamilyPage from "../components/SubFamilyPage";
 class SubFamilyOverviewPage extends Component {
   render() {
     const { history, modulesManager, subFamilie_uuid, family_uuid, insuree_uuid } = this.props;
-    var actions = [
+    const actions = [
       {
         doIt: (e) => historyPush(modulesManager, history, "insuree.route.subFamily", [subFamilie_uuid, family_uuid, insuree_uuid]),
         icon: <EditIcon />,

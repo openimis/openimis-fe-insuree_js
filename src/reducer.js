@@ -205,7 +205,7 @@ function reducer(
         errorParentfamily: null
       };
     case "INSUREE_PARENTFAMILY_OVERVIEW_RESP":
-      var families = parseData(action.payload.data.families);
+      families = parseData(action.payload.data.families);
       return{
           ...state,
           fetchingParentFamily: false,

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { withModulesManager } from "@openimis/fe-core";
+import { withModulesManager, FormattedMessage } from "@openimis/fe-core";
 
 const styles = (theme) => ({
   primaryButton: theme.dialog.primaryButton,
@@ -10,9 +10,7 @@ const styles = (theme) => ({
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 
-import { FormattedMessage } from "@openimis/fe-core";
-
-import { familyLabel, insureeLabel } from "../utils/utils";
+import { familyLabel } from "../utils/utils";
 
 class RemoveSubFamilyDialog extends Component {
   constructor(props) {

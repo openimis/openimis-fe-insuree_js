@@ -191,7 +191,7 @@ export function fetchFamilySummaries(mm, filters) {
 
 export function fetchParentFamily(mm, parentFamilyUuid, headInsureeChfId) {
   let filters = [];
-  if (!!parentFamilyUuid) {
+  if (parentFamilyUuid != null) {
     filters.push(`uuid: "${parentFamilyUuid}"`, "showHistory: true");
   } else {
     filters.push(`headInsuree_ChfId: "${headInsureeChfId}"`);
@@ -217,7 +217,7 @@ export function formatUnlinkFamily (familyUuids, cancelPolicies){
 
 export function linkFamily (familyUuid, familyUuids, clientMutationLabel, cancelPolicies){
   let mutation = formatMutation("moveFamiliesToParentMutation", formatLinkFamily(familyUuid, familyUuids, cancelPolicies) )
-  var requestedDateTime = new Date();
+  const requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_LINK_FAMILY_RESP", "INSUREE_LINK_FAMILY_ERR"], {
     clientMutationId: mutation.clientMutationId,
     clientMutationLabel,
@@ -228,7 +228,7 @@ export function linkFamily (familyUuid, familyUuids, clientMutationLabel, cancel
 
 export function unLinkFamily ( familyUuids, clientMutationLabel, cancelPolicies){
   let mutation = formatMutation("deleteFamiliesFromParentMutation", formatUnlinkFamily(familyUuids, cancelPolicies) )
-  var requestedDateTime = new Date();
+  const requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UNLINK_FAMILY_RESP", "INSUREE_UNLINK_FAMILY_ERR"], {
     clientMutationId: mutation.clientMutationId,
     clientMutationLabel,
@@ -455,7 +455,7 @@ export function formatFamilyGQL(mm, family) {
         ? `confirmationTypeId: "${family.confirmationType.code}"`
         : ""
     }
-    ${!!family.parentFamily ? `parentId: ${decodeId(family.parentFamily)}` : ""}
+    ${family.parentFamily != null ? `parentId: ${decodeId(family.parentFamily)}` : ""}
     ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
