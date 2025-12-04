@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
-import _ from "lodash";
 
 import { Checkbox, Paper, Button, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@material-ui/core";
 import {
@@ -136,7 +135,7 @@ class SubFamiliesSummary extends PagedDataHandler {
     if (this.state.orderBy) {
       prms.push(`orderBy: "${this.state.orderBy}"`);
     }
-    if (this.props.family && this.props.family.uuid) {
+    if (this.props?.family?.uuid) {
       prms.push(`parent_Uuid:"${this.props.family.uuid}"`);
       for (const [value] of Object.entries(this.state.filters)) {
         prms.push(value["filter"]);
