@@ -30,7 +30,7 @@ const styles = (theme) => ({
 
 const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";
 
-export class InsureeFormComponent extends Component {
+class InsureeForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -304,6 +304,6 @@ export default withHistory(
       clearInsuree,
       fetchInsureeMutation,
       journalize,
-    })(injectIntl(withTheme(withStyles(styles)(InsureeFormComponent)))),
+    })(injectIntl(withTheme(withStyles(styles)(InsureeForm)))),
   ),
 );
