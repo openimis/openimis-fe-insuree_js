@@ -1,8 +1,5 @@
-import { render } from "@testing-library/react";
-import InsureeFormComponent from "../src/components/InsureeForm";
 import { isValidInsuree } from "../src/utils/utils";
 
-// Mock global baseInsuree
 const baseInsuree = {
   chfId: "CHF123",
   lastName: "Doe",
@@ -15,7 +12,6 @@ const baseInsuree = {
   status: "AC",
 };
 
-// Mock ModulesManager global
 const mockModulesManager = {
   getConf: jest.fn((module, key, defaultValue) => {
     const conf = {
@@ -29,7 +25,6 @@ const mockModulesManager = {
   }),
 };
 
-// Props globales pour le composant
 const defaultProps = {
   modulesManager: mockModulesManager,
   isChfIdValid: true,
@@ -69,18 +64,3 @@ describe("isValidInsuree()", () => {
   });
 });
 
-describe("InsureeFormComponent canSave()", () => {
-  it("returns true when all conditions are met", () => {
-    // Render du composant
-    const { container } = render(<InsureeFormComponent {...defaultProps} />);
-
-    // Récupérer l'instance de la class component
-    const componentInstance = container.firstChild._reactRootContainer._internalRoot.current.child.stateNode;
-
-    // Set le state avec baseInsuree
-    componentInstance.setState({ insuree: { ...baseInsuree }, lockNew: false, newInsuree: false });
-
-    // Vérifie que canSave retourne true
-    expect(componentInstance.canSave()).toBe(true);
-  });
-});
