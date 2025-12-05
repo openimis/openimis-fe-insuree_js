@@ -15,7 +15,7 @@ on:
 
 jobs:
   run-tests:
-    uses: Y-Note-SAS/openimis-fe_js/.github/workflows/ci-module.yml@feature-34644
+    uses: openimis/openimis-fe_js/.github/workflows/ci-module.yml@develop
     with:
       module-path: ./current-module
       repo: ${{ github.repository }}
