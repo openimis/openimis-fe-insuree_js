@@ -55,8 +55,7 @@ describe("isValidInsuree()", () => {
 
   it("fails if status required but missing", () => {
     mockModulesManager.getConf.mockImplementation((module, key, defaultValue) => {
-      if (module === "fe-insuree" && key === "insureeForm.isInsureeStatusRequired") return true;
-      return false;
+      return module === "fe-insuree" && key === "insureeForm.isInsureeStatusRequired";
     });
 
     const insuree = { ...baseInsuree, status: null };
