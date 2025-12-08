@@ -40,7 +40,7 @@ import {
   clearSubFamily,
 } from "../actions";
 import { EMPTY_STRING } from "../constants";
-import { familyLabel } from "../utils/utils";
+import { familyLabel, insureeLabel } from "../utils/utils";
 import RemoveSubFamilyDialog from "./RemoveSubFamilyDialog";
 import EnquiryDialog from "./EnquiryDialog";
 import FamilySubFamilySearcher from "./FamilySubFamilySearcher";
