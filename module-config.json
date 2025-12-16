@@ -1,0 +1,9 @@
+{
+    "moduleName": "fe-insuree",
+    "dependencies": [
+        "core",
+        "policy"
+    ],
+    "branch": "feature-34644",
+    "repo": "Y-Note-SAS/openimis-fe-insuree_js"
+}

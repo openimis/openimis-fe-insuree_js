@@ -1,4 +1,6 @@
 import { isValidInsuree } from "../src/utils/utils";
+import { RIGHT_INSUREE } from "../src/constants";
+import { render } from "@testing-library/react";
 
 const baseInsuree = {
   chfId: "CHF123",
@@ -25,10 +27,10 @@ const mockModulesManager = {
   }),
 };
 
-const defaultProps = {
+const mockProps = {
   modulesManager: mockModulesManager,
   isChfIdValid: true,
-  rights: ["RIGHT_INSUREE"],
+  rights: [RIGHT_INSUREE],
   fetchInsureeFull: jest.fn(),
   fetchFamily: jest.fn(),
   clearInsuree: jest.fn(),
@@ -36,7 +38,16 @@ const defaultProps = {
   journalize: jest.fn(),
   save: jest.fn(),
   add: jest.fn(),
+  intl: { formatMessage: ({ id }) => id },
+  family: { uuid: 'FAM123', name: 'Doe' },
+  insuree: { uuid: 'INS123', firstName: 'John', lastName: 'Doe' },
+  mutation: { clientMutationId: 'abc123' },
+  insuree_uuid: 'INS123',
+  family_uuid: 'FAM123',
+  submittingMutation: false,
 };
+
+render(<InsureeForm {...mockProps} />);
 
 describe("isValidInsuree()", () => {
   it("returns true for a fully valid insuree", () => {
@@ -61,5 +72,6 @@ describe("isValidInsuree()", () => {
     const insuree = { ...baseInsuree, status: null };
     expect(isValidInsuree(insuree, mockModulesManager)).toBe(false);
   });
+
 });
 
