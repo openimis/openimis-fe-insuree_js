@@ -3,6 +3,7 @@ import { RIGHT_INSUREE } from "../src/constants";
 import { render } from "@testing-library/react";
 import InsureeForm from "../src/components/InsureeForm";
 
+
 const baseInsuree = {
   chfId: "CHF123",
   lastName: "Doe",
