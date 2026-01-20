@@ -223,7 +223,7 @@ class InsureeFilter extends Component {
             />
           </Grid>
         </Grid>
-        {!this.columns?.email === "H" && (
+        {this.columns?.email !== "H" && (
         <ControlledField
           module="insuree"
           id="InsureeFilter.email"

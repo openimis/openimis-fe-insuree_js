@@ -353,7 +353,7 @@ class FamilyFilter extends Component {
             </Grid>
           }
         />
-        {this.columns?.confirmationNo === "H" && (
+        {this.columns?.confirmationNo !== "H" && (
         <ControlledField
           module="insuree"
           id="FamilyFilter.confirmationNo"
