@@ -22,7 +22,7 @@ class InsureeOfficer extends Component {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
-    this.isCurrentAdminEnrollmentOfficerActive = props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", true);
+    this.isCurrentAdminEnrollmentOfficerActive = props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", false);
     this.currentEO = null;
   }
 
