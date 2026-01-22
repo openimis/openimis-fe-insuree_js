@@ -72,20 +72,29 @@ class InsureeMasterPanel extends FormPanel {
       />
     </Grid>
   );
+
   getLocationId = (insuree, family) => {
-    const { sameLocation } = this.props.edited || {};
-    const { edited } = this.props || {}
-    if (sameLocation == false) {
-      if (insuree?.currentVillage?.id) return insuree.currentVillage.id;
-      if (family?.headInsuree?.currentVillage?.id) return family.headInsuree.currentVillage.id;
-      if (edited?.currentVillage?.id) return edited.currentVillage.id;
+    const { edited = {} } = this.props;
+    const { sameLocation } = edited;
+  
+    if (sameLocation) {
+      return (
+        family?.location?.id ||
+        insuree?.family?.location?.id ||
+        ""
+      );
     }
-
-    if (family?.location?.id) return family.location.id;
-    if (insuree?.family?.location?.id) return insuree.family.location.id;
-
-    return "";
+  
+    return (
+      insuree?.currentVillage?.id ||
+      family?.headInsuree?.currentVillage?.id ||
+      edited?.currentVillage?.id ||
+      family?.location?.id ||
+      insuree?.family?.location?.id ||
+      ""
+    );
   };
+  
   render() {
     const {
       intl,
