@@ -37,7 +37,7 @@ class FamilySearcher extends Component {
       "familyFilter.rowsPerPageOptions",
       [10, 20, 50, 100],
     );
-    this.columns = props.modulesManager.getConf("fe-insuree", "columns", {});
+    this.columns = props.modulesManager.getConf("fe-insuree", "searcherColumnsConfig", {});
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "familyFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
     this.renderLastNameFirst = props.modulesManager.getConf(
