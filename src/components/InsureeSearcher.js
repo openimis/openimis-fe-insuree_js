@@ -47,6 +47,8 @@ class InsureeSearcher extends Component {
       "insureeFilter.rowsPerPageOptions",
       [10, 20, 50, 100],
     );
+    this.columns = props.modulesManager.getConf("fe-insuree", "columns", {});
+    this.fields = props.modulesManager.getConf("fe-insuree", "fields", {});
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "insureeFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
     this.renderLastNameFirst = props.modulesManager.getConf(
@@ -130,7 +132,7 @@ class InsureeSearcher extends Component {
       !this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
       "insuree.insureeSummaries.maritalStatus",
       "insuree.insureeSummaries.gender",
-      "insuree.insureeSummaries.email",
+      this.columns.email !== "H" ? "insuree.insureeSummaries.email" : null,
       "insuree.insureeSummaries.phone",
       "insuree.insureeSummaries.dob",
       ...Array.from(Array(this.locationLevels)).map((_, i) => (`location.locationType.${i}`)),
@@ -217,7 +219,7 @@ class InsureeSearcher extends Component {
               value={!!insuree.gender ? insuree.gender.code : null}
             />
           ),
-      (insuree) => insuree.email,
+      this.columns.email !== "H" ? (insuree) => insuree.email : null,
       (insuree) => insuree.phone,
       (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
     ];
