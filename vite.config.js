@@ -5,6 +5,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [react({
     jsxRuntime: 'automatic',
+    jsxImportSource: '@emotion/react',
   })],
   build: {
     lib: {
