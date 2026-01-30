@@ -22,4 +22,5 @@ const mapStateToProps = (state, props) => ({
   family_uuid: props.match.params.family_uuid,
 });
 
+export { FamilyOverviewPage };
 export default withHistory(withModulesManager(connect(mapStateToProps)(FamilyOverviewPage)));

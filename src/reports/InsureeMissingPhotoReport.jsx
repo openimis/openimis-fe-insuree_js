@@ -9,7 +9,7 @@ const InsureeMissingPhotoReport = (props) => {
 
   return (
     <Grid container direction="column" spacing={1}>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="insuree.InsureeOfficerPicker"
           value={values.officer}
@@ -18,7 +18,7 @@ const InsureeMissingPhotoReport = (props) => {
           onChange={(officer) => setValues({ ...values, officer })}
         />
       </Grid>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="location.LocationPicker"
           onChange={(location) =>

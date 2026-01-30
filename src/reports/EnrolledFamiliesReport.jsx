@@ -7,7 +7,7 @@ const EnrolledFamiliesReport = (props) => {
 
   return (
     <Grid container direction="column" spacing={1}>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="location.LocationPicker"
           onChange={(location) =>
@@ -21,7 +21,7 @@ const EnrolledFamiliesReport = (props) => {
           locationLevel={2}
         />
       </Grid>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="core.DatePicker"
           value={values.dateFrom}
@@ -31,7 +31,7 @@ const EnrolledFamiliesReport = (props) => {
           onChange={(dateFrom) => setValues({ ...values, dateFrom })}
         />
       </Grid>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="core.DatePicker"
           value={values.dateTo}

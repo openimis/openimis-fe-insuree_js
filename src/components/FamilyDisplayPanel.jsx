@@ -56,4 +56,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchFamily }, dispatch);
 };
 
+export { FamilyDisplayPanel };
 export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(FamilyDisplayPanel));

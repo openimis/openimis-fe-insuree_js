@@ -311,4 +311,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchFamilySummaries, deleteFamily, journalize }, dispatch);
 };
 
+export { FAMILY_SEARCHER_CONTRIBUTION_KEY };
 export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(injectIntl(FamilySearcher)));

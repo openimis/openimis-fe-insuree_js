@@ -49,16 +49,16 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
     <StyledFamilyInsureesSearcher>
       <Fragment>
         <Grid container alignItems="center" direction="row" className="paperHeader">
-          <Grid item xs={8}>
+          <Grid size={8}>
             <Typography className="tableTitle">
               {formatMessage('Insuree.searchCriteria')}
             </Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <Grid container justify="flex-end">
               {actions.map((a, idx) => {
                 return (
-                  <Grid item key={`searcher-action-${idx}`} className="paperHeaderAction">
+                  <Grid key={`searcher-action-${idx}`} className="paperHeaderAction">
                     {withTooltip(a.button, a.tooltip)}
                   </Grid>
                 );
@@ -71,7 +71,7 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
             module="insuree"
             id="FamilyInsureesSearch.chfId"
             field={
-              <Grid item xs={3} className="item">
+              <Grid size={3} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.chfId"
@@ -94,7 +94,7 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
             module="insuree"
             id="FamilyInsureesSearch.lastName"
             field={
-              <Grid item xs={3} className="item">
+              <Grid size={3} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.lastName"
@@ -117,7 +117,7 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
             module="insuree"
             id="FamilyInsureesSearch.givenName"
             field={
-              <Grid item xs={3} className="item">
+              <Grid size={3} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.otherNames"
@@ -140,7 +140,7 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
             module="insuree"
             id="FamilyInsureesSearch.gender"
             field={
-              <Grid item xs={3} className="item">
+              <Grid size={3} className="item">
                 <PublishedComponent
                   pubRef="insuree.InsureeGenderPicker"
                   withNull={true}
@@ -163,7 +163,7 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
             id="FamilyInsureesSearch.dob"
             field={
               <Grid container>
-                <Grid item xs={3} className="item">
+                <Grid size={3} className="item">
                   <PublishedComponent
                     pubRef="core.DatePicker"
                     value={filterValue("dobFrom")}
@@ -180,7 +180,7 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
                     }
                   />
                 </Grid>
-                <Grid item xs={3} className="item">
+                <Grid size={3} className="item">
                   <PublishedComponent
                     pubRef="core.DatePicker"
                     value={filterValue("dobTo")}

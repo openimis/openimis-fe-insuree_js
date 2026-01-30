@@ -100,4 +100,5 @@ const Enquiry = (props) => {
   );
 };
 
+export { StyledEnquiry };
 export default injectIntl(Enquiry);

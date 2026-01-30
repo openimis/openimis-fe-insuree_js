@@ -72,8 +72,8 @@ const InsureeSummary = (props) => {
               </Typography>
             }
           />
-          <Grid item container xs={12} spacing={5}>
-            <Grid item>
+          <Grid container size={12} spacing={5}>
+            <Grid>
               <div>
                 <Box>
                   <Typography className="rawValue" variant="h6">
@@ -123,7 +123,7 @@ const InsureeSummary = (props) => {
                     module="insuree"
                     id="InsureeSummary.gender"
                     field={
-                      <Grid item xs={12}>
+                      <Grid size={12}>
                         <Typography className="rawValue">{insuree.gender?.gender}</Typography>
                       </Grid>
                     }
@@ -135,7 +135,7 @@ const InsureeSummary = (props) => {
                       module="insuree"
                       id="InsureeSummary.insureeLocation"
                       field={
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                           <Typography className="rawValue">
                             {formatMessageWithValues(intl, "insuree", "InsureeSummary.insureeLocation", {
                               location: insuree?.family
@@ -153,12 +153,12 @@ const InsureeSummary = (props) => {
               </div>
             </Grid>
             {hasExtContributions && (
-              <Grid item>
+              <Grid>
                 <Contributions contributionKey={INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY} insuree={insuree} />
               </Grid>
             )}
             {!!insuree?.family?.uuid && (
-              <Grid item>
+              <Grid>
                 <Button
                   variant="contained"
                   color="primary"
@@ -172,13 +172,13 @@ const InsureeSummary = (props) => {
               </Grid>
             )}
             {showInsureeProfile && (
-              <Grid item>
+              <Grid>
                 <InsureeProfileLink insureeUuid={insuree.uuid} />
               </Grid>
             )}
           </Grid>
         </Box>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Contributions contributionKey={INSUREE_SUMMARY_CONTRIBUTION_KEY} insuree={insuree} />
         </Grid>
       </Grid>
@@ -186,4 +186,5 @@ const InsureeSummary = (props) => {
   );
 };
 
+export { INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY };
 export default withModulesManager(withHistory(injectIntl(InsureeSummary)));

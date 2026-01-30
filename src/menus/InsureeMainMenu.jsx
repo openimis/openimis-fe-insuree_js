@@ -102,4 +102,5 @@ const mapStateToProps = (state) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
 });
 
+export { INSUREE_MAIN_MENU_CONTRIBUTION_KEY };
 export default withModulesManager(injectIntl(connect(mapStateToProps)(InsureeMainMenu)));

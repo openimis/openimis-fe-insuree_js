@@ -67,6 +67,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ createInsuree, updateInsuree }, dispatch);
 };
 
+export { StyledInsureePage };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(injectIntl(InsureePage)),

@@ -82,7 +82,7 @@ class InsureeChfIdPicker extends Component {
     const { readOnly = false, required = false } = this.props;
     return (
       <Grid container>
-        <Grid item xs={4}>
+        <Grid size={4}>
           <TextInput
             readOnly={readOnly}
             autoFocus={true}
@@ -96,7 +96,7 @@ class InsureeChfIdPicker extends Component {
             required={required}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid size={8}>
           <ProgressOrError progress={this.props.fetching} error={this.props.error} />
           {!this.props.fetching && (
             <TextInput
@@ -122,4 +122,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchInsuree }, dispatch);
 };
 
+export { INIT_STATE };
 export default withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(InsureeChfIdPicker)));

@@ -76,4 +76,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchRelations }, dispatch);
 };
 
+export { RelationPicker };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withModulesManager(RelationPicker)));

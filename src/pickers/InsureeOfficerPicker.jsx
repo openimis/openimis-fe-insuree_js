@@ -102,6 +102,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchInsureeOfficers }, dispatch);
 };
 
+export { StyledInsureeOfficer };
 export default withModulesManager(
   connect(mapStateToProps, mapDispatchToProps)(injectIntl(InsureeOfficer)),
 );

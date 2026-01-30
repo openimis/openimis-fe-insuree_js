@@ -63,4 +63,5 @@ class ChangeInsureeFamilyDialog extends Component {
   }
 }
 
+export { StyledChangeInsureeFamilyDialog };
 export default withModulesManager(injectIntl(ChangeInsureeFamilyDialog));

@@ -439,23 +439,23 @@ class FamilyInsureesOverview extends PagedDataHandler {
             />
           </Collapse>
           <Grid container alignItems="center" direction="row" className="paperHeader">
-            <Grid item xs={8}>
+            <Grid size={8}>
               <Typography className="tableTitle">
                 <FormattedMessage module="insuree" id="Family.insurees" values={{ count: pageInfo.totalCount }} />
               </Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <Grid container justify="flex-end">
                 {actions.map((a, idx) => {
                   return (
-                    <Grid item key={`form-action-${idx}`} className="paperHeaderAction">
+                    <Grid key={`form-action-${idx}`} className="paperHeaderAction">
                       {withTooltip(a.button, a.tooltip)}
                     </Grid>
                   );
                 })}
               </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Divider />
             </Grid>
           </Grid>
@@ -519,6 +519,7 @@ const mapDispatchToProps = (dispatch) => {
   );
 };
 
+export { StyledFamilyInsureesOverview };
 export default withModulesManager(
   injectIntl(connect(mapStateToProps, mapDispatchToProps)(FamilyInsureesOverview)),
 );

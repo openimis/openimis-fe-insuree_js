@@ -18,13 +18,13 @@ class InsureeFirstServicePointPanel extends FormPanel {
     return (
       <StyledInsureeFirstServicePointPanel>
         <Grid container>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Paper className="paper">
               <Typography className="title">
                 <FormattedMessage module="insuree" id="insuree.InsureeFirstServicePointPanel.title" />
               </Typography>
               <Divider />
-              <Grid container item xs={12} className="item">
+              <Grid container size={12} className="item">
                 {readOnly && !edited.healthFacility ? (
                   <FormattedMessage module="insuree" id="insuree.noFSP" />
                 ) : (

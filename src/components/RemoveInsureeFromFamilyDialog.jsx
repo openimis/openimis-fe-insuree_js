@@ -63,4 +63,5 @@ class RemoveInsureeFromFamilyDialog extends Component {
   }
 }
 
+export { StyledRemoveInsureeFromFamilyDialog };
 export default withModulesManager(injectIntl(RemoveInsureeFromFamilyDialog));

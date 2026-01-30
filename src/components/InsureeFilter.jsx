@@ -70,7 +70,7 @@ class InsureeFilter extends Component {
         module="insuree"
         id="InsureeFilter.lastName"
         field={
-          <Grid item xs={3} className="item">
+          <Grid size={3} className="item">
             <TextInput
               module="insuree"
               label="Insuree.lastName"
@@ -98,7 +98,7 @@ class InsureeFilter extends Component {
         module="insuree"
         id="InsureeFilter.givenName"
         field={
-          <Grid item xs={3} className="item">
+          <Grid size={3} className="item">
             <TextInput
               module="insuree"
               label="Insuree.otherNames"
@@ -129,7 +129,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.location"
             field={
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <PublishedComponent
                   pubRef="location.DetailedLocationFilter"
                   withNull={true}
@@ -145,7 +145,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.chfId"
             field={
-              <Grid item xs={3} className="item">
+              <Grid size={3} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.chfId"
@@ -175,13 +175,13 @@ class InsureeFilter extends Component {
               {this.renderLastNameField()}
             </>
           )}
-          <Grid item xs={3}>
+          <Grid size={3}>
             <Grid container>
               <ControlledField
                 module="insuree"
                 id="InsureeFilter.gender"
                 field={
-                  <Grid item xs={6} className="item">
+                  <Grid size={6} className="item">
                     <PublishedComponent
                       pubRef="insuree.InsureeGenderPicker"
                       withNull={true}
@@ -204,7 +204,7 @@ class InsureeFilter extends Component {
                 module="insuree"
                 id="InsureeFilter.maritalStatus"
                 field={
-                  <Grid item xs={6} className="item">
+                  <Grid size={6} className="item">
                     <PublishedComponent
                       pubRef="insuree.InsureeMaritalStatusPicker"
                       value={this._filterValue("maritalStatus")}
@@ -228,7 +228,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.email"
             field={
-              <Grid item xs={3} className="item">
+              <Grid size={3} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.email"
@@ -251,7 +251,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.phone"
             field={
-              <Grid item xs={3} className="item">
+              <Grid size={3} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.phone"
@@ -274,7 +274,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.familyStatus"
             field={
-              <Grid item xs={6} className="item">
+              <Grid size={6} className="item">
                 <PublishedComponent
                   pubRef="insuree.FamilyStatusPicker"
                   value={this._filterValue("familyStatus")}
@@ -296,9 +296,9 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.dob"
             field={
-              <Grid item xs={3}>
+              <Grid size={3}>
                 <Grid container>
-                  <Grid item xs={6} className="item">
+                  <Grid size={6} className="item">
                     <PublishedComponent
                       pubRef="core.DatePicker"
                       value={this._filterValue("dobFrom")}
@@ -317,7 +317,7 @@ class InsureeFilter extends Component {
                       }
                     />
                   </Grid>
-                  <Grid item xs={6} className="item">
+                  <Grid size={6} className="item">
                     <PublishedComponent
                       pubRef="core.DatePicker"
                       value={this._filterValue("dobTo")}
@@ -340,13 +340,13 @@ class InsureeFilter extends Component {
               </Grid>
             }
           />
-          <Grid item xs={3}>
+          <Grid size={3}>
             <Grid container>
               <ControlledField
                 module="insuree"
                 id="InsureeFilter.photoStatus"
                 field={
-                  <Grid item xs={6} className="item">
+                  <Grid size={6} className="item">
                     <PublishedComponent
                       pubRef="insuree.PhotoStatusPicker"
                       value={this._filterValue("photoStatus")}
@@ -368,7 +368,7 @@ class InsureeFilter extends Component {
                 module="insuree"
                 id="InsureeFilter.showHistory"
                 field={
-                  <Grid item xs={6} className="item">
+                  <Grid size={6} className="item">
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -395,4 +395,5 @@ class InsureeFilter extends Component {
   }
 }
 
+export { StyledInsureeFilter };
 export default withModulesManager(injectIntl(InsureeFilter));

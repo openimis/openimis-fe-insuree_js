@@ -48,4 +48,5 @@ class DeleteFamilyDialog extends Component {
   }
 }
 
+export { StyledDeleteFamilyDialog };
 export default injectIntl(DeleteFamilyDialog);

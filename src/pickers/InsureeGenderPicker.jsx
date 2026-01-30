@@ -77,4 +77,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchInsureeGenders }, dispatch);
 };
 
+export { InsureeGenderPicker };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withModulesManager(InsureeGenderPicker)));

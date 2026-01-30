@@ -55,7 +55,7 @@ class RawFilter extends Component {
   };
 
   renderLastNameField = () => (
-    <Grid item xs={4} className="item">
+    <Grid size={4} className="item">
       <TextInput
         module="insuree"
         label="Insuree.lastName"
@@ -66,7 +66,7 @@ class RawFilter extends Component {
   );
 
   renderGivenNameField = () => (
-    <Grid item xs={4} className="item">
+    <Grid size={4} className="item">
       <TextInput
         module="insuree"
         label="Insuree.otherNames"
@@ -79,7 +79,7 @@ class RawFilter extends Component {
   render() {
     return (
       <Grid container>
-        <Grid item xs={4} className="item">
+        <Grid size={4} className="item">
           <TextInput
             autoFocus={true}
             module="insuree"
@@ -269,6 +269,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchInsureesForPicker, checkIfHeadSelected }, dispatch);
 };
 
+export { StyledInsureePicker };
+export { RawFilter };
 export default withModulesManager(
   connect(mapStateToProps, mapDispatchToProps)(injectIntl(InsureePicker)),
 );

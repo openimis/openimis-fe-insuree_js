@@ -80,4 +80,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchIdentificationTypes }, dispatch);
 };
 
+export { IdentificationTypePicker };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withModulesManager(IdentificationTypePicker)));

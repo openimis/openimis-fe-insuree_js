@@ -63,4 +63,5 @@ const mapStateToProps = (state) => ({
   headSelected: state.insuree?.headSelected,
 });
 
+export { InsureeNumberInput };
 export default withModulesManager(connect(mapStateToProps)(injectIntl(InsureeNumberInput)));

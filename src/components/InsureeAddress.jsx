@@ -30,7 +30,7 @@ const InsureeAddress = ({
   return (
     <StyledInsureeAddress>
       <Grid container>
-        <Grid item xs={6} className="item">
+        <Grid size={6} className="item">
           <FormControlLabel
             control={
               <Checkbox
@@ -54,7 +54,7 @@ const InsureeAddress = ({
             />
           }
         </Grid>
-        <Grid item xs={6} className="item">
+        <Grid size={6} className="item">
           <FormControlLabel
             control={
               <Checkbox

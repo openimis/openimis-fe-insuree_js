@@ -77,4 +77,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchEducations }, dispatch);
 };
 
+export { EducationPicker };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withModulesManager(EducationPicker)));

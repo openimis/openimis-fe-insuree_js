@@ -7,7 +7,7 @@ const InsureeFamilyOverviewReport = (props) => {
 
   return (
     <Grid container direction="column" spacing={1}>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="core.DatePicker"
           value={values.dateFrom}
@@ -17,7 +17,7 @@ const InsureeFamilyOverviewReport = (props) => {
           onChange={(dateFrom) => setValues({ ...values, dateFrom })}
         />
       </Grid>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="core.DatePicker"
           value={values.dateTo}

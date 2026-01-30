@@ -234,7 +234,7 @@ class InsureeSearcher extends Component {
         : null,
       (insuree) => (
         <Grid container wrap="nowrap" spacing="2">
-            <Grid item>
+            <Grid>
               <IconButton
                 size="small"
                 onClick={(e) => !insuree.clientMutationId && this.setState({ open: true, chfid: insuree.chfId })}
@@ -243,7 +243,7 @@ class InsureeSearcher extends Component {
               </IconButton>
             </Grid>
           {insuree.family && (
-            <Grid item>
+            <Grid>
               <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
                 <IconButton
                   size="small"
@@ -259,7 +259,7 @@ class InsureeSearcher extends Component {
               </Tooltip>
             </Grid>
           )}
-          <Grid item>
+          <Grid>
             <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openNewTabButton.tooltip")}>
               <IconButton
                 size="small"
@@ -270,7 +270,7 @@ class InsureeSearcher extends Component {
             </Tooltip>
           </Grid>
           {this.props.rights.includes(RIGHT_INSUREE_DELETE) && !insuree.validityTo && (
-            <Grid item>
+            <Grid>
               <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.deleteFamily.tooltip")}>
                 <IconButton size="small" onClick={(e) => !insuree.clientMutationId && this.confirmDelete(insuree)}>
                   <DeleteIcon />
@@ -368,6 +368,8 @@ const mapDispatchToProps = (dispatch) => {
   );
 };
 
+export { INSUREE_SEARCHER_CONTRIBUTION_KEY };
+export { InsureeSearcher };
 export default withModulesManager(
   withHistory(connect(mapStateToProps, mapDispatchToProps)(injectIntl(InsureeSearcher))),
 );

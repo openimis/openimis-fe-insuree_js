@@ -77,4 +77,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchProfessions }, dispatch);
 };
 
+export { ProfessionPicker };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withModulesManager(ProfessionPicker)));

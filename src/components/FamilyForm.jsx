@@ -253,6 +253,7 @@ const mapDispatchToProps = (dispatch) => {
   );
 };
 
+export { StyledFamilyForm };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(injectIntl(FamilyForm)),

@@ -103,4 +103,5 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchInsureeEnquiry, clearInsureeEnquiry }, dispatch);
+export { StyledEnquiryDialog };
 export default withModulesManager(withHistory(connect(mapStateToProps, mapDispatchToProps)(injectIntl(EnquiryDialog))));

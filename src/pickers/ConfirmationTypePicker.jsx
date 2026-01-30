@@ -78,4 +78,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchConfirmationTypes }, dispatch);
 };
 
+export { ConfirmationTypePicker };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withModulesManager(ConfirmationTypePicker)));

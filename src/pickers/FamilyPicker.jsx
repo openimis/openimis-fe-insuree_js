@@ -31,4 +31,5 @@ class FamilyPicker extends Component {
   }
 }
 
+export { StyledFamilyPicker };
 export default injectIntl(FamilyPicker);

@@ -18,7 +18,7 @@ class FamilyTypePicker extends Component {
     }
   }
 
-  nullDisplay = this.props.nullLabel || formatMessage(this.props.intl, "insuree", `FamilyType.null`);
+  nullDisplay = this.props.nullLabel || formatMessage(this.props.intl, "insuree", `Family.FamilyType.null`);
 
   formatSuggestion = (i) =>
     !!i ? `${formatMessage(this.props.intl, "insuree", `FamilyType.${i}`)}` : this.nullDisplay;
@@ -78,4 +78,5 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ fetchFamilyTypes }, dispatch);
 };
 
+export { FamilyTypePicker };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withModulesManager(FamilyTypePicker)));

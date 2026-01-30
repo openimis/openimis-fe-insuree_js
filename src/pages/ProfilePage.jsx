@@ -65,9 +65,9 @@ const ProfilePage = () => {
           <Typography className="title" variant="h6">
             {formatMessage("link.profile")}
           </Typography>
-          <Grid item xs={12} container display="flex">
+          <Grid size={12} container display="flex">
             <ProgressOrError progress={fetchingInsuree} error={errorInsuree} />
-            <Grid item container direction="row" className="flexContainer">
+            <Grid container direction="row" className="flexContainer">
               {hasAvatarContribution && (
                 <Grid className="item">
                   <Box mr={3}>
@@ -134,7 +134,7 @@ const ProfilePage = () => {
                       module="insuree"
                       id="InsureeSummary.gender"
                       field={
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                           <Typography> {insuree?.gender?.gender} </Typography>
                         </Grid>
                       }
@@ -146,7 +146,7 @@ const ProfilePage = () => {
                         module="insuree"
                         id="InsureeSummary.insureeLocation"
                         field={
-                          <Grid item xs={12}>
+                          <Grid size={12}>
                             <Typography>
                               {formatMessageWithValues("InsureeSummary.insureeLocation", {
                                 location: insuree?.family

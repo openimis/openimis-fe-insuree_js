@@ -40,7 +40,7 @@ class FamilyMasterPanel extends FormPanel {
 
   renderLastNameField = (edited) => {
     return (
-      <Grid item xs={3} className="item">
+      <Grid size={3} className="item">
         <TextInput
           module="insuree"
           label="Family.headInsuree.lastName"
@@ -52,7 +52,7 @@ class FamilyMasterPanel extends FormPanel {
   };
 
   renderGivenNameField = (edited) => (
-    <Grid item xs={3} className="item">
+    <Grid size={3} className="item">
       <TextInput
         module="insuree"
         label="Family.headInsuree.otherNames"
@@ -66,7 +66,7 @@ class FamilyMasterPanel extends FormPanel {
     const { edited } = this.props;
     return (
       <Fragment>
-        <Grid item xs={3} className="item">
+        <Grid size={3} className="item">
           <TextInput
             module="insuree"
             label="Family.headInsuree.chfId"
@@ -85,7 +85,7 @@ class FamilyMasterPanel extends FormPanel {
             {this.renderLastNameField(edited)}
           </>
         )}
-        <Grid item xs={2} className="item">
+        <Grid size={2} className="item">
           <PublishedComponent
             pubRef="core.DatePicker"
             value={!edited || !edited.headInsuree ? null : edited.headInsuree.dob}
@@ -94,7 +94,7 @@ class FamilyMasterPanel extends FormPanel {
             readOnly={true}
           />
         </Grid>
-        <Grid item xs={2} className="item">
+        <Grid size={2} className="item">
           <PublishedComponent
             pubRef="insuree.InsureeGenderPicker"
             value={!edited || !edited.headInsuree || !edited.headInsuree.gender ? null : edited.headInsuree.gender.code}
@@ -123,9 +123,9 @@ class FamilyMasterPanel extends FormPanel {
       <StyledFamilyMasterPanel>
         <Fragment>
           <Grid container className="tableTitle">
-            <Grid item>
+            <Grid>
               <Grid container align="center" justify="center" direction="column" className="fullHeight">
-                <Grid item>
+                <Grid>
                   <Typography>
                     <FormattedMessage module="insuree" id="insuree.FamilyDetailPanel.title" />
                   </Typography>
@@ -133,7 +133,7 @@ class FamilyMasterPanel extends FormPanel {
               </Grid>
             </Grid>
             {!!openFamilyButton && !!overview && !!edited.uuid && (
-              <Grid item>
+              <Grid>
                 <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
                   <IconButton
                     onClick={(e) =>
@@ -150,19 +150,19 @@ class FamilyMasterPanel extends FormPanel {
           </Grid>
           <Divider />
           <Grid container className="item">
-            <Grid item xs={12}>
+            <Grid size={12}>
               <PublishedComponent
                 pubRef="location.DetailedLocation"
                 withNull={true}
                 readOnly={readOnly}
                 required
-                value={!edited ? null : edited.location}
+                value={!edited ? null : (edited.location ?? null)}
                 onChange={(v) => this.updateAttribute("location", v)}
                 filterLabels={false}
               />
             </Grid>
             {!!overview && this.headSummary()}
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <PublishedComponent
                 pubRef="insuree.FamilyTypePicker"
                 withNull={false}
@@ -171,7 +171,7 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("familyType", { code: v })}
               />
             </Grid>
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <PublishedComponent
                 pubRef="insuree.ConfirmationTypePicker"
                 withNull={false}
@@ -180,27 +180,27 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("confirmationType", v)}
               />
             </Grid>
-            <Grid item xs={3} className="item">
+            <Grid size={3} className="item">
               <TextInput
                 module="insuree"
                 label="Family.confirmationNo"
                 readOnly={readOnly}
-                value={!edited ? "" : edited.confirmationNo}
+                value={!edited ? "" : edited.confirmationNo || ""}
                 onChange={(v) => this.updateAttribute("confirmationNo", v)}
                 required={edited?.confirmationType?.isConfirmationNumberRequired ?? false}
               />
             </Grid>
-            <Grid item xs={5} className="item">
+            <Grid size={5} className="item">
               <TextInput
                 module="insuree"
                 label="Family.address"
                 multiline
                 readOnly={readOnly}
-                value={!edited ? "" : edited.address}
+                value={!edited ? "" : edited.address || ""}
                 onChange={(v) => this.updateAttribute("address", v)}
               />
             </Grid>
-            <Grid item xs={1} className="item">
+            <Grid size={1} className="item">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -229,4 +229,5 @@ class FamilyMasterPanel extends FormPanel {
   }
 }
 
+export { FAMILY_MASTER_PANEL_CONTRIBUTION_KEY };
 export default withModulesManager(withHistory(injectIntl(FamilyMasterPanel)));

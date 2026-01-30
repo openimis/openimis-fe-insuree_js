@@ -55,4 +55,5 @@ class HeadInsureeMasterPanel extends Component {
   }
 }
 
+export { INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY };
 export default withModulesManager(connect()(injectIntl(HeadInsureeMasterPanel)));

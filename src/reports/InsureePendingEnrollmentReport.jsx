@@ -9,7 +9,7 @@ const InsureePendingEnrollmentReport = (props) => {
 
   return (
     <Grid container direction="column" spacing={1}>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="core.DatePicker"
           value={values.dateFrom}
@@ -19,7 +19,7 @@ const InsureePendingEnrollmentReport = (props) => {
           onChange={(dateFrom) => setValues({ ...values, dateFrom })}
         />
       </Grid>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="core.DatePicker"
           value={values.dateTo}
@@ -29,7 +29,7 @@ const InsureePendingEnrollmentReport = (props) => {
           onChange={(dateTo) => setValues({ ...values, dateTo })}
         />
       </Grid>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="insuree.InsureeOfficerPicker"
           value={values.officer}
@@ -39,7 +39,7 @@ const InsureePendingEnrollmentReport = (props) => {
           onChange={(officer) => setValues({ ...values, officer })}
         />
       </Grid>
-      <Grid item>
+      <Grid>
         <PublishedComponent
           pubRef="location.LocationPicker"
           onChange={(location) =>

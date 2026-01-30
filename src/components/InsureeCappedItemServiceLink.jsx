@@ -16,7 +16,7 @@ class InsureeCappedItemServiceLink extends Component {
     const { insuree } = this.props;
     return (
       <StyledInsureeCappedItemServiceLink>
-        <Grid item xs={12} className="lnk">
+        <Grid size={12} className="lnk">
           <Link href={`${process.env.PUBLIC_URL || ""}/insuree/cappedItemService?nshid=${insuree.chfId}`}>
             <FormattedMessage module="insuree" id="link.cappedItemService" />
           </Link>
@@ -30,4 +30,5 @@ const mapStateToProps = (state) => ({
   insuree: state.insuree.insuree,
 });
 
+export { StyledInsureeCappedItemServiceLink };
 export default injectIntl(connect(mapStateToProps)(InsureeCappedItemServiceLink));
