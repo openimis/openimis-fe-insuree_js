@@ -3,10 +3,17 @@ import InsureeMasterPanel from "./InsureeMasterPanel";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Contributions, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
-import { PersonAdd as AddExistingIcon } from "@material-ui/icons";
+import { PersonAdd } from "@material-ui/icons";
 import { fetchInsureeFull } from "../actions";
+import { Button } from "@material-ui/core";
 
 const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels";
+
+const AddExistingIcon = (intl) => (
+  <Button startIcon={<PersonAdd />}>
+    {formatMessage(intl, "insuree", "familySelectExistingInsureeAsHead.buttonText")}
+  </Button>
+);
 
 class HeadInsureeMasterPanel extends Component {
 
@@ -27,7 +34,7 @@ class HeadInsureeMasterPanel extends Component {
           <div>
             <PublishedComponent //div needed for the tooltip style!!
               pubRef="insuree.InsureePicker"
-              IconRender={AddExistingIcon}
+              IconRender={() => AddExistingIcon(intl)}
               forcedFilter={["head: false"]}
               onChange={this.onEditedChanged}
             />
