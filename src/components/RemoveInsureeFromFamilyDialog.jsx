@@ -10,8 +10,8 @@ import { FormattedMessage } from "@openimis/fe-core";
 import { familyLabel, insureeLabel } from "../utils/utils";
 
 const StyledRemoveInsureeFromFamilyDialog = styled('div')(({ theme }) => ({
-  '& .primaryButton': theme.dialog.primaryButton,
-  '& .secondaryButton': theme.dialog.secondaryButton,
+  '& .primaryButton': theme?.dialog?.primaryButton ?? {},
+  '& .secondaryButton': theme?.dialog?.secondaryButton ?? {},
 }));
 
 class RemoveInsureeFromFamilyDialog extends Component {

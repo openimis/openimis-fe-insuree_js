@@ -13,11 +13,11 @@ const StyledFamilyMembersTable = styled('div')(({ theme }) => ({
     marginInline: 16,
     marginBlock: 12,
   },
-  '& .headerTitle': theme.table.title,
+  '& .headerTitle': theme?.table?.title ?? {},
   '& .actionCell': {
     width: 60,
   },
-  '& .header': theme.table.header,
+  '& .header': theme?.table?.header ?? {},
 }));
 
 const FAMILY_MEMBERS_HEADERS = [

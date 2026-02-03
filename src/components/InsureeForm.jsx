@@ -24,7 +24,7 @@ import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
 
 const StyledInsureeForm = styled('div')(({ theme }) => ({
-  '&.lockedPage': theme.page.locked,
+  '&.lockedPage': theme?.page?.locked ?? {},
 }));
 
 const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";

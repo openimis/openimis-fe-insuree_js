@@ -16,15 +16,15 @@ import {
 import { DEFAULT, WITHOUT_STR } from "../constants";
 
 const StyledInsureeFilter = styled('div')(({ theme }) => ({
-  '& .dialogTitle': theme.dialog.title,
-  '& .dialogContent': theme.dialog.content,
+  '& .dialogTitle': theme?.dialog?.title ?? {},
+  '& .dialogContent': theme?.dialog?.content ?? {},
   '& .form': {
     padding: 0,
   },
   '& .item': {
-    padding: theme.spacing(1),
+    padding: theme?.spacing ? theme.spacing(1) : 8,
   },
-  '& .paperDivider': theme.paper.divider,
+  '& .paperDivider': theme?.paper?.divider ?? {},
 }));
 
 const INSUREE_FILTER_CONTRIBUTION_KEY = "insuree.Filter";

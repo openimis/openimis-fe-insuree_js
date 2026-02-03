@@ -41,10 +41,10 @@ import FamilyInsureesSearcher from "./FamilyInsureesSearcher";
 import RemoveInsureeFromFamilyDialog from "./RemoveInsureeFromFamilyDialog";
 
 const StyledFamilyInsureesOverview = styled('div')(({ theme }) => ({
-  '& .paper': theme.paper.paper,
-  '& .paperHeader': theme.paper.header,
-  '& .paperHeaderAction': theme.paper.action,
-  '& .tableTitle': theme.table.title,
+  '& .paper': theme?.paper?.paper ?? {},
+  '& .paperHeader': theme?.paper?.header ?? {},
+  '& .paperHeaderAction': theme?.paper?.action ?? {},
+  '& .tableTitle': theme?.table?.title ?? {},
 }));
 
 class FamilyInsureesOverview extends PagedDataHandler {

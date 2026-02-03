@@ -18,10 +18,10 @@ import { formatLocationString } from "../utils/utils";
 import FamilyMembersTable from "../components/FamilyMembersTable";
 
 const StyledProfilePage = styled('div')(({ theme }) => ({
-  '& .page': theme.page,
-  '& .paper': theme.paper.paper,
-  '& .title': theme.paper.title,
-  '& .item': theme.paper.item,
+  '& .page': theme?.page ?? {},
+  '& .paper': theme?.paper?.paper ?? {},
+  '& .title': theme?.paper?.title ?? {},
+  '& .item': theme?.paper?.item ?? {},
   '& .flexContainer': {
     flex: 1,
   },

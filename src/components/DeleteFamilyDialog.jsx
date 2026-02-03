@@ -3,8 +3,8 @@ import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 
 const StyledDeleteFamilyDialog = styled('div')(({ theme }) => ({
-  '& .primaryButton': theme.dialog.primaryButton,
-  '& .secondaryButton': theme.dialog.secondaryButton,
+  '& .primaryButton': theme?.dialog?.primaryButton ?? {},
+  '& .secondaryButton': theme?.dialog?.secondaryButton ?? {},
 }));
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";

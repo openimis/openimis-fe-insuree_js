@@ -6,9 +6,9 @@ import { styled } from "@mui/material/styles";
 import { FormattedMessage, PublishedComponent, FormPanel } from "@openimis/fe-core";
 
 const StyledInsureeFirstServicePointPanel = styled('div')(({ theme }) => ({
-  '& .paper': theme.paper.paper,
-  '& .title': theme.paper.title,
-  '& .item': theme.paper.item,
+  '& .paper': theme?.paper?.paper ?? {},
+  '& .title': theme?.paper?.title ?? {},
+  '& .item': theme?.paper?.item ?? {},
 }));
 
 class InsureeFirstServicePointPanel extends FormPanel {

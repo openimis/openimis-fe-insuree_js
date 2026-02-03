@@ -26,7 +26,7 @@ import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
 
 const StyledFamilyForm = styled('div')(({ theme }) => ({
-  '& .lockedPage': theme.page.locked,
+  '& .lockedPage': theme?.page?.locked ?? {},
 }));
 
 const INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY = "insuree.Family.panels";

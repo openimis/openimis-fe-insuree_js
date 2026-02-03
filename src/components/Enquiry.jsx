@@ -12,20 +12,20 @@ import { INSUREE_NUMBER_MAX_LENGTH } from "../constants";
 const StyledEnquiry = styled('div')(({ theme }) => ({
   '& .search': {
     position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    borderRadius: theme?.shape?.borderRadius ?? 4,
+    backgroundColor: alpha(theme?.palette?.common?.white ?? "#fff", 0.15),
     "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme?.palette?.common?.white ?? "#fff", 0.25),
     },
     marginLeft: 0,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
+      marginLeft: theme?.spacing ? theme.spacing(1) : 8,
       width: "auto",
     },
   },
   '& .searchIcon': {
-    width: theme.spacing(7),
+    width: theme?.spacing ? theme.spacing(7) : 56,
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -37,8 +37,8 @@ const StyledEnquiry = styled('div')(({ theme }) => ({
     color: "inherit",
   },
   '& .inputInput': {
-    padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create("width"),
+    padding: theme?.spacing ? theme.spacing(1, 1, 1, 7) : "8px 8px 8px 56px",
+    transition: theme?.transitions?.create ? theme.transitions.create("width") : "width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       width: 120,

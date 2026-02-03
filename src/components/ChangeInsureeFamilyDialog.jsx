@@ -4,8 +4,8 @@ import { styled } from "@mui/material/styles";
 import { withModulesManager } from "@openimis/fe-core";
 
 const StyledChangeInsureeFamilyDialog = styled('div')(({ theme }) => ({
-  '& .primaryButton': theme.dialog.primaryButton,
-  '& .secondaryButton': theme.dialog.secondaryButton,
+  '& .primaryButton': theme?.dialog?.primaryButton ?? {},
+  '& .secondaryButton': theme?.dialog?.secondaryButton ?? {},
 }));
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";

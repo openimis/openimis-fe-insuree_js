@@ -13,9 +13,9 @@ import {
 } from "@openimis/fe-core";
 
 const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
-  '& .paper': theme.paper.paper,
-  '& .tableTitle': theme.table.title,
-  '& .item': theme.paper.item,
+  '& .paper': theme?.paper?.paper ?? {},
+  '& .tableTitle': theme?.table?.title ?? {},
+  '& .item': theme?.paper?.item ?? {},
   '& .fullHeight': {
     height: "100%",
   },

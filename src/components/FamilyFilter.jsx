@@ -17,15 +17,15 @@ import {
 import { DEFAULT } from "../constants";
 
 const StyledFamilyFilter = styled('div')(({ theme }) => ({
-  '& .dialogTitle': theme.dialog.title,
-  '& .dialogContent': theme.dialog.content,
+  '& .dialogTitle': theme?.dialog?.title ?? {},
+  '& .dialogContent': theme?.dialog?.content ?? {},
   '& .form': {
     padding: 0,
   },
   '& .item': {
-    padding: theme.spacing(1),
+    padding: theme?.spacing ? theme.spacing(1) : 8,
   },
-  '& .paperDivider': theme.paper.divider,
+  '& .paperDivider': theme?.paper?.divider ?? {},
 }));
 
 class FamilyFilter extends Component {

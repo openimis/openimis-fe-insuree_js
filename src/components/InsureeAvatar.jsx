@@ -6,12 +6,12 @@ import _ from "lodash";
 import moment from "moment";
 
 const StyledInsureeAvatar = styled('div')(({ theme }) => ({
-  '& .bigAvatar': theme.bigAvatar,
+  '& .bigAvatar': theme?.bigAvatar ?? {},
   '& .hiddenInput': {
     display: "none",
   },
   '& .item': {
-    ...theme.paper.item,
+    ...(theme?.paper?.item ?? {}),
     paddingInline: 0,
   },
 }));

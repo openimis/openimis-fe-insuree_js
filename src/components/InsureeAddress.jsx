@@ -12,7 +12,7 @@ import {
 import { EMPTY_STRING, MODULE_NAME } from "../constants";
 
 const StyledInsureeAddress = styled('div')(({ theme }) => ({
-  '& .item': theme.paper.item,
+  '& .item': theme?.paper?.item ?? {},
 }));
 
 const InsureeAddress = ({

@@ -18,8 +18,8 @@ import FamilySearcher from "../components/FamilySearcher";
 import { RIGHT_FAMILY_ADD } from "../constants";
 
 const StyledFamiliesPage = styled('div')(({ theme }) => ({
-  '& .page': theme.page,
-  '& .fab': theme.fab,
+  '& .page': theme?.page ?? {},
+  '& .fab': theme?.fab ?? {},
 }));
 
 const FAMILY_FILTERS_CONTRIBUTION_KEY = "insuree.FamilyFilters";

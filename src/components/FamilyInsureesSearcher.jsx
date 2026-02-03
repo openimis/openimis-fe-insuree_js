@@ -16,10 +16,10 @@ import {
 import { EMPTY_STRING } from "../constants";
 
 const StyledFamilyInsureesSearcher = styled('div')(({ theme }) => ({
-  '& .item': theme.paper.item,
-  '& .tableTitle': theme.table.title,
-  '& .paperHeader': theme.paper.header,
-  '& .paperHeaderAction': theme.paper.action,
+  '& .item': theme?.paper?.item ?? {},
+  '& .tableTitle': theme?.table?.title ?? {},
+  '& .paperHeader': theme?.paper?.header ?? {},
+  '& .paperHeaderAction': theme?.paper?.action ?? {},
 }));
 
 const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {

@@ -18,8 +18,8 @@ import InsureeSearcher from "../components/InsureeSearcher";
 import { RIGHT_INSUREE_ADD } from "../constants";
 
 const StyledInsureesPage = styled('div')(({ theme }) => ({
-  '& .page': theme.page,
-  '& .fab': theme.fab,
+  '& .page': theme?.page ?? {},
+  '& .fab': theme?.fab ?? {},
 }));
 
 class InsureesPage extends Component {

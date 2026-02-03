@@ -16,7 +16,7 @@ const StyledInsureePicker = styled('div')(({ theme }) => ({
     color: theme.palette.primary.main,
   },
   '& .item': {
-    padding: theme.spacing(1),
+    padding: theme?.spacing ? theme.spacing(1) : 8,
   },
 }));
 
