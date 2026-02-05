@@ -13,6 +13,10 @@ import { EMPTY_STRING, MODULE_NAME } from "../constants";
 
 const StyledInsureeAddress = styled('div')(({ theme }) => ({
   '& .item': theme?.paper?.item ?? {},
+  '& .locationWrapper': {
+    paddingLeft: theme?.spacing ? theme.spacing(1) : 8,
+    paddingRight: theme?.spacing ? theme.spacing(1) : 8,
+  },
 }));
 
 const InsureeAddress = ({
@@ -43,15 +47,17 @@ const InsureeAddress = ({
             label={formatMessage("Insuree.currentVillage.sameAsFamily")}
           />
           {!location &&
-            <PublishedComponent
-              pubRef="location.DetailedLocation"
-              withNull={true}
-              value={value?.currentVillage ?? null}
-              split={true}
-              readOnly={readOnly}
-              onChange={onChangeLocation}
-              filterLabels={false}
-            />
+            <div className="locationWrapper">
+              <PublishedComponent
+                pubRef="location.DetailedLocation"
+                withNull={true}
+                value={value?.currentVillage ?? null}
+                split={true}
+                readOnly={readOnly}
+                onChange={onChangeLocation}
+                filterLabels={false}
+              />
+            </div>
           }
         </Grid>
         <Grid size={6} className="item">

@@ -149,7 +149,7 @@ class FamilyMasterPanel extends FormPanel {
             )}
           </Grid>
           <Divider />
-          <Grid container className="item">
+          <Grid container className="item" spacing={2}>
             <Grid size={12}>
               <PublishedComponent
                 pubRef="location.DetailedLocation"

@@ -120,7 +120,7 @@ class InsureeMasterPanel extends FormPanel {
                 </Grid>
               </Grid>
               <Divider />
-              <Grid container className="item">
+              <Grid container className="item" spacing={2}>
                 <Grid size={4} className="item">
                   <PublishedComponent
                     pubRef="insuree.InsureeNumberInput"
@@ -145,7 +145,7 @@ class InsureeMasterPanel extends FormPanel {
                   </>
                 )}
                 <Grid size={8}>
-                  <Grid container>
+                  <Grid container spacing={2}>
                     <Grid size={3} className="item">
                       <PublishedComponent
                         pubRef="core.DatePicker"

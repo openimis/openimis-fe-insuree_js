@@ -12,19 +12,26 @@ import {
   PublishedComponent,
   ControlledField,
   TextInput,
+  GRID_RESPONSIVE_STANDARD,
+  GRID_RESPONSIVE_SMALL,
+  GRID_RESPONSIVE_FULL,
+  GRID_RESPONSIVE_HALF,
 } from "@openimis/fe-core";
 import { DEFAULT, WITHOUT_STR } from "../constants";
 
-const StyledInsureeFilter = styled('div')(({ theme }) => ({
-  '& .dialogTitle': theme?.dialog?.title ?? {},
-  '& .dialogContent': theme?.dialog?.content ?? {},
-  '& .form': {
+const StyledInsureeFilter = styled("div")(({ theme }) => ({
+  "& .dialogTitle": theme?.dialog?.title ?? {},
+  "& .dialogContent": theme?.dialog?.content ?? {},
+  "& .form": {
     padding: 0,
   },
-  '& .item': {
+  "& .item": {
     padding: theme?.spacing ? theme.spacing(1) : 8,
   },
-  '& .paperDivider': theme?.paper?.divider ?? {},
+  "& .locationWrapper": {
+    paddingTop: theme?.spacing ? theme.spacing(1) : 8,
+  },
+  "& .paperDivider": theme?.paper?.divider ?? {},
 }));
 
 const INSUREE_FILTER_CONTRIBUTION_KEY = "insuree.Filter";
@@ -70,7 +77,7 @@ class InsureeFilter extends Component {
         module="insuree"
         id="InsureeFilter.lastName"
         field={
-          <Grid size={3} className="item">
+          <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
             <TextInput
               module="insuree"
               label="Insuree.lastName"
@@ -98,7 +105,7 @@ class InsureeFilter extends Component {
         module="insuree"
         id="InsureeFilter.givenName"
         field={
-          <Grid size={3} className="item">
+          <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
             <TextInput
               module="insuree"
               label="Insuree.otherNames"
@@ -124,12 +131,12 @@ class InsureeFilter extends Component {
     const { intl, filters, onChangeFilters } = this.props;
     return (
       <StyledInsureeFilter>
-        <Grid container className="form">
+        <Grid container className="form" spacing={1}>
           <ControlledField
             module="insuree"
             id="InsureeFilter.location"
             field={
-              <Grid size={12}>
+              <Grid size={GRID_RESPONSIVE_FULL} className="locationWrapper">
                 <PublishedComponent
                   pubRef="location.DetailedLocationFilter"
                   withNull={true}
@@ -137,6 +144,7 @@ class InsureeFilter extends Component {
                   onChangeFilters={onChangeFilters}
                   anchor="parentLocation"
                   reset={this.props.reset}
+                  split
                 />
               </Grid>
             }
@@ -145,7 +153,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.chfId"
             field={
-              <Grid size={3} className="item">
+              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.chfId"
@@ -175,13 +183,13 @@ class InsureeFilter extends Component {
               {this.renderLastNameField()}
             </>
           )}
-          <Grid size={3}>
+          <Grid size={GRID_RESPONSIVE_STANDARD}>
             <Grid container>
               <ControlledField
                 module="insuree"
                 id="InsureeFilter.gender"
                 field={
-                  <Grid size={6} className="item">
+                  <Grid size={GRID_RESPONSIVE_HALF} className="item">
                     <PublishedComponent
                       pubRef="insuree.InsureeGenderPicker"
                       withNull={true}
@@ -204,7 +212,7 @@ class InsureeFilter extends Component {
                 module="insuree"
                 id="InsureeFilter.maritalStatus"
                 field={
-                  <Grid size={6} className="item">
+                  <Grid size={GRID_RESPONSIVE_HALF} className="item">
                     <PublishedComponent
                       pubRef="insuree.InsureeMaritalStatusPicker"
                       value={this._filterValue("maritalStatus")}
@@ -228,7 +236,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.email"
             field={
-              <Grid size={3} className="item">
+              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.email"
@@ -251,7 +259,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.phone"
             field={
-              <Grid size={3} className="item">
+              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                 <TextInput
                   module="insuree"
                   label="Insuree.phone"
@@ -274,7 +282,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.familyStatus"
             field={
-              <Grid size={6} className="item">
+              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                 <PublishedComponent
                   pubRef="insuree.FamilyStatusPicker"
                   value={this._filterValue("familyStatus")}
@@ -296,9 +304,9 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.dob"
             field={
-              <Grid size={3}>
+              <Grid size={GRID_RESPONSIVE_STANDARD}>
                 <Grid container>
-                  <Grid size={6} className="item">
+                  <Grid size={GRID_RESPONSIVE_HALF} className="item">
                     <PublishedComponent
                       pubRef="core.DatePicker"
                       value={this._filterValue("dobFrom")}
@@ -317,7 +325,7 @@ class InsureeFilter extends Component {
                       }
                     />
                   </Grid>
-                  <Grid size={6} className="item">
+                  <Grid size={GRID_RESPONSIVE_HALF} className="item">
                     <PublishedComponent
                       pubRef="core.DatePicker"
                       value={this._filterValue("dobTo")}
@@ -340,13 +348,13 @@ class InsureeFilter extends Component {
               </Grid>
             }
           />
-          <Grid size={3}>
+          <Grid size={GRID_RESPONSIVE_STANDARD}>
             <Grid container>
               <ControlledField
                 module="insuree"
                 id="InsureeFilter.photoStatus"
                 field={
-                  <Grid size={6} className="item">
+                  <Grid size={GRID_RESPONSIVE_HALF} className="item">
                     <PublishedComponent
                       pubRef="insuree.PhotoStatusPicker"
                       value={this._filterValue("photoStatus")}
@@ -368,7 +376,7 @@ class InsureeFilter extends Component {
                 module="insuree"
                 id="InsureeFilter.showHistory"
                 field={
-                  <Grid size={6} className="item">
+                  <Grid size={GRID_RESPONSIVE_HALF} className="item">
                     <FormControlLabel
                       control={
                         <Checkbox

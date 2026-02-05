@@ -4,7 +4,12 @@ import _debounce from "lodash/debounce";
 
 import { Checkbox, FormControlLabel, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { GRID_RESPONSIVE_STANDARD, GRID_RESPONSIVE_SMALL, GRID_RESPONSIVE_FULL, GRID_RESPONSIVE_HALF } from "@openimis/fe-core";
+import {
+  GRID_RESPONSIVE_STANDARD,
+  GRID_RESPONSIVE_SMALL,
+  GRID_RESPONSIVE_FULL,
+  GRID_RESPONSIVE_HALF,
+} from "@openimis/fe-core";
 
 import {
   withModulesManager,
@@ -16,16 +21,19 @@ import {
 } from "@openimis/fe-core";
 import { DEFAULT } from "../constants";
 
-const StyledFamilyFilter = styled('div')(({ theme }) => ({
-  '& .dialogTitle': theme?.dialog?.title ?? {},
-  '& .dialogContent': theme?.dialog?.content ?? {},
-  '& .form': {
+const StyledFamilyFilter = styled("div")(({ theme }) => ({
+  "& .dialogTitle": theme?.dialog?.title ?? {},
+  "& .dialogContent": theme?.dialog?.content ?? {},
+  "& .form": {
     padding: 0,
   },
-  '& .item': {
+  "& .item": {
     padding: theme?.spacing ? theme.spacing(1) : 8,
   },
-  '& .paperDivider': theme?.paper?.divider ?? {},
+  "& .locationWrapper": {
+    paddingTop: theme?.spacing ? theme.spacing(1) : 8,
+  },
+  "& .paperDivider": theme?.paper?.divider ?? {},
 }));
 
 class FamilyFilter extends Component {
@@ -74,7 +82,7 @@ class FamilyFilter extends Component {
       module="insuree"
       id={`FamilyFilter.${anchor}.lastName`}
       field={
-        <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+        <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
           <TextInput
             module="insuree"
             label={`Family.${anchor}.lastName`}
@@ -100,7 +108,7 @@ class FamilyFilter extends Component {
       module="insuree"
       id={`FamilyFilter.${anchor}.givenName`}
       field={
-        <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+        <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
           <TextInput
             module="insuree"
             label={`Family.${anchor}.otherNames`}
@@ -129,7 +137,7 @@ class FamilyFilter extends Component {
           module="insuree"
           id={`FamilyFilter.${anchor}.chfId`}
           field={
-            <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <TextInput
                 module="insuree"
                 label={`Family.${anchor}.chfId`}
@@ -163,7 +171,7 @@ class FamilyFilter extends Component {
           module="insuree"
           id={`InsureeFilter.${anchor}.gender`}
           field={
-            <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <PublishedComponent
                 pubRef="insuree.InsureeGenderPicker"
                 withNull={true}
@@ -187,7 +195,7 @@ class FamilyFilter extends Component {
           module="insuree"
           id={`FamilyFilter.${anchor}.phone`}
           field={
-            <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <TextInput
                 module="insuree"
                 label={`Family.${anchor}.phone`}
@@ -210,7 +218,7 @@ class FamilyFilter extends Component {
           module="insuree"
           id={`FamilyFilter.${anchor}.email`}
           field={
-            <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <TextInput
                 module="insuree"
                 label={`Family.${anchor}.email`}
@@ -233,7 +241,7 @@ class FamilyFilter extends Component {
           module="insuree"
           id={`FamilyFilter.${anchor}.dob`}
           field={
-            <Grid size={GRID_RESPONSIVE_SMALL}>
+            <Grid size={GRID_RESPONSIVE_STANDARD}>
               <Grid container>
                 <Grid size={GRID_RESPONSIVE_HALF} className="item">
                   <PublishedComponent
@@ -316,12 +324,12 @@ class FamilyFilter extends Component {
     const { intl, filters, onChangeFilters, filterPaneContributionsKey } = this.props;
     return (
       <StyledFamilyFilter>
-        <Grid container className="form">
+        <Grid container className="form" spacing={1}>
           <ControlledField
             module="insuree"
             id="FamilyFilter.location"
             field={
-              <Grid size={GRID_RESPONSIVE_FULL}>
+              <Grid size={GRID_RESPONSIVE_FULL} className="locationWrapper">
                 <PublishedComponent
                   pubRef="location.DetailedLocationFilter"
                   withNull={true}
@@ -329,6 +337,7 @@ class FamilyFilter extends Component {
                   onChangeFilters={onChangeFilters}
                   anchor="parentLocation"
                   reset={this.props.reset}
+                  split
                 />
               </Grid>
             }
@@ -339,7 +348,7 @@ class FamilyFilter extends Component {
             module="insuree"
             id="FamilyFilter.poverty"
             field={
-              <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+              <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                 <PublishedComponent
                   pubRef="insuree.FamilyPovertyStatusPicker"
                   value={this._filterValue("poverty")}
