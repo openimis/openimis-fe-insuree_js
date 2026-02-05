@@ -6,7 +6,8 @@ import { Grid } from "@mui/material";
 import { withModulesManager, TextInput, ProgressOrError, formatMessage } from "@openimis/fe-core";
 
 import { fetchInsuree } from "../actions";
-import _debounce from "lodash/debounce";
+import isEqual from "lodash/isEqual";
+import debounce from "lodash/debounce";
 import { DEFAULT, EMPTY_STRING } from "../constants";
 
 const INIT_STATE = {
@@ -43,9 +44,9 @@ class InsureeChfIdPicker extends Component {
         search: !!props.value ? props.value.chfId : "",
         selected: props.value,
       }));
-    } else if (!_.isEqual(prevProps.insuree, this.props.insuree)) {
+    } else if (!isEqual(prevProps.insuree, this.props.insuree)) {
       this.props.onChange(this.props.insuree, this.formatInsuree(this.props.insuree));
-    } else if (!_.isEqual(prevProps.value, this.props.value)) {
+    } else if (!isEqual(prevProps.value, this.props.value)) {
       this.setState((state, props) => ({
         search: !!props.value ? props.value.chfId : this.state.search,
         selected: props.value,
@@ -63,7 +64,7 @@ class InsureeChfIdPicker extends Component {
     );
   };
 
-  debouncedSearch = _debounce(this.fetch, this.props.modulesManager.getConf("fe-insuree", "debounceTime", 800));
+  debouncedSearch = debounce(this.fetch, this.props.modulesManager.getConf("fe-insuree", "debounceTime", 800));
 
   formatInsuree(insuree) {
     const { search } = this.state;
