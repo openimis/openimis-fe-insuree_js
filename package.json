@@ -27,21 +27,22 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/runtime": "^7.9.6",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^7.2.0",
-    "@mui/material": "^7.2.0",
     "@vitejs/plugin-react": "^5.0.0",
-    "moment": "^2.25.3",
     "prettier": "^2.3.2",
     "prop-types": "^15.7.2",
     "react-autosuggest": "^10.0.2",
-    "redux": "^4.0.5",
     "redux-api-middleware": "^3.2.1",
     "vite": "^7.1.2"
   },
   "files": [
     "dist"
   ],
-  "dependencies": {}
+  "peerDependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^7.2.0",
+    "@mui/icons-material": "^7.2.0",
+    "redux": "^4.0.5",
+    "moment": "^2.25.3"
+  }
 }
