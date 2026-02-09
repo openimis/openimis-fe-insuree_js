@@ -30,11 +30,6 @@ const StyledFamilyFilter = styled("div")(({ theme }) => ({
   "& .item": {
     padding: theme?.spacing ? theme.spacing(1) : 8,
   },
-  "& .locationWrapper": {
-    paddingTop: theme?.spacing ? theme.spacing(1) : 8,
-    paddingLeft: theme?.spacing ? theme.spacing(0) : 0,
-    paddingRight: theme?.spacing ? theme.spacing(0) : 0,
-  },
   "& .paperDivider": theme?.paper?.divider ?? {},
 }));
 

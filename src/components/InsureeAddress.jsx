@@ -13,10 +13,6 @@ import { EMPTY_STRING, MODULE_NAME } from "../constants";
 
 const StyledInsureeAddress = styled('div')(({ theme }) => ({
   '& .item': theme?.paper?.item ?? {},
-  '& .locationWrapper': {
-    paddingLeft: theme?.spacing ? theme.spacing(1) : 8,
-    paddingRight: theme?.spacing ? theme.spacing(1) : 8,
-  },
 }));
 
 const InsureeAddress = ({
