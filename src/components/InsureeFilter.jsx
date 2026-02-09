@@ -30,6 +30,8 @@ const StyledInsureeFilter = styled("div")(({ theme }) => ({
   },
   "& .locationWrapper": {
     paddingTop: theme?.spacing ? theme.spacing(1) : 8,
+    paddingLeft: theme?.spacing ? theme.spacing(0) : 0,
+    paddingRight: theme?.spacing ? theme.spacing(0) : 0,
   },
   "& .paperDivider": theme?.paper?.divider ?? {},
 }));
