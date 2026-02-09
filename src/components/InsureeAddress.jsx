@@ -3,24 +3,14 @@ import React, { useState } from "react";
 import { Grid, FormControlLabel, Checkbox } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import {
-  PublishedComponent,
-  TextInput,
-  useTranslations,
-  useModulesManager
-} from "@openimis/fe-core";
+import { PublishedComponent, TextInput, useTranslations, useModulesManager } from "@openimis/fe-core";
 import { EMPTY_STRING, MODULE_NAME } from "../constants";
 
-const StyledInsureeAddress = styled('div')(({ theme }) => ({
-  '& .item': theme?.paper?.item ?? {},
+const StyledInsureeAddress = styled("div")(({ theme }) => ({
+  "& .item": theme?.paper?.item ?? {},
 }));
 
-const InsureeAddress = ({
-  onChangeLocation,
-  onChangeAddress,
-  readOnly,
-  value,
-}) => {
+const InsureeAddress = ({ onChangeLocation, onChangeAddress, readOnly, value }) => {
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
 
@@ -42,19 +32,17 @@ const InsureeAddress = ({
             }
             label={formatMessage("Insuree.currentVillage.sameAsFamily")}
           />
-          {!location &&
-            <div className="locationWrapper">
-              <PublishedComponent
-                pubRef="location.DetailedLocation"
-                withNull={true}
-                value={value?.currentVillage ?? null}
-                split={true}
-                readOnly={readOnly}
-                onChange={onChangeLocation}
-                filterLabels={false}
-              />
-            </div>
-          }
+          {!location && (
+            <PublishedComponent
+              pubRef="location.DetailedLocation"
+              withNull={true}
+              value={value?.currentVillage ?? null}
+              split={true}
+              readOnly={readOnly}
+              onChange={onChangeLocation}
+              filterLabels={false}
+            />
+          )}
         </Grid>
         <Grid size={6} className="item">
           <FormControlLabel
@@ -68,7 +56,7 @@ const InsureeAddress = ({
             }
             label={formatMessage("Insuree.currentAddress.sameAsFamily")}
           />
-          {!address &&
+          {!address && (
             <TextInput
               module="insuree"
               label="Insuree.currentAddress"
@@ -78,11 +66,11 @@ const InsureeAddress = ({
               value={value?.currentAddress ?? EMPTY_STRING}
               onChange={onChangeAddress}
             />
-          }
+          )}
         </Grid>
       </Grid>
     </StyledInsureeAddress>
-  )
-}
+  );
+};
 
 export default InsureeAddress;

@@ -28,11 +28,6 @@ const StyledInsureeFilter = styled("div")(({ theme }) => ({
   "& .item": {
     padding: theme?.spacing ? theme.spacing(1) : 8,
   },
-  "& .locationWrapper": {
-    paddingTop: theme?.spacing ? theme.spacing(1) : 8,
-    paddingLeft: theme?.spacing ? theme.spacing(0) : 0,
-    paddingRight: theme?.spacing ? theme.spacing(0) : 0,
-  },
   "& .paperDivider": theme?.paper?.divider ?? {},
 }));
 
@@ -133,12 +128,12 @@ class InsureeFilter extends Component {
     const { intl, filters, onChangeFilters } = this.props;
     return (
       <StyledInsureeFilter>
-        <Grid container className="form" spacing={1}>
+        <Grid container className="form">
           <ControlledField
             module="insuree"
             id="InsureeFilter.location"
             field={
-              <Grid size={GRID_RESPONSIVE_FULL} className="locationWrapper">
+              <Grid size={GRID_RESPONSIVE_FULL}>
                 <PublishedComponent
                   pubRef="location.DetailedLocationFilter"
                   withNull={true}
