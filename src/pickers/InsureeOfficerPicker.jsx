@@ -22,10 +22,11 @@ class InsureeOfficer extends Component {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
+    this.isCurrentAdminEnrollmentOfficerActive = props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", false);
   }
 
   componentDidMount() {
-    if (!this.props.fetchedInsureeOfficers) {
+    if (!this.props.fetchedInsureeOfficers || !!this.isCurrentAdminEnrollmentOfficerActive ) {
       // prevent loading multiple times the cache when component is
       // several times on tha page
       setTimeout(() => {
@@ -33,6 +34,22 @@ class InsureeOfficer extends Component {
       }, Math.floor(Math.random() * 300));
     }
   }
+  componentDidUpdate(prevProps) {
+    if (this.isCurrentAdminEnrollmentOfficerActive == true &&
+      this.props.insureeOfficers !== prevProps.insureeOfficers &&
+      this.props.insureeOfficers &&
+      this.props.insureeOfficers.length > 0 && this.isEnrollmentAdminOfficer(this.props.user, this.props.insureeOfficers)) {
+      this.props.onChange(
+        this.props.insureeOfficers[0],
+        this.formatSuggestion(this.props.insureeOfficers[0])
+      );
+    }
+  }
+  isEnrollmentAdminOfficer = (user, insureeOfficers) => {
+    if (!insureeOfficers || !user) return false;
+    if (user.username.trim() === insureeOfficers[0].code.trim()) return true;
+    else return false
+  } 
 
   formatSuggestion = (a) => {
     if (!a) return "";
@@ -61,6 +78,7 @@ class InsureeOfficer extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      user,
     } = this.props;
     let v = insureeOfficers ? insureeOfficers.filter((o) => parseInt(decodeId(o.id)) === value) : [];
     v = v.length ? v[0] : null;
@@ -76,9 +94,9 @@ class InsureeOfficer extends Component {
               getSuggestions={this.insureeOfficers}
               getSuggestionValue={this.formatSuggestion}
               onSuggestionSelected={this.onSuggestionSelected}
-              value={v}
+              value={this.isCurrentAdminEnrollmentOfficerActive == true && this.isEnrollmentAdminOfficer(user, insureeOfficers) ? insureeOfficers[0] : v}
               reset={reset}
-              readOnly={readOnly}
+              readOnly={this.isCurrentAdminEnrollmentOfficerActive == true && this.isEnrollmentAdminOfficer(user, insureeOfficers) ? true : readOnly}
               required={required}
               selectThreshold={this.selectThreshold}
               withNull={withNull}
@@ -96,6 +114,7 @@ const mapStateToProps = (state) => ({
   fetchingInsureeOfficers: state.insuree.fetchingInsureeOfficers,
   fetchedInsureeOfficers: state.insuree.fetchedInsureeOfficers,
   errorInsureeOfficers: state.insuree.errorInsureeOfficers,
+  user: state.core.user
 });
 
 const mapDispatchToProps = (dispatch) => {

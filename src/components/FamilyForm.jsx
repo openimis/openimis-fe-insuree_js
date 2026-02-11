@@ -24,6 +24,7 @@ import { insureeLabel, isValidInsuree } from "../utils/utils";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
+import { formatMessage } from "@openimis/fe-core";
 
 const StyledFamilyForm = styled('div')(({ theme }) => ({
   '& .lockedPage': theme?.page?.locked ?? {},
@@ -182,6 +183,7 @@ class FamilyForm extends Component {
       {
         doIt: this.reload,
         icon: <ReplayIcon />,
+        buttonText: formatMessage(this.props.intl, "insuree", "FamilyReload.buttonText") || "Reload",
         onlyIfDirty: !readOnly && !runningMutation && !isSaved,
       },
     ];

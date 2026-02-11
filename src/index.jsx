@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { AssignmentInd, GroupAdd, People, Person } from "@mui/icons-material";
 import { FormattedMessage } from "@openimis/fe-core";
 import InsureeMainMenu from "./menus/InsureeMainMenu";
@@ -155,7 +155,7 @@ const DEFAULT_CONFIG = {
     { path: ROUTE_INSUREE_PROFILE + "/:insuree_uuid", component: ProfilePage },
   ],
   "core.AppBar": [Enquiry],
-  "core.MainMenu": [{ name: 'InsureeMainMenu', component: InsureeMainMenu }],
+  "core.MainMenu": [{ name: "InsureeMainMenu", component: InsureeMainMenu }],
   "insuree.InsureeSummaryAvatar": [InsureeAvatar],
   "insuree.InsureeSummaryExt": [InsureeFirstServicePointDisplay],
   "insuree.Insuree.panels": [InsureeFirstServicePointPanel],
@@ -194,7 +194,7 @@ const DEFAULT_CONFIG = {
       route: "/" + ROUTE_INSUREE_INSUREES,
       id: "insuree.insurees",
       filter: (rights) => rights.includes(RIGHT_INSUREE),
-    }
+    },
   ],
 };
 

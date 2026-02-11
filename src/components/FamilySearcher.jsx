@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Checkbox, IconButton, Tooltip } from "@mui/material";
+import { Checkbox, Button, Tooltip } from "@mui/material";
 import TabIcon from "@mui/icons-material/Tab";
 import _ from "lodash";
 import {
@@ -38,6 +38,7 @@ class FamilySearcher extends Component {
       "familyFilter.rowsPerPageOptions",
       [10, 20, 50, 100],
     );
+    this.columns = props.modulesManager.getConf("fe-insuree", "searcherColumnsConfig", {});
     this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "familyFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
     this.renderLastNameFirst = props.modulesManager.getConf(
@@ -117,7 +118,7 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.insuranceNo",
       this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
       !this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
-      "insuree.familySummaries.email",
+      this.columns.email !== "H" ? "insuree.familySummaries.email" : null,
       "insuree.familySummaries.phone",
       "insuree.familySummaries.dob",
     ];
@@ -125,8 +126,8 @@ class FamilySearcher extends Component {
       h.push(`location.locationType.${i}`);
     }
     h.push(
-      "insuree.familySummaries.poverty",
-      "insuree.familySummaries.confirmationNo",
+      this.columns.poverty !== "H" ? "insuree.familySummaries.poverty" : null,
+      this.columns.confirmationNo !== "H" ? "insuree.familySummaries.confirmationNo" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityFrom" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityTo" : null,
       "insuree.familySummaries.openNewTab",
@@ -164,9 +165,9 @@ class FamilySearcher extends Component {
   deleteFamilyAction = (i) =>
     !!i.validityTo ? null : (
       <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.tooltip")}>
-        <IconButton onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })}>
-          <DeleteIcon />
-        </IconButton>
+          <Button onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })} startIcon={<DeleteIcon />}>
+            {formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.buttonText")}
+          </Button>
       </Tooltip>
     );
 
@@ -195,7 +196,7 @@ class FamilySearcher extends Component {
         (family.headInsuree && !this.renderLastNameFirst
           ? family.headInsuree.lastName
           : family.headInsuree.otherNames) || "",
-      (family) => (!!family.headInsuree ? family.headInsuree.email : ""),
+      this.columns.email !== "H" ? (family) => (!!family.headInsuree ? family.headInsuree.email : "") : null,
       (family) => (!!family.headInsuree ? family.headInsuree.phone : ""),
       (family) =>
         !!family.headInsuree
@@ -208,8 +209,8 @@ class FamilySearcher extends Component {
       formatters.push((family) => this.parentLocation(family.location, j));
     }
     formatters.push(
-      (family) => <Checkbox color="primary" checked={family.poverty} readOnly />,
-      (family) => family.confirmationNo,
+      this.columns.poverty !== "H" ? (family) => <Checkbox color="primary" checked={family.poverty} readOnly /> : null,
+      this.columns.confirmationNo !== "H" ? (family) => family.confirmationNo : null,
       filters?.showHistory?.value
         ? (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom)
         : null,
@@ -218,10 +219,9 @@ class FamilySearcher extends Component {
         : null,
       (family) => (
         <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.openNewTabButton.tooltip")}>
-          <IconButton onClick={(e) => !family.clientMutationId && this.props.onDoubleClick(family, true)}>
-            {" "}
-            <TabIcon />
-          </IconButton>
+          <Button onClick={(e) => !family.clientMutationId && this.props.onDoubleClick(family, true)} startIcon={<TabIcon />}>
+            {formatMessage(this.props.intl, "insuree", "familySummaries.openNewTabButton.buttonText")}
+          </Button>
         </Tooltip>
       ),
     );

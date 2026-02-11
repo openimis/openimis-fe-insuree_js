@@ -4,8 +4,9 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 import _ from "lodash";
 
-import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse } from "@mui/material";
-import { Search as SearchIcon, Add as AddIcon, PersonAdd as AddExistingIcon, PersonPin as SetHeadIcon, Delete as DeleteIcon, Clear as RemoveIcon, Remove as CloseIcon } from "@mui/icons-material";
+import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse   ,Button,
+} from "@mui/material";
+import { Search as SearchIcon, Add as AddIcon, PersonAdd, PersonPin as SetHeadIcon, Delete as DeleteIcon, Clear as RemoveIcon, Remove as CloseIcon } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 
 import {
@@ -46,6 +47,12 @@ const StyledFamilyInsureesOverview = styled('div')(({ theme }) => ({
   '& .paperHeaderAction': theme?.paper?.action ?? {},
   '& .tableTitle': theme?.table?.title ?? {},
 }));
+
+const AddExistingIcon = (intl) => (
+  <Button startIcon={<PersonAdd />}>
+    {formatMessage(intl, "insuree", "familyAddExistingInsuree.buttonText")}
+  </Button>
+);
 
 class FamilyInsureesOverview extends PagedDataHandler {
   state = {
@@ -219,9 +226,9 @@ class FamilyInsureesOverview extends PagedDataHandler {
 
   setHeadInsureeAction = (i) => (
     <Tooltip title={formatMessage(this.props.intl, "insuree", "familySetHeadInsuree.tooltip")}>
-      <IconButton onClick={(e) => this.confirmSetHeadInsuree(i)}>
-        <SetHeadIcon />
-      </IconButton>
+      <Button startIcon={<SetHeadIcon />} onClick={(e) => this.confirmSetHeadInsuree(i)}>
+      {formatMessage(this.props.intl, "insuree", "familySetHEadInsuree.buttonText")}
+      </Button>
     </Tooltip>
   );
 
@@ -248,9 +255,9 @@ class FamilyInsureesOverview extends PagedDataHandler {
 
   removeInsureeAction = (removeInsuree) => (
     <Tooltip title={formatMessage(this.props.intl, "insuree", "familyRemoveInsuree.tooltip")}>
-      <IconButton onClick={(e) => this.setState({ removeInsuree })}>
-        <RemoveIcon />
-      </IconButton>
+      <Button onClick={(e) => this.removeInsuree(removeInsuree)} startIcon={<RemoveIcon />}>
+        {formatMessage(this.props.intl, "insuree", "familyRemoveInsuree.buttonText")}
+      </Button>
     </Tooltip>
   );
 
@@ -274,9 +281,9 @@ class FamilyInsureesOverview extends PagedDataHandler {
 
   deleteInsureeAction = (i) => (
     <Tooltip title={formatMessage(this.props.intl, "insuree", "familyDeleteInsuree.tooltip")}>
-      <IconButton onClick={(e) => this.confirmDeleteInsuree(i)}>
-        <DeleteIcon />
-      </IconButton>
+      <Button onClick={(e) => this.confirmDeleteInsuree(i)} startIcon={<DeleteIcon />}>
+        {formatMessage(this.props.intl, "insuree", "familyDeleteInsuree.buttonText")}
+      </Button>
     </Tooltip>
   );
 
@@ -364,35 +371,36 @@ class FamilyInsureesOverview extends PagedDataHandler {
         : [
           {
             button: (
-              <div>
                 <PublishedComponent //div needed for the tooltip style!!
                   pubRef="insuree.InsureePicker"
-                  IconRender={AddExistingIcon}
+                  IconRender={() => AddExistingIcon(intl)}
                   forcedFilter={["head: false"]}
                   onChange={(changeInsureeFamily) => this.setState({ changeInsureeFamily })}
                   check={() => this.checkCanAddInsuree(() => this.setState({ checkedCanAdd: true }))}
                   checked={this.state.checkedCanAdd}
                 />
-              </div>
             ),
-            tooltip: formatMessage(intl, "insuree", "familyAddExsistingInsuree.tooltip"),
+            tooltip: formatMessage(intl, "insuree", "familyAddExistingInsuree.tooltip"),
           },
           {
             button: (
-              <IconButton onClick={(e) => this.checkCanAddInsuree(this.addNewInsuree)}>
-                <AddIcon />
-              </IconButton>
+              <div>
+                <Button onClick={(e) => this.checkCanAddInsuree(this.addNewInsuree)} startIcon={<AddIcon />}>
+                  {formatMessage(intl, "insuree", "familyAddNewInsuree.buttonText")}
+                </Button>
+              </div>
             ),
             tooltip: formatMessage(intl, "insuree", "familyAddNewInsuree.tooltip"),
           },
           {
             button: this.state.showInsureeSearcher ?
-              <IconButton onClick={(e) => this.closeInsureeSearcher()}>
-                <CloseIcon />
-              </IconButton> :
-              <IconButton onClick={(e) => this.handleInsureeSearcherToogle(true)}>
-                <SearchIcon />
-              </IconButton>
+              <Button onClick={(e) => this.closeInsureeSearcher()} startIcon={<CloseIcon />}>
+                {formatMessage(intl, "insuree", "closeInsureeSearchCriteria.buttonText")}
+              </Button>
+               :
+              <Button onClick={(e) => this.handleInsureeSearcherToogle(true)} startIcon={<SearchIcon />}>
+                {formatMessage(intl, "insuree", "searchInsuree.buttonText")}
+              </Button>
             ,
             tooltip: this.state.showInsureeSearcher ?
               formatMessage(intl, "insuree", "closeInsureeSearchCriteria.tooltip") :
@@ -445,7 +453,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
               </Typography>
             </Grid>
             <Grid size={4}>
-              <Grid container justify="flex-end">
+              <Grid container alignItems="center" justify="flex-end">
                 {actions.map((a, idx) => {
                   return (
                     <Grid key={`form-action-${idx}`} className="paperHeaderAction">
