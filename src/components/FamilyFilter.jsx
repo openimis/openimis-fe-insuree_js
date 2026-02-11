@@ -321,7 +321,7 @@ class FamilyFilter extends Component {
     const { intl, filters, onChangeFilters, filterPaneContributionsKey } = this.props;
     return (
       <StyledFamilyFilter>
-        <Grid container className="form" spacing={1}>
+        <Grid container className="form">
           <ControlledField
             module="insuree"
             id="FamilyFilter.location"
