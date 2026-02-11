@@ -16,9 +16,6 @@
     "format": "prettier src -w",
     "prepare": "npm run build"
   },
-  "peerDependency": {
-    "react-intl": "^7.1.11"
-  },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
@@ -43,6 +40,7 @@
     "@mui/material": "^7.2.0",
     "@mui/icons-material": "^7.2.0",
     "redux": "^5.0.1",
-    "moment": "^2.25.3"
+    "moment": "^2.25.3",
+    "react-intl": "^7.1.11"
   }
 }
