@@ -41,6 +41,7 @@ class InsureeGenderPicker extends Component {
       readOnly = false,
       required = false,
       withNull = false,
+      inputProps,
     } = this.props;
     let options = !!insureeGenders ? insureeGenders.map((v) => ({ value: v, label: this.formatSuggestion(v) })) : [];
     if (withNull) {
@@ -62,6 +63,7 @@ class InsureeGenderPicker extends Component {
         withNull={withNull}
         nullLabel={this.nullDisplay}
         fullWidth={true}
+        inputProps={inputProps}
       />
     );
   }
