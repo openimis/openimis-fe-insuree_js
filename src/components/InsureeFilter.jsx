@@ -165,6 +165,7 @@ class InsureeFilter extends Component {
                       },
                     ])
                   }
+                  inputProps={{ "data-cy": "insuree-chf-id" }}
                 />
               </Grid>
             }

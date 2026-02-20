@@ -39,6 +39,7 @@ class IdentificationTypePicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      inputProps
     } = this.props;
     let options = !!identificationTypes
       ? identificationTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) }))
@@ -65,6 +66,7 @@ class IdentificationTypePicker extends Component {
         withNull={withNull}
         nullLabel={this.nullDisplay}
         fullWidth={true}
+        inputProps={inputProps}
       />
     );
   }

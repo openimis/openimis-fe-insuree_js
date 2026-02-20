@@ -63,7 +63,7 @@ class InsureesPage extends Component {
           {rights.includes(RIGHT_INSUREE_ADD) &&
             withTooltip(
               <div className="fab">
-                <Fab color="primary" onClick={this.onAdd}>
+                <Fab color="primary" onClick={this.onAdd} data-cy="create-insuree-button">
                   <AddIcon />
                 </Fab>
               </div>,

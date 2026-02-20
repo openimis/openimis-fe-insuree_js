@@ -39,6 +39,7 @@ class ConfirmationTypePicker extends Component {
       readOnly = false,
       required = false,
       withNull = false,
+      inputProps,
       nullLabel = null,
     } = this.props;
     let options = !!confirmationTypes
@@ -63,6 +64,7 @@ class ConfirmationTypePicker extends Component {
         withNull={withNull}
         nullLabel={this.nullDisplay}
         fullWidth={true}
+        inputProps={inputProps}
       />
     );
   }

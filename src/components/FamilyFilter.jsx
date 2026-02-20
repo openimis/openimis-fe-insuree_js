@@ -150,6 +150,7 @@ class FamilyFilter extends Component {
                     },
                   ])
                 }
+                inputProps={{ "data-cy": "head-insuree-chf-id" }}
               />
             </Grid>
           }
@@ -386,6 +387,7 @@ class FamilyFilter extends Component {
                       },
                     ])
                   }
+                  inputProps={{ "data-cy": "family-confirmation-no" }}
                 />
               </Grid>
             }

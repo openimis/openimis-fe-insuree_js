@@ -22,6 +22,7 @@ const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
 }));
 
 import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
+import { Calendar } from "react-multi-date-picker";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
@@ -160,7 +161,11 @@ class InsureeMasterPanel extends FormPanel {
                         required={true}
                         maxDate={new Date()}
                         onChange={(v) => this.updateAttribute("dob", v)}
-                        data-cy="insuree-dob"
+                        slotProps={{
+                          day: {
+                            'data-cy': 'insuree-dob-day',
+                          }
+                        }}
                       />
                     </Grid>
                     <Grid size={4} className="item">

@@ -41,6 +41,7 @@ class FamilyTypePicker extends Component {
       readOnly = false,
       required = false,
       withNull = false,
+      inputProps,
       nullLabel = null,
     } = this.props;
     let options = !!familyTypes ? familyTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) })) : [];
@@ -63,6 +64,7 @@ class FamilyTypePicker extends Component {
         withNull={withNull}
         nullLabel={this.nullDisplay}
         fullWidth={true}
+        inputProps={inputProps}
       />
     );
   }

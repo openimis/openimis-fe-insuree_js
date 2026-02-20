@@ -43,6 +43,7 @@ class ProfessionPicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      inputProps
     } = this.props;
     return (
       <AutoSuggestion
@@ -62,6 +63,7 @@ class ProfessionPicker extends Component {
         withNull={withNull}
         nullLabel={this.nullDisplay}
         fullWidth={true}
+        inputProps={inputProps}
       />
     );
   }

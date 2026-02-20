@@ -73,7 +73,7 @@ class FamiliesPage extends Component {
           {rights.includes(RIGHT_FAMILY_ADD) &&
             withTooltip(
               <div className="fab">
-                <Fab color="primary" onClick={this.onAdd}>
+                <Fab color="primary" onClick={this.onAdd} data-cy="create-family-button">
                   <AddIcon />
                 </Fab>
               </div>,

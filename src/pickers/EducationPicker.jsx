@@ -43,6 +43,7 @@ class EducationPicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      inputProps
     } = this.props;
     return (
       <AutoSuggestion
@@ -62,6 +63,7 @@ class EducationPicker extends Component {
         withNull={withNull}
         nullLabel={this.nullDisplay}
         fullWidth={true}
+        inputProps={inputProps}
       />
     );
   }

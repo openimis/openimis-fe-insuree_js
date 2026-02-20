@@ -165,7 +165,7 @@ class FamilySearcher extends Component {
   deleteFamilyAction = (i) =>
     !!i.validityTo ? null : (
       <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.tooltip")}>
-          <Button onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })} startIcon={<DeleteIcon />}>
+          <Button onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })} startIcon={<DeleteIcon />} data-cy="delete-family-button">
             {formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.buttonText")}
           </Button>
       </Tooltip>

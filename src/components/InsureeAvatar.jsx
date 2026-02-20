@@ -72,7 +72,7 @@ const InsureeAvatar = (props) => {
         </div>
         {withMeta && (
           <Grid container direction="column">
-            <Grid className="item">
+            <Grid size={12} className="item">
               <PublishedComponent
                 pubRef="core.DatePicker"
                 value={photo?.date}
@@ -83,7 +83,7 @@ const InsureeAvatar = (props) => {
                 onChange={(date) => onChange({ ...photo, date })}
               />
             </Grid>
-            <Grid className="item">
+            <Grid size={12} className="item">
               <PublishedComponent
                 pubRef="insuree.InsureeOfficerPicker"
                 value={photo?.officerId}

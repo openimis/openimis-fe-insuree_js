@@ -281,6 +281,7 @@ class InsureeSearcher extends Component {
                   startIcon={<DeleteIcon />}
                   size="small"
                   onClick={(e) => !insuree.clientMutationId && this.confirmDelete(insuree)}
+                  data-cy="delete-insuree-button"
                 >
                   {formatMessage(this.props.intl, "insuree", "deleteInsuree.textButton")}
                 </Button>
