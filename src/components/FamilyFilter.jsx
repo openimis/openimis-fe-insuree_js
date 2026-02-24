@@ -150,7 +150,7 @@ class FamilyFilter extends Component {
                     },
                   ])
                 }
-                inputProps={{ "data-cy": "head-insuree-chf-id" }}
+                inputProps={{ "data-cy": "head-insuree-chf-id-filter" }}
               />
             </Grid>
           }

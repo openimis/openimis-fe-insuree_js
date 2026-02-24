@@ -80,7 +80,7 @@ class InsureeChfIdPicker extends Component {
   }
 
   render() {
-    const { readOnly = false, required = false } = this.props;
+    const { readOnly = false, required = false, inputProps = "insuree-picker" } = this.props;
     return (
       <Grid container>
         <Grid size={4}>
@@ -92,6 +92,7 @@ class InsureeChfIdPicker extends Component {
             value={this.state.search}
             onChange={(v) => this.debouncedSearch(v)}
             inputProps={{
+              ...inputProps,
               "maxLength": this.chfIdMaxLength,
             }}
             required={required}

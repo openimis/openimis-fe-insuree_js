@@ -86,6 +86,9 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
                       },
                     ])
                   }
+                  inputProps={{
+                    "data-cy": "family-insurees-search-chfId",
+                  }}
                 />
               </Grid>
             }
@@ -109,6 +112,9 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
                       },
                     ])
                   }
+                  inputProps={{
+                    "data-cy": "family-insurees-search-lastName",
+                  }}
                 />
               </Grid>
             }
@@ -132,6 +138,9 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
                       },
                     ])
                   }
+                  inputProps={{
+                    "data-cy": "family-insurees-search-givenName",
+                  }}
                 />
               </Grid>
             }

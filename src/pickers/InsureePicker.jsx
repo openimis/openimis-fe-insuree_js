@@ -86,6 +86,7 @@ class RawFilter extends Component {
             label="Insuree.chfId"
             value={this.state.chfId}
             onChange={(v) => this._onChange("chfId", v)}
+            inputProps={{"data-cy": "insuree-chf-id-picker"}}
           />
         </Grid>
         {this.renderLastNameFirst ? (

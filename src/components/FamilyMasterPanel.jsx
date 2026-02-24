@@ -169,7 +169,7 @@ class FamilyMasterPanel extends FormPanel {
                 readOnly={readOnly}
                 value={!!edited && !!edited.familyType ? edited.familyType.code : null}
                 onChange={(v) => this.updateAttribute("familyType", { code: v })}
-                inputProps={{"data-cy": "family-type"}}
+                inputProps={{"data-cy": "family-type-picker"}}
               />
             </Grid>
             <Grid size={3} className="item">
@@ -179,7 +179,7 @@ class FamilyMasterPanel extends FormPanel {
                 readOnly={readOnly}
                 value={edited?.confirmationType ?? null}
                 onChange={(v) => this.updateAttribute("confirmationType", v)}
-                inputProps={{"data-cy": "family-confirmation-type"}}
+                inputProps={{"data-cy": "family-confirmation-type-picker"}}
               />
             </Grid>
             <Grid size={3} className="item">
@@ -190,7 +190,7 @@ class FamilyMasterPanel extends FormPanel {
                 value={!edited ? "" : edited.confirmationNo || ""}
                 onChange={(v) => this.updateAttribute("confirmationNo", v)}
                 required={edited?.confirmationType?.isConfirmationNumberRequired ?? false}
-                inputProps={{"data-cy": "family-confirmation-no"}}
+                inputProps={{"data-cy": "family-confirmation-no-input"}}
               />
             </Grid>
             <Grid size={5} className="item">
@@ -201,7 +201,7 @@ class FamilyMasterPanel extends FormPanel {
                 readOnly={readOnly}
                 value={!edited ? "" : edited.address || ""}
                 onChange={(v) => this.updateAttribute("address", v)}
-                inputProps={{"data-cy": "family-address"}}
+                inputProps={{"data-cy": "family-address-textarea"}}
               />
             </Grid>
             <Grid size={1} className="item">

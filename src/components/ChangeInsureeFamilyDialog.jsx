@@ -44,16 +44,16 @@ class ChangeInsureeFamilyDialog extends Component {
           </DialogContent>
           <DialogActions>
             {!!this.canCancel && (
-              <Button onClick={(e) => onConfirm(true)} className="primaryButton" autoFocus>
+              <Button onClick={(e) => onConfirm(true)} className="primaryButton" autoFocus data-cy="change-insuree-family-dialog-cancel-policies-button">
                 <FormattedMessage module="insuree" id="changeInsureeFamilyDialog.cancelPolicies.button" />
               </Button>
             )}
             {!!this.canKeep && (
-              <Button onClick={(e) => onConfirm(false)} className="secondaryButton">
+              <Button onClick={(e) => onConfirm(false)} className="secondaryButton" data-cy="change-insuree-family-dialog-keep-policies-button">
                 <FormattedMessage module="insuree" id="changeInsureeFamilyDialog.keepPolicies.button" />
               </Button>
             )}
-            <Button onClick={onCancel} className="secondaryButton">
+            <Button onClick={onCancel} className="secondaryButton" data-cy="change-insuree-family-dialog-cancel-button">
               <FormattedMessage module="core" id="cancel" />
             </Button>
           </DialogActions>

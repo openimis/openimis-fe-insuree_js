@@ -32,13 +32,13 @@ class DeleteFamilyDialog extends Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={(e) => onConfirm(true)} className="primaryButton" autoFocus>
+            <Button onClick={(e) => onConfirm(true)} className="primaryButton" autoFocus data-cy="delete-family-and-insurees-button">
               <FormattedMessage module="insuree" id="deleteFamilyDialog.deleteFamilyAndInsurres.button" />
             </Button>
-            <Button onClick={(e) => onConfirm(false)} className="secondaryButton">
+            <Button onClick={(e) => onConfirm(false)} className="secondaryButton" data-cy="delete-family-only-button">
               <FormattedMessage module="insuree" id="deleteFamilyDialog.deleteFamilyOnly.button" />
             </Button>
-            <Button onClick={onCancel} className="secondaryButton">
+            <Button onClick={onCancel} className="secondaryButton" data-cy="delete-family-cancel-button">
               <FormattedMessage module="core" id="cancel" />
             </Button>
           </DialogActions>

@@ -52,7 +52,7 @@ class InsureeMasterPanel extends FormPanel {
           readOnly={readOnly}
           value={!!edited && !!edited.lastName ? edited.lastName : ""}
           onChange={(v) => this.updateAttribute("lastName", v)}
-          inputProps={{ "data-cy": "insuree-last-name" }}
+          inputProps={{ "data-cy": "insuree-last-name-input" }}
         />
       </Grid>
     );
@@ -67,7 +67,7 @@ class InsureeMasterPanel extends FormPanel {
         readOnly={readOnly}
         value={!!edited && !!edited.otherNames ? edited.otherNames : ""}
         onChange={(v) => this.updateAttribute("otherNames", v)}
-        inputProps={{ "data-cy": "insuree-other-names" }}
+        inputProps={{ "data-cy": "insuree-other-names-input" }}
       />
     </Grid>
   );
@@ -108,7 +108,7 @@ class InsureeMasterPanel extends FormPanel {
                             readOnly={readOnly}
                             value={!!edited && !!edited.relationship ? edited.relationship.id : ""}
                             onChange={(v) => this.updateAttribute("relationship", { id: v })}
-                            inputProps={{ "data-cy": "insuree-relationship" }}
+                            inputProps={{ "data-cy": "insuree-relationship-picker" }}
                           />
                         </Grid>
                       )}
@@ -135,7 +135,7 @@ class InsureeMasterPanel extends FormPanel {
                     value={edited?.chfId || ""}
                     editedId={editedId}
                     onChange={(v) => this.updateAttribute("chfId", v)}
-                    inputProps={{ "data-cy": "insuree-chf-id" }}
+                    inputProps={{ "data-cy": "insuree-chf-id-input" }}
                   />
                 </Grid>
                 {this.renderLastNameFirst ? (
@@ -177,7 +177,7 @@ class InsureeMasterPanel extends FormPanel {
                         withNull={false}
                         required={true}
                         onChange={(v) => this.updateAttribute("gender", { code: v })}
-                        inputProps={{ "data-cy": "insuree-gender" }}
+                        inputProps={{ "data-cy": "insuree-gender-picker" }}
                       />
                     </Grid>
                     <Grid size={3} className="item">
@@ -188,7 +188,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         withNull={false}
                         onChange={(v) => this.updateAttribute("marital", v)}
-                        inputProps={{ "data-cy": "insuree-marital-status" }}
+                        inputProps={{ "data-cy": "insuree-marital-status-picker" }}
                       />
                     </Grid>
                     <Grid size={3} className="item">
@@ -199,7 +199,7 @@ class InsureeMasterPanel extends FormPanel {
                             checked={!!edited && !!edited.cardIssued}
                             disabled={readOnly}
                             onChange={(v) => this.updateAttribute("cardIssued", !edited || !edited.cardIssued)}
-                            inputProps={{ "data-cy": "insuree-card-issued" }}
+                            inputProps={{ "data-cy": "insuree-card-issued-checkbox" }}
                           />
                         }
                         label={formatMessage(intl, "insuree", "Insuree.cardIssued")}
@@ -213,7 +213,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         onChangeLocation={(v) => this.updateAttribute("currentVillage", v)}
                         onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
-                        inputProps={{ "data-cy": "insuree-address" }}
+                        inputProps={{ "data-cy": "insuree-address-textarea" }}
                       />
                     </Grid>
                     <Grid size={6} className="item">
@@ -223,7 +223,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         value={!!edited && !!edited.phone ? edited.phone : ""}
                         onChange={(v) => this.updateAttribute("phone", v)}
-                        inputProps={{ "data-cy": "insuree-phone" }}
+                        inputProps={{ "data-cy": "insuree-phone-input" }}
                       />
                     </Grid>
                     <Grid size={6} className="item">
@@ -233,7 +233,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         value={!!edited && !!edited.email ? edited.email : ""}
                         onChange={(v) => this.updateAttribute("email", v)}
-                        inputProps={{ "data-cy": "insuree-email" }}
+                        inputProps={{ "data-cy": "insuree-email-input" }}
                       />
                     </Grid>
                     <Grid size={3} className="item">
@@ -244,7 +244,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         withNull={false}
                         onChange={(v) => this.updateAttribute("profession", { id: v })}
-                        inputProps={{ "data-cy": "insuree-profession" }}
+                        inputProps={{ "data-cy": "insuree-profession-picker" }}
                       />
                     </Grid>
                     <Grid size={3} className="item">
@@ -255,7 +255,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         withNull={false}
                         onChange={(v) => this.updateAttribute("education", { id: v })}
-                        inputProps={{ "data-cy": "insuree-education" }}
+                        inputProps={{ "data-cy": "insuree-education-picker" }}
                       />
                     </Grid>
                     <Grid size={3} className="item">
@@ -266,7 +266,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         withNull={false}
                         onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
-                        inputProps={{ "data-cy": "insuree-type-of-id" }}
+                        inputProps={{ "data-cy": "insuree-type-of-id-picker" }}
                       />
                     </Grid>
                     <Grid size={3} className="item">
@@ -276,7 +276,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={readOnly}
                         value={!!edited && !!edited.passport ? edited.passport : ""}
                         onChange={(v) => this.updateAttribute("passport", !!v ? v : null)}
-                        inputProps={{ "data-cy": "insuree-passport" }}
+                        inputProps={{ "data-cy": "insuree-passport-input" }}
                       />
                     </Grid>
                     <Grid size={3} className="item">
@@ -289,7 +289,7 @@ class InsureeMasterPanel extends FormPanel {
                         readOnly={!edited?.uuid || readOnly}
                         onChange={(v) => this.updateAttributes({ "status": v, "statusReason": null })}
                         required={this.isInsureeStatusRequired}
-                        inputProps={{ "data-cy": "insuree-status" }}
+                        inputProps={{ "data-cy": "insuree-status-picker" }}
                       />
                     </Grid>
                     {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
@@ -302,7 +302,7 @@ class InsureeMasterPanel extends FormPanel {
                           readOnly={readOnly}
                           required={true}
                           onChange={(v) => this.updateAttribute("statusDate", v)}
-                          inputProps={{ "data-cy": "insuree-status-date" }}
+                          inputProps={{ "data-cy": "insuree-status-date-picker" }}
                         />
                       </Grid>
                     )}
@@ -318,7 +318,7 @@ class InsureeMasterPanel extends FormPanel {
                           statusType={edited.status}
                           required={true}
                           onChange={(v) => this.updateAttribute("statusReason", v)}
-                          inputProps={{ "data-cy": "insuree-status-reason" }}
+                          inputProps={{ "data-cy": "insuree-status-reason-picker" }}
                         />
                       </Grid>
                     )}
@@ -331,7 +331,7 @@ class InsureeMasterPanel extends FormPanel {
                     readOnly={readOnly}
                     withMeta={true}
                     onChange={(v) => this.updateAttribute("photo", !!v ? v : null)}
-                    inputProps={{ "data-cy": "insuree-photo" }}
+                    inputProps={{ "data-cy": "insuree-photo-component" }}
                   />
                 </Grid>
                 <Contributions

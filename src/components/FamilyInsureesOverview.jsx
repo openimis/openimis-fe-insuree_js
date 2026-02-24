@@ -49,7 +49,7 @@ const StyledFamilyInsureesOverview = styled('div')(({ theme }) => ({
 }));
 
 const AddExistingIcon = (intl) => (
-  <Button startIcon={<PersonAdd />}>
+  <Button startIcon={<PersonAdd />} data-cy="family-add-existing-insuree-button">
     {formatMessage(intl, "insuree", "familyAddExistingInsuree.buttonText")}
   </Button>
 );
@@ -255,7 +255,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
 
   removeInsureeAction = (removeInsuree) => (
     <Tooltip title={formatMessage(this.props.intl, "insuree", "familyRemoveInsuree.tooltip")}>
-      <Button onClick={(e) => this.removeInsuree(removeInsuree)} startIcon={<RemoveIcon />}>
+      <Button onClick={() => this.setState({ removeInsuree })} data-cy="family-remove-insuree-button" startIcon={<RemoveIcon />}>
         {formatMessage(this.props.intl, "insuree", "familyRemoveInsuree.buttonText")}
       </Button>
     </Tooltip>
@@ -385,7 +385,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
           {
             button: (
               <div>
-                <Button onClick={(e) => this.checkCanAddInsuree(this.addNewInsuree)} startIcon={<AddIcon />}>
+                <Button onClick={(e) => this.checkCanAddInsuree(this.addNewInsuree)} startIcon={<AddIcon />} data-cy="family-add-new-insuree-button">
                   {formatMessage(intl, "insuree", "familyAddNewInsuree.buttonText")}
                 </Button>
               </div>
@@ -394,11 +394,11 @@ class FamilyInsureesOverview extends PagedDataHandler {
           },
           {
             button: this.state.showInsureeSearcher ?
-              <Button onClick={(e) => this.closeInsureeSearcher()} startIcon={<CloseIcon />}>
+              <Button onClick={(e) => this.closeInsureeSearcher()} startIcon={<CloseIcon />} data-cy="family-insuree-searcher-close-button">
                 {formatMessage(intl, "insuree", "closeInsureeSearchCriteria.buttonText")}
               </Button>
                :
-              <Button onClick={(e) => this.handleInsureeSearcherToogle(true)} startIcon={<SearchIcon />}>
+              <Button onClick={(e) => this.handleInsureeSearcherToogle(true)} startIcon={<SearchIcon />} data-cy="family-insuree-searcher-open-button">
                 {formatMessage(intl, "insuree", "searchInsuree.buttonText")}
               </Button>
             ,
