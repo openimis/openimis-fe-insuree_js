@@ -18,7 +18,7 @@ import {
   parseData,
   Helmet,
 } from "@openimis/fe-core";
-import { fetchFamily, newFamily, createFamily, fetchFamilyMutation } from "../actions";
+import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, fetchParentFamily } from "../actions";
 import { INSUREE_ACTIVE_STRING, RIGHT_FAMILY, FAMILY_TYPE_POLYGAMY_CODE } from "../constants";
 import { insureeLabel, isValidInsuree } from "../utils/utils";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
@@ -63,14 +63,27 @@ class FamilyForm extends Component {
         (e) => this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid),
       );
     }
+    if (this.props.parent_uuid) {
+      this.props.fetchParentFamily(this.props.modulesManager, this.props.parent_uuid);
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!prevProps.fetchedFamily && !!this.props.fetchedFamily) {
+    if (prevProps.parent_uuid !== this.props.parent_uuid && !!this.props.parent_uuid) {
+      this.props.fetchParentFamily(this.props.modulesManager, this.props.parent_uuid);
+    } else if (prevProps.family_uuid !== this.props.family_uuid && !!this.props.family_uuid) {
+      this.setState(
+        { family_uuid: this.props.family_uuid, lockNew: false, newFamily: false },
+        () => this.props.fetchFamily(this.props.modulesManager, this.props.family_uuid),
+      );
+    } else if (!prevProps.fetchedFamily && !!this.props.fetchedFamily) {
       var family = this.props.family;
       if (family) {
         family.ext = !!family.jsonExt ? JSON.parse(family.jsonExt) : {};
         this.setState({ family, family_uuid: family.uuid, lockNew: false, newFamily: false });
+        if (family?.parent?.uuid && family.parent.uuid !== prevProps?.parentFamily?.uuid) {
+          this.props.fetchParentFamily(this.props.modulesManager, family.parent.uuid);
+        }
       }
     } else if (prevProps.family_uuid && !this.props.family_uuid) {
       this.setState({ family: this._newFamily(), newFamily: true, lockNew: false, family_uuid: null });
@@ -206,6 +219,7 @@ class FamilyForm extends Component {
       save,
       back,
       intl,
+      parent_uuid,
     } = this.props;
     const { family, newFamily, isSaved } = this.state;
   
@@ -242,6 +256,8 @@ class FamilyForm extends Component {
             actions={actions}
             openFamilyButton={openFamilyButton}
             overview={overview}
+            parent_uuid={parent_uuid}
+            parentFamily={this.props.parentFamily}
             HeadPanel={FamilyMasterPanel}
             Panels={panels}
             contributedPanelsKey={contributedPanelsKey}
@@ -266,6 +282,7 @@ const mapStateToProps = (state, props) => ({
   errorFamily: state.insuree.errorFamily,
   fetchedFamily: state.insuree.fetchedFamily,
   family: state.insuree.family,
+  parentFamily: state.insuree.parentFamily,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   insuree: state.insuree.insuree,
@@ -276,7 +293,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, journalize, coreConfirm },
+    { fetchFamilyMutation, fetchFamily, newFamily, createFamily, fetchParentFamily, journalize, coreConfirm },
     dispatch,
   );
 };

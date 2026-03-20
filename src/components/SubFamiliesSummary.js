@@ -34,8 +34,9 @@ import {
   removeInsuree,
   setFamilyHead,
   changeFamily,
-  checkCanAddSubFamily,
+  fetchFamilySummaries,
   fetchSubFamilySummaries,
+  linkFamily,
   unLinkFamily,
   clearSubFamily,
 } from "../actions";
@@ -46,6 +47,7 @@ import EnquiryDialog from "./EnquiryDialog";
 import FamilySubFamilySearcher from "./FamilySubFamilySearcher";
 import RemoveInsureeFromFamilyDialog from "./RemoveInsureeFromFamilyDialog";
 import ChangeInsureeFamilyDialog from "./ChangeInsureeFamilyDialog";
+import LinkSubFamilyDialog from "./LinkSubFamilyDialog";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -70,6 +72,9 @@ class SubFamiliesSummary extends PagedDataHandler {
     shouldBeLocked: false,
     linkedFamily: null,
     removeSubFamily: null,
+    linkSubFamily: false,
+    selectedCandidateFamily: null,
+    candidateSearchValue: "",
   };
 
   constructor(props) {
@@ -120,6 +125,23 @@ class SubFamiliesSummary extends PagedDataHandler {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.familyChanged(prevProps)) {
       this.query();
+    } else if (!prevProps.checkedCanAddSubFamily && !!this.props.checkedCanAddSubFamily) {
+      if (_.isEmpty(this.props.canAddSubFamilyWarnings)) {
+        this.setState({ checkedCanAdd: true }, (e) => this.state.canAddAction && this.state.canAddAction());
+      } else {
+        let messages = [...this.props.canAddSubFamilyWarnings];
+        messages.push(formatMessage(this.props.intl, "insuree", "addSubFamily.alert.message"));
+        this.props.coreAlert(formatMessage(this.props.intl, "insuree", "addSubFamily.alert.title"), messages);
+      }
+    } else if (prevProps.submittingMutation && !this.props.submittingMutation) {
+      this.setState(
+        {
+          shouldBeLocked: false,
+          linkSubFamily: false,
+          selectedCandidateFamily: null,
+        },
+        () => this.query(),
+      );
     }
     if (this.state.filters !== prevState.filters) {
       this.query();
@@ -149,8 +171,8 @@ class SubFamiliesSummary extends PagedDataHandler {
     historyPush(
       this.props.modulesManager,
       this.props.history,
-      "insuree.route.subFamilyOverview",
-      [i.uuid, this.props.family.uuid, i.headInsuree.uuid],
+      "insuree.route.familyOverview",
+      [i.uuid],
       newTab,
     );
   };
@@ -197,7 +219,7 @@ class SubFamiliesSummary extends PagedDataHandler {
   };
 
   onAdd = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family?.uuid]);
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.subfamily", [this.props.family.uuid]);
   };
 
   deleteInsureeAction = (i) => (
@@ -234,20 +256,50 @@ class SubFamiliesSummary extends PagedDataHandler {
       this.props.unLinkFamily(
         subFamily.uuid,
         formatMessageWithValues(this.props.intl, "insuree", "unlinkFamily.mutationLabel", {
-          label: familyLabel(subFamily),
+          parent: familyLabel(this.props.family),
+          family: familyLabel(subFamily),
         }),
         cancelPolicies,
       );
     });
   };
 
-  checkCanAddSubFamily = (action) => {
-    this.setState(
-      {
-        canAddAction: action,
-        checkedCanAdd: false,
-      },
-      (e) => this.props.checkCanAddSubFamily(this.props.family),
+  openLinkSubFamilyDialog = () => {
+    this.setState({ linkSubFamily: true, selectedCandidateFamily: null, candidateSearchValue: "" }, () =>
+      this.searchCandidateFamilies(""),
+    );
+  };
+
+  searchCandidateFamilies = (value) => {
+    const filters = ['showHistory: false'];
+    if (!!value) {
+      filters.push(`headInsuree_ChfId_Istartswith: "${value}"`);
+    }
+    this.props.fetchFamilySummaries(this.props.modulesManager, filters);
+  };
+
+  onConfirmLinkSubFamily = (cancelPolicies) => {
+    const parentFamily = this.props.family;
+    const subFamily = this.state.selectedCandidateFamily;
+    if (!parentFamily?.uuid || !subFamily?.uuid) return;
+    this.setState({ shouldBeLocked: true }, () => {
+      this.props.linkFamily(
+        parentFamily.uuid,
+        subFamily.uuid,
+        formatMessageWithValues(this.props.intl, "insuree", "linkSubFamily.mutationLabel", {
+          parent: familyLabel(parentFamily),
+          family: familyLabel(subFamily),
+        }),
+        cancelPolicies,
+      );
+    });
+  };
+
+  candidateFamilies = () => {
+    const parentUuid = this.props.family?.uuid;
+    const linkedUuids = new Set((this.props.subFamilies || []).map((f) => f.uuid));
+    return (this.props.families || []).filter(
+      (f) => !!f?.uuid && f.uuid !== parentUuid && !linkedUuids.has(f.uuid),
     );
   };
 
@@ -353,6 +405,19 @@ class SubFamiliesSummary extends PagedDataHandler {
               tooltip: formatMessage(intl, "insuree", "familyAddNewSubFamily.tooltip"),
             },
             {
+              button: (
+                <Button
+                  startIcon={<AddIcon />}
+                  onClick={(e) => {
+                    this.openLinkSubFamilyDialog();
+                  }}
+                >
+                  {formatMessage(intl, "insuree", "familyAddExistingSubFamily.buttonText")}
+                </Button>
+              ),
+              tooltip: formatMessage(intl, "insuree", "familyAddExistingSubFamily.tooltip"),
+            },
+            {
               button: this.state.showIFamilySearcher ? (
                 <IconButton onClick={(e) => this.closeFamilySearcher()}>
                   <CloseIcon />
@@ -385,6 +450,23 @@ class SubFamiliesSummary extends PagedDataHandler {
           onClose={() => {
             this.setState({ enquiryOpen: false, chfid: null });
           }}
+        />
+        <LinkSubFamilyDialog
+          open={this.state.linkSubFamily}
+          candidates={this.candidateFamilies()}
+          selectedFamily={this.state.selectedCandidateFamily}
+          onSelectFamily={(candidateFamily) => this.setState({ selectedCandidateFamily: candidateFamily })}
+          searchValue={this.state.candidateSearchValue}
+          onSearchValueChange={(value) => this.setState({ candidateSearchValue: value })}
+          onSearch={this.searchCandidateFamilies}
+          onConfirm={this.onConfirmLinkSubFamily}
+          onCancel={() =>
+            this.setState({
+              linkSubFamily: false,
+              selectedCandidateFamily: null,
+              candidateSearchValue: "",
+            })
+          }
         />
         <ChangeInsureeFamilyDialog
           family={this.state.linkedFamily}
@@ -481,6 +563,8 @@ const mapStateToProps = (state) => ({
   checkedCanAddSubFamily: state.insuree.checkedCanAddSubFamily,
   canAddSubFamilyWarnings: state.insuree.canAddSubFamilyWarnings,
   errorCanAddSubFamily: state.insuree.errorCanAddSubFamily,
+  fetchingFamilies: state.insuree.fetchingFamilies,
+  families: state.insuree.families,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
 });
@@ -494,7 +578,8 @@ const mapDispatchToProps = (dispatch) => {
       removeInsuree,
       setFamilyHead,
       changeFamily,
-      checkCanAddSubFamily,
+      fetchFamilySummaries,
+      linkFamily,
       clearSubFamily,
       unLinkFamily,
       coreAlert,

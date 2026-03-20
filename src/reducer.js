@@ -169,7 +169,6 @@ function reducer(
         subFamiliesTotalCount : 0,
       };
     case "INSUREE_SUB_FAMILY_RESP":
-      console.log("action.payload", action.payload)
       return {
         ...state,
         fetchingSubFamilies: false,
@@ -631,6 +630,14 @@ function reducer(
       return dispatchMutationResp(state, "setFamilyHead", action);
     case "INSUREE_CHANGE_FAMILY_HEAD_RESP":
       return dispatchMutationResp(state, "changeInsureeFamily", action);
+    case "INSUREE_LINK_FAMILY_RESP":
+      return dispatchMutationResp(state, "moveFamiliesToParentMutation", action);
+    case "INSUREE_LINK_FAMILY_ERR":
+      return dispatchMutationErr(state, action);
+    case "INSUREE_UNLINK_FAMILY_RESP":
+      return dispatchMutationResp(state, "deleteFamiliesFromParentMutation", action);
+    case "INSUREE_UNLINK_FAMILY_ERR":
+      return dispatchMutationErr(state, action);
     default:
       return state;
   }

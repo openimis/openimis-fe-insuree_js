@@ -117,8 +117,17 @@ class FamilyMasterPanel extends FormPanel {
     this.updateAttribute("contribution", contributionAttribute);
   };
 
+  parentHeadLabel = () => {
+    const { parentFamily } = this.props;
+    const parentHead = parentFamily?.headInsuree;
+    if (!parentHead) return "";
+    return [parentHead.chfId, parentHead.lastName, parentHead.otherNames].filter(Boolean).join(" - ");
+  };
+
   render() {
-    const { intl, classes, edited, parent_uuid, openFamilyButton = false, readOnly, overview } = this.props;
+    const { intl, classes, edited, parent_uuid, openFamilyButton = false, readOnly, overview, parentFamily } =
+      this.props;
+    const isSubFamily = !!parent_uuid || !!edited?.parent;
     return (
       <Fragment>
         <Grid container className={classes.tableTitle}>
@@ -161,6 +170,16 @@ class FamilyMasterPanel extends FormPanel {
             />
           </Grid>
           {!!overview && this.headSummary()}
+          {!!isSubFamily && (
+            <Grid item xs={3} className={classes.item}>
+              <TextInput
+                module="insuree"
+                label="Family.parent.headInsuree"
+                readOnly={true}
+                value={parentFamily ? this.parentHeadLabel() : ""}
+              />
+            </Grid>
+          )}
           <Grid item xs={2} className={classes.item}>
             <PublishedComponent
               pubRef="insuree.FamilyTypePicker"

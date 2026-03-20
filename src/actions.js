@@ -216,7 +216,7 @@ export function formatUnlinkFamily (familyUuids, cancelPolicies){
 }
 
 export function linkFamily (familyUuid, familyUuids, clientMutationLabel, cancelPolicies){
-  let mutation = formatMutation("moveFamiliesToParentMutation", formatLinkFamily(familyUuid, familyUuids, cancelPolicies) )
+  let mutation = formatMutation("moveFamiliesToParentMutation", formatLinkFamily(familyUuid, familyUuids, cancelPolicies), clientMutationLabel)
   const requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_LINK_FAMILY_RESP", "INSUREE_LINK_FAMILY_ERR"], {
     clientMutationId: mutation.clientMutationId,
@@ -227,7 +227,7 @@ export function linkFamily (familyUuid, familyUuids, clientMutationLabel, cancel
 }
 
 export function unLinkFamily ( familyUuids, clientMutationLabel, cancelPolicies){
-  let mutation = formatMutation("deleteFamiliesFromParentMutation", formatUnlinkFamily(familyUuids, cancelPolicies) )
+  let mutation = formatMutation("deleteFamiliesFromParentMutation", formatUnlinkFamily(familyUuids, cancelPolicies), clientMutationLabel)
   const requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_UNLINK_FAMILY_RESP", "INSUREE_UNLINK_FAMILY_ERR"], {
     clientMutationId: mutation.clientMutationId,
