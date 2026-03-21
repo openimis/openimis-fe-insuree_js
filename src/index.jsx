@@ -48,6 +48,7 @@ import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE, INSUREE_MAIN_MENU_CONTRI
 const ROUTE_INSUREE_FAMILIES = "insuree/families";
 const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
 const ROUTE_INSUREE_FAMILY = "insuree/family";
+const ROUTE_INSUREE_SUBFAMILY = "insuree/subfamily";
 const ROUTE_INSUREE_PROFILE = "insuree/profile";
 const ROUTE_INSUREE_INSUREES = "insuree/insurees";
 const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
@@ -131,6 +132,7 @@ const DEFAULT_CONFIG = {
     { key: "insuree.route.families", ref: ROUTE_INSUREE_FAMILIES },
     { key: "insuree.route.familyOverview", ref: ROUTE_INSUREE_FAMILY_OVERVIEW },
     { key: "insuree.route.family", ref: ROUTE_INSUREE_FAMILY },
+    { key: "insuree.route.subfamily", ref: ROUTE_INSUREE_SUBFAMILY },
     { key: "insuree.route.insurees", ref: ROUTE_INSUREE_INSUREES },
     { key: "insuree.route.insuree", ref: ROUTE_INSUREE_INSUREE },
     { key: "insuree.route.insureeProfile", ref: ROUTE_INSUREE_PROFILE },
@@ -144,14 +146,60 @@ const DEFAULT_CONFIG = {
     { key: "insuree.CappedItemServiceLink", ref: InsureeCappedItemServiceLink },
   ],
   "core.Router": [
-    { path: ROUTE_INSUREE_FAMILIES, text: "insuree.menu.familiesOrGroups", id: "insuree.familiesOrGroups", component: FamiliesPage, rights: [RIGHT_FAMILY], icon: "People" },
-    { path: ROUTE_INSUREE_FAMILY + "/:family_uuid?", component: FamilyPage, rights: [RIGHT_FAMILY_ADD], icon: "GroupAdd" },
-    { path: ROUTE_INSUREE_FAMILY, text: "insuree.menu.addFamilyOrGroup", id: "insuree.addFamilyOrGroup", component: FamilyPage, rights: [RIGHT_FAMILY_ADD], icon: "GroupAdd" },
-    { path: ROUTE_INSUREE_FAMILY_OVERVIEW + "/:family_uuid",component: FamilyOverviewPage, rights: [RIGHT_FAMILY_ADD], icon: "GroupAdd" },
-    { path: ROUTE_INSUREE_INSUREES, text: "insuree.menu.insurees", id: "insuree.insurees", component: InsureesPage, rights: [RIGHT_INSUREE], icon: "Person" },
-    { path: ROUTE_INSUREE_INSUREE + "/:insuree_uuid?/:family_uuid?", component: InsureePage, rights: [RIGHT_INSUREE], icon: "Person" },
-    { path: "insuree/cappedItemService", component: CappedItemServicePage },
-    { path: ROUTE_INSUREE_PROFILE + "/:insuree_uuid", component: ProfilePage, rights: [RIGHT_INSUREE], icon: "Person" },
+    { 
+      path: ROUTE_INSUREE_FAMILIES, 
+      text: "insuree.menu.familiesOrGroups", 
+      id: "insuree.familiesOrGroups", 
+      component: FamiliesPage, 
+      rights: [RIGHT_FAMILY], 
+      icon: "People" 
+    },
+    { 
+      path: ROUTE_INSUREE_SUBFAMILY + "/:parent_uuid/:family_uuid?/", 
+      component: FamilyPage,
+      rights: [RIGHT_FAMILY_ADD],
+      icon: "GroupAdd"
+    },
+    { 
+      path: ROUTE_INSUREE_FAMILY + "/:family_uuid?", 
+      text: "insuree.menu.addFamilyOrGroup", 
+      id: "insuree.addFamilyOrGroup", 
+      component: FamilyPage, 
+      rights: [RIGHT_FAMILY_ADD], 
+      icon: "GroupAdd" 
+    },
+    { 
+      path: ROUTE_INSUREE_FAMILY_OVERVIEW + "/:family_uuid",
+      component: FamilyOverviewPage, 
+      rights: [RIGHT_FAMILY_ADD], 
+      icon: "GroupAdd" 
+    },
+    { 
+      path: ROUTE_INSUREE_INSUREES, 
+      text: "insuree.menu.insurees", 
+      id: "insuree.insurees", 
+      component: InsureesPage, 
+      rights: [RIGHT_INSUREE], 
+      icon: "Person" 
+    },
+    { 
+      path: ROUTE_INSUREE_INSUREE + "/:insuree_uuid?/:family_uuid?", 
+      component: InsureePage, 
+      rights: [RIGHT_INSUREE], 
+      icon: "Person" 
+    },
+    { 
+      path: "insuree/cappedItemService", 
+      component: CappedItemServicePage,
+      rights: [RIGHT_INSUREE],
+      icon: "MoneyOff"
+    },
+    { 
+      path: ROUTE_INSUREE_PROFILE + "/:insuree_uuid", 
+      component: ProfilePage, 
+      rights: [RIGHT_INSUREE], 
+      icon: "Person" 
+    },
   ],
   "core.AppBar": [Enquiry],
   "core.MainMenu": [
@@ -180,17 +228,10 @@ const DEFAULT_CONFIG = {
   ],
   "insuree.MainMenu": [
     {
-      route:  ROUTE_INSUREE_FAMILY,
-      withDivider: true,
+      route: ROUTE_INSUREE_FAMILIES,
     },
     {
-      
-      route:  ROUTE_INSUREE_FAMILIES,
-    },
-    {
-      
-      route:  ROUTE_INSUREE_INSUREES,
-      
+      route: ROUTE_INSUREE_INSUREES,
     },
   ],
 };
