@@ -248,10 +248,12 @@ const mapStateToProps = (state, props) => ({
   confirmed: state.core.confirmed,
   state: state,
   isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
-  totalPoliciesAmount: !!state.policy.policy ? state.policy.policy.policyValue : state.policy?.policies?.reduce(
-    (sum, policy) => sum + (parseFloat(policy.policyValue) || 0), 
-    0
-  ) || 0,
+  totalPoliciesAmount: !!state.policy.policy 
+    ? (parseFloat(state.policy.policy.policyValue) || 0)
+    : state.policy?.policies?.reduce(
+        (sum, policy) => sum + (parseFloat(policy.policyValue) || 0), 
+        0
+      ) || 0,
   totalContributions: state.contribution?.policiesPremiums?.reduce(
     (sum, contribution) => sum + (parseFloat(contribution.amount) || 0), 
     0
