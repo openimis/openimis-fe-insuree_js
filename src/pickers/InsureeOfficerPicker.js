@@ -23,33 +23,55 @@ class InsureeOfficer extends Component {
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
     this.isCurrentAdminEnrollmentOfficerActive = props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", false);
+    this.currentEO = null;
   }
 
   componentDidMount() {
-    if (!this.props.fetchedInsureeOfficers || !!this.isCurrentAdminEnrollmentOfficerActive ) {
+   if (!this.props.fetchedInsureeOfficers || this.isCurrentAdminEnrollmentOfficerActive) {
+      const filters = [];
+      if(!!this.props.locationId){
+        filters.push(`locationId:"${decodeId(this.props.locationId)}"`)
+      }
       // prevent loading multiple times the cache when component is
-      // several times on tha page
+      // several times on the page
+
       setTimeout(() => {
-        !this.props.fetchingInsureeOfficers && this.props.fetchInsureeOfficers(this.props.modulesManager);
+        !this.props.fetchingInsureeOfficers && this.props.fetchInsureeOfficers(this.props.modulesManager, filters);
       }, Math.floor(Math.random() * 300));
     }
   }
-  componentDidUpdate(prevProps) {
+
+  isEnrollmentAdminOfficer = (user, insureeOfficers) => {
+    for (let i = 0; i < insureeOfficers.length; i++) {
+      if (user.username.trim() === insureeOfficers[i].code.trim()) {
+        this.currentEO = insureeOfficers[i];
+        return true;
+      }
+    }
+    return false;
+  } 
+
+    componentDidUpdate(prevProps) {
+    // Recharger les données si locationId change
+    if (this.props.locationId !== prevProps.locationId) {
+      const { locationId } = this.props
+      const filters = [];
+      if (locationId != undefined && locationId != "" ) {
+        filters.push(`locationId:"${decodeId(locationId)}"`)
+      }
+      this.props.fetchInsureeOfficers(this.props.modulesManager, filters);
+      }
+
     if (this.isCurrentAdminEnrollmentOfficerActive == true &&
       this.props.insureeOfficers !== prevProps.insureeOfficers &&
       this.props.insureeOfficers &&
       this.props.insureeOfficers.length > 0 && this.isEnrollmentAdminOfficer(this.props.user, this.props.insureeOfficers)) {
       this.props.onChange(
-        this.props.insureeOfficers[0],
-        this.formatSuggestion(this.props.insureeOfficers[0])
+        this.currentEO,
+        this.formatSuggestion(this.currentEO)
       );
     }
   }
-  isEnrollmentAdminOfficer = (user, insureeOfficers) => {
-    if (!insureeOfficers || !user) return false;
-    if (user.username.trim() === insureeOfficers[0].code.trim()) return true;
-    else return false
-  } 
 
   formatSuggestion = (a) => {
     if (!a) return "";
@@ -82,7 +104,7 @@ class InsureeOfficer extends Component {
       nullLabel = null,
       user,
     } = this.props;
-    let v = insureeOfficers ? insureeOfficers.filter((o) => parseInt(decodeId(o.id)) === value) : [];
+    let v = (insureeOfficers ? insureeOfficers.filter((o) => o.id === value) : []);
     v = v.length ? v[0] : null;
     return (
       <Fragment>
@@ -97,7 +119,7 @@ class InsureeOfficer extends Component {
             getSuggestions={this.insureeOfficers}
             getSuggestionValue={this.formatSuggestion}
             onSuggestionSelected={this.onSuggestionSelected}
-            value={this.isCurrentAdminEnrollmentOfficerActive == true && this.isEnrollmentAdminOfficer(user, insureeOfficers) ? insureeOfficers[0] : v}
+            value={this.isCurrentAdminEnrollmentOfficerActive == true && this.isEnrollmentAdminOfficer(user, insureeOfficers) ? this.currentEO : v}
             reset={reset}
             readOnly={this.isCurrentAdminEnrollmentOfficerActive == true && this.isEnrollmentAdminOfficer(user, insureeOfficers) ? true : readOnly}
             required={required}
