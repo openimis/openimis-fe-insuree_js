@@ -24,6 +24,7 @@ const InsureeAddress = ({
   onChangeAddress,
   readOnly,
   value,
+  onChangeSameLocationCheckbox,
 }) => {
   const classes = useStyles();
   const modulesManager = useModulesManager();
@@ -31,6 +32,12 @@ const InsureeAddress = ({
 
   const [location, setLocation] = useState(true);
   const [address, setAddress] = useState(true);
+
+  const handleLocationChange = (e) => {
+    const checked = e.target.checked;
+    onChangeSameLocationCheckbox(checked)
+    setLocation(checked);
+  };
 
   return (
     <Grid container>
@@ -41,7 +48,7 @@ const InsureeAddress = ({
               color="primary"
               checked={location}
               disabled={readOnly}
-              onChange={(e) => setLocation((prevState) => !prevState)}
+              onChange={(e) =>handleLocationChange(e)}
             />
           }
           label={formatMessage("Insuree.currentVillage.sameAsFamily")}

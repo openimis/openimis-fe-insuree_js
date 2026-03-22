@@ -8,6 +8,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 
 import {
   formatMessageWithValues,
+  formatMessage,
   withModulesManager,
   withHistory,
   historyPush,
@@ -186,6 +187,7 @@ class FamilyForm extends Component {
       {
         doIt: this.reload,
         icon: <ReplayIcon />,
+        buttonText: formatMessage(this.props.intl, "insuree", "FamilyReload.buttonText") || "Reload",
         onlyIfDirty: !readOnly && !runningMutation && !isSaved,
       },
     ];
