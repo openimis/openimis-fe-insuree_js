@@ -328,8 +328,8 @@ export function fetchInsureeMutation(mm, clientMutationId) {
   return graphql(payload, "INSUREE_INSUREE");
 }
 
-export function fetchInsureeOfficers(mm) {
-  const payload = formatPageQuery("insureeOfficers", null, mm.getRef("insuree.InsureeOfficerPicker.projection"));
+export function fetchInsureeOfficers(mm, filters) {
+  const payload = formatPageQuery("insureeOfficers", filters, mm.getRef("insuree.InsureeOfficerPicker.projection"));
   return graphql(payload, "INSUREE_INSUREE_OFFICERS");
 }
 

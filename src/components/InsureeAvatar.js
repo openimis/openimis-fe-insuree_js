@@ -17,7 +17,8 @@ const styles = (theme) => ({
 });
 
 const InsureeAvatar = (props) => {
-  const { photo, classes, className, withMeta = false, readOnly, onChange , required} = props;
+  const { photo, classes, className, withMeta = false, readOnly, onChange , required, locationId} = props;
+
   const modulesManager = useModulesManager();
   const { formatMessage } = useTranslations("insuree", modulesManager);
 
@@ -91,6 +92,7 @@ const InsureeAvatar = (props) => {
               readOnly={readOnly}
               required={isRequired}
               onChange={(v) => onChange({ ...photo, officerId: v?.id })}
+              locationId = {locationId}
             />
           </Grid>
         </Grid>
