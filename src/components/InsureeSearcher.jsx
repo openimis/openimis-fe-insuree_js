@@ -200,22 +200,14 @@ class InsureeSearcher extends Component {
       (insuree) => insuree.chfId,
       (insuree) => (this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
       (insuree) => (!this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
-      (insuree) => (
-            <PublishedComponent
-              pubRef="insuree.InsureeMaritalStatusPicker"
-              withLabel={false}
-              readOnly={true}
-              value={insuree.marital || INSUREE_MARITAL_STATUS[0]}
-            />
-          ),
-          (insuree) => (
-            <PublishedComponent
-              pubRef="insuree.InsureeGenderPicker"
-              withLabel={false}
-              readOnly={true}
-              value={!!insuree.gender ? insuree.gender.code : null}
-            />
-          ),
+      (insuree) => formatMessage(
+        this.props.intl,
+        "insuree",
+        `InsureeMaritalStatus.${insuree?.marital == null || insuree.marital === "0"
+          ? INSUREE_MARITAL_STATUS[0]
+          : insuree.marital}`
+      ),
+      (insuree) => formatMessage(this.props.intl, "insuree", `InsureeGender.${insuree?.gender?.code}`),
       this.columns.email !== "H" ? (insuree) => insuree.email : null,
       (insuree) => insuree.phone,
       (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
