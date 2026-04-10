@@ -3,7 +3,12 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Grid, Button, Tooltip } from "@mui/material";
-import { Search as SearchIcon, People as PeopleIcon, Tab as TabIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { GetIconComponent } from "@openimis/fe-core";
+const SearchIcon = GetIconComponent("Search")
+const PeopleIcon = GetIconComponent("People")
+const TabIcon = GetIconComponent("Tab")
+const DeleteIcon = GetIconComponent("Delete")
+
 import _ from "lodash";
 import {
   withModulesManager,

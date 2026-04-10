@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import _ from "lodash";
 
 import { styled } from "@mui/material/styles";
-import ReplayIcon from "@mui/icons-material/Replay";
+import { GetIconComponent } from "@openimis/fe-core";
+const ReplayIcon = GetIconComponent("Replay")
 
 import {
   formatMessageWithValues,

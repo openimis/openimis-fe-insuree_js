@@ -3,7 +3,8 @@ import { injectIntl } from "react-intl";
 
 import { Grid, Box, Typography, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { People } from "@mui/icons-material";
+import { GetIconComponent } from "@openimis/fe-core";
+const People = GetIconComponent("People")
 
 import {
   formatMessage,

@@ -6,7 +6,8 @@ import _ from "lodash";
 
 import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse   ,Button,
 } from "@mui/material";
-import { Search as SearchIcon, Add as AddIcon, PersonAdd, PersonPin as SetHeadIcon, Delete as DeleteIcon, Clear as RemoveIcon, Remove as CloseIcon } from "@mui/icons-material";
+
+
 import { styled } from "@mui/material/styles";
 
 import {
@@ -24,6 +25,7 @@ import {
   PagedDataHandler,
   PublishedComponent,
   ProgressOrError,
+  GetIconComponent,
 } from "@openimis/fe-core";
 import {
   fetchFamilyMembers,
@@ -40,7 +42,13 @@ import ChangeInsureeFamilyDialog from "./ChangeInsureeFamilyDialog";
 import EnquiryDialog from "./EnquiryDialog";
 import FamilyInsureesSearcher from "./FamilyInsureesSearcher";
 import RemoveInsureeFromFamilyDialog from "./RemoveInsureeFromFamilyDialog";
-
+const SearchIcon = GetIconComponent("Search")
+const AddIcon = GetIconComponent("Add")
+const PersonAdd = GetIconComponent("PersonAdd")
+const SetHeadIcon = GetIconComponent("PersonPin")
+const DeleteIcon = GetIconComponent("Delete")
+const RemoveIcon = GetIconComponent("Clear")
+const CloseIcon = GetIconComponent("Remove")
 const StyledFamilyInsureesOverview = styled('div')(({ theme }) => ({
   '& .paper': theme?.paper?.paper ?? {},
   '& .paperHeader': theme?.paper?.header ?? {},

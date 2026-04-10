@@ -3,7 +3,8 @@ import InsureeMasterPanel from "./InsureeMasterPanel";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Contributions, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
-import { PersonAdd } from "@mui/icons-material";
+import { GetIconComponent } from "@openimis/fe-core";
+const PersonAdd = GetIconComponent("PersonAdd")
 import { fetchInsureeFull } from "../actions";
 import { Button } from "@mui/material";
 

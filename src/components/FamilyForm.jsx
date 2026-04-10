@@ -4,7 +4,6 @@ import { bindActionCreators } from "redux";
 import { injectIntl } from "react-intl";
 
 import { styled } from "@mui/material/styles";
-import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
   formatMessageWithValues,
@@ -17,6 +16,7 @@ import {
   coreConfirm,
   parseData,
   Helmet,
+  GetIconComponent,
 } from "@openimis/fe-core";
 import { fetchFamily, newFamily, createFamily, fetchFamilyMutation } from "../actions";
 import { INSUREE_ACTIVE_STRING, RIGHT_FAMILY } from "../constants";
@@ -25,6 +25,7 @@ import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
 import { formatMessage } from "@openimis/fe-core";
+const ReplayIcon = GetIconComponent("Replay")
 
 const StyledFamilyForm = styled('div')(({ theme }) => ({
   '& .lockedPage': theme?.page?.locked ?? {},

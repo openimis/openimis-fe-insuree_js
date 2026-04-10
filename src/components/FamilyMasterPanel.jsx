@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 
 import { Grid, FormControlLabel, Checkbox, Typography, Divider, Tooltip, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { People as PeopleIcon } from "@mui/icons-material";
+
 
 import {
   historyPush,
@@ -15,8 +15,10 @@ import {
   FormattedMessage,
   FormPanel,
   Contributions,
+  GetIconComponent,
 } from "@openimis/fe-core";
 import { DEFAULT } from "../constants";
+const PeopleIcon = GetIconComponent("People")
 
 const FAMILY_MASTER_PANEL_CONTRIBUTION_KEY = "insuree.Family.master";
 

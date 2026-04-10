@@ -3,7 +3,9 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Checkbox, Button, Tooltip } from "@mui/material";
-import TabIcon from "@mui/icons-material/Tab";
+import { GetIconComponent } from "@openimis/fe-core";
+const TabIcon = GetIconComponent("Tab")
+
 import _ from "lodash";
 import {
   withModulesManager,
@@ -15,7 +17,8 @@ import {
 } from "@openimis/fe-core";
 
 import { fetchFamilySummaries, deleteFamily } from "../actions";
-import { Delete as DeleteIcon } from "@mui/icons-material";
+const DeleteIcon = GetIconComponent("Delete")
+
 import FamilyFilter from "./FamilyFilter";
 import { DEFAULT, RIGHT_FAMILY_DELETE } from "../constants";
 import { familyLabel } from "../utils/utils";

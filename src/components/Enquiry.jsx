@@ -4,11 +4,11 @@ import { alpha } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
 import clsx from "clsx";
 import { InputBase } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import { formatMessage } from "@openimis/fe-core";
+
+import { GetIconComponent, formatMessage } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
 import { INSUREE_NUMBER_MAX_LENGTH } from "../constants";
-
+const SearchIcon = GetIconComponent("Search")
 const StyledEnquiry = styled('div')(({ theme }) => ({
   '& .search': {
     position: "relative",

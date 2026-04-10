@@ -1,5 +1,8 @@
 import React from "react";
-import { AssignmentInd, GroupAdd, People, Person } from "@mui/icons-material";
+import { GetIconComponent } from "@openimis/fe-core";
+const Person = GetIconComponent("Person")
+const People = GetIconComponent("People")
+const GroupAdd = GetIconComponent("GroupAdd")
 import { FormattedMessage } from "@openimis/fe-core";
 import InsureeMainMenu from "./menus/InsureeMainMenu";
 import FamiliesPage from "./pages/FamiliesPage";

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { AssignmentInd } from "@mui/icons-material";
+import { GetIconComponent } from "@openimis/fe-core";
+const AssignmentInd = GetIconComponent("AssignmentInd")
 import { formatMessage, MainMenuContribution, withModulesManager } from "@openimis/fe-core";
 
 const INSUREE_MAIN_MENU_CONTRIBUTION_KEY = "insuree.MainMenu";

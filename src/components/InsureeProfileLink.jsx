@@ -2,7 +2,8 @@ import React from "react";
 
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Person } from "@mui/icons-material";
+import { GetIconComponent } from "@openimis/fe-core";
+const Person = GetIconComponent("Person")
 
 import { useModulesManager, useTranslations, useHistory, historyPush } from "@openimis/fe-core";
 import { MODULE_NAME } from "../constants";

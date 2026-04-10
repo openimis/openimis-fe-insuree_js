@@ -3,7 +3,9 @@ import _debounce from "lodash/debounce";
 
 import { Typography, Grid, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { YoutubeSearchedFor as ResetFilterIcon } from "@mui/icons-material";
+import { GetIconComponent } from "@openimis/fe-core";
+const ResetFilterIcon = GetIconComponent("YoutubeSearchedFor")
+
 
 import {
   useTranslations,
