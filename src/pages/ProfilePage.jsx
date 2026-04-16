@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
+import { useDispatch, useSelector, connect } from "react-redux";
+import { injectIntl } from "react-intl";
 import { Box, Typography, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -11,6 +11,8 @@ import {
   ProgressOrError,
   Contributions,
   ControlledField,
+  withHistory,
+  withModulesManager,
 } from "@openimis/fe-core";
 import { fetchInsureeFull } from "../actions";
 import { DEFAULT, MODULE_NAME } from "../constants";
@@ -187,4 +189,14 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+const mapStateToProps = (state) => ({
+  module: state.core?.savedPagination?.module,
+  user: state.core?.user,
+});
+const mapDispatchToProps = null;
+
+export default withHistory(
+  withModulesManager(
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(ProfilePage)),
+  ),
+);
