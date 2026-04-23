@@ -19,7 +19,7 @@ import FamilySearcher from "../components/FamilySearcher";
 import { RIGHT_FAMILY_ADD } from "../constants";
 
 const StyledFamiliesPage = styled('div')(({ theme }) => ({
-  '& .page': theme?.page ?? {},
+  ...theme?.page ?? {},
   '& .fab': theme?.fab ?? {},
 }));
 
@@ -63,24 +63,22 @@ class FamiliesPage extends Component {
     const { intl, rights } = this.props;
     return (
       <StyledFamiliesPage>
-        <div className="page">
-          <FamilySearcher
-            cacheFiltersKey="insureeFamiliesPageFiltersCache"
-            onDoubleClick={this.onDoubleClick}
-            filterPaneContributionsKey={FAMILY_FILTERS_CONTRIBUTION_KEY}
-            actionsContributionKey={FAMILY_ACTION_CONTRIBUTION_KEY}
-            defaultFilters = {this.state.defaultFilters}
-          />
-          {rights.includes(RIGHT_FAMILY_ADD) &&
-            withTooltip(
-              <div className="fab">
-                <Fab color="primary" onClick={this.onAdd}>
-                  <AddIcon />
-                </Fab>
-              </div>,
-              formatMessage(intl, "insuree", "addNewFamilyTooltip"),
-            )}
-        </div>
+        <FamilySearcher
+          cacheFiltersKey="insureeFamiliesPageFiltersCache"
+          onDoubleClick={this.onDoubleClick}
+          filterPaneContributionsKey={FAMILY_FILTERS_CONTRIBUTION_KEY}
+          actionsContributionKey={FAMILY_ACTION_CONTRIBUTION_KEY}
+          defaultFilters = {this.state.defaultFilters}
+        />
+        {rights.includes(RIGHT_FAMILY_ADD) &&
+          withTooltip(
+            <div className="fab">
+              <Fab color="primary" onClick={this.onAdd}>
+                <AddIcon />
+              </Fab>
+            </div>,
+            formatMessage(intl, "insuree", "addNewFamilyTooltip"),
+          )}
       </StyledFamiliesPage>
     );
   }

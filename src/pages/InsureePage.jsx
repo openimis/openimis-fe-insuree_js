@@ -9,7 +9,7 @@ import { createInsuree, updateInsuree } from "../actions";
 import { RIGHT_INSUREE, RIGHT_INSUREE_ADD, RIGHT_INSUREE_EDIT } from "../constants";
 
 const StyledInsureePage = styled('div')(({ theme }) => ({
-  '& .page': theme?.page ?? {},
+  ...theme?.page ?? {},
 }));
 
 class InsureePage extends Component {
@@ -42,16 +42,14 @@ class InsureePage extends Component {
     if (!rights.includes(RIGHT_INSUREE)) return null;
     return (
       <StyledInsureePage>
-        <div className="page">
-          <InsureeForm
-            insuree_uuid={insuree_uuid !== "_NEW_" ? insuree_uuid : null}
-            family_uuid={family_uuid}
-            back={(e) => historyPush(modulesManager, history, "insuree.route.insurees")}
-            add={rights.includes(RIGHT_INSUREE_ADD) ? this.add : null}
-            save={rights.includes(RIGHT_INSUREE_EDIT) ? this.save : null}
-            readOnly={!rights.includes(RIGHT_INSUREE_EDIT) || !rights.includes(RIGHT_INSUREE_ADD)}
-          />
-        </div>
+        <InsureeForm
+          insuree_uuid={insuree_uuid !== "_NEW_" ? insuree_uuid : null}
+          family_uuid={family_uuid}
+          back={(e) => historyPush(modulesManager, history, "insuree.route.insurees")}
+          add={rights.includes(RIGHT_INSUREE_ADD) ? this.add : null}
+          save={rights.includes(RIGHT_INSUREE_EDIT) ? this.save : null}
+          readOnly={!rights.includes(RIGHT_INSUREE_EDIT) || !rights.includes(RIGHT_INSUREE_ADD)}
+        />
       </StyledInsureePage>
     );
   }

@@ -19,7 +19,7 @@ import InsureeSearcher from "../components/InsureeSearcher";
 import { RIGHT_INSUREE_ADD } from "../constants";
 
 const StyledInsureesPage = styled('div')(({ theme }) => ({
-  '& .page': theme?.page ?? {},
+  ...theme?.page ?? {},
   '& .fab': theme?.fab ?? {},
 }));
 
@@ -59,18 +59,16 @@ class InsureesPage extends Component {
     const { intl, rights } = this.props;
     return (
       <StyledInsureesPage>
-        <div className="page">
-          <InsureeSearcher cacheFiltersKey="insureeInsureesPageFiltersCache" onDoubleClick={this.onDoubleClick} defaultFilters={this.state.defaultFilters} />
-          {rights.includes(RIGHT_INSUREE_ADD) &&
-            withTooltip(
-              <div className="fab">
-                <Fab color="primary" onClick={this.onAdd}>
-                  <AddIcon />
-                </Fab>
-              </div>,
-              formatMessage(intl, "insuree", "addNewInsureeTooltip"),
-            )}
-        </div>
+        <InsureeSearcher cacheFiltersKey="insureeInsureesPageFiltersCache" onDoubleClick={this.onDoubleClick} defaultFilters={this.state.defaultFilters} />
+        {rights.includes(RIGHT_INSUREE_ADD) &&
+          withTooltip(
+            <div className="fab">
+              <Fab color="primary" onClick={this.onAdd}>
+                <AddIcon />
+              </Fab>
+            </div>,
+            formatMessage(intl, "insuree", "addNewInsureeTooltip"),
+          )}
       </StyledInsureesPage>
     );
   }

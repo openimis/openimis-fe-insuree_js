@@ -22,6 +22,7 @@ const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
 }));
 
 import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
+import { GRID_RESPONSIVE_LARGE, GRID_RESPONSIVE_SMALL, GRID_RESPONSIVE_STANDARD } from "../../../CoreModule/src";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
@@ -43,7 +44,7 @@ class InsureeMasterPanel extends FormPanel {
 
   renderLastNameField = (edited, readOnly) => {
     return (
-      <Grid size={4} className="item">
+      <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
         <TextInput
           module="insuree"
           label="Insuree.lastName"
@@ -57,7 +58,7 @@ class InsureeMasterPanel extends FormPanel {
   };
 
   renderGivenNameField = (edited, readOnly) => (
-    <Grid size={4} className="item">
+    <Grid xsize={GRID_RESPONSIVE_STANDARD} className="item">
       <TextInput
         module="insuree"
         label="Insuree.otherNames"
@@ -86,18 +87,18 @@ class InsureeMasterPanel extends FormPanel {
           <Grid size={12}>
             <Paper className="paper">
               <Grid container className="tableTitle">
-                <Grid size={3} container alignItems="center" className="item">
+                <Grid size={GRID_RESPONSIVE_SMALL} container alignItems="center" className="item">
                   <Typography variant="h5">
                     <FormattedMessage module="insuree" id={title} values={titleParams} />
                   </Typography>
                 </Grid>
-                <Grid size={9}>
+                <Grid size={GRID_RESPONSIVE_LARGE}>
                   <Grid container justify="flex-end">
                     {!!edited &&
                       !!edited.family &&
                       !!edited.family.headInsuree &&
                       edited.family.headInsuree.id !== edited.id && (
-                        <Grid size={3}>
+                        <Grid size={GRID_RESPONSIVE_SMALL}>
                           <PublishedComponent
                             pubRef="insuree.RelationPicker"
                             withNull={true}
@@ -121,7 +122,7 @@ class InsureeMasterPanel extends FormPanel {
               </Grid>
               <Divider />
               <Grid container className="item">
-                <Grid size={4} className="item">
+                <Grid xsize={GRID_RESPONSIVE_STANDARD} className="item">
                   <PublishedComponent
                     pubRef="insuree.InsureeNumberInput"
                     module="insuree"
@@ -144,9 +145,9 @@ class InsureeMasterPanel extends FormPanel {
                     {this.renderLastNameField(edited, readOnly)}
                   </>
                 )}
-                <Grid size={8}>
+                <Grid size={GRID_RESPONSIVE_LARGE}>
                   <Grid container>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <PublishedComponent
                         pubRef="core.DatePicker"
                         value={!!edited ? edited.dob : null}
@@ -158,7 +159,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("dob", v)}
                       />
                     </Grid>
-                    <Grid size={4} className="item">
+                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                       <PublishedComponent
                         pubRef="insuree.InsureeGenderPicker"
                         value={!!edited && !!edited.gender ? edited.gender.code : ""}
@@ -169,7 +170,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("gender", { code: v })}
                       />
                     </Grid>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <PublishedComponent
                         pubRef="insuree.InsureeMaritalStatusPicker"
                         value={!!edited && !!edited.marital ? edited.marital : ""}
@@ -179,7 +180,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("marital", v)}
                       />
                     </Grid>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -192,7 +193,7 @@ class InsureeMasterPanel extends FormPanel {
                         label={formatMessage(intl, "insuree", "Insuree.cardIssued")}
                       />
                     </Grid>
-                    <Grid size={12}>
+                    <Grid size={GRID_RESPONSIVE_LARGE}>
                       <PublishedComponent
                         pubRef="insuree.InsureeAddress"
                         value={edited}
@@ -202,7 +203,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
                       />
                     </Grid>
-                    <Grid size={6} className="item">
+                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                       <TextInput
                         module="insuree"
                         label="Insuree.phone"
@@ -211,7 +212,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("phone", v)}
                       />
                     </Grid>
-                    <Grid size={6} className="item">
+                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                       <TextInput
                         module="insuree"
                         label="Insuree.email"
@@ -220,7 +221,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("email", v)}
                       />
                     </Grid>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <PublishedComponent
                         pubRef="insuree.ProfessionPicker"
                         module="insuree"
@@ -230,7 +231,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("profession", { id: v })}
                       />
                     </Grid>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <PublishedComponent
                         pubRef="insuree.EducationPicker"
                         module="insuree"
@@ -240,7 +241,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("education", { id: v })}
                       />
                     </Grid>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <PublishedComponent
                         pubRef="insuree.IdentificationTypePicker"
                         module="insuree"
@@ -250,7 +251,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
                       />
                     </Grid>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <TextInput
                         module="insuree"
                         label="Insuree.passport"
@@ -259,7 +260,7 @@ class InsureeMasterPanel extends FormPanel {
                         onChange={(v) => this.updateAttribute("passport", !!v ? v : null)}
                       />
                     </Grid>
-                    <Grid size={3} className="item">
+                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <PublishedComponent
                         pubRef="insuree.InsureeStatusPicker"
                         label="Insuree.status"
@@ -272,7 +273,7 @@ class InsureeMasterPanel extends FormPanel {
                       />
                     </Grid>
                     {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
-                      <Grid size={3} className="item">
+                      <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                         <PublishedComponent
                           pubRef="core.DatePicker"
                           label="Insuree.statusDate"
@@ -285,7 +286,7 @@ class InsureeMasterPanel extends FormPanel {
                       </Grid>
                     )}
                     {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
-                      <Grid size={3} className="item">
+                      <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                         <PublishedComponent
                           pubRef="insuree.InsureeStatusReasonPicker"
                           label="Insuree.statusReason"
@@ -301,7 +302,7 @@ class InsureeMasterPanel extends FormPanel {
                     )}
                   </Grid>
                 </Grid>
-                <Grid size={4} className="item">
+                <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
                   <PublishedComponent
                     pubRef="insuree.Avatar"
                     photo={!!edited ? edited.photo : null}

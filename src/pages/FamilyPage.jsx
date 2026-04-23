@@ -10,7 +10,7 @@ import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants"
 import { familyLabel } from "../utils/utils";
 
 const StyledFamilyPage = styled('div')(({ theme }) => ({
-  '& .page': theme?.page ?? {},
+  ...theme?.page ?? {},
 }));
 
 class FamilyPage extends Component {
@@ -48,16 +48,14 @@ class FamilyPage extends Component {
 
     return (
       <StyledFamilyPage>
-        <div className="page">
-          <FamilyForm
-            overview={overview}
-            family_uuid={family_uuid}
-            back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
-            add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
-            save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
-            readOnly={!rights.includes(RIGHT_FAMILY_EDIT) || !rights.includes(RIGHT_FAMILY_ADD)}
-          />
-        </div>
+        <FamilyForm
+          overview={overview}
+          family_uuid={family_uuid}
+          back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
+          add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
+          save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
+          readOnly={!rights.includes(RIGHT_FAMILY_EDIT) || !rights.includes(RIGHT_FAMILY_ADD)}
+        />
       </StyledFamilyPage>
     );
   }

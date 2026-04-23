@@ -67,11 +67,11 @@ const ProfilePage = () => {
           <Typography className="title" variant="h6">
             {formatMessage("link.profile")}
           </Typography>
-          <Grid size={12} container display="flex">
+          <Grid size={GRID_RESPONSIVE_LARGE} container display="flex">
             <ProgressOrError progress={fetchingInsuree} error={errorInsuree} />
             <Grid container direction="row" className="flexContainer">
               {hasAvatarContribution && (
-                <Grid className="item">
+                <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                   <Box mr={3}>
                     <Contributions
                       readOnly
@@ -81,7 +81,7 @@ const ProfilePage = () => {
                   </Box>
                 </Grid>
               )}
-              <Grid className="item">
+              <Grid size={GRID_RESPONSIVE_LARGE} className="item">
                 <Box mr={10}>
                   <ControlledField
                     module="insuree"
@@ -136,7 +136,7 @@ const ProfilePage = () => {
                       module="insuree"
                       id="InsureeSummary.gender"
                       field={
-                        <Grid size={12}>
+                        <Grid size={GRID_RESPONSIVE_LARGE}>
                           <Typography> {insuree?.gender?.gender} </Typography>
                         </Grid>
                       }
@@ -148,7 +148,7 @@ const ProfilePage = () => {
                         module="insuree"
                         id="InsureeSummary.insureeLocation"
                         field={
-                          <Grid size={12}>
+                          <Grid size={GRID_RESPONSIVE_LARGE}>
                             <Typography>
                               {formatMessageWithValues("InsureeSummary.insureeLocation", {
                                 location: insuree?.family
@@ -164,14 +164,14 @@ const ProfilePage = () => {
                 </Box>
               </Grid>
               {hasExtContributions && (
-                <Grid className="item">
+                <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                   <Box>
                     <Contributions contributionKey={INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY} insuree={insuree} />
                   </Box>
                 </Grid>
               )}
             </Grid>
-            <Grid className="item">
+            <Grid size={GRID_RESPONSIVE_LARGE} className="item">
               <Box>
                 <FamilyMembersTable />
               </Box>
