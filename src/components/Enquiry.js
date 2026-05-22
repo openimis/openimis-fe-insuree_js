@@ -86,6 +86,7 @@ const Enquiry = (props) => {
         <SearchIcon />
       </div>
       <InputBase
+        name="enquiryField"
         inputRef={inputRef}
         placeholder={formatMessage(intl, "insuree", "appBar.enquiry")}
         classes={{
