@@ -10,6 +10,9 @@ import {
   TextInput,
   Contributions,
   withModulesManager,
+  GRID_RESPONSIVE_LARGE,
+  GRID_RESPONSIVE_SMALL,
+  GRID_RESPONSIVE_STANDARD
 } from "@openimis/fe-core";
 
 const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
@@ -22,7 +25,6 @@ const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
 }));
 
 import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
-import { GRID_RESPONSIVE_LARGE, GRID_RESPONSIVE_SMALL, GRID_RESPONSIVE_STANDARD } from "../../../CoreModule/src";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
