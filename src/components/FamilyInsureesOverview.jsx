@@ -263,7 +263,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
 
   removeInsureeAction = (removeInsuree) => (
     <Tooltip title={formatMessage(this.props.intl, "insuree", "familyRemoveInsuree.tooltip")}>
-      <Button onClick={(e) => this.removeInsuree(removeInsuree)} startIcon={<RemoveIcon />}>
+      <Button onClick={() => this.setState({ removeInsuree })} startIcon={<RemoveIcon />}>
         {formatMessage(this.props.intl, "insuree", "familyRemoveInsuree.buttonText")}
       </Button>
     </Tooltip>
