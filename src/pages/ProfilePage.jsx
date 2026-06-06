@@ -1,0 +1,202 @@
+import React, { Fragment, useEffect } from "react";
+import { useDispatch, useSelector, connect } from "react-redux";
+import { injectIntl } from "react-intl";
+import { Box, Typography, Grid, Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+import {
+  useParams,
+  useTranslations,
+  useModulesManager,
+  ProgressOrError,
+  Contributions,
+  ControlledField,
+  withHistory,
+  withModulesManager,
+} from "@openimis/fe-core";
+import { fetchInsureeFull } from "../actions";
+import { DEFAULT, MODULE_NAME } from "../constants";
+import { formatLocationString } from "../utils/utils";
+import FamilyMembersTable from "../components/FamilyMembersTable";
+
+const StyledProfilePage = styled('div')(({ theme }) => ({
+  '& .page': theme?.page ?? {},
+  '& .paper': theme?.paper?.paper ?? {},
+  '& .title': theme?.paper?.title ?? {},
+  '& .item': theme?.paper?.item ?? {},
+  '& .flexContainer': {
+    flex: 1,
+  },
+}));
+
+const INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY = "insuree.InsureeSummaryAvatar";
+const INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY = "insuree.InsureeSummaryExt";
+const INSUREE_POLICIES_OVERVIEW_CONTRIBUTION_KEY = "insuree.ProfilePage.insureePolicies";
+const INSUREE_CLAIMS_OVERVIEW_CONTRIBUTION_KEY = "insuree.ProfilePage.insureeClaims";
+
+const ProfilePage = () => {
+  const { insuree_uuid } = useParams();
+  const dispatch = useDispatch();
+  const modulesManager = useModulesManager();
+  const { formatMessage, formatMessageWithValues, formatDateFromISO } = useTranslations(MODULE_NAME, modulesManager);
+
+  const { fetchingInsuree, insuree, errorInsuree } = useSelector((store) => store.insuree);
+
+  const hasAvatarContribution = !!modulesManager.getContribs(INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY);
+  const hasExtContributions = !!modulesManager.getContribs(INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY);
+  const renderLastNameFirst = modulesManager.getConf(
+    "fe-insuree",
+    "renderLastNameFirst",
+    DEFAULT.RENDER_LAST_NAME_FIRST,
+  );
+
+  const showInsureeSummaryAddress = modulesManager.getConf(
+    "fe-insuree",
+    "showInsureeSummaryAddress",
+    DEFAULT.SHOW_INSUREE_SUMMARY_ADDRESS,
+  );
+
+  useEffect(() => {
+    if (insuree_uuid) dispatch(fetchInsureeFull(modulesManager, insuree_uuid));
+  }, [insuree_uuid]);
+
+  return (
+    <StyledProfilePage>
+      <Box className="page">
+        <Paper className="paper">
+          <Typography className="title" variant="h6">
+            {formatMessage("link.profile")}
+          </Typography>
+          <Grid size={GRID_RESPONSIVE_LARGE} container display="flex">
+            <ProgressOrError progress={fetchingInsuree} error={errorInsuree} />
+            <Grid container direction="row" className="flexContainer">
+              {hasAvatarContribution && (
+                <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+                  <Box mr={3}>
+                    <Contributions
+                      readOnly
+                      photo={insuree?.photo}
+                      contributionKey={INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY}
+                    />
+                  </Box>
+                </Grid>
+              )}
+              <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                <Box mr={10}>
+                  <ControlledField
+                    module="insuree"
+                    id="InsureeSummary.chfId"
+                    field={<Typography variant="h4">{insuree?.chfId}</Typography>}
+                  />
+                  <Box>
+                    <Typography variant="h6">
+                      {insuree && (
+                        <Fragment>
+                          {renderLastNameFirst ? (
+                            <>
+                              <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree.lastName} />{" "}
+                              <ControlledField
+                                module="insuree"
+                                id="InsureeSummary.otherNames"
+                                field={`${insuree.otherNames}`}
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <ControlledField
+                                module="insuree"
+                                id="InsureeSummary.otherNames"
+                                field={`${insuree.otherNames}`}
+                              />{" "}
+                              <ControlledField module="insuree" id="InsureeSummary.lastName" field={insuree.lastName} />
+                            </>
+                          )}
+                        </Fragment>
+                      )}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography>
+                      <Fragment>
+                        <ControlledField
+                          module="insuree"
+                          id="InsureeSummary.dob"
+                          field={formatDateFromISO(modulesManager, null, insuree?.dob)}
+                        />
+                        <ControlledField
+                          module="insuree"
+                          id="InsureeSummary.age"
+                          field={` (${insuree?.age} ${formatMessage("ageUnit")})`}
+                        />
+                      </Fragment>
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <ControlledField
+                      module="insuree"
+                      id="InsureeSummary.gender"
+                      field={
+                        <Grid size={GRID_RESPONSIVE_LARGE}>
+                          <Typography> {insuree?.gender?.gender} </Typography>
+                        </Grid>
+                      }
+                    />
+                  </Box>
+                  {showInsureeSummaryAddress && (
+                    <Box>
+                      <ControlledField
+                        module="insuree"
+                        id="InsureeSummary.insureeLocation"
+                        field={
+                          <Grid size={GRID_RESPONSIVE_LARGE}>
+                            <Typography>
+                              {formatMessageWithValues("InsureeSummary.insureeLocation", {
+                                location: insuree?.family
+                                  ? `${formatLocationString(insuree.family)}`
+                                  : formatMessage("notFound"),
+                              })}
+                            </Typography>
+                          </Grid>
+                        }
+                      />
+                    </Box>
+                  )}
+                </Box>
+              </Grid>
+              {hasExtContributions && (
+                <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+                  <Box>
+                    <Contributions contributionKey={INSUREE_SUMMARY_EXT_CONTRIBUTION_KEY} insuree={insuree} />
+                  </Box>
+                </Grid>
+              )}
+            </Grid>
+            <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+              <Box>
+                <FamilyMembersTable />
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+        <Contributions
+          contributionKey={INSUREE_POLICIES_OVERVIEW_CONTRIBUTION_KEY}
+          insuree={insuree}
+          hideAddPolicyButton={true}
+        />
+        <Contributions contributionKey={INSUREE_CLAIMS_OVERVIEW_CONTRIBUTION_KEY} insuree={insuree} />
+      </Box>
+    </StyledProfilePage>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  module: state.core?.savedPagination?.module,
+  user: state.core?.user,
+});
+const mapDispatchToProps = null;
+
+export default withHistory(
+  withModulesManager(
+    connect(mapStateToProps, mapDispatchToProps)(injectIntl(ProfilePage)),
+  ),
+);

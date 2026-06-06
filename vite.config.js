@@ -1,0 +1,49 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+
+export default defineConfig({
+  plugins: [react({
+    jsxRuntime: 'automatic',
+    jsxImportSource: '@emotion/react',
+  })],
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, 'src/index.jsx'),
+      name: 'OpenIMISFeInsuree',
+      fileName: (format) => `index.${format === 'es' ? 'es' : 'cjs'}.js`,
+      formats: ['es', 'cjs'],
+    },
+    rollupOptions: {
+      external: [
+        /^@babel.*/,
+        /^@date-io\/.*/,
+        /^@openimis.*/,
+        'classnames',
+        'clsx',
+        'history',
+        /^lodash.*/,
+        'moment',
+        'prop-types',
+        /^react.*/,
+        /^redux.*/,
+        /^@mui\/material/,
+        /^@mui\/icons-material/,
+        '@mui/x-date-pickers',
+        /^@emotion\/react/,    
+        /^@emotion\/styled/,
+        /^@emotion\/cache/,
+        '@mui/styled-engine',
+      ],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
+    },
+    sourcemap: true,
+    outDir: 'dist',
+    emptyOutDir: false,
+  },
+});
