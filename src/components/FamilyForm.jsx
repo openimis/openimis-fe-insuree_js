@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 
 import {
   formatMessageWithValues,
+  formatMessage,
   withModulesManager,
   withHistory,
   historyPush,
@@ -24,7 +25,8 @@ import { insureeLabel, isValidInsuree } from "../utils/utils";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 import FamilyMasterPanel from "./FamilyMasterPanel";
 import FamilyInsureesOverview from "./FamilyInsureesOverview";
-import { formatMessage } from "@openimis/fe-core";
+import FamilySummaryPanel from "./FamilySummaryPanel";
+
 const ReplayIcon = GetIconComponent("Replay")
 
 const StyledFamilyForm = styled('div')(({ theme }) => ({
@@ -172,6 +174,8 @@ class FamilyForm extends Component {
       add,
       save,
       back,
+      totalPoliciesAmount,
+      totalContributions,
     } = this.props;
     const { family, newFamily, isSaved } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
@@ -200,35 +204,38 @@ class FamilyForm extends Component {
               { label: insureeLabel(this.state.family.headInsuree) },
             )}
           />
-          <ProgressOrError progress={fetchingFamily} error={errorFamily} />
-          {((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
-            <Form
-              module="insuree"
-              title="FamilyOverview.title"
-              titleParams={{ label: insureeLabel(this.state.family.headInsuree) }}
-              edited_id={family_uuid}
-              edited={family}
-              reset={this.state.reset}
-              back={back}
-              add={!!add && !newFamily ? this._add : null}
-              readOnly={readOnly || runningMutation || !!family.validityTo}
-              actions={actions}
-              openFamilyButton={openFamilyButton}
-              overview={overview}
-              HeadPanel={FamilyMasterPanel}
-              Panels={overview ? [FamilyInsureesOverview] : [HeadInsureeMasterPanel]}
-              contributedPanelsKey={
-                overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
-              }
-              family={family}
-              insuree={insuree}
-              onEditedChanged={this.onEditedChanged}
-              canSave={this.canSave}
-              save={!!save ? this._save : null}
-              onActionToConfirm={this.onActionToConfirm}
-              openDirty={save}
-            />
-          )}
+
+        <ProgressOrError progress={fetchingFamily} error={errorFamily} />
+        {((!!fetchedFamily && !!family && family.uuid === family_uuid) || !family_uuid) && (
+          <Form
+            module="insuree"
+            title="FamilyOverview.title"
+            titleParams={{ label: insureeLabel(this.state.family.headInsuree) }}
+            edited_id={family_uuid}
+            edited={family}
+            reset={this.state.reset}
+            back={back}
+            add={!!add && !newFamily ? this._add : null}
+            readOnly={readOnly || runningMutation || !!family.validityTo}
+            actions={actions}
+            openFamilyButton={openFamilyButton}
+            overview={overview}
+            HeadPanel={FamilyMasterPanel}
+            totalPoliciesAmount={totalPoliciesAmount}
+            totalContributions={totalContributions}
+            Panels={overview ? [FamilyInsureesOverview, FamilySummaryPanel] : [HeadInsureeMasterPanel, FamilySummaryPanel]}
+            contributedPanelsKey={
+              overview ? INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY : INSUREE_FAMILY_PANELS_CONTRIBUTION_KEY
+            }
+            family={family}
+            insuree={insuree}
+            onEditedChanged={this.onEditedChanged}
+            canSave={this.canSave}
+            save={!!save ? this._save : null}
+            onActionToConfirm={this.onActionToConfirm}
+            openDirty={save}
+          />
+        )}
         </div>
       </StyledFamilyForm>
     );
@@ -247,6 +254,16 @@ const mapStateToProps = (state, props) => ({
   confirmed: state.core.confirmed,
   state: state,
   isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
+  totalPoliciesAmount: !!state.policy.policy 
+    ? (parseFloat(state.policy.policy.policyValue) || 0)
+    : state.policy?.policies?.reduce(
+        (sum, policy) => sum + (parseFloat(policy.policyValue) || 0), 
+        0
+      ) || 0,
+  totalContributions: state.contribution?.policiesPremiums?.reduce(
+    (sum, contribution) => sum + (parseFloat(contribution.amount) || 0), 
+    0
+  ) || 0,
 });
 
 const mapDispatchToProps = (dispatch) => {
