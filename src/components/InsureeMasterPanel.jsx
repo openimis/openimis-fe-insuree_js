@@ -32,12 +32,12 @@ const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
 class InsureeMasterPanel extends FormPanel {
   constructor(props) {
     super(props);
-    this.isInsureeStatusRequired = props.modulesManager.getConf(
+    this.isInsureeStatusRequired = this.props.modulesManager.getConf(
       "fe-insuree",
       "insureeForm.isInsureeStatusRequired",
       false,
     );
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,

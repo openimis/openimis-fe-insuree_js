@@ -16,13 +16,13 @@ const StyledInsureeOfficer = styled('div')(({ theme }) => ({
 class InsureeOfficer extends Component {
   constructor(props) {
     super(props);
-    this.selectThreshold = props.modulesManager.getConf("fe-insuree", "InsureeOfficer.selectThreshold", 10);
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.selectThreshold = this.props.modulesManager.getConf("fe-insuree", "InsureeOfficer.selectThreshold", 10);
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
-    this.isCurrentAdminEnrollmentOfficerActive = props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", false);
+    this.isCurrentAdminEnrollmentOfficerActive = this.props.modulesManager.getConf("fe-insuree", "isCurrentAdminEnrollmentOfficerActive", false);
     this.currentEO = null;
   }
 

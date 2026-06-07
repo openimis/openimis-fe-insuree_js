@@ -10,7 +10,7 @@ import _ from "lodash";
 class RelationPicker extends Component {
   constructor(props) {
     super(props);
-    this.selectThreshold = props.modulesManager.getConf("fe-insuree", "RelationPicker.selectThreshold", 10);
+    this.selectThreshold = this.props.modulesManager.getConf("fe-insuree", "RelationPicker.selectThreshold", 10);
   }
 
   componentDidMount() {

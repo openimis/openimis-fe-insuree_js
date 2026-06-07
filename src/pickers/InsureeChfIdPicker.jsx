@@ -20,8 +20,8 @@ class InsureeChfIdPicker extends Component {
 
   constructor(props) {
     super(props);
-    this.chfIdMaxLength = props.modulesManager.getConf("fe-insuree", "insureeForm.chfIdMaxLength", 12);
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.chfIdMaxLength = this.props.modulesManager.getConf("fe-insuree", "insureeForm.chfIdMaxLength", 12);
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
