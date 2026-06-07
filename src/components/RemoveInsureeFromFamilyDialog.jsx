@@ -17,8 +17,8 @@ const StyledRemoveInsureeFromFamilyDialog = styled('div')(({ theme }) => ({
 class RemoveInsureeFromFamilyDialog extends Component {
   constructor(props) {
     super(props);
-    this.canCancel = props.modulesManager.getConf("fe-insuree", "canCancelPoliciesOnRemoveInsureeFromFamily", true);
-    this.canKeep = props.modulesManager.getConf("fe-insuree", "canKeepPoliciesOnRemoveInsureeFromFamily", true);
+    this.canCancel = this.props.modulesManager.getConf("fe-insuree", "canCancelPoliciesOnRemoveInsureeFromFamily", true);
+    this.canKeep = this.props.modulesManager.getConf("fe-insuree", "canKeepPoliciesOnRemoveInsureeFromFamily", true);
   }
 
   render() {

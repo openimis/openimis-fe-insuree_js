@@ -36,7 +36,7 @@ const INSUREE_FILTER_CONTRIBUTION_KEY = "insuree.Filter";
 class InsureeFilter extends Component {
   constructor(props) {
     super(props);
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,

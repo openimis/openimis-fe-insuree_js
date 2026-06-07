@@ -44,16 +44,16 @@ class InsureeSearcher extends Component {
 
   constructor(props) {
     super(props);
-    this.rowsPerPageOptions = props.modulesManager.getConf(
+    this.rowsPerPageOptions = this.props.modulesManager.getConf(
       "fe-insuree",
       "insureeFilter.rowsPerPageOptions",
       [10, 20, 50, 100],
     );
-    this.columns = props.modulesManager.getConf("fe-insuree", "columns", {});
-    this.fields = props.modulesManager.getConf("fe-insuree", "fields", {});
-    this.defaultPageSize = props.modulesManager.getConf("fe-insuree", "insureeFilter.defaultPageSize", 10);
+    this.columns = this.props.modulesManager.getConf("fe-insuree", "columns", {});
+    this.fields = this.props.modulesManager.getConf("fe-insuree", "fields", {});
+    this.defaultPageSize = this.props.modulesManager.getConf("fe-insuree", "insureeFilter.defaultPageSize", 10);
     this.locationLevels = this.props.modulesManager.getConf("fe-location", "location.Location.MaxLevels", 4);
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,

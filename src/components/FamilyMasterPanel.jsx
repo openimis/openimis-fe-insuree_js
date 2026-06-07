@@ -33,7 +33,7 @@ const StyledFamilyMasterPanel = styled('div')(({ theme }) => ({
 class FamilyMasterPanel extends FormPanel {
   constructor(props) {
     super(props);
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,

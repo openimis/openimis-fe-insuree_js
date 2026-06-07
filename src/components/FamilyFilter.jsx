@@ -40,9 +40,9 @@ class FamilyFilter extends Component {
 
   constructor(props) {
     super(props);
-    this.columns = props.modulesManager.getConf("fe-insuree", "columns", {});
-    this.filterFamiliesOnMembers = props.modulesManager.getConf("fe-insuree", "filterFamiliesOnMembers", true);
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.columns = this.props.modulesManager.getConf("fe-insuree", "columns", {});
+    this.filterFamiliesOnMembers = this.props.modulesManager.getConf("fe-insuree", "filterFamiliesOnMembers", true);
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
