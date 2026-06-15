@@ -125,8 +125,8 @@ class FamilyMasterPanel extends FormPanel {
       <StyledFamilyMasterPanel>
         <Fragment>
           <Grid container className="tableTitle">
-            <Grid>
-              <Grid container align="center" justify="center" direction="column" className="fullHeight">
+            <Grid size="grow">
+              <Grid container alignItems="center" justifyContent="center" direction="column" className="fullHeight">
                 <Grid>
                   <Typography>
                     <FormattedMessage module="insuree" id="insuree.FamilyDetailPanel.title" />
@@ -135,7 +135,7 @@ class FamilyMasterPanel extends FormPanel {
               </Grid>
             </Grid>
             {!!openFamilyButton && !!overview && !!edited.uuid && (
-              <Grid>
+              <Grid size="auto">
                 <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
                   <IconButton
                     onClick={(e) =>
@@ -215,7 +215,9 @@ class FamilyMasterPanel extends FormPanel {
                 label={formatMessage(intl, "insuree", "Family.poverty")}
               />
             </Grid>
-            <Divider />
+            <Grid size={12}>
+              <Divider />
+            </Grid>
           </Grid>
           <Contributions
             {...this.props}
