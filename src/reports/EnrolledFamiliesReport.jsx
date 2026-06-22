@@ -9,7 +9,8 @@ const EnrolledFamiliesReport = (props) => {
     <Grid container direction="column" spacing={1}>
       <Grid>
         <PublishedComponent
-          pubRef="location.LocationPicker"
+          pubRef="location.LocationCascader"
+          module="location"
           onChange={(location) =>
             setValues({
               ...values,
@@ -18,7 +19,6 @@ const EnrolledFamiliesReport = (props) => {
           }
           required
           value={values.location}
-          locationLevel={2}
         />
       </Grid>
       <Grid>

@@ -10,10 +10,16 @@ import {
   TextInput,
   Contributions,
   withModulesManager,
-  GRID_RESPONSIVE_LARGE,
+  GRID_RESPONSIVE_FULL,
   GRID_RESPONSIVE_SMALL,
-  GRID_RESPONSIVE_STANDARD
+  GRID_RESPONSIVE_STANDARD,
 } from "@openimis/fe-core";
+
+const GRID_INSUREE_FIELD = { xs: 12, sm: 6, lg: 4 };
+const GRID_INSUREE_MAIN = { xs: 12, lg: 8 };
+const GRID_INSUREE_AVATAR = { xs: 12, lg: 4 };
+const GRID_INSUREE_TITLE = { xs: 12, lg: 3 };
+const GRID_INSUREE_ACTIONS = { xs: 12, lg: 9 };
 
 const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
   '& .paper': theme?.paper?.paper ?? {},
@@ -46,7 +52,7 @@ class InsureeMasterPanel extends FormPanel {
 
   renderLastNameField = (edited, readOnly) => {
     return (
-      <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+      <Grid size={GRID_INSUREE_FIELD} className="item">
         <TextInput
           module="insuree"
           label="Insuree.lastName"
@@ -60,7 +66,7 @@ class InsureeMasterPanel extends FormPanel {
   };
 
   renderGivenNameField = (edited, readOnly) => (
-    <Grid xsize={GRID_RESPONSIVE_STANDARD} className="item">
+    <Grid size={GRID_INSUREE_FIELD} className="item">
       <TextInput
         module="insuree"
         label="Insuree.otherNames"
@@ -89,12 +95,12 @@ class InsureeMasterPanel extends FormPanel {
           <Grid size={12}>
             <Paper className="paper">
               <Grid container className="tableTitle">
-                <Grid size={GRID_RESPONSIVE_SMALL} container alignItems="center" className="item">
+                <Grid size={GRID_INSUREE_TITLE} container alignItems="center" className="item">
                   <Typography variant="h5">
                     <FormattedMessage module="insuree" id={title} values={titleParams} />
                   </Typography>
                 </Grid>
-                <Grid size={GRID_RESPONSIVE_LARGE}>
+                <Grid size={GRID_INSUREE_ACTIONS}>
                   <Grid container justify="flex-end">
                     {!!edited &&
                       !!edited.family &&
@@ -124,7 +130,7 @@ class InsureeMasterPanel extends FormPanel {
               </Grid>
               <Divider />
               <Grid container className="item">
-                <Grid xsize={GRID_RESPONSIVE_STANDARD} className="item">
+                <Grid size={GRID_INSUREE_FIELD} className="item">
                   <PublishedComponent
                     pubRef="insuree.InsureeNumberInput"
                     module="insuree"
@@ -147,7 +153,7 @@ class InsureeMasterPanel extends FormPanel {
                     {this.renderLastNameField(edited, readOnly)}
                   </>
                 )}
-                <Grid size={GRID_RESPONSIVE_LARGE}>
+                <Grid size={GRID_INSUREE_MAIN}>
                   <Grid container>
                     <Grid size={GRID_RESPONSIVE_SMALL} className="item">
                       <PublishedComponent
@@ -195,7 +201,7 @@ class InsureeMasterPanel extends FormPanel {
                         label={formatMessage(intl, "insuree", "Insuree.cardIssued")}
                       />
                     </Grid>
-                    <Grid size={GRID_RESPONSIVE_LARGE}>
+                    <Grid size={GRID_RESPONSIVE_FULL}>
                       <PublishedComponent
                         pubRef="insuree.InsureeAddress"
                         value={edited}
@@ -304,7 +310,7 @@ class InsureeMasterPanel extends FormPanel {
                     )}
                   </Grid>
                 </Grid>
-                <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                <Grid size={GRID_INSUREE_AVATAR} className="item">
                   <PublishedComponent
                     pubRef="insuree.Avatar"
                     photo={!!edited ? edited.photo : null}
