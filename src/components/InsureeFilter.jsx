@@ -18,6 +18,7 @@ import {
   GRID_RESPONSIVE_HALF,
 } from "@openimis/fe-core";
 import { DEFAULT, WITHOUT_STR } from "../constants";
+import { buildParentLocationFilters } from "../utils/utils";
 
 const StyledInsureeFilter = styled("div")(({ theme }) => ({
   "& .dialogTitle": theme?.dialog?.title ?? {},
@@ -41,6 +42,7 @@ class InsureeFilter extends Component {
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
     );
+    this.locationTypesCount = props.modulesManager.getConf("fe-location", "Location.types", ["R", "D", "W", "V"]).length;
   }
   debouncedOnChangeFilter = _debounce(
     this.props.onChangeFilters,
@@ -135,13 +137,12 @@ class InsureeFilter extends Component {
             field={
               <Grid size={GRID_RESPONSIVE_FULL}>
                 <PublishedComponent
-                  pubRef="location.DetailedLocationFilter"
-                  withNull={true}
-                  filters={filters}
-                  onChangeFilters={onChangeFilters}
-                  anchor="parentLocation"
-                  reset={this.props.reset}
-                  split
+                  pubRef="location.LocationCascader"
+                  module="location"
+                  value={this._filterValue("parentLocation")}
+                  onChange={(v) =>
+                    onChangeFilters(buildParentLocationFilters(v, "parentLocation", this.locationTypesCount))
+                  }
                 />
               </Grid>
             }
