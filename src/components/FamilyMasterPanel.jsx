@@ -22,7 +22,7 @@ import {
 } from "@openimis/fe-core";
 
 const GRID_FAMILY_ADDRESS = { xs: 12, sm: 12, md: 8, lg: 5 };
-const GRID_FAMILY_POVERTY = { xs: 12, sm: 6, md: 4, lg: 1 };
+const GRID_FAMILY_POVERTY = { xs: 12, sm: 6, md: 4, lg: 5 };
 import { DEFAULT } from "../constants";
 const PeopleIcon = GetIconComponent("People")
 
@@ -158,7 +158,7 @@ class FamilyMasterPanel extends FormPanel {
           </Grid>
           <Divider />
           <Grid container className="item">
-            <Grid size={GRID_RESPONSIVE_FULL} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <PublishedComponent
                 pubRef="location.LocationCascader"
                 module="location"
