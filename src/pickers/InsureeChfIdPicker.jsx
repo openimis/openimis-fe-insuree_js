@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { Grid } from "@mui/material";
-import { withModulesManager, TextInput, ProgressOrError, formatMessage } from "@openimis/fe-core";
+import { withModulesManager, TextInput, ProgressOrError, formatMessage, GRID_RESPONSIVE_HALF } from "@openimis/fe-core";
 
 import { fetchInsuree } from "../actions";
 import isEqual from "lodash/isEqual";
@@ -82,8 +82,8 @@ class InsureeChfIdPicker extends Component {
   render() {
     const { readOnly = false, required = false } = this.props;
     return (
-      <Grid container>
-        <Grid size={4}>
+      <Grid container spacing={2}>
+        <Grid size={GRID_RESPONSIVE_HALF}>
           <TextInput
             readOnly={readOnly}
             autoFocus={true}
@@ -97,7 +97,7 @@ class InsureeChfIdPicker extends Component {
             required={required}
           />
         </Grid>
-        <Grid size={8}>
+        <Grid size={GRID_RESPONSIVE_HALF}>
           <ProgressOrError progress={this.props.fetching} error={this.props.error} />
           {!this.props.fetching && (
             <TextInput
