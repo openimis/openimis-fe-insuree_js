@@ -135,7 +135,7 @@ class InsureeFilter extends Component {
             module="insuree"
             id="InsureeFilter.location"
             field={
-              <Grid size={GRID_RESPONSIVE_FULL}>
+              <Grid size={GRID_RESPONSIVE_STANDARD}>
                 <PublishedComponent
                   pubRef="location.LocationCascader"
                   module="location"
