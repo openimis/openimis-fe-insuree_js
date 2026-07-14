@@ -10,10 +10,16 @@ import {
   TextInput,
   Contributions,
   withModulesManager,
-  GRID_RESPONSIVE_LARGE,
+  GRID_RESPONSIVE_FULL,
   GRID_RESPONSIVE_SMALL,
-  GRID_RESPONSIVE_STANDARD
+  GRID_RESPONSIVE_STANDARD,
 } from "@openimis/fe-core";
+
+const GRID_INSUREE_FIELD = { xs: 12, sm: 6, lg: 4 };
+const GRID_INSUREE_MAIN = { xs: 12, lg: 8 };
+const GRID_INSUREE_AVATAR = { xs: 12, lg: 4 };
+const GRID_INSUREE_TITLE = { xs: 12, lg: 3 };
+const GRID_INSUREE_ACTIONS = { xs: 12, lg: 9 };
 
 const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
   '& .paper': theme?.paper?.paper ?? {},
@@ -38,12 +44,12 @@ const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
 class InsureeMasterPanel extends FormPanel {
   constructor(props) {
     super(props);
-    this.isInsureeStatusRequired = props.modulesManager.getConf(
+    this.isInsureeStatusRequired = this.props.modulesManager.getConf(
       "fe-insuree",
       "insureeForm.isInsureeStatusRequired",
       false,
     );
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
@@ -95,12 +101,12 @@ class InsureeMasterPanel extends FormPanel {
           <Grid size={12}>
             <Paper className="paper">
               <Grid container className="tableTitle">
-                <Grid size={GRID_RESPONSIVE_SMALL} container alignItems="center" className="item">
+                <Grid size={GRID_INSUREE_TITLE} container alignItems="center" className="item">
                   <Typography variant="h5">
                     <FormattedMessage module="insuree" id={title} values={titleParams} />
                   </Typography>
                 </Grid>
-                <Grid size={GRID_RESPONSIVE_LARGE}>
+                <Grid size={GRID_INSUREE_ACTIONS}>
                   <Grid container justify="flex-end">
                     {!!edited &&
                       !!edited.family &&

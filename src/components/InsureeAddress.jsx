@@ -34,13 +34,12 @@ const InsureeAddress = ({ onChangeLocation, onChangeAddress, readOnly, value }) 
           />
           {!location && (
             <PublishedComponent
-              pubRef="location.DetailedLocation"
-              withNull={true}
+              pubRef="location.LocationCascader"
+              module="location"
+              required
               value={value?.currentVillage ?? null}
-              split={true}
               readOnly={readOnly}
               onChange={onChangeLocation}
-              filterLabels={false}
             />
           )}
         </Grid>

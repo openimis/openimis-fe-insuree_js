@@ -16,7 +16,13 @@ import {
   FormPanel,
   Contributions,
   GetIconComponent,
+  GRID_RESPONSIVE_FULL,
+  GRID_RESPONSIVE_SMALL,
+  GRID_RESPONSIVE_STANDARD,
 } from "@openimis/fe-core";
+
+const GRID_FAMILY_ADDRESS = { xs: 12, sm: 12, md: 8, lg: 5 };
+const GRID_FAMILY_POVERTY = { xs: 12, sm: 6, md: 4, lg: 5 };
 import { DEFAULT } from "../constants";
 const PeopleIcon = GetIconComponent("People")
 
@@ -33,7 +39,7 @@ const StyledFamilyMasterPanel = styled('div')(({ theme }) => ({
 class FamilyMasterPanel extends FormPanel {
   constructor(props) {
     super(props);
-    this.renderLastNameFirst = props.modulesManager.getConf(
+    this.renderLastNameFirst = this.props.modulesManager.getConf(
       "fe-insuree",
       "renderLastNameFirst",
       DEFAULT.RENDER_LAST_NAME_FIRST,
@@ -42,7 +48,7 @@ class FamilyMasterPanel extends FormPanel {
 
   renderLastNameField = (edited) => {
     return (
-      <Grid size={3} className="item">
+      <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
         <TextInput
           module="insuree"
           label="Family.headInsuree.lastName"
@@ -54,7 +60,7 @@ class FamilyMasterPanel extends FormPanel {
   };
 
   renderGivenNameField = (edited) => (
-    <Grid size={3} className="item">
+    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
       <TextInput
         module="insuree"
         label="Family.headInsuree.otherNames"
@@ -68,7 +74,7 @@ class FamilyMasterPanel extends FormPanel {
     const { edited } = this.props;
     return (
       <Fragment>
-        <Grid size={3} className="item">
+        <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
           <TextInput
             module="insuree"
             label="Family.headInsuree.chfId"
@@ -87,7 +93,7 @@ class FamilyMasterPanel extends FormPanel {
             {this.renderLastNameField(edited)}
           </>
         )}
-        <Grid size={2} className="item">
+        <Grid size={GRID_RESPONSIVE_SMALL} className="item">
           <PublishedComponent
             pubRef="core.DatePicker"
             value={!edited || !edited.headInsuree ? null : edited.headInsuree.dob}
@@ -96,7 +102,7 @@ class FamilyMasterPanel extends FormPanel {
             readOnly={true}
           />
         </Grid>
-        <Grid size={2} className="item">
+        <Grid size={GRID_RESPONSIVE_SMALL} className="item">
           <PublishedComponent
             pubRef="insuree.InsureeGenderPicker"
             value={!edited || !edited.headInsuree || !edited.headInsuree.gender ? null : edited.headInsuree.gender.code}
@@ -152,19 +158,18 @@ class FamilyMasterPanel extends FormPanel {
           </Grid>
           <Divider />
           <Grid container className="item">
-            <Grid size={12}>
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <PublishedComponent
-                pubRef="location.DetailedLocation"
-                withNull={true}
+                pubRef="location.LocationCascader"
+                module="location"
                 readOnly={readOnly}
                 required
                 value={!edited ? null : (edited.location ?? null)}
                 onChange={(v) => this.updateAttribute("location", v)}
-                filterLabels={false}
               />
             </Grid>
             {!!overview && this.headSummary()}
-            <Grid size={3} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <PublishedComponent
                 pubRef="insuree.FamilyTypePicker"
                 withNull={false}
@@ -173,7 +178,7 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("familyType", { code: v })}
               />
             </Grid>
-            <Grid size={3} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <PublishedComponent
                 pubRef="insuree.ConfirmationTypePicker"
                 withNull={false}
@@ -182,7 +187,7 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("confirmationType", v)}
               />
             </Grid>
-            <Grid size={3} className="item">
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <TextInput
                 module="insuree"
                 label="Family.confirmationNo"
@@ -192,7 +197,7 @@ class FamilyMasterPanel extends FormPanel {
                 required={edited?.confirmationType?.isConfirmationNumberRequired ?? false}
               />
             </Grid>
-            <Grid size={5} className="item">
+            <Grid size={GRID_FAMILY_ADDRESS} className="item">
               <TextInput
                 module="insuree"
                 label="Family.address"
@@ -202,7 +207,7 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("address", v)}
               />
             </Grid>
-            <Grid size={1} className="item">
+            <Grid size={GRID_FAMILY_POVERTY} className="item">
               <FormControlLabel
                 control={
                   <Checkbox

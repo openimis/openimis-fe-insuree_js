@@ -17,8 +17,8 @@ import { familyLabel, insureeLabel } from "../utils/utils";
 class ChangeInsureeFamilyDialog extends Component {
   constructor(props) {
     super(props);
-    this.canCancel = props.modulesManager.getConf("fe-insuree", "canCancelPoliciesOnChangeInsureeFamily", true);
-    this.canKeep = props.modulesManager.getConf("fe-insuree", "canKeepPoliciesOnChangeInsureeFamily", true);
+    this.canCancel = this.props.modulesManager.getConf("fe-insuree", "canCancelPoliciesOnChangeInsureeFamily", true);
+    this.canKeep = this.props.modulesManager.getConf("fe-insuree", "canKeepPoliciesOnChangeInsureeFamily", true);
   }
 
   render() {
