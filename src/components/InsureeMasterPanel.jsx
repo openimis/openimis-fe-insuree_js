@@ -12,8 +12,7 @@ import {
   withModulesManager,
   GRID_RESPONSIVE_FULL,
   GRID_RESPONSIVE_SMALL,
-  GRID_RESPONSIVE_STANDARD,
-  GRID_RESPONSIVE_FULL,
+  GRID_RESPONSIVE_STANDARD
 } from "@openimis/fe-core";
 import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
 
