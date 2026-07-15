@@ -331,7 +331,7 @@ class FamilyFilter extends Component {
             module="insuree"
             id="FamilyFilter.location"
             field={
-              <Grid size={GRID_RESPONSIVE_FULL}>
+              <Grid size={GRID_RESPONSIVE_STANDARD}>
                 <PublishedComponent
                   pubRef="location.LocationCascader"
                   module="location"
