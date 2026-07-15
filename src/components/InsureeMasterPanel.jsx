@@ -12,8 +12,9 @@ import {
   withModulesManager,
   GRID_RESPONSIVE_FULL,
   GRID_RESPONSIVE_SMALL,
-  GRID_RESPONSIVE_STANDARD,
+  GRID_RESPONSIVE_STANDARD
 } from "@openimis/fe-core";
+import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
 
 const GRID_INSUREE_FIELD = { xs: 12, sm: 6, lg: 4 };
 const GRID_INSUREE_MAIN = { xs: 12, lg: 8 };
@@ -35,8 +36,6 @@ const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
     height: "100%",
   },
 }));
-
-import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
@@ -106,8 +105,8 @@ class InsureeMasterPanel extends FormPanel {
                     <FormattedMessage module="insuree" id={title} values={titleParams} />
                   </Typography>
                 </Grid>
-                <Grid size={GRID_INSUREE_ACTIONS}>
-                  <Grid container justify="flex-end">
+                <Grid size={GRID_RESPONSIVE_LARGE}>
+                  <Grid container justifyContent="flex-end">
                     {!!edited &&
                       !!edited.family &&
                       !!edited.family.headInsuree &&
@@ -315,6 +314,16 @@ class InsureeMasterPanel extends FormPanel {
                       </Grid>
                     )}
                   </Grid>
+                )}
+                <Grid size={GRID_RESPONSIVE_FULL} className="item">
+                  <PublishedComponent
+                    pubRef="insuree.InsureeAddress"
+                    value={edited}
+                    module="insuree"
+                    readOnly={readOnly}
+                    onChangeLocation={(v) => this.updateAttribute("currentVillage", v)}
+                    onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12, md: 4 }} className="item avatarColumn">
                   <PublishedComponent
