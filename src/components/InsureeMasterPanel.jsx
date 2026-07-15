@@ -314,7 +314,7 @@ class InsureeMasterPanel extends FormPanel {
                       </Grid>
                     )}
                   </Grid>
-                )}
+                </Grid> 
                 <Grid size={GRID_RESPONSIVE_FULL} className="item">
                   <PublishedComponent
                     pubRef="insuree.InsureeAddress"
