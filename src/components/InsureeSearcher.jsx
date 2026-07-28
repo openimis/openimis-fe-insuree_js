@@ -3,11 +3,12 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Grid, Button, Tooltip } from "@mui/material";
-import { GetIconComponent } from "@openimis/fe-core";
+import { GetIconComponent, ActionMenu } from "@openimis/fe-core";
 const SearchIcon = GetIconComponent("Search")
 const PeopleIcon = GetIconComponent("People")
 const TabIcon = GetIconComponent("Tab")
 const DeleteIcon = GetIconComponent("Delete")
+const MoreVertIcon = GetIconComponent("MoreVert")
 
 import _ from "lodash";
 import {
@@ -40,6 +41,8 @@ class InsureeSearcher extends Component {
     failedExport: false,
     searchInitiated: false,
     initialFitlers: this.props.defaultFilters,
+    anchorEl: null,
+    selectedInsuree: null,
   };
 
   constructor(props) {
@@ -131,7 +134,7 @@ class InsureeSearcher extends Component {
     var h = [
       "insuree.insureeSummaries.insuranceNo",
       "insuree.insureeSummaries.name",
-      !!this.columns.maritalStatus && this.columns.maritalStatus !== "H" ? "insuree.insureeSummaries.maritalStatus": null,
+      !!this.columns.maritalStatus && this.columns.maritalStatus !== "H" ? "insuree.insureeSummaries.maritalStatus" : null,
       "insuree.insureeSummaries.gender",
       !!this.columns.email && this.columns.email !== "H" ? "insuree.insureeSummaries.email" : null,
       !!this.columns.email && this.columns.email !== "H" ? "insuree.insureeSummaries.phone" : null,
@@ -199,8 +202,22 @@ class InsureeSearcher extends Component {
     this.setState({ confirmedAction }, confirm);
   };
 
-  renderInsureeName = (insuree) => 
-    this.renderLastNameFirst ? insuree.lastName + " " + insuree.otherNames : insuree.otherNames + " " + insuree.lastName
+  renderInsureeName = (insuree) =>
+    this.renderLastNameFirst ? insuree.lastName + " " + insuree.otherNames : insuree.otherNames + " " + insuree.lastName;
+
+  handleMenuOpen = (event, insuree) => {
+    this.setState({
+      anchorEl: event.currentTarget,
+      selectedInsuree: insuree,
+    });
+  };
+
+  handleMenuClose = () => {
+    this.setState({
+      anchorEl: null,
+      selectedInsuree: null,
+    });
+  };
 
   itemFormatters = (filters) => {
     var formatters = [
@@ -212,19 +229,19 @@ class InsureeSearcher extends Component {
         `InsureeMaritalStatus.${insuree?.marital == null || insuree.marital === "0"
           ? INSUREE_MARITAL_STATUS[0]
           : insuree.marital}`
-      ): null,
+      ) : null,
       (insuree) => formatMessage(this.props.intl, "insuree", `InsureeGender.${insuree?.gender?.code}`),
       !!this.columns.email && this.columns.email !== "H" ? (insuree) => insuree.email : null,
       !!this.columns.phone && this.columns.phone !== "H" ? (insuree) => insuree.phone : null,
       (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
     ];
-      for (var i = 0; i < this.locationLevels; i++) {
-        // need a fixed variable to refer to as parentLocation argument
-        let j = i + 0;
-        formatters.push((insuree) =>
-          this.parentLocation(insuree.currentVillage || (!!insuree.family && insuree.family.location), j),
-        );
-      }
+    for (var i = 0; i < this.locationLevels; i++) {
+      // need a fixed variable to refer to as parentLocation argument
+      let j = i + 0;
+      formatters.push((insuree) =>
+        this.parentLocation(insuree.currentVillage || (!!insuree.family && insuree.family.location), j),
+      );
+    }
     formatters.push(
       filters?.showHistory?.value
         ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityFrom)
@@ -233,59 +250,62 @@ class InsureeSearcher extends Component {
         ? (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.validityTo)
         : null,
       (insuree) => (
-        <Grid container wrap="nowrap" spacing="2">
-            <Grid>
-              <Button
-                startIcon={<SearchIcon />}
-                size="small"
-                onClick={(e) => !insuree.clientMutationId && this.setState({ open: true, chfid: insuree.chfId })}
-              >
-                {formatMessage(this.props.intl, "insuree", "insureeSummaries.openInsureeButton.buttonText")}
-              </Button>
-            </Grid>
-          {insuree.family && (
-            <Grid>
-              <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
-                <Button
-                  startIcon={<PeopleIcon />}
-                  size="small"
-                  onClick={(e) =>
-                    !insuree.clientMutationId &&
-                    historyPush(this.props.modulesManager, this.props.history, "insuree.route.familyOverview", [
-                      insuree.family.uuid,
-                    ])
-                  }
-                >
-                  {formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.buttonText")}
-                </Button>
-              </Tooltip>
-            </Grid>
-          )}
-          <Grid>
-            <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openNewTabButton.tooltip")}>
-              <Button
-                startIcon={<TabIcon />}
-                size="small"
-                onClick={(e) => !insuree.clientMutationId && this.props.onDoubleClick(insuree, true)}
-              >
-                {formatMessage(this.props.intl, "insuree", "insureeSummaries.openNewTabButton.buttonText")}
-              </Button>
-            </Tooltip>
-          </Grid>
-          {this.props.rights.includes(RIGHT_INSUREE_DELETE) && !insuree.validityTo && (
-            <Grid>
-              <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.deleteInsuree.tooltip")}>
-                <Button
-                  startIcon={<DeleteIcon />}
-                  size="small"
-                  onClick={(e) => !insuree.clientMutationId && this.confirmDelete(insuree)}
-                >
-                  {formatMessage(this.props.intl, "insuree", "deleteInsuree.textButton")}
-                </Button>
-              </Tooltip>
-            </Grid>
-          )}
-        </Grid>
+        <ActionMenu
+          actions={[
+            {
+              icon: <SearchIcon fontSize="small" />,
+              label: formatMessage(
+                this.props.intl,
+                "insuree",
+                "insureeSummaries.openInsureeButton.buttonText"
+              ),
+              onClick: () =>
+                this.setState({
+                  open: true,
+                  chfid: insuree.chfId,
+                }),
+            },
+
+            insuree.family && {
+              icon: <PeopleIcon fontSize="small" />,
+              label: formatMessage(
+                this.props.intl,
+                "insuree",
+                "insureeSummaries.openFamilyButton.buttonText"
+              ),
+              onClick: () =>
+                historyPush(
+                  this.props.modulesManager,
+                  this.props.history,
+                  "insuree.route.familyOverview",
+                  [insuree.family.uuid]
+                ),
+            },
+
+            {
+              icon: <TabIcon fontSize="small" />,
+              label: formatMessage(
+                this.props.intl,
+                "insuree",
+                "insureeSummaries.openNewTabButton.buttonText"
+              ),
+              onClick: () => this.props.onDoubleClick(insuree, true),
+            },
+
+            this.props.rights.includes(RIGHT_INSUREE_DELETE) &&
+            !insuree.validityTo && {
+              divider: true,
+              icon: <DeleteIcon fontSize="small" color="error" />,
+              label: formatMessage(
+                this.props.intl,
+                "insuree",
+                "deleteInsuree.textButton"
+              ),
+              color: "error.main",
+              onClick: () => this.confirmDelete(insuree),
+            },
+          ].filter(Boolean)}
+        />
       ),
     );
     return formatters.filter(Boolean);
@@ -333,7 +353,7 @@ class InsureeSearcher extends Component {
           tableTitle={formatMessageWithValues(intl, "insuree", "insureeSummaries", { count })}
           rowsPerPageOptions={this.rowsPerPageOptions}
           defaultPageSize={this.defaultPageSize}
-          fetch={this.isDefaultFetchInsureeActivated == false  && searchInitiated ? this.fetch : this.isDefaultFetchInsureeActivated == true ? this.fetch : () => {}}
+          fetch={this.isDefaultFetchInsureeActivated == false && searchInitiated ? this.fetch : this.isDefaultFetchInsureeActivated == true ? this.fetch : () => { }}
           rowIdentifier={this.rowIdentifier}
           rowSecondaryHighlighted={this.rowSecondaryHighlighted}
           filtersToQueryParams={this.filtersToQueryParams}
