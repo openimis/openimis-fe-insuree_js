@@ -133,7 +133,8 @@ class InsureeSearcher extends Component {
   headers = (filters) => {
     var h = [
       "insuree.insureeSummaries.insuranceNo",
-      "insuree.insureeSummaries.name",
+      this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
+      !this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",,
       !!this.columns.maritalStatus && this.columns.maritalStatus !== "H" ? "insuree.insureeSummaries.maritalStatus" : null,
       "insuree.insureeSummaries.gender",
       !!this.columns.email && this.columns.email !== "H" ? "insuree.insureeSummaries.email" : null,
@@ -202,9 +203,6 @@ class InsureeSearcher extends Component {
     this.setState({ confirmedAction }, confirm);
   };
 
-  renderInsureeName = (insuree) =>
-    this.renderLastNameFirst ? insuree.lastName + " " + insuree.otherNames : insuree.otherNames + " " + insuree.lastName;
-
   handleMenuOpen = (event, insuree) => {
     this.setState({
       anchorEl: event.currentTarget,
@@ -222,7 +220,8 @@ class InsureeSearcher extends Component {
   itemFormatters = (filters) => {
     var formatters = [
       (insuree) => insuree.chfId,
-      (insuree) => this.renderInsureeName(insuree),
+      (insuree) => (this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
+      (insuree) => (!this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
       !!this.columns.maritalStatus && this.columns.maritalStatus !== "H" ? (insuree) => formatMessage(
         this.props.intl,
         "insuree",
