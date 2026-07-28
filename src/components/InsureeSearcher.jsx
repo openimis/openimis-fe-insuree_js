@@ -130,12 +130,11 @@ class InsureeSearcher extends Component {
   headers = (filters) => {
     var h = [
       "insuree.insureeSummaries.insuranceNo",
-      this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
-      !this.renderLastNameFirst ? "insuree.insureeSummaries.lastName" : "insuree.insureeSummaries.otherNames",
-      "insuree.insureeSummaries.maritalStatus",
+      "insuree.insureeSummaries.name",
+      !!this.columns.maritalStatus && this.columns.maritalStatus !== "H" ? "insuree.insureeSummaries.maritalStatus": null,
       "insuree.insureeSummaries.gender",
-      this.columns.email !== "H" ? "insuree.insureeSummaries.email" : null,
-      "insuree.insureeSummaries.phone",
+      !!this.columns.email && this.columns.email !== "H" ? "insuree.insureeSummaries.email" : null,
+      !!this.columns.email && this.columns.email !== "H" ? "insuree.insureeSummaries.phone" : null,
       "insuree.insureeSummaries.dob",
       ...Array.from(Array(this.locationLevels)).map((_, i) => (`location.locationType.${i}`)),
       filters?.showHistory?.value ? "insuree.insureeSummaries.validityFrom" : null,
@@ -200,21 +199,23 @@ class InsureeSearcher extends Component {
     this.setState({ confirmedAction }, confirm);
   };
 
+  renderInsureeName = (insuree) => 
+    this.renderLastNameFirst ? insuree.lastName + " " + insuree.otherNames : insuree.otherNames + " " + insuree.lastName
+
   itemFormatters = (filters) => {
     var formatters = [
       (insuree) => insuree.chfId,
-      (insuree) => (this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
-      (insuree) => (!this.renderLastNameFirst ? insuree.lastName : insuree.otherNames) || "",
-      (insuree) => formatMessage(
+      (insuree) => this.renderInsureeName(insuree),
+      !!this.columns.maritalStatus && this.columns.maritalStatus !== "H" ? (insuree) => formatMessage(
         this.props.intl,
         "insuree",
         `InsureeMaritalStatus.${insuree?.marital == null || insuree.marital === "0"
           ? INSUREE_MARITAL_STATUS[0]
           : insuree.marital}`
-      ),
+      ): null,
       (insuree) => formatMessage(this.props.intl, "insuree", `InsureeGender.${insuree?.gender?.code}`),
-      this.columns.email !== "H" ? (insuree) => insuree.email : null,
-      (insuree) => insuree.phone,
+      !!this.columns.email && this.columns.email !== "H" ? (insuree) => insuree.email : null,
+      !!this.columns.phone && this.columns.phone !== "H" ? (insuree) => insuree.phone : null,
       (insuree) => formatDateFromISO(this.props.modulesManager, this.props.intl, insuree.dob),
     ];
       for (var i = 0; i < this.locationLevels; i++) {
