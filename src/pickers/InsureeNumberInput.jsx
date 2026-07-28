@@ -38,6 +38,7 @@ const InsureeNumberInput = (props) => {
       isValid={isInsureeNumberValid}
       isValidating={isInsureeNumberValidating}
       validationError={insureeNumberValidationError}
+      showValidationErrorAsHelperText
       action={insureeNumberValidationCheck}
       clearAction={insureeNumberValidationClear}
       setValidAction={insureeNumberSetValid}
