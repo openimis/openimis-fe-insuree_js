@@ -203,20 +203,6 @@ class InsureeSearcher extends Component {
     this.setState({ confirmedAction }, confirm);
   };
 
-  handleMenuOpen = (event, insuree) => {
-    this.setState({
-      anchorEl: event.currentTarget,
-      selectedInsuree: insuree,
-    });
-  };
-
-  handleMenuClose = () => {
-    this.setState({
-      anchorEl: null,
-      selectedInsuree: null,
-    });
-  };
-
   itemFormatters = (filters) => {
     var formatters = [
       (insuree) => insuree.chfId,
