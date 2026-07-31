@@ -2,12 +2,6 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { GetIconComponent, ActionMenu } from "@openimis/fe-core";
-const SearchIcon = GetIconComponent("Search")
-const PeopleIcon = GetIconComponent("People")
-const TabIcon = GetIconComponent("Tab")
-const DeleteIcon = GetIconComponent("Delete")
-const MoreVertIcon = GetIconComponent("MoreVert")
 
 import _ from "lodash";
 import {
@@ -21,7 +15,14 @@ import {
   journalize,
   Searcher,
   PublishedComponent,
+  GetIconComponent,
+  ActionMenu
 } from "@openimis/fe-core";
+const SearchIcon = GetIconComponent("Search")
+const PeopleIcon = GetIconComponent("People")
+const TabIcon = GetIconComponent("Tab")
+const DeleteIcon = GetIconComponent("Delete")
+const MoreVertIcon = GetIconComponent("MoreVert")
 import EnquiryDialog from "./EnquiryDialog";
 import { RIGHT_INSUREE_DELETE, INSUREE_MARITAL_STATUS, DEFAULT } from "../constants";
 import { fetchInsureeSummaries, deleteInsuree } from "../actions";
