@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { Grid, Button, Tooltip } from "@mui/material";
 import { GetIconComponent, ActionMenu } from "@openimis/fe-core";
 const SearchIcon = GetIconComponent("Search")
 const PeopleIcon = GetIconComponent("People")
