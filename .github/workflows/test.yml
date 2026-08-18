@@ -1,0 +1,11 @@
+name: Run Module Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  run-tests:
+    uses: openimis/openimis-fe_js/.github/workflows/module-unit-tests.yml@develop
+    with:
+      module-path: .

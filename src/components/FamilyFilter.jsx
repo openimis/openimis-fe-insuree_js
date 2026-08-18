@@ -7,7 +7,6 @@ import { styled } from "@mui/material/styles";
 import {
   GRID_RESPONSIVE_STANDARD,
   GRID_RESPONSIVE_SMALL,
-  GRID_RESPONSIVE_FULL,
   GRID_RESPONSIVE_HALF,
 } from "@openimis/fe-core";
 
