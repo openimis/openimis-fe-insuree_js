@@ -307,6 +307,7 @@
   "familySummaries.deleteFamily.buttonText": "Delete",
   "resetFilters.buttonText": "Reset",
   "familySelectExistingInsureeAsHead.buttonText": "Select existing",
+  "insuree.insureeSummaries.name": "Name"
   "insuree.Insuree.identity": "Identity",
   "insuree.Insuree.household": "Household",
   "insuree.Insuree.additionnalInfos": "Additionnal Informations"
