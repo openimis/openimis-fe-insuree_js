@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { styled } from "@mui/material/styles";
 import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
 import FamilyForm from "../components/FamilyForm";
-import { createFamily, updateFamily, clearInsuree } from "../actions";
+import { createFamily, updateFamily, clearInsuree, fetchParentFamily } from "../actions";
 import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants";
 import { familyLabel } from "../utils/utils";
 
@@ -18,10 +18,16 @@ class FamilyPage extends Component {
     historyPush(this.props.modulesManager, this.props.history, "insuree.route.family");
   };
 
-  save = (family) => {
+  save = async (family) => {
+    const { modulesManager, parent_uuid } = this.props;
     if (!family.uuid) {
+      if (!!parent_uuid && !family.parentFamily) {
+        const response = await this.props.fetchParentFamily(modulesManager, parent_uuid);
+        const parentFamily = response?.payload?.data?.families?.edges?.[0]?.node;
+        family.parentFamily = parentFamily?.id || null;
+      }
       this.props.createFamily(
-        this.props.modulesManager,
+        modulesManager,
         family,
         formatMessageWithValues(this.props.intl, "insuree", "CreateFamily.mutationLabel", {
           label: familyLabel(family),
@@ -29,7 +35,7 @@ class FamilyPage extends Component {
       );
     } else {
       this.props.updateFamily(
-        this.props.modulesManager,
+        modulesManager,
         family,
         formatMessageWithValues(this.props.intl, "insuree", "UpdateFamily.mutationLabel", {
           label: familyLabel(family),
@@ -43,19 +49,30 @@ class FamilyPage extends Component {
   };
 
   render() {
-    const { modulesManager, history, rights, family_uuid, overview } = this.props;
+    const { modulesManager, history, rights, family_uuid, overview, parent_uuid } = this.props;
     if (!rights.includes(RIGHT_FAMILY)) return null;
+
+    const handleBack = () => {
+      if (parent_uuid) {
+        historyPush(modulesManager, history, "insuree.route.familyOverview", [parent_uuid]);
+      } else {
+        historyPush(modulesManager, history, "insuree.route.families");
+      }
+    };
 
     return (
       <StyledFamilyPage>
-        <FamilyForm
-          overview={overview}
-          family_uuid={family_uuid}
-          back={(e) => historyPush(modulesManager, history, "insuree.route.families")}
-          add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
-          save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
-          readOnly={!rights.includes(RIGHT_FAMILY_EDIT) || !rights.includes(RIGHT_FAMILY_ADD)}
-        />
+        <div className="page">
+          <FamilyForm
+            overview={overview}
+            family_uuid={family_uuid}
+            parent_uuid={parent_uuid}
+            back={handleBack}
+            add={rights.includes(RIGHT_FAMILY_ADD) ? this.add : null}
+            save={rights.includes(RIGHT_FAMILY_EDIT) ? this.save : null}
+            readOnly={!rights.includes(RIGHT_FAMILY_EDIT) || !rights.includes(RIGHT_FAMILY_ADD)}
+          />
+        </div>
       </StyledFamilyPage>
     );
   }
@@ -64,10 +81,11 @@ class FamilyPage extends Component {
 const mapStateToProps = (state, props) => ({
   rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
   family_uuid: props.match.params.family_uuid,
+  parent_uuid: props.match.params.parent_uuid
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ createFamily, updateFamily, clearInsuree }, dispatch);
+  return bindActionCreators({ createFamily, updateFamily, clearInsuree, fetchParentFamily }, dispatch);
 };
 
 export { StyledFamilyPage };

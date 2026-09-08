@@ -16,9 +16,15 @@ import {
   FormPanel,
   Contributions,
   GetIconComponent,
+  GRID_RESPONSIVE_SMALL,
+  GRID_RESPONSIVE_STANDARD,
 } from "@openimis/fe-core";
+
+const GRID_FAMILY_ADDRESS = { xs: 12, sm: 12, md: 8, lg: 5 };
+const GRID_FAMILY_POVERTY = { xs: 12, sm: 6, md: 4, lg: 5 };
 import { DEFAULT } from "../constants";
-const PeopleIcon = GetIconComponent("People")
+
+const PeopleIcon = GetIconComponent("People");
 
 const FAMILY_MASTER_PANEL_CONTRIBUTION_KEY = "insuree.Family.master";
 
@@ -42,7 +48,7 @@ class FamilyMasterPanel extends FormPanel {
 
   renderLastNameField = (edited) => {
     return (
-      <Grid size={3} className="item">
+      <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
         <TextInput
           module="insuree"
           label="Family.headInsuree.lastName"
@@ -54,7 +60,7 @@ class FamilyMasterPanel extends FormPanel {
   };
 
   renderGivenNameField = (edited) => (
-    <Grid size={3} className="item">
+    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
       <TextInput
         module="insuree"
         label="Family.headInsuree.otherNames"
@@ -68,7 +74,7 @@ class FamilyMasterPanel extends FormPanel {
     const { edited } = this.props;
     return (
       <Fragment>
-        <Grid size={3} className="item">
+        <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
           <TextInput
             module="insuree"
             label="Family.headInsuree.chfId"
@@ -87,7 +93,7 @@ class FamilyMasterPanel extends FormPanel {
             {this.renderLastNameField(edited)}
           </>
         )}
-        <Grid size={2} className="item">
+        <Grid size={GRID_RESPONSIVE_SMALL} className="item">
           <PublishedComponent
             pubRef="core.DatePicker"
             value={!edited || !edited.headInsuree ? null : edited.headInsuree.dob}
@@ -96,7 +102,7 @@ class FamilyMasterPanel extends FormPanel {
             readOnly={true}
           />
         </Grid>
-        <Grid size={2} className="item">
+        <Grid size={GRID_RESPONSIVE_SMALL} className="item">
           <PublishedComponent
             pubRef="insuree.InsureeGenderPicker"
             value={!edited || !edited.headInsuree || !edited.headInsuree.gender ? null : edited.headInsuree.gender.code}
@@ -119,14 +125,25 @@ class FamilyMasterPanel extends FormPanel {
     this.updateAttribute("contribution", contributionAttribute);
   };
 
+  parentHeadLabel = () => {
+    const { parentFamily } = this.props;
+    const parentHead = parentFamily?.headInsuree;
+    if (!parentHead) return "";
+    return [parentHead.chfId, parentHead.lastName, parentHead.otherNames].filter(Boolean).join(" - ");
+  };
+
   render() {
-    const { intl, edited, openFamilyButton = false, readOnly, overview } = this.props;
+    const { intl, edited, openFamilyButton = false, readOnly, overview, parent_uuid, parentFamily } = this.props;
+    const isSubFamily = !!parent_uuid || !!edited?.parent;
+    const sameLocationAsParent = !!edited?.sameLocationAsParent;
+    const isLocationReadOnly = readOnly || sameLocationAsParent;
+    
     return (
       <StyledFamilyMasterPanel>
         <Fragment>
           <Grid container className="tableTitle">
-            <Grid>
-              <Grid container align="center" justify="center" direction="column" className="fullHeight">
+            <Grid size="grow">
+              <Grid container alignItems="center" justifyContent="center" direction="column" className="fullHeight">
                 <Grid>
                   <Typography>
                     <FormattedMessage module="insuree" id="insuree.FamilyDetailPanel.title" />
@@ -135,7 +152,7 @@ class FamilyMasterPanel extends FormPanel {
               </Grid>
             </Grid>
             {!!openFamilyButton && !!overview && !!edited.uuid && (
-              <Grid>
+              <Grid size="auto">
                 <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.openFamilyButton.tooltip")}>
                   <IconButton
                     onClick={(e) =>
@@ -152,28 +169,64 @@ class FamilyMasterPanel extends FormPanel {
           </Grid>
           <Divider />
           <Grid container className="item">
+            {!!isSubFamily && !!parentFamily && (
+              <Grid size={12} className="item">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      color="primary"
+                      checked={sameLocationAsParent}
+                      disabled={readOnly}
+                      onChange={() => {
+                        const nextValue = !sameLocationAsParent;
+                        this.updateAttributes({
+                          sameLocationAsParent: nextValue,
+                          ...(nextValue ? { location: parentFamily?.location ?? null } : {}),
+                        });
+                      }}
+                    />
+                  }
+                  label={formatMessage(intl, "insuree", "Family.sameLocationAsParent")}
+                />
+              </Grid>
+            )}
+            
             <Grid size={12}>
               <PublishedComponent
                 pubRef="location.DetailedLocation"
                 withNull={true}
-                readOnly={readOnly}
+                readOnly={isLocationReadOnly}
                 required
                 value={!edited ? null : (edited.location ?? null)}
                 onChange={(v) => this.updateAttribute("location", v)}
-                filterLabels={false}
               />
             </Grid>
+            
             {!!overview && this.headSummary()}
+            
+            {!!isSubFamily && (
+              <Grid size={3} className="item">
+                <TextInput
+                  module="insuree"
+                  label="Family.parent.headInsuree"
+                  readOnly={true}
+                  value={parentFamily ? this.parentHeadLabel() : ""}
+                />
+              </Grid>
+            )}
+            
             <Grid size={3} className="item">
               <PublishedComponent
                 pubRef="insuree.FamilyTypePicker"
+                isSubFamily={isSubFamily}
                 withNull={false}
                 readOnly={readOnly}
                 value={!!edited && !!edited.familyType ? edited.familyType.code : null}
                 onChange={(v) => this.updateAttribute("familyType", { code: v })}
               />
             </Grid>
-            <Grid size={3} className="item">
+            
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <PublishedComponent
                 pubRef="insuree.ConfirmationTypePicker"
                 withNull={false}
@@ -182,7 +235,8 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("confirmationType", v)}
               />
             </Grid>
-            <Grid size={3} className="item">
+            
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <TextInput
                 module="insuree"
                 label="Family.confirmationNo"
@@ -192,7 +246,8 @@ class FamilyMasterPanel extends FormPanel {
                 required={edited?.confirmationType?.isConfirmationNumberRequired ?? false}
               />
             </Grid>
-            <Grid size={5} className="item">
+            
+            <Grid size={GRID_FAMILY_ADDRESS} className="item">
               <TextInput
                 module="insuree"
                 label="Family.address"
@@ -202,7 +257,8 @@ class FamilyMasterPanel extends FormPanel {
                 onChange={(v) => this.updateAttribute("address", v)}
               />
             </Grid>
-            <Grid size={1} className="item">
+            
+            <Grid size={GRID_FAMILY_POVERTY} className="item">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -215,8 +271,12 @@ class FamilyMasterPanel extends FormPanel {
                 label={formatMessage(intl, "insuree", "Family.poverty")}
               />
             </Grid>
-            <Divider />
+            
+            <Grid size={12}>
+              <Divider />
+            </Grid>
           </Grid>
+          
           <Contributions
             {...this.props}
             updateAttribute={this.updateContribution}

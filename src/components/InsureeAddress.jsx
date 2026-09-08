@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Grid, FormControlLabel, Checkbox } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { PublishedComponent, TextInput, useTranslations, useModulesManager } from "@openimis/fe-core";
+import { PublishedComponent, TextInput, useTranslations, useModulesManager, GRID_RESPONSIVE_STANDARD, GRID_RESPONSIVE_LARGE } from "@openimis/fe-core";
 import { EMPTY_STRING, MODULE_NAME } from "../constants";
 
 const StyledInsureeAddress = styled("div")(({ theme }) => ({
@@ -20,7 +20,7 @@ const InsureeAddress = ({ onChangeLocation, onChangeAddress, readOnly, value }) 
   return (
     <StyledInsureeAddress>
       <Grid container>
-        <Grid size={6} className="item">
+        <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
           <FormControlLabel
             control={
               <Checkbox
@@ -34,17 +34,16 @@ const InsureeAddress = ({ onChangeLocation, onChangeAddress, readOnly, value }) 
           />
           {!location && (
             <PublishedComponent
-              pubRef="location.DetailedLocation"
-              withNull={true}
+              pubRef="location.LocationCascader"
+              module="location"
+              required
               value={value?.currentVillage ?? null}
-              split={true}
               readOnly={readOnly}
               onChange={onChangeLocation}
-              filterLabels={false}
             />
           )}
         </Grid>
-        <Grid size={6} className="item">
+        <Grid size={GRID_RESPONSIVE_LARGE} className="item">
           <FormControlLabel
             control={
               <Checkbox
@@ -61,7 +60,7 @@ const InsureeAddress = ({ onChangeLocation, onChangeAddress, readOnly, value }) 
               module="insuree"
               label="Insuree.currentAddress"
               multiline
-              rows={4}
+              rows={1}
               readOnly={readOnly}
               value={value?.currentAddress ?? EMPTY_STRING}
               onChange={onChangeAddress}

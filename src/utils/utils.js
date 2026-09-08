@@ -42,6 +42,35 @@ export const isValidInsuree = (insuree, modulesManager) => {
   return true;
 };
 
+// to be removed when also published in location
+export const buildParentLocationFilters = (location, anchor = "parentLocation", locationTypesCount = 4) => {
+  const lineage = [];
+  let current = location;
+  while (current) {
+    lineage.unshift(current);
+    current = current.parent || null;
+  }
+
+  const level = location ? lineage.length - 1 : null;
+  const filters = [
+    {
+      id: anchor,
+      value: location || null,
+      filter: location ? `${anchor}: "${location.uuid}", ${anchor}Level: ${level}` : null,
+    },
+  ];
+
+  for (let i = 0; i < locationTypesCount; i++) {
+    filters.push({
+      id: `${anchor}_${i}`,
+      value: lineage[i] || null,
+      filter: "",
+    });
+  }
+
+  return filters;
+};
+
 export const formatLocationString = (family) => {
   const { location, address } = family;
   return [

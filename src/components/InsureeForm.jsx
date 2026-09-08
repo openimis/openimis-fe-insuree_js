@@ -295,7 +295,7 @@ const mapStateToProps = (state, props) => ({
   isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
 });
 
-export { StyledInsureeForm };
+export { InsureeForm, StyledInsureeForm };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, {

@@ -24,7 +24,7 @@ class InsureeFirstServicePointPanel extends FormPanel {
                 <FormattedMessage module="insuree" id="insuree.InsureeFirstServicePointPanel.title" />
               </Typography>
               <Divider />
-              <Grid container size={12} className="item">
+              <Grid className="item">
                 {readOnly && !edited.healthFacility ? (
                   <FormattedMessage module="insuree" id="insuree.noFSP" />
                 ) : (

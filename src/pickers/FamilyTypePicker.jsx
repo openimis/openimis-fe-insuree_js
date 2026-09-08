@@ -6,8 +6,14 @@ import { formatMessage, SelectInput, withModulesManager } from "@openimis/fe-cor
 import { fetchFamilyTypes } from "../actions";
 import _debounce from "lodash/debounce";
 import _ from "lodash";
+import { FAMILY_TYPE_POLYGAMY_CODE } from "../constants";
 
 class FamilyTypePicker extends Component {
+  constructor(props) {
+    super(props);
+    this.usePolygamousFamilies = props.modulesManager.getConf("fe-insuree", "usePolygamousFamilies", false);
+  }
+
   componentDidMount() {
     if (!this.props.familyTypes) {
       // prevent loading multiple times the cache when component is
@@ -41,9 +47,14 @@ class FamilyTypePicker extends Component {
       readOnly = false,
       required = false,
       withNull = false,
+      isSubFamily = false,
       nullLabel = null,
     } = this.props;
-    let options = !!familyTypes ? familyTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) })) : [];
+    let options = familyTypes
+      ? familyTypes
+          .filter((v) => (this.usePolygamousFamilies && !isSubFamily) || v !== FAMILY_TYPE_POLYGAMY_CODE)
+          .map((v) => ({ value: v, label: this.formatSuggestion(v) }))
+      : [];
     if (withNull) {
       options.unshift({ value: null, label: this.formatSuggestion(null) });
     }

@@ -1,7 +1,15 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { Avatar, Grid, IconButton } from "@mui/material";
-import { toISODate, useModulesManager, useTranslations, PublishedComponent } from "@openimis/fe-core";
+import { 
+  toISODate, 
+  useModulesManager, 
+  useTranslations, 
+  PublishedComponent, 
+  GRID_RESPONSIVE_STANDARD, 
+  GRID_RESPONSIVE_FULL,
+  GRID_RESPONSIVE_LARGE,
+ } from "@openimis/fe-core";
 import _ from "lodash";
 import moment from "moment";
 
@@ -51,7 +59,7 @@ const InsureeAvatar = (props) => {
   const isRequired = Boolean(photo?.thumbnail || photo?.photo);
   return (
     <StyledInsureeAvatar>
-      <Grid container className={className} direction="row" wrap="nowrap" spacing={1}>
+      <Grid container className={className} direction="row" wrap="nowrap" spacing={1} alignItems="center">
         <div>
           <IconButton
             variant="contained"
@@ -71,8 +79,8 @@ const InsureeAvatar = (props) => {
           </IconButton>
         </div>
         {withMeta && (
-          <Grid container direction="column">
-            <Grid className="item">
+          <Grid container size={GRID_RESPONSIVE_FULL}>
+            <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
               <PublishedComponent
                 pubRef="core.DatePicker"
                 value={photo?.date}
@@ -83,7 +91,7 @@ const InsureeAvatar = (props) => {
                 onChange={(date) => onChange({ ...photo, date })}
               />
             </Grid>
-            <Grid className="item">
+            <Grid className="item" size={GRID_RESPONSIVE_LARGE}>
               <PublishedComponent
                 pubRef="insuree.InsureeOfficerPicker"
                 value={photo?.officerId}

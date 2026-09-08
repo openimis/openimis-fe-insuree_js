@@ -14,6 +14,7 @@ import {
   formatMessage,
   Searcher,
   journalize,
+  ActionMenu
 } from "@openimis/fe-core";
 
 import { fetchFamilySummaries, deleteFamily } from "../actions";
@@ -121,7 +122,7 @@ class FamilySearcher extends Component {
       "insuree.familySummaries.insuranceNo",
       this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
       !this.renderLastNameFirst ? "insuree.familySummaries.lastName" : "insuree.familySummaries.otherNames",
-      this.columns.email !== "H" ? "insuree.familySummaries.email" : null,
+      !!this.columns.email && this.columns.email !== "H" ? "insuree.familySummaries.email" : null,
       "insuree.familySummaries.phone",
       "insuree.familySummaries.dob",
     ];
@@ -129,8 +130,8 @@ class FamilySearcher extends Component {
       h.push(`location.locationType.${i}`);
     }
     h.push(
-      this.columns.poverty !== "H" ? "insuree.familySummaries.poverty" : null,
-      this.columns.confirmationNo !== "H" ? "insuree.familySummaries.confirmationNo" : null,
+      !!this.columns.poverty && this.columns.poverty !== "H" ? "insuree.familySummaries.poverty" : null,
+      !!this.columns.confirmationNo && this.columns.confirmationNo !== "H" ? "insuree.familySummaries.confirmationNo" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityFrom" : null,
       filters?.showHistory?.value ? "insuree.familySummaries.validityTo" : null,
       "insuree.familySummaries.openNewTab",
@@ -168,9 +169,9 @@ class FamilySearcher extends Component {
   deleteFamilyAction = (i) =>
     !!i.validityTo ? null : (
       <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.tooltip")}>
-          <Button onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })} startIcon={<DeleteIcon />}>
-            {formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.buttonText")}
-          </Button>
+        <Button onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })} startIcon={<DeleteIcon />}>
+          {formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.buttonText")}
+        </Button>
       </Tooltip>
     );
 
@@ -212,8 +213,8 @@ class FamilySearcher extends Component {
       formatters.push((family) => this.parentLocation(family.location, j));
     }
     formatters.push(
-      this.columns.poverty !== "H" ? (family) => <Checkbox color="primary" checked={family.poverty} readOnly /> : null,
-      this.columns.confirmationNo !== "H" ? (family) => family.confirmationNo : null,
+      !!this.columns.poverty && this.columns.poverty !== "H" ? (family) => <Checkbox color="primary" checked={family.poverty} readOnly /> : null,
+      !!this.columns.confirmationNo && this.columns.confirmationNo !== "H" ? (family) => family.confirmationNo : null,
       filters?.showHistory?.value
         ? (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityFrom)
         : null,
@@ -221,16 +222,31 @@ class FamilySearcher extends Component {
         ? (family) => formatDateFromISO(this.props.modulesManager, this.props.intl, family.validityTo)
         : null,
       (family) => (
-        <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.openNewTabButton.tooltip")}>
-          <Button onClick={(e) => !family.clientMutationId && this.props.onDoubleClick(family, true)} startIcon={<TabIcon />}>
-            {formatMessage(this.props.intl, "insuree", "familySummaries.openNewTabButton.buttonText")}
-          </Button>
-        </Tooltip>
+        <ActionMenu
+          actions={[
+            {
+              icon: <TabIcon fontSize="small" />,
+              label: formatMessage(
+                this.props.intl,
+                "insuree",
+                "insureeSummaries.openNewTabButton.buttonText"
+              ),
+              onClick: () => this.props.onDoubleClick(family, true),
+              tooltip: formatMessage(this.props.intl, "insuree", "familySummaries.openNewTabButton.tooltip")
+            },
+            this.props.rights.includes(RIGHT_FAMILY_DELETE) &&
+            !family.validityTo && {
+              divider: true,
+              icon: <DeleteIcon fontSize="small" color="error" />,
+              label: formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.buttonText"),
+              color: "error.main",
+              onClick: () => !family.clientMutationId && this.setState({ deleteFamily: i }),
+              tooltip: formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.tooltip")
+            },
+          ].filter(Boolean)}
+        />
       ),
     );
-    if (!!this.props.rights.includes(RIGHT_FAMILY_DELETE)) {
-      formatters.push(this.deleteFamilyAction);
-    }
     return formatters;
   };
 
@@ -240,7 +256,7 @@ class FamilySearcher extends Component {
       filters, // Update the active filters
     });
   };
-  
+
   rowDisabled = (selection, i) => !!i.validityTo;
   rowLocked = (selection, i) => !!i.clientMutationId;
 
@@ -280,7 +296,7 @@ class FamilySearcher extends Component {
           tableTitle={formatMessageWithValues(intl, "insuree", "familySummaries", { count })}
           rowsPerPageOptions={this.rowsPerPageOptions}
           defaultPageSize={this.defaultPageSize}
-          fetch={this.isDefaultFetchFamilyActivated == false  && searchInitiated ? this.fetch : this.isDefaultFetchFamilyActivated == true ? this.fetch : () => {}}
+          fetch={this.isDefaultFetchFamilyActivated == false && searchInitiated ? this.fetch : this.isDefaultFetchFamilyActivated == true ? this.fetch : () => { }}
           rowIdentifier={this.rowIdentifier}
           filtersToQueryParams={this.filtersToQueryParams}
           defaultOrderBy="-validityFrom"

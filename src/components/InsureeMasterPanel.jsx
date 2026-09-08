@@ -10,21 +10,33 @@ import {
   TextInput,
   Contributions,
   withModulesManager,
-  GRID_RESPONSIVE_LARGE,
+  GRID_RESPONSIVE_FULL,
   GRID_RESPONSIVE_SMALL,
-  GRID_RESPONSIVE_STANDARD
+  GRID_RESPONSIVE_STANDARD,
+  GRID_RESPONSIVE_LARGE
 } from "@openimis/fe-core";
+import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
+
+const GRID_INSUREE_FIELD = { xs: 12, sm: 6, lg: 4 };
+const GRID_INSUREE_MAIN = { xs: 12, lg: 8 };
+const GRID_INSUREE_AVATAR = { xs: 12, lg: 4 };
+const GRID_INSUREE_TITLE = { xs: 12, lg: 3 };
+const GRID_INSUREE_ACTIONS = { xs: 12, lg: 9 };
 
 const StyledInsureeMasterPanel = styled('div')(({ theme }) => ({
   '& .paper': theme?.paper?.paper ?? {},
   '& .tableTitle': theme?.table?.title ?? {},
   '& .item': theme?.paper?.item ?? {},
+  '& .avatarColumn': {
+    alignSelf: "flex-start",
+  },
+  '& .avatarColumn > *': {
+    width: "100%",
+  },
   '& .fullHeight': {
     height: "100%",
   },
 }));
-
-import { DEFAULT, INSUREE_ACTIVE_STRING } from "../constants";
 
 const INSUREE_INSUREE_CONTRIBUTION_KEY = "insuree.Insuree";
 const INSUREE_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.Insuree.panels";
@@ -46,7 +58,7 @@ class InsureeMasterPanel extends FormPanel {
 
   renderLastNameField = (edited, readOnly) => {
     return (
-      <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+      <Grid size={GRID_RESPONSIVE_LARGE} className="item">
         <TextInput
           module="insuree"
           label="Insuree.lastName"
@@ -60,7 +72,7 @@ class InsureeMasterPanel extends FormPanel {
   };
 
   renderGivenNameField = (edited, readOnly) => (
-    <Grid xsize={GRID_RESPONSIVE_STANDARD} className="item">
+    <Grid size={GRID_RESPONSIVE_LARGE} className="item">
       <TextInput
         module="insuree"
         label="Insuree.otherNames"
@@ -89,13 +101,13 @@ class InsureeMasterPanel extends FormPanel {
           <Grid size={12}>
             <Paper className="paper">
               <Grid container className="tableTitle">
-                <Grid size={GRID_RESPONSIVE_SMALL} container alignItems="center" className="item">
+                <Grid size={GRID_INSUREE_TITLE} container alignItems="center" className="item">
                   <Typography variant="h5">
                     <FormattedMessage module="insuree" id={title} values={titleParams} />
                   </Typography>
                 </Grid>
                 <Grid size={GRID_RESPONSIVE_LARGE}>
-                  <Grid container justify="flex-end">
+                  <Grid container justifyContent="flex-end">
                     {!!edited &&
                       !!edited.family &&
                       !!edited.family.headInsuree &&
@@ -123,188 +135,197 @@ class InsureeMasterPanel extends FormPanel {
                 </Grid>
               </Grid>
               <Divider />
-              <Grid container className="item">
-                <Grid xsize={GRID_RESPONSIVE_STANDARD} className="item">
-                  <PublishedComponent
-                    pubRef="insuree.InsureeNumberInput"
-                    module="insuree"
-                    label="Insuree.chfId"
-                    required={true}
-                    readOnly={readOnly}
-                    value={edited?.chfId || ""}
-                    editedId={editedId}
-                    onChange={(v) => this.updateAttribute("chfId", v)}
-                  />
-                </Grid>
-                {this.renderLastNameFirst ? (
-                  <>
-                    {this.renderLastNameField(edited, readOnly)}
-                    {this.renderGivenNameField(edited, readOnly)}
-                  </>
-                ) : (
-                  <>
-                    {this.renderGivenNameField(edited, readOnly)}
-                    {this.renderLastNameField(edited, readOnly)}
-                  </>
-                )}
-                <Grid size={GRID_RESPONSIVE_LARGE}>
-                  <Grid container>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <PublishedComponent
-                        pubRef="core.DatePicker"
-                        value={!!edited ? edited.dob : null}
-                        module="insuree"
-                        label="Insuree.dob"
-                        readOnly={readOnly}
-                        required={true}
-                        maxDate={new Date()}
-                        onChange={(v) => this.updateAttribute("dob", v)}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
-                      <PublishedComponent
-                        pubRef="insuree.InsureeGenderPicker"
-                        value={!!edited && !!edited.gender ? edited.gender.code : ""}
-                        module="insuree"
-                        readOnly={readOnly}
-                        withNull={false}
-                        required={true}
-                        onChange={(v) => this.updateAttribute("gender", { code: v })}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <PublishedComponent
-                        pubRef="insuree.InsureeMaritalStatusPicker"
-                        value={!!edited && !!edited.marital ? edited.marital : ""}
-                        module="insuree"
-                        readOnly={readOnly}
-                        withNull={false}
-                        onChange={(v) => this.updateAttribute("marital", v)}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            color="primary"
-                            checked={!!edited && !!edited.cardIssued}
-                            disabled={readOnly}
-                            onChange={(v) => this.updateAttribute("cardIssued", !edited || !edited.cardIssued)}
-                          />
-                        }
-                        label={formatMessage(intl, "insuree", "Insuree.cardIssued")}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_LARGE}>
-                      <PublishedComponent
-                        pubRef="insuree.InsureeAddress"
-                        value={edited}
-                        module="insuree"
-                        readOnly={readOnly}
-                        onChangeLocation={(v) => this.updateAttribute("currentVillage", v)}
-                        onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
-                      <TextInput
-                        module="insuree"
-                        label="Insuree.phone"
-                        readOnly={readOnly}
-                        value={!!edited && !!edited.phone ? edited.phone : ""}
-                        onChange={(v) => this.updateAttribute("phone", v)}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
-                      <TextInput
-                        module="insuree"
-                        label="Insuree.email"
-                        readOnly={readOnly}
-                        value={!!edited && !!edited.email ? edited.email : ""}
-                        onChange={(v) => this.updateAttribute("email", v)}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <PublishedComponent
-                        pubRef="insuree.ProfessionPicker"
-                        module="insuree"
-                        value={!!edited && !!edited.profession ? edited.profession.id : null}
-                        readOnly={readOnly}
-                        withNull={false}
-                        onChange={(v) => this.updateAttribute("profession", { id: v })}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <PublishedComponent
-                        pubRef="insuree.EducationPicker"
-                        module="insuree"
-                        value={!!edited && !!edited.education ? edited.education.id : ""}
-                        readOnly={readOnly}
-                        withNull={false}
-                        onChange={(v) => this.updateAttribute("education", { id: v })}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <PublishedComponent
-                        pubRef="insuree.IdentificationTypePicker"
-                        module="insuree"
-                        value={!!edited && !!edited.typeOfId ? edited.typeOfId.code : null}
-                        readOnly={readOnly}
-                        withNull={false}
-                        onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <TextInput
-                        module="insuree"
-                        label="Insuree.passport"
-                        readOnly={readOnly}
-                        value={!!edited && !!edited.passport ? edited.passport : ""}
-                        onChange={(v) => this.updateAttribute("passport", !!v ? v : null)}
-                      />
-                    </Grid>
-                    <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                      <PublishedComponent
-                        pubRef="insuree.InsureeStatusPicker"
-                        label="Insuree.status"
-                        value={edited?.status}
-                        withNull={false}
-                        module="insuree"
-                        readOnly={!edited?.uuid || readOnly}
-                        onChange={(v) => this.updateAttributes({ "status": v, "statusReason": null })}
-                        required={this.isInsureeStatusRequired}
-                      />
-                    </Grid>
-                    {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
-                      <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                        <PublishedComponent
-                          pubRef="core.DatePicker"
-                          label="Insuree.statusDate"
-                          value={edited?.statusDate}
-                          module="insuree"
-                          readOnly={readOnly}
-                          required={true}
-                          onChange={(v) => this.updateAttribute("statusDate", v)}
+              <Grid container className="item" direction="column">
+                <Typography className="item" fontWeight="bold">
+                  <FormattedMessage module="insuree" id="Insuree.identity" value={titleParams} />
+                </Typography>
+                <Grid container>
+                  <Grid size={GRID_RESPONSIVE_LARGE} className="item">
+                    <PublishedComponent
+                      pubRef="insuree.InsureeNumberInput"
+                      module="insuree"
+                      label="Insuree.chfId"
+                      required={true}
+                      readOnly={readOnly}
+                      value={edited?.chfId || ""}
+                      editedId={editedId}
+                      onChange={(v) => this.updateAttribute("chfId", v)}
+                    />
+                  </Grid>
+                  {this.renderLastNameFirst ? (
+                    <>
+                      {this.renderLastNameField(edited, readOnly)}
+                      {this.renderGivenNameField(edited, readOnly)}
+                    </>
+                  ) : (
+                    <>
+                      {this.renderGivenNameField(edited, readOnly)}
+                      {this.renderLastNameField(edited, readOnly)}
+                    </>
+                  )}
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <PublishedComponent
+                      pubRef="core.DatePicker"
+                      value={!!edited ? edited.dob : null}
+                      module="insuree"
+                      label="Insuree.dob"
+                      readOnly={readOnly}
+                      required={true}
+                      maxDate={new Date()}
+                      onChange={(v) => this.updateAttribute("dob", v)}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <PublishedComponent
+                      pubRef="insuree.InsureeGenderPicker"
+                      value={!!edited && !!edited.gender ? edited.gender.code : ""}
+                      module="insuree"
+                      readOnly={readOnly}
+                      withNull={false}
+                      required={true}
+                      onChange={(v) => this.updateAttribute("gender", { code: v })}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <PublishedComponent
+                      pubRef="insuree.InsureeMaritalStatusPicker"
+                      value={!!edited && !!edited.marital ? edited.marital : ""}
+                      module="insuree"
+                      readOnly={readOnly}
+                      withNull={false}
+                      onChange={(v) => this.updateAttribute("marital", v)}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          color="primary"
+                          checked={!!edited && !!edited.cardIssued}
+                          disabled={readOnly}
+                          onChange={(v) => this.updateAttribute("cardIssued", !edited || !edited.cardIssued)}
                         />
-                      </Grid>
-                    )}
-                    {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
-                      <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                        <PublishedComponent
-                          pubRef="insuree.InsureeStatusReasonPicker"
-                          label="Insuree.statusReason"
-                          value={edited?.statusReason}
-                          module="insuree"
-                          readOnly={readOnly}
-                          withNull={false}
-                          statusType={edited.status}
-                          required={true}
-                          onChange={(v) => this.updateAttribute("statusReason", v)}
-                        />
-                      </Grid>
-                    )}
+                      }
+                      label={formatMessage(intl, "insuree", "Insuree.cardIssued")}
+                    />
                   </Grid>
                 </Grid>
-                <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                <Typography className="item" fontWeight="bold">
+                  {formatMessage(intl, "insuree", `Insuree.household`)}
+                </Typography>
+                <Grid size={GRID_RESPONSIVE_FULL}>
+                  <PublishedComponent
+                    pubRef="insuree.InsureeAddress"
+                    value={edited}
+                    module="insuree"
+                    readOnly={readOnly}
+                    onChangeLocation={(v) => this.updateAttribute("currentVillage", v)}
+                    onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
+                  />
+                </Grid>
+                <Typography className="item" fontWeight="bold">
+                  {formatMessage(intl, "insuree", "Insuree.additionnalInfos")}
+                </Typography>
+                <Grid container>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <TextInput
+                      module="insuree"
+                      label="Insuree.phone"
+                      readOnly={readOnly}
+                      value={!!edited && !!edited.phone ? edited.phone : ""}
+                      onChange={(v) => this.updateAttribute("phone", v)}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <TextInput
+                      module="insuree"
+                      label="Insuree.email"
+                      readOnly={readOnly}
+                      value={!!edited && !!edited.email ? edited.email : ""}
+                      onChange={(v) => this.updateAttribute("email", v)}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <PublishedComponent
+                      pubRef="insuree.ProfessionPicker"
+                      module="insuree"
+                      value={!!edited && !!edited.profession ? edited.profession.id : null}
+                      readOnly={readOnly}
+                      withNull={false}
+                      onChange={(v) => this.updateAttribute("profession", { id: v })}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <PublishedComponent
+                      pubRef="insuree.EducationPicker"
+                      module="insuree"
+                      value={!!edited && !!edited.education ? edited.education.id : ""}
+                      readOnly={readOnly}
+                      withNull={false}
+                      onChange={(v) => this.updateAttribute("education", { id: v })}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <PublishedComponent
+                      pubRef="insuree.IdentificationTypePicker"
+                      module="insuree"
+                      value={!!edited && !!edited.typeOfId ? edited.typeOfId.code : null}
+                      readOnly={readOnly}
+                      withNull={false}
+                      onChange={(v) => this.updateAttribute("typeOfId", { code: v })}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                    <TextInput
+                      module="insuree"
+                      label="Insuree.passport"
+                      readOnly={readOnly}
+                      value={!!edited && !!edited.passport ? edited.passport : ""}
+                      onChange={(v) => this.updateAttribute("passport", !!v ? v : null)}
+                    />
+                  </Grid>
+                  <Grid size={GRID_RESPONSIVE_SMALL} className="item">
+                    <PublishedComponent
+                      pubRef="insuree.InsureeStatusPicker"
+                      label="Insuree.status"
+                      value={edited?.status}
+                      withNull={false}
+                      module="insuree"
+                      readOnly={!edited?.uuid || readOnly}
+                      onChange={(v) => this.updateAttributes({ "status": v, "statusReason": null })}
+                      required={this.isInsureeStatusRequired}
+                    />
+                  </Grid>
+                  {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
+                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                      <PublishedComponent
+                        pubRef="core.DatePicker"
+                        label="Insuree.statusDate"
+                        value={edited?.statusDate}
+                        module="insuree"
+                        readOnly={readOnly}
+                        required={true}
+                        onChange={(v) => this.updateAttribute("statusDate", v)}
+                      />
+                    </Grid>
+                  )}
+                  {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (
+                    <Grid size={GRID_RESPONSIVE_STANDARD} className="item">
+                      <PublishedComponent
+                        pubRef="insuree.InsureeStatusReasonPicker"
+                        label="Insuree.statusReason"
+                        value={edited?.statusReason}
+                        module="insuree"
+                        readOnly={readOnly}
+                        withNull={false}
+                        statusType={edited.status}
+                        required={true}
+                        onChange={(v) => this.updateAttribute("statusReason", v)}
+                      />
+                    </Grid>
+                  )}
+                </Grid>
+                <Grid size={GRID_RESPONSIVE_FULL} className="item avatarColumn">
                   <PublishedComponent
                     pubRef="insuree.Avatar"
                     photo={!!edited ? edited.photo : null}

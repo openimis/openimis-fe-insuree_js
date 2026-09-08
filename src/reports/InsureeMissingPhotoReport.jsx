@@ -20,7 +20,8 @@ const InsureeMissingPhotoReport = (props) => {
       </Grid>
       <Grid>
         <PublishedComponent
-          pubRef="location.LocationPicker"
+          pubRef="location.LocationCascader"
+          module="location"
           onChange={(location) =>
             setValues({
               ...values,
@@ -28,7 +29,6 @@ const InsureeMissingPhotoReport = (props) => {
             })
           }
           value={values.location}
-          locationLevel={1}
         />
       </Grid>
     </Grid>
