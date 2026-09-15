@@ -161,7 +161,7 @@ const DEFAULT_CONFIG = {
       icon: "GroupAdd"
     },
     { 
-      path: ROUTE_INSUREE_FAMILY + "/:family_uuid?", 
+      path: ROUTE_INSUREE_FAMILY + "/new", 
       text: "insuree.menu.addFamilyOrGroup", 
       id: "insuree.addFamilyOrGroup", 
       component: FamilyPage, 
