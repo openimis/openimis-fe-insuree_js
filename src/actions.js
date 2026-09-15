@@ -437,8 +437,9 @@ export function formatInsureeGQL(mm, insuree) {
 }
 
 export function formatFamilyGQL(mm, family) {
-  let headInsuree = family.headInsuree;
-  headInsuree["head"] = true;
+  // Copy: the head insuree may come straight from the store (InsureePicker selection),
+  // and marking it in place is a redux state mutation.
+  const headInsuree = { ...family.headInsuree, head: true };
   return `
     ${family.uuid !== undefined && family.uuid !== null ? `uuid: "${family.uuid}"` : ""}
     headInsuree: {${formatInsureeGQL(mm, headInsuree)}}

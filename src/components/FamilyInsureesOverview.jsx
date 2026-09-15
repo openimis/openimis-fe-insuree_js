@@ -56,9 +56,11 @@ const StyledFamilyInsureesOverview = styled('div')(({ theme }) => ({
   '& .tableTitle': theme?.table?.title ?? {},
 }));
 
-const AddExistingIcon = (intl) => (
-  <Button startIcon={<PersonAdd />}>
-    {formatMessage(intl, "insuree", "familyAddExistingInsuree.buttonText")}
+// Named "...Button" so Picker.renderIcon detects it as a button and does not
+// wrap it in an IconButton (which would nest a <button> inside a <button>).
+const AddExistingInsureeButton = (props) => (
+  <Button {...props} startIcon={<PersonAdd />}>
+    <FormattedMessage module="insuree" id="familyAddExistingInsuree.buttonText" />
   </Button>
 );
 
@@ -379,14 +381,17 @@ class FamilyInsureesOverview extends PagedDataHandler {
         : [
           {
             button: (
-                <PublishedComponent //div needed for the tooltip style!!
+              <div>
+                {/* div needed for the tooltip style and to give Tooltip a ref holder!! */}
+                <PublishedComponent
                   pubRef="insuree.InsureePicker"
-                  IconRender={() => AddExistingIcon(intl)}
+                  IconRender={AddExistingInsureeButton}
                   forcedFilter={["head: false"]}
                   onChange={(changeInsureeFamily) => this.setState({ changeInsureeFamily })}
                   check={() => this.checkCanAddInsuree(() => this.setState({ checkedCanAdd: true }))}
                   checked={this.state.checkedCanAdd}
                 />
+              </div>
             ),
             tooltip: formatMessage(intl, "insuree", "familyAddExistingInsuree.tooltip"),
           },

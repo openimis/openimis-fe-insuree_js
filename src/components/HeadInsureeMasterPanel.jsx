@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import InsureeMasterPanel from "./InsureeMasterPanel";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Contributions, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
+import { Contributions, FormattedMessage, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
 import { GetIconComponent } from "@openimis/fe-core";
 const PersonAdd = GetIconComponent("PersonAdd")
 import { fetchInsureeFull } from "../actions";
@@ -10,9 +10,11 @@ import { Button } from "@mui/material";
 
 const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels";
 
-const AddExistingIcon = (intl) => (
-  <Button startIcon={<PersonAdd />}>
-    {formatMessage(intl, "insuree", "familySelectExistingInsureeAsHead.buttonText")}
+// Named "...Button" so Picker.renderIcon detects it as a button and does not
+// wrap it in an IconButton (which would nest a <button> inside a <button>).
+const SelectExistingHeadButton = (props) => (
+  <Button {...props} startIcon={<PersonAdd />}>
+    <FormattedMessage module="insuree" id="familySelectExistingInsureeAsHead.buttonText" />
   </Button>
 );
 
@@ -35,7 +37,7 @@ class HeadInsureeMasterPanel extends Component {
           <div>
             <PublishedComponent //div needed for the tooltip style!!
               pubRef="insuree.InsureePicker"
-              IconRender={() => AddExistingIcon(intl)}
+              IconRender={SelectExistingHeadButton}
               forcedFilter={["head: false"]}
               onChange={this.onEditedChanged}
             />

@@ -240,7 +240,7 @@ class FamilySearcher extends Component {
               icon: <DeleteIcon fontSize="small" color="error" />,
               label: formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.buttonText"),
               color: "error.main",
-              onClick: () => !family.clientMutationId && this.setState({ deleteFamily: i }),
+              onClick: () => !family.clientMutationId && this.setState({ deleteFamily: family }),
               tooltip: formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.tooltip")
             },
           ].filter(Boolean)}
