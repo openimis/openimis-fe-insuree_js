@@ -44,7 +44,6 @@ class FamilyFilter extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    document.addEventListener('keydown', this.props.handleEnter);
     if (
       prevProps.filters["showHistory"] !== this.props.filters["showHistory"] &&
       !!this.props.filters["showHistory"] &&
