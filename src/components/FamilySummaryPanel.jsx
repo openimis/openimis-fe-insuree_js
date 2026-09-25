@@ -48,6 +48,10 @@ const FamilySummaryPanel = ({
   const modulesManager = useModulesManager();
   const { formatMessage, formatAmount } = useTranslations("insuree", modulesManager);
 
+  // In invoice payment mode the contributions are replaced by invoices: the
+  // family amounts summary (policies vs contributions) no longer applies.
+  if (modulesManager.getConf("fe-policy", "productsOrContributions", "products") === "contributions") return null;
+
   // Calcul de la balance (différence entre le total des polices et le total des contributions)
   const balance = totalPoliciesAmount - totalContributions;
 
