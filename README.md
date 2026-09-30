@@ -16,6 +16,30 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 
   **Insurees** (insuree.menu.insureestranslation key), displayed if user has the right `101101`
 
+## Access control
+
+Families belong to a village, and an enrolment officer is a user holding the `ENROLMENT`
+credential (a User Business Access link) on one or more villages: the family / insuree
+rights their role grants them may sit in the UBA bag only, valid on the families of those
+villages. `src/utils/rights.js` keeps the two questions apart:
+
+- navigation level gates (main menu, route pages, the "+" buttons, the searcher columns)
+  use `hasPermsAnywhere`;
+- an action on one family or insuree (edit, delete, add a member, set the head, remove,
+  delete a member) uses `canOnFamily` / `canOnInsuree`: `hasPerms(right, { accessRequirements:
+  ["location.location", villageUuidOrId, "ENROLMENT"] })`, which falls back to the global bag;
+- the family form receives `rightsOnFamily` (global bag + UBA bag where linked) as `rights`.
+
+The family location (`components/FamilyLocation.js`) is `location.DetailedLocation`,
+except for a user holding the family right only through ENROLMENT links: each level then
+only offers the ancestors of their villages, the village level those villages, and a
+level with a single option is preselected. The backend remains the authority, scoping the
+location queries and checking the village on the mutations.
+
+The insuree main menu hides the policy holder entry by its route (`/policyHolders`)
+rather than dropping the last contributed entry, which removed a different entry for a user
+without the policy holder rights.
+
 ## Other Contributions
 
 - `core.AppBar`: `[Enquiry]`, registering the enquiry search input (and related dialog) to the AppBar

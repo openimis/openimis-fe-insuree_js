@@ -11,6 +11,8 @@ import {
   formatMessage,
   Searcher,
   journalize,
+  hasPermsAnywhere,
+  selectUserRights,
 } from "@openimis/fe-core";
 
 import { fetchFamilySummaries, deleteFamily } from "../actions";
@@ -18,6 +20,7 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 import FamilyFilter from "./FamilyFilter";
 import { DEFAULT, RIGHT_FAMILY_DELETE } from "../constants";
 import { familyLabel } from "../utils/utils";
+import { canOnFamily } from "../utils/rights";
 import DeleteFamilyDialog from "./DeleteFamilyDialog";
 
 const FAMILY_SEARCHER_CONTRIBUTION_KEY = "insuree.FamilySearcher";
@@ -130,7 +133,9 @@ class FamilySearcher extends Component {
       filters?.showHistory?.value ? "insuree.familySummaries.validityTo" : null,
       "insuree.familySummaries.openNewTab",
     );
-    if (!!this.props.rights.includes(RIGHT_FAMILY_DELETE)) {
+    // the column is there when the user may delete a family somewhere, each row then
+    // offering the action on the families of the villages they hold that right on
+    if (hasPermsAnywhere(RIGHT_FAMILY_DELETE, { rights: this.props.rights })) {
       h.push("insuree.familySummaries.delete");
     }
     return h;
@@ -160,7 +165,7 @@ class FamilySearcher extends Component {
   };
 
   deleteFamilyAction = (i) =>
-    !!i.validityTo ? null : (
+    !!i.validityTo || !canOnFamily(RIGHT_FAMILY_DELETE, i, { rights: this.props.rights }) ? null : (
       <Tooltip title={formatMessage(this.props.intl, "insuree", "familySummaries.deleteFamily.tooltip")}>
         <IconButton onClick={(e) => !i.clientMutationId && this.setState({ deleteFamily: i })}>
           <DeleteIcon />
@@ -215,7 +220,7 @@ class FamilySearcher extends Component {
         </Tooltip>
       ),
     );
-    if (!!this.props.rights.includes(RIGHT_FAMILY_DELETE)) {
+    if (hasPermsAnywhere(RIGHT_FAMILY_DELETE, { rights: this.props.rights })) {
       formatters.push(this.deleteFamilyAction);
     }
     return formatters;
@@ -293,7 +298,8 @@ class FamilySearcher extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  rights: selectUserRights(state),
+  userBusinessAccesses: state.core?.userBusinessAccesses,
   families: state.insuree.families,
   familiesPageInfo: state.insuree.familiesPageInfo,
   fetchingFamilies: state.insuree.fetchingFamilies,

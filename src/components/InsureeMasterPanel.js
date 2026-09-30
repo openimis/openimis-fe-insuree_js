@@ -10,6 +10,7 @@ import {
   TextInput,
   Contributions,
   withModulesManager,
+  hasPerms,
 } from "@openimis/fe-core";
 import { RIGHT_VIH } from "../constants";
 import { isChfIdOnlyNumbers } from "../utils/utils";
@@ -161,7 +162,7 @@ class InsureeMasterPanel extends FormPanel {
                 <TextInput
                   module="insuree"
                   label="Insuree.lastName"
-                  required={!rights.includes(RIGHT_VIH) ? true : false}
+                  required={!hasPerms(RIGHT_VIH, { rights })}
                   readOnly={readOnly}
                   value={!!edited && !!edited.lastName ? edited.lastName : ""}
                   onChange={(v) => this.updateAttribute("lastName", v)}
@@ -171,7 +172,7 @@ class InsureeMasterPanel extends FormPanel {
                 <TextInput
                   module="insuree"
                   label="Insuree.otherNames"
-                  required={!rights.includes(RIGHT_VIH) ? true : false}
+                  required={!hasPerms(RIGHT_VIH, { rights })}
                   readOnly={readOnly}
                   value={!!edited && !!edited.otherNames ? edited.otherNames : ""}
                   onChange={(v) => this.updateAttribute("otherNames", v)}

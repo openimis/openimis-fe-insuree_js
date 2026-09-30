@@ -17,6 +17,8 @@ import {
   coreConfirm,
   parseData,
   Helmet,
+  hasPermsAnywhere,
+  selectUserRights,
 } from "@openimis/fe-core";
 import { RIGHT_FAMILY, INSUREE_ACTIVE_STRING, RIGHT_FAMILY_EDIT } from "../constants";
 import FamilyMasterPanel from "./FamilyMasterPanel";
@@ -26,6 +28,7 @@ import FamilyInsureesOverview from "./FamilyInsureesOverview";
 import HeadInsureeMasterPanel from "./HeadInsureeMasterPanel";
 
 import { insureeLabel, isValidInsuree, isChfIdOnlyNumbers } from "../utils/utils";
+import { rightsOnFamily } from "../utils/rights";
 import FamilyVihMasterPanel from "./FamilyVihMasterPanel";
 
 const styles = (theme) => ({
@@ -185,7 +188,8 @@ class FamilyForm extends Component {
       back,
     } = this.props;
     const { family, newFamily, isSaved } = this.state;
-    if (!rights.includes(RIGHT_FAMILY)) return null;
+    // navigation level gate: what may be done on this family is the page's to say
+    if (!hasPermsAnywhere(RIGHT_FAMILY, { rights })) return null;
     let runningMutation = !!family && !!family.clientMutationId;
     let contributedMutations = modulesManager.getContribs(INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY);
     for (let i = 0; i < contributedMutations.length && !runningMutation; i++) {
@@ -218,7 +222,9 @@ class FamilyForm extends Component {
             edited_id={family_uuid}
             edited={family}
             reset={this.state.reset}
-            rights={rights}
+            // the global bag, plus the UBA one where an ENROLMENT link covers the family's
+            // village: what the panels contributed to the form check their actions against
+            rights={rightsOnFamily(family, { rights })}
             back={back}
             add={!!add && !newFamily ? this._add : null}
             readOnly={readOnly || runningMutation || !!family.validityTo}
@@ -248,7 +254,8 @@ class FamilyForm extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  rights: selectUserRights(state),
+  userBusinessAccesses: state.core?.userBusinessAccesses,
   fetchingFamily: state.insuree.fetchingFamily,
   errorFamily: state.insuree.errorFamily,
   fetchedFamily: state.insuree.fetchedFamily,

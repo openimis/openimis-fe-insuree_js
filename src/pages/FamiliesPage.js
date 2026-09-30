@@ -12,6 +12,8 @@ import {
   withTooltip,
   formatMessage,
   clearCurrentPaginationPage,
+  hasPermsAnywhere,
+  selectUserRights,
 } from "@openimis/fe-core";
 import FamilySearcher from "../components/FamilySearcher";
 
@@ -67,7 +69,9 @@ class FamiliesPage extends Component {
           actionsContributionKey={FAMILY_ACTION_CONTRIBUTION_KEY}
           defaultFilters = {this.state.defaultFilters}
         />
-        {rights.includes(RIGHT_FAMILY_ADD) &&
+        {/* navigation level: a right held only on the villages the user is linked to
+            (ENROLMENT) still opens the form, the village picker restricting the choice */}
+        {hasPermsAnywhere(RIGHT_FAMILY_ADD, { rights }) &&
           withTooltip(
             <div className={classes.fab}>
               <Fab color="primary" onClick={this.onAdd}>
@@ -82,7 +86,7 @@ class FamiliesPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  rights: selectUserRights(state),
   module: state.core?.savedPagination?.module,
 });
 

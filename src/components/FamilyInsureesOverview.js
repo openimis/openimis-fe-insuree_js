@@ -40,6 +40,7 @@ import {
   PagedDataHandler,
   PublishedComponent,
   ProgressOrError,
+  selectUserRights,
 } from "@openimis/fe-core";
 import {
   fetchFamilyMembers,
@@ -50,7 +51,14 @@ import {
   changeFamily,
   checkCanAddInsuree,
 } from "../actions";
-import { RIGHT_INSUREE_DELETE, EMPTY_STRING, DEFAULT } from "../constants";
+import {
+  RIGHT_FAMILY_EDIT,
+  RIGHT_INSUREE_ADD,
+  RIGHT_INSUREE_DELETE,
+  EMPTY_STRING,
+  DEFAULT,
+} from "../constants";
+import { canOnFamily } from "../utils/rights";
 import { insureeLabel, familyLabel } from "../utils/utils";
 import ChangeInsureeFamilyDialog from "./ChangeInsureeFamilyDialog";
 import EnquiryDialog from "./EnquiryDialog";
@@ -299,6 +307,15 @@ class FamilyInsureesOverview extends PagedDataHandler {
 
   isHead = (f, i) => i.chfId === (!!f.headInsuree && f.headInsuree.chfId);
 
+  // object level: globally, or through an ENROLMENT link on the family's village
+  canOnFamily = (perms) => canOnFamily(perms, this.props.family, { rights: this.props.rights });
+
+  canActOnMember = (i) =>
+    !this.props.readOnly &&
+    this.canOnFamily(RIGHT_INSUREE_DELETE) &&
+    !this.isHead(this.props.family, i) &&
+    !i.clientMutationId;
+
   formatters = [
     (i) => this.adornedChfId(i),
     (i) => i.email == "newhivuser_XM7dw70J0M3N@gmail.com" ? "" : i.lastName ,
@@ -307,27 +324,9 @@ class FamilyInsureesOverview extends PagedDataHandler {
       i.gender && i.gender.code ? formatMessage(this.props.intl, "insuree", `InsureeGender.${i.gender.code}`) : "",
     (i) => formatDateFromISO(this.props.modulesManager, this.props.intl, i.dob),
     (i) => <Checkbox color="primary" readOnly={true} disabled={true} checked={i.cardIssued} />,
-    (i) =>
-      !!this.props.readOnly ||
-        !this.props.rights.includes(RIGHT_INSUREE_DELETE) ||
-        this.isHead(this.props.family, i) ||
-        !!i.clientMutationId
-        ? null
-        : this.setHeadInsureeAction(i),
-    (i) =>
-      !!this.props.readOnly ||
-        !this.props.rights.includes(RIGHT_INSUREE_DELETE) ||
-        this.isHead(this.props.family, i) ||
-        !!i.clientMutationId
-        ? null
-        : this.removeInsureeAction(i),
-    (i) =>
-      !!this.props.readOnly ||
-        !this.props.rights.includes(RIGHT_INSUREE_DELETE) ||
-        this.isHead(this.props.family, i) ||
-        !!i.clientMutationId
-        ? null
-        : this.deleteInsureeAction(i),
+    (i) => (this.canActOnMember(i) ? this.setHeadInsureeAction(i) : null),
+    (i) => (this.canActOnMember(i) ? this.removeInsureeAction(i) : null),
+    (i) => (this.canActOnMember(i) ? this.deleteInsureeAction(i) : null),
   ];
 
   addNewInsuree = () =>
@@ -376,11 +375,15 @@ class FamilyInsureesOverview extends PagedDataHandler {
       checkingCanAddInsuree,
       errorCanAddInsuree,
     } = this.props;
+    // adding a member is an action on the family: an existing insuree moves into it (a
+    // family update), a new one is created in it (an insuree creation)
+    const canAddExisting = this.canOnFamily(RIGHT_FAMILY_EDIT);
+    const canAddNew = this.canOnFamily(RIGHT_INSUREE_ADD);
     let actions =
       !!readOnly || !!checkingCanAddInsuree || !!errorCanAddInsuree
         ? []
         : [
-          {
+          canAddExisting && {
             button: (
               <div>
                 <PublishedComponent //div needed for the tooltip style!!
@@ -395,7 +398,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
             ),
             tooltip: formatMessage(intl, "insuree", "familyAddExsistingInsuree.tooltip"),
           },
-          {
+          canAddNew && {
             button: (
               <IconButton onClick={(e) => this.checkCanAddInsuree(this.addNewInsuree)}>
                 <AddIcon />
@@ -416,7 +419,7 @@ class FamilyInsureesOverview extends PagedDataHandler {
               formatMessage(intl, "insuree", "closeInsureeSearchCriteria.tooltip") :
               formatMessage(intl, "insuree", "showInsureeSearchCriteria.tooltip"),
           },
-        ];
+        ].filter(Boolean);
     if (!!checkingCanAddInsuree || !!errorCanAddInsuree) {
       actions.push({
         button: (
@@ -503,7 +506,8 @@ class FamilyInsureesOverview extends PagedDataHandler {
 }
 
 const mapStateToProps = (state) => ({
-  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  rights: selectUserRights(state),
+  userBusinessAccesses: state.core?.userBusinessAccesses,
   alert: !!state.core ? state.core.alert : null,
   family: state.insuree.family,
   fetchingFamilyMembers: state.insuree.fetchingFamilyMembers,

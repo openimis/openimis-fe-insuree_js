@@ -25,9 +25,11 @@ import {
   Searcher,
   PublishedComponent,
   downloadExport,
+  selectUserRights,
 } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
 import { RIGHT_INSUREE_DELETE, INSUREE_MARITAL_STATUS, DEFAULT } from "../constants";
+import { canOnInsuree } from "../utils/rights";
 import { fetchInsureeSummaries, deleteInsuree, downloadWorkers, clearWorkersExport } from "../actions";
 
 import InsureeFilter from "./InsureeFilter";
@@ -294,7 +296,8 @@ class InsureeSearcher extends Component {
               </IconButton>
             </Tooltip>
           </Grid>
-          {this.props.rights.includes(RIGHT_INSUREE_DELETE) && !insuree.validityTo && (
+          {/* object level: globally, or on the village of the insuree's family (ENROLMENT) */}
+          {canOnInsuree(RIGHT_INSUREE_DELETE, insuree, { rights: this.props.rights }) && !insuree.validityTo && (
             <Grid item>
               <Tooltip title={formatMessage(this.props.intl, "insuree", "insureeSummaries.deleteFamily.tooltip")}>
                 <IconButton size="small" onClick={(e) => !insuree.clientMutationId && this.confirmDelete(insuree)}>
@@ -398,7 +401,8 @@ class InsureeSearcher extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  rights: selectUserRights(state),
+  userBusinessAccesses: state.core?.userBusinessAccesses,
   insurees: state.insuree.insurees,
   insureesPageInfo: state.insuree.insureesPageInfo,
   fetchingInsurees: state.insuree.fetchingInsurees,

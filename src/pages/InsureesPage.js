@@ -12,6 +12,8 @@ import {
   withTooltip,
   formatMessage,
   clearCurrentPaginationPage,
+  hasPermsAnywhere,
+  selectUserRights,
 } from "@openimis/fe-core";
 import InsureeSearcher from "../components/InsureeSearcher";
 
@@ -58,7 +60,9 @@ class InsureesPage extends Component {
     return (
       <div className={classes.page}>
         <InsureeSearcher cacheFiltersKey="insureeInsureesPageFiltersCache" onDoubleClick={this.onDoubleClick} defaultFilters={this.state.defaultFilters}/>
-        {rights.includes(RIGHT_INSUREE_ADD) &&
+        {/* navigation level: a right held only on the villages the user is linked to
+            (ENROLMENT) still opens the form, the village picker restricting the choice */}
+        {hasPermsAnywhere(RIGHT_INSUREE_ADD, { rights }) &&
           withTooltip(
             <div className={classes.fab}>
               <Fab color="primary" onClick={this.onAdd}>
@@ -73,7 +77,7 @@ class InsureesPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  rights: selectUserRights(state),
   module: state.core?.savedPagination?.module,
 });
 

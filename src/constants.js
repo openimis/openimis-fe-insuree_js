@@ -25,6 +25,14 @@ export const RIGHT_INSUREE_DELETE = 101104;
 export const RIGHT_INSUREE_ENQUIRE = 101105;
 export const RIGHT_VIH = 10119;
 
+// The User Business Access credential of an enrolment officer, held on a village
+// (`location.location`) and registered by the location module in the backend registry
+// (`core.uba_link_types`). Families belong to a village, so the family and insuree rights
+// an enrolment officer holds in their UBA bag apply to the families of their villages.
+// See `docs/rights.md` in the core module, and `utils/rights.js`.
+export const UBA_LINK_TYPE_ENROLMENT = "ENROLMENT";
+export const UBA_MODEL_LOCATION = "location.location";
+
 export const DEFAULT = {
   SHOW_INSUREE_PROFILE: false,
   SHOW_INSUREE_SUMMARY_ADDRESS: false,

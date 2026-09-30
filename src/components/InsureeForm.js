@@ -16,10 +16,13 @@ import {
   parseData,
   ProgressOrError,
   Helmet,
+  hasPermsAnywhere,
+  selectUserRights,
 } from "@openimis/fe-core";
 import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation, fetchUserHealthFacilityFullPath } from "../actions";
 import { DEFAULT, INSUREE_ACTIVE_STRING, RIGHT_INSUREE } from "../constants";
 import { insureeLabel, isValidInsuree, isValidWorker, isChfIdOnlyNumbers } from "../utils/utils";
+import { rightsOnInsuree } from "../utils/rights";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
 import InsureeVihMasterPanel from "./InsureeVihMasterPanel";
@@ -250,7 +253,8 @@ class InsureeForm extends Component {
       user
     } = this.props;
     const { insuree, clientMutationId } = this.state;
-    if (!rights.includes(RIGHT_INSUREE)) return null;
+    // navigation level gate: what may be done on this insuree is the page's to say
+    if (!hasPermsAnywhere(RIGHT_INSUREE, { rights })) return null;
     let runningMutation = !!insuree && !!clientMutationId;
     let actions = [
       {
@@ -276,7 +280,12 @@ class InsureeForm extends Component {
               title="Insuree.title"
               titleParams={{ label: insureeLabel(this.state.insuree) }}
               edited_id={insuree_uuid}
-              rights={rights}
+              // the global bag, plus the UBA one where an ENROLMENT link covers the village
+              // of the insuree's family (the family being joined, for a new member)
+              rights={rightsOnInsuree(
+                !!insuree?.family || !family ? insuree : { ...insuree, family },
+                { rights },
+              )}
               edited={this.state.insuree}
               reset={this.state.reset}
               back={this.back}
@@ -303,7 +312,8 @@ class InsureeForm extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
+  rights: selectUserRights(state),
+  userBusinessAccesses: state.core?.userBusinessAccesses,
   fetchingInsuree: state.insuree.fetchingInsuree,
   errorInsuree: state.insuree.errorInsuree,
   fetchedInsuree: state.insuree.fetchedInsuree,

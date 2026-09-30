@@ -14,6 +14,7 @@ import {
   FormPanel,
   Contributions,
 } from "@openimis/fe-core";
+import FamilyLocation from "./FamilyLocation";
 
 const FAMILY_MASTER_PANEL_CONTRIBUTION_KEY = "insuree.Family.master";
 
@@ -103,14 +104,12 @@ class FamilyVihMasterPanel extends FormPanel {
         <Divider />
         <Grid container className={classes.item}>
           <Grid item xs={12}>
-            <PublishedComponent
-              pubRef="location.DetailedLocation"
-              withNull={true}
+            <FamilyLocation
               readOnly={readOnly}
               required
+              family={edited}
               value={!edited ? null : edited.location}
               onChange={(v) => this.updateAttribute("location", v)}
-              filterLabels={false}
             />
           </Grid>
           {!!overview && this.headSummary()}
