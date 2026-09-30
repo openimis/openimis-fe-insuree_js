@@ -14,11 +14,7 @@
     "build": "vite build",
     "start": "vite",
     "format": "prettier src -w",
-    "prepare": "npm run build",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:ci": "vitest run --coverage --reporter=default"
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -29,13 +25,11 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/runtime": "^7.9.6",
     "@vitejs/plugin-react": "^5.0.0",
-    "@vitest/coverage-v8": "^4.0.18",
     "prettier": "^2.3.2",
     "prop-types": "^15.7.2",
     "react-autosuggest": "^10.0.2",
     "redux-api-middleware": "^3.2.1",
-    "vite": "^7.1.2",
-    "vitest": "^4.0.18"
+    "vite": "^7.1.2"
   },
   "files": [
     "dist"
