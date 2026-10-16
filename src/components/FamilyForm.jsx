@@ -44,7 +44,6 @@ class FamilyForm extends Component {
     reset: 0,
     family: this._newFamily(),
     newFamily: true,
-    confirmedAction: null,
     isSaved: false,
   };
 
@@ -99,10 +98,6 @@ class FamilyForm extends Component {
             family: { ...state.family, clientMutationId: props.mutation.clientMutationId }
           }));
         }
-      },
-      {
-        condition: () => prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction,
-        handler: () => this.state.confirmedAction()
       }
     ];
 
@@ -172,7 +167,6 @@ class FamilyForm extends Component {
       reset: 0,
       family: this._newFamily(),
       newFamily: true,
-      confirmedAction: null,
       isSaved: false,
     });
   };
@@ -194,8 +188,11 @@ class FamilyForm extends Component {
     this.setState({ family, newFamily: false });
   };
 
-  onActionToConfirm = (title, message, confirmedAction) => {
-    this.setState({ confirmedAction }, this.props.coreConfirm(title, message));
+  // The action travels with the question, so only this caller is answered. It used to
+  // be parked in state and run on any `confirmed` transition, which left a cancelled
+  // action armed for the next dialog anyone else opened (OP-3190).
+  onActionToConfirm = (title, message, onConfirm) => {
+    this.props.coreConfirm(title, message, { onConfirm });
   };
 
   render() {

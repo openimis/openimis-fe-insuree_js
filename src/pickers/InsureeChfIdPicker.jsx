@@ -13,6 +13,10 @@ import { DEFAULT, EMPTY_STRING } from "../constants";
 const INIT_STATE = {
   search: "",
   selected: "",
+  // The fetching flag and the error live in the store slot every insuree lookup
+  // shares, and outlive the form: opening a new claim mounts a fresh picker on
+  // the error of the last one. Only what this picker asked for is its to show.
+  lookedUp: false,
 };
 
 class InsureeChfIdPicker extends Component {
@@ -59,6 +63,7 @@ class InsureeChfIdPicker extends Component {
       {
         search: chfId,
         selected: "",
+        lookedUp: true,
       },
       (e) => this.props.fetchInsuree(this.props.modulesManager, chfId),
     );
@@ -81,6 +86,8 @@ class InsureeChfIdPicker extends Component {
 
   render() {
     const { readOnly = false, required = false } = this.props;
+    const { lookedUp } = this.state;
+    const fetching = lookedUp && this.props.fetching;
     return (
       <Grid container spacing={2}>
         <Grid size={GRID_RESPONSIVE_HALF}>
@@ -98,8 +105,8 @@ class InsureeChfIdPicker extends Component {
           />
         </Grid>
         <Grid size={GRID_RESPONSIVE_HALF}>
-          <ProgressOrError progress={this.props.fetching} error={this.props.error} />
-          {!this.props.fetching && (
+          <ProgressOrError progress={fetching} error={lookedUp ? this.props.error : null} />
+          {!fetching && (
             <TextInput
               readOnly={true}
               module="insuree"

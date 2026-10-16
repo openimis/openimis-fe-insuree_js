@@ -94,33 +94,29 @@ const INSUREE_FULL_PROJECTION = (mm) => [
 
 export const INSUREE_PICKER_PROJECTION = ["id", "uuid", "chfId", "lastName", "otherNames", "dob"];
 
+// What a CHFID lookup hands to the form it serves (claim, policy holder): the
+// picker projection plus a few scalars. The family is a reference only - its
+// head, its location tree and the first service point are the insuree page's
+// business, and an editor reloads them with fetchInsureeFull.
+const INSUREE_LOOKUP_PROJECTION = [
+  ...INSUREE_PICKER_PROJECTION,
+  "age",
+  "validityFrom",
+  "validityTo",
+  "status",
+  "gender{code, gender, altLanguage}",
+  "photo{folder,filename,photo}",
+  "family{id,uuid}",
+  "healthFacility{id,uuid,code,name}",
+];
+
 export function fetchInsureeGenders() {
   const payload = formatQuery("insureeGenders", null, ["code"]);
   return graphql(payload, "INSUREE_GENDERS");
 }
 
 export function fetchInsuree(mm, chfid) {
-  let payload = formatPageQuery(
-    "insurees",
-    [`chfId:"${chfid}", ignoreLocation:true`],
-    [
-      "id",
-      "uuid",
-      "chfId",
-      "lastName",
-      "otherNames",
-      "dob",
-      "age",
-      "validityFrom",
-      "validityTo",
-      "gender{code}",
-      "status",
-      `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
-      "photo{folder,filename,photo}",
-      "gender{code, gender, altLanguage}",
-      "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
-    ],
-  );
+  let payload = formatPageQuery("insurees", [`chfId:"${chfid}", ignoreLocation:true`], INSUREE_LOOKUP_PROJECTION);
   return graphql(payload, "INSUREE_INSUREE");
 }
 
