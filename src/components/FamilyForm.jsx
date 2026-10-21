@@ -311,7 +311,6 @@ const mapStateToProps = (state, props) => ({
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
   insuree: state.insuree.insuree,
-  confirmed: state.core.confirmed,
   state: state,
   isChfIdValid: state.insuree?.validationFields?.insureeNumber?.isValid,
   totalPoliciesAmount: state.policy?.policy 
