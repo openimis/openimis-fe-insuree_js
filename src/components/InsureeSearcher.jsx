@@ -365,7 +365,6 @@ const mapStateToProps = (state) => ({
   errorInsurees: state.insuree.errorInsurees,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
-  confirmed: state.core.confirmed,
 });
 
 const mapDispatchToProps = (dispatch) => {
