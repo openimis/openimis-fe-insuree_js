@@ -482,10 +482,10 @@ export function deleteFamily(mm, family, deleteMembers, clientMutationLabel) {
     `uuids: ["${family.uuid}"], deleteMembers: ${deleteMembers}`,
     clientMutationLabel,
   );
-  family.clientMutationId = mutation.clientMutationId;
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_DELETE_FAMILY_RESP", "INSUREE_MUTATION_ERR"], {
     clientMutationId: mutation.clientMutationId,
+    uuids: [family.uuid],
     clientMutationLabel,
     requestedDateTime,
     familyUuid: family.uuid,
@@ -518,10 +518,10 @@ export function removeInsuree(mm, family_uuid, insuree, cancelPolicies, clientMu
     `uuid: "${family_uuid}", uuids: ["${insuree.uuid}"], cancelPolicies: ${cancelPolicies}`,
     clientMutationLabel,
   );
-  insuree.clientMutationId = mutation.clientMutationId;
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_REMOVE_INSUREES_RESP", "INSUREE_MUTATION_ERR"], {
     clientMutationId: mutation.clientMutationId,
+    uuids: [insuree.uuid],
     clientMutationLabel,
     requestedDateTime,
     familyUuid: family_uuid,
@@ -534,10 +534,10 @@ export function deleteInsuree(mm, family_uuid, insuree, clientMutationLabel) {
     `${!!family_uuid ? `uuid: "${family_uuid}",` : ""} uuids: ["${insuree.uuid}"]`,
     clientMutationLabel,
   );
-  insuree.clientMutationId = mutation.clientMutationId;
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_DELETE_INSUREES_RESP", "INSUREE_MUTATION_ERR"], {
     clientMutationId: mutation.clientMutationId,
+    uuids: [insuree.uuid],
     clientMutationLabel,
     requestedDateTime,
     familyUuid: family_uuid,
