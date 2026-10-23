@@ -540,7 +540,7 @@ const mapDispatchToProps = (dispatch) => {
   );
 };
 
-export { StyledFamilyInsureesOverview };
+export { FamilyInsureesOverview, StyledFamilyInsureesOverview };
 export default withModulesManager(
   injectIntl(connect(mapStateToProps, mapDispatchToProps)(FamilyInsureesOverview)),
 );

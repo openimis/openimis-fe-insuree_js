@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ createFamily, updateFamily, clearInsuree, fetchParentFamily }, dispatch);
 };
 
-export { StyledFamilyPage };
+export { FamilyPage, StyledFamilyPage };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(injectIntl(FamilyPage)),

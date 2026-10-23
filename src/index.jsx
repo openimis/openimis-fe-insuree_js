@@ -45,13 +45,16 @@ import InsureeMissingPhotoReport from "./reports/InsureeMissingPhotoReport";
 import InsureePendingEnrollmentReport from "./reports/InsureePendingEnrollmentReport";
 import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_INSUREE, INSUREE_MAIN_MENU_CONTRIBUTION_KEY } from "./constants";
 
-const ROUTE_INSUREE_FAMILIES = "insuree/families";
-const ROUTE_INSUREE_FAMILY_OVERVIEW = "insuree/families/familyOverview";
-const ROUTE_INSUREE_FAMILY = "insuree/family";
-const ROUTE_INSUREE_SUBFAMILY = "insuree/subfamily";
-const ROUTE_INSUREE_PROFILE = "insuree/profile";
-const ROUTE_INSUREE_INSUREES = "insuree/insurees";
-const ROUTE_INSUREE_INSUREE = "insuree/insurees/insuree";
+import {
+  ROUTE_INSUREE_FAMILIES,
+  ROUTE_INSUREE_FAMILY_OVERVIEW,
+  ROUTE_INSUREE_FAMILY_NEW,
+  ROUTE_INSUREE_SUBFAMILY,
+  ROUTE_INSUREE_PROFILE,
+  ROUTE_INSUREE_INSUREES,
+  ROUTE_INSUREE_INSUREE,
+  ROUTE_REFS,
+} from "./routes";
 
 const DEFAULT_CONFIG = {
   "translations": [{ key: "en", messages: messages_en }],
@@ -129,13 +132,7 @@ const DEFAULT_CONFIG = {
     { key: "insuree.RelationPicker", ref: RelationPicker },
     { key: "insuree.InsureeNumberInput", ref: InsureeNumberInput },
 
-    { key: "insuree.route.families", ref: ROUTE_INSUREE_FAMILIES },
-    { key: "insuree.route.familyOverview", ref: ROUTE_INSUREE_FAMILY_OVERVIEW },
-    { key: "insuree.route.family", ref: ROUTE_INSUREE_FAMILY },
-    { key: "insuree.route.subfamily", ref: ROUTE_INSUREE_SUBFAMILY },
-    { key: "insuree.route.insurees", ref: ROUTE_INSUREE_INSUREES },
-    { key: "insuree.route.insuree", ref: ROUTE_INSUREE_INSUREE },
-    { key: "insuree.route.insureeProfile", ref: ROUTE_INSUREE_PROFILE },
+    ...ROUTE_REFS,
 
     { key: "insuree.Avatar", ref: InsureeAvatar },
     { key: "insuree.Summary", ref: InsureeSummary },
@@ -161,7 +158,7 @@ const DEFAULT_CONFIG = {
       icon: "GroupAdd"
     },
     { 
-      path: ROUTE_INSUREE_FAMILY + "/new", 
+      path: ROUTE_INSUREE_FAMILY_NEW,
       text: "insuree.menu.addFamilyOrGroup", 
       id: "insuree.addFamilyOrGroup", 
       component: FamilyPage, 
