@@ -15,7 +15,7 @@ const StyledFamilyPage = styled('div')(({ theme }) => ({
 
 class FamilyPage extends Component {
   add = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.family");
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.newFamily");
   };
 
   save = async (family) => {
@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ createFamily, updateFamily, clearInsuree, fetchParentFamily }, dispatch);
 };
 
-export { StyledFamilyPage };
+export { FamilyPage, StyledFamilyPage };
 export default withHistory(
   withModulesManager(
     connect(mapStateToProps, mapDispatchToProps)(injectIntl(FamilyPage)),

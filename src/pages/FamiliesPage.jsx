@@ -41,7 +41,7 @@ class FamiliesPage extends Component {
   };
 
   onAdd = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.family");
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.newFamily");
   };
 
   componentDidMount = () => {
@@ -91,7 +91,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ clearCurrentPaginationPage }, dispatch);
 
-export { StyledFamiliesPage };
+export { FamiliesPage, StyledFamiliesPage };
 export default injectIntl(
   withModulesManager(
     withHistory(connect(mapStateToProps, mapDispatchToProps)(FamiliesPage)),
