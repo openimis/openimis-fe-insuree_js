@@ -48,6 +48,12 @@ const PersonAdd = GetIconComponent("PersonAdd")
 const SetHeadIcon = GetIconComponent("PersonPin")
 const DeleteIcon = GetIconComponent("Delete")
 const RemoveIcon = GetIconComponent("Clear")
+
+// Journal statuses, mirroring fe-core helpers/mutations.js (not exported by fe-core).
+const MUTATION_RECEIVED = 0;
+const MUTATION_SUCCESS = 2;
+const journalStatus = (mutations, clientMutationId) =>
+  (mutations ?? []).find((m) => m.clientMutationId === clientMutationId)?.status;
 const CloseIcon = GetIconComponent("Remove")
 const StyledFamilyInsureesOverview = styled('div')(({ theme }) => ({
   '& .paper': theme?.paper?.paper ?? {},
@@ -142,7 +148,24 @@ class FamilyInsureesOverview extends PagedDataHandler {
     if (this.state.filters !== prevState.filters) {
       this.query();
     }
+    if (prevProps.mutations !== this.props.mutations && this.memberMutationLanded(prevProps.mutations)) {
+      this.query();
+    }
   }
+
+  // A member carries the clientMutationId of the mutation changing it (lockMutated).
+  // When the journal records that mutation as done, the members are read again,
+  // as fe-core's Searcher does: a deleted or removed member then disappears.
+  // Keyed off SUCCESS, not the response, which only means queued.
+  memberMutationLanded = (prevMutations) =>
+    (this.props.familyMembers ?? []).some((member) => {
+      const id = member?.clientMutationId;
+      return (
+        !!id &&
+        journalStatus(prevMutations, id) === MUTATION_RECEIVED &&
+        journalStatus(this.props.mutations, id) === MUTATION_SUCCESS
+      );
+    });
 
   queryPrms = () => {
     let prms = [];
@@ -522,6 +545,7 @@ const mapStateToProps = (state) => ({
   errorCanAddInsuree: state.insuree.errorCanAddInsuree,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
+  mutations: state.core?.mutations ?? [],
 });
 
 const mapDispatchToProps = (dispatch) => {

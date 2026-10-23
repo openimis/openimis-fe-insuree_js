@@ -41,7 +41,7 @@ class FamiliesPage extends Component {
   };
 
   onAdd = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.family");
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.newFamily");
   };
 
   componentDidMount = () => {

@@ -15,7 +15,7 @@ const StyledFamilyPage = styled('div')(({ theme }) => ({
 
 class FamilyPage extends Component {
   add = () => {
-    historyPush(this.props.modulesManager, this.props.history, "insuree.route.family");
+    historyPush(this.props.modulesManager, this.props.history, "insuree.route.newFamily");
   };
 
   save = async (family) => {
