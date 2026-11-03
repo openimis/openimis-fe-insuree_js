@@ -8,6 +8,25 @@ import {
   dispatchMutationErr,
 } from "@openimis/fe-core";
 
+// Mark the families and insurees under mutation (read by the searchers' and the
+// family overview's rowLocked) on copies: the records in state must not be written in place.
+const LOCKABLE_LISTS = ["insurees", "familyMembers", "insureeFamilyMembers", "families"];
+const LOCKABLE_RECORDS = ["insuree", "family"];
+
+function lockMutated(state, meta) {
+  const uuids = meta?.uuids;
+  if (!uuids?.length) return state;
+  const lock = (r) => (r && uuids.includes(r.uuid) ? { ...r, clientMutationId: meta.clientMutationId } : r);
+  const next = { ...state };
+  LOCKABLE_LISTS.forEach((key) => {
+    if (Array.isArray(state[key])) next[key] = state[key].map(lock);
+  });
+  LOCKABLE_RECORDS.forEach((key) => {
+    next[key] = lock(state[key]);
+  });
+  return next;
+}
+
 function reducer(
   state = {
     fetchingInsuree: false,
@@ -625,7 +644,7 @@ function reducer(
         headSelected: action.payload?.headSelected,
       };
     case "INSUREE_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
+      return lockMutated(dispatchMutationReq(state, action), action.meta);
     case "INSUREE_MUTATION_ERR":
       return dispatchMutationErr(state, action);
     case "INSUREE_CREATE_FAMILY_RESP":

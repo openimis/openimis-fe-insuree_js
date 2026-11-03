@@ -94,33 +94,29 @@ const INSUREE_FULL_PROJECTION = (mm) => [
 
 export const INSUREE_PICKER_PROJECTION = ["id", "uuid", "chfId", "lastName", "otherNames", "dob"];
 
+// What a CHFID lookup hands to the form it serves (claim, policy holder): the
+// picker projection plus a few scalars. The family is a reference only - its
+// head, its location tree and the first service point are the insuree page's
+// business, and an editor reloads them with fetchInsureeFull.
+const INSUREE_LOOKUP_PROJECTION = [
+  ...INSUREE_PICKER_PROJECTION,
+  "age",
+  "validityFrom",
+  "validityTo",
+  "status",
+  "gender{code, gender, altLanguage}",
+  "photo{folder,filename,photo}",
+  "family{id,uuid}",
+  "healthFacility{id,uuid,code,name}",
+];
+
 export function fetchInsureeGenders() {
   const payload = formatQuery("insureeGenders", null, ["code"]);
   return graphql(payload, "INSUREE_GENDERS");
 }
 
 export function fetchInsuree(mm, chfid) {
-  let payload = formatPageQuery(
-    "insurees",
-    [`chfId:"${chfid}", ignoreLocation:true`],
-    [
-      "id",
-      "uuid",
-      "chfId",
-      "lastName",
-      "otherNames",
-      "dob",
-      "age",
-      "validityFrom",
-      "validityTo",
-      "gender{code}",
-      "status",
-      `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
-      "photo{folder,filename,photo}",
-      "gender{code, gender, altLanguage}",
-      "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
-    ],
-  );
+  let payload = formatPageQuery("insurees", [`chfId:"${chfid}", ignoreLocation:true`], INSUREE_LOOKUP_PROJECTION);
   return graphql(payload, "INSUREE_INSUREE");
 }
 
@@ -437,8 +433,9 @@ export function formatInsureeGQL(mm, insuree) {
 }
 
 export function formatFamilyGQL(mm, family) {
-  let headInsuree = family.headInsuree;
-  headInsuree["head"] = true;
+  // Copy: the head insuree may come straight from the store (InsureePicker selection),
+  // and marking it in place is a redux state mutation.
+  const headInsuree = { ...family.headInsuree, head: true };
   return `
     ${family.uuid !== undefined && family.uuid !== null ? `uuid: "${family.uuid}"` : ""}
     headInsuree: {${formatInsureeGQL(mm, headInsuree)}}
@@ -485,10 +482,10 @@ export function deleteFamily(mm, family, deleteMembers, clientMutationLabel) {
     `uuids: ["${family.uuid}"], deleteMembers: ${deleteMembers}`,
     clientMutationLabel,
   );
-  family.clientMutationId = mutation.clientMutationId;
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_DELETE_FAMILY_RESP", "INSUREE_MUTATION_ERR"], {
     clientMutationId: mutation.clientMutationId,
+    uuids: [family.uuid],
     clientMutationLabel,
     requestedDateTime,
     familyUuid: family.uuid,
@@ -521,10 +518,10 @@ export function removeInsuree(mm, family_uuid, insuree, cancelPolicies, clientMu
     `uuid: "${family_uuid}", uuids: ["${insuree.uuid}"], cancelPolicies: ${cancelPolicies}`,
     clientMutationLabel,
   );
-  insuree.clientMutationId = mutation.clientMutationId;
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_REMOVE_INSUREES_RESP", "INSUREE_MUTATION_ERR"], {
     clientMutationId: mutation.clientMutationId,
+    uuids: [insuree.uuid],
     clientMutationLabel,
     requestedDateTime,
     familyUuid: family_uuid,
@@ -537,10 +534,10 @@ export function deleteInsuree(mm, family_uuid, insuree, clientMutationLabel) {
     `${!!family_uuid ? `uuid: "${family_uuid}",` : ""} uuids: ["${insuree.uuid}"]`,
     clientMutationLabel,
   );
-  insuree.clientMutationId = mutation.clientMutationId;
   var requestedDateTime = new Date();
   return graphql(mutation.payload, ["INSUREE_MUTATION_REQ", "INSUREE_DELETE_INSUREES_RESP", "INSUREE_MUTATION_ERR"], {
     clientMutationId: mutation.clientMutationId,
+    uuids: [insuree.uuid],
     clientMutationLabel,
     requestedDateTime,
     familyUuid: family_uuid,

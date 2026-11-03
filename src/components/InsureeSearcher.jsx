@@ -76,8 +76,6 @@ class InsureeSearcher extends Component {
     if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
       this.setState({ reset: this.state.reset + 1 });
-    } else if (!prevProps.confirmed && this.props.confirmed && !!this.state.confirmedAction) {
-      this.state.confirmedAction();
     }
     if (
       prevState.searchInitiated !== this.state.searchInitiated ||
@@ -186,21 +184,23 @@ class InsureeSearcher extends Component {
   };
 
   confirmDelete = (i) => {
-    let confirmedAction = () =>
-      this.props.deleteInsuree(
-        this.props.modulesManager,
-        !!i.family ? i.family.uuid : null,
-        i,
-        formatMessageWithValues(this.props.intl, "insuree", "DeleteInsuree.mutationLabel", { label: insureeLabel(i) }),
-      );
-    let confirm = (e) =>
-      this.props.coreConfirm(
-        formatMessageWithValues(this.props.intl, "insuree", "deleteInsureeDialog.title", { label: insureeLabel(i) }),
-        formatMessageWithValues(this.props.intl, "insuree", "deleteInsureeDialog.message", {
-          label: insureeLabel(i),
-        }),
-      );
-    this.setState({ confirmedAction }, confirm);
+    this.props.coreConfirm(
+      formatMessageWithValues(this.props.intl, "insuree", "deleteInsureeDialog.title", { label: insureeLabel(i) }),
+      formatMessageWithValues(this.props.intl, "insuree", "deleteInsureeDialog.message", {
+        label: insureeLabel(i),
+      }),
+      {
+        onConfirm: () =>
+          this.props.deleteInsuree(
+            this.props.modulesManager,
+            !!i.family ? i.family.uuid : null,
+            i,
+            formatMessageWithValues(this.props.intl, "insuree", "DeleteInsuree.mutationLabel", {
+              label: insureeLabel(i),
+            }),
+          ),
+      },
+    );
   };
 
   itemFormatters = (filters) => {
@@ -365,7 +365,6 @@ const mapStateToProps = (state) => ({
   errorInsurees: state.insuree.errorInsurees,
   submittingMutation: state.insuree.submittingMutation,
   mutation: state.insuree.mutation,
-  confirmed: state.core.confirmed,
 });
 
 const mapDispatchToProps = (dispatch) => {

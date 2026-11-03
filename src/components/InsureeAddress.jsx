@@ -37,6 +37,8 @@ const InsureeAddress = ({ onChangeLocation, onChangeAddress, readOnly, value }) 
               pubRef="location.LocationCascader"
               module="location"
               required
+              // the village: MaxLevels is a count, levels are 0-based
+              requiredLevel={Number.parseInt(modulesManager.getConf("location", "Location.MaxLevels", 4)) - 1}
               value={value?.currentVillage ?? null}
               readOnly={readOnly}
               onChange={onChangeLocation}
