@@ -10,6 +10,14 @@ const fromOpenimisFrontend = (dependency) => {
   return fs.existsSync(dependencyPath) ? dependencyPath : dependency;
 };
 
+// Under test the module uses its own copies of the runtime libraries (they are
+// devDependencies). Fall back to the bare specifier when they are absent, as in
+// the assembly build where the module's node_modules is not installed.
+const fromLocalNodeModules = (dependency) => {
+  const dependencyPath = path.resolve(__dirname, 'node_modules', dependency);
+  return fs.existsSync(dependencyPath) ? dependencyPath : dependency;
+};
+
 export default defineConfig({
   plugins: [react({
     jsxRuntime: 'automatic',
@@ -70,7 +78,20 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['src/**/*.test.{js,jsx}'],
+    include: ['src/**/*.test.{js,jsx}', 'tests/**/*.test.{js,jsx}'],
+    // The runtime libs are aliased above so the dev app shares the assembly's
+    // copies; under test the module uses its own copies, otherwise React and
+    // @emotion end up duplicated.
+    alias: {
+      '@openimis/fe-core': path.resolve(__dirname, 'tests/mocks/feCore.jsx'),
+      react: fromLocalNodeModules('react'),
+      'react-dom': fromLocalNodeModules('react-dom'),
+      'react-intl': fromLocalNodeModules('react-intl'),
+      '@emotion/react': fromLocalNodeModules('@emotion/react'),
+      '@emotion/styled': fromLocalNodeModules('@emotion/styled'),
+      '@mui/material': fromLocalNodeModules('@mui/material'),
+      '@mui/material/styles': fromLocalNodeModules('@mui/material/styles'),
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'lcov'],
