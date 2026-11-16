@@ -63,6 +63,27 @@ describe("FamilyInsureesOverview", () => {
     expect(component.query).toHaveBeenCalledTimes(1);
   });
 
+  // A mutation that runs inline answers with its outcome: the journal entry is added and
+  // completed in one dispatch batch, so the overview never sees it as received.
+  it("reloads the members when a member's mutation is journalled already finished", () => {
+    const component = overview([]);
+
+    update(component, [{ clientMutationId: "mutation-1", status: SUCCESS }]);
+
+    expect(component.query).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not reload again for a member's mutation that had already succeeded", () => {
+    const component = overview([{ clientMutationId: "mutation-1", status: SUCCESS }]);
+
+    update(component, [
+      { clientMutationId: "mutation-1", status: SUCCESS },
+      { clientMutationId: "unrelated", status: SUCCESS },
+    ]);
+
+    expect(component.query).not.toHaveBeenCalled();
+  });
+
   it("does not reload while the member's mutation is still running", () => {
     const component = overview([{ clientMutationId: "mutation-1", status: RECEIVED }]);
 
