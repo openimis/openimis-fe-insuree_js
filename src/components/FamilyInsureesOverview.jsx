@@ -49,8 +49,7 @@ const SetHeadIcon = GetIconComponent("PersonPin")
 const DeleteIcon = GetIconComponent("Delete")
 const RemoveIcon = GetIconComponent("Clear")
 
-// Journal statuses, mirroring fe-core helpers/mutations.js (not exported by fe-core).
-const MUTATION_RECEIVED = 0;
+// Journal status, mirroring fe-core helpers/mutations.js (not exported by fe-core).
 const MUTATION_SUCCESS = 2;
 const journalStatus = (mutations, clientMutationId) =>
   (mutations ?? []).find((m) => m.clientMutationId === clientMutationId)?.status;
@@ -156,13 +155,15 @@ class FamilyInsureesOverview extends PagedDataHandler {
   // A member carries the clientMutationId of the mutation changing it (lockMutated).
   // When the journal records that mutation as done, the members are read again,
   // as fe-core's Searcher does: a deleted or removed member then disappears.
-  // Keyed off SUCCESS, not the response, which only means queued.
+  // Keyed off SUCCESS, not the response, which only means queued. A mutation that runs
+  // inline is journalled and completed in the same dispatch batch, so the journal may
+  // never show it as received here: any status before SUCCESS counts, absent included.
   memberMutationLanded = (prevMutations) =>
     (this.props.familyMembers ?? []).some((member) => {
       const id = member?.clientMutationId;
       return (
         !!id &&
-        journalStatus(prevMutations, id) === MUTATION_RECEIVED &&
+        journalStatus(prevMutations, id) !== MUTATION_SUCCESS &&
         journalStatus(this.props.mutations, id) === MUTATION_SUCCESS
       );
     });
