@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 import { Fab } from "@mui/material";
-import { GetIconComponent } from "@openimis/fe-core";
+import { GetIconComponent, injectIntl } from "@openimis/fe-core";
 const AddIcon = GetIconComponent("Add")
 import {
   historyPush,
@@ -19,7 +18,7 @@ import FamilySearcher from "../components/FamilySearcher";
 import { RIGHT_FAMILY_ADD } from "../constants";
 
 const StyledFamiliesPage = styled('div')(({ theme }) => ({
-  ...theme?.page ?? {},
+  ...(theme?.page ?? {}),
   '& .fab': theme?.fab ?? {},
 }));
 

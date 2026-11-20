@@ -5,7 +5,8 @@ vi.mock("@mui/material/styles", () => ({
   styled: () => () => "styled-component",
 }));
 
-vi.mock("@openimis/fe-core", () => ({
+vi.mock("@openimis/fe-core", async () => ({
+  injectIntl: (await import("@openimis/fe-core/testing")).injectIntl,
   Form: "Form",
   Helmet: "Helmet",
   ProgressOrError: "ProgressOrError",

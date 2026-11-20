@@ -1,11 +1,10 @@
 import React, { useState, useRef } from "react";
-import { injectIntl } from "react-intl";
 import { alpha } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
 import clsx from "clsx";
 import { InputBase } from "@mui/material";
 
-import { GetIconComponent, formatMessage } from "@openimis/fe-core";
+import { GetIconComponent, formatMessage, injectIntl } from "@openimis/fe-core";
 import EnquiryDialog from "./EnquiryDialog";
 import { INSUREE_NUMBER_MAX_LENGTH } from "../constants";
 const SearchIcon = GetIconComponent("Search")

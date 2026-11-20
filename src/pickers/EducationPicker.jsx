@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
-import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-core";
+
+import { formatMessage, AutoSuggestion, withModulesManager, injectIntl } from "@openimis/fe-core";
 import { fetchEducations } from "../actions";
 import _debounce from "lodash/debounce";
 import _ from "lodash";

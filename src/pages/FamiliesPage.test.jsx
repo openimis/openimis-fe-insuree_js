@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import { ROUTE_INSUREE_FAMILY_NEW, ROUTE_REFS } from "../routes";
 
 // The fe-core barrel cannot be loaded from a test: only what FamiliesPage uses.
-vi.mock("@openimis/fe-core", () => ({
+vi.mock("@openimis/fe-core", async () => ({
+  injectIntl: (await import("@openimis/fe-core/testing")).injectIntl,
   GetIconComponent: () => () => null,
   historyPush: vi.fn(),
   withModulesManager: (C) => C,

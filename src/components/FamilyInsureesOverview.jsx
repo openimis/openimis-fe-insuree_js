@@ -1,12 +1,10 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
 import _ from "lodash";
 
 import { Checkbox, Paper, IconButton, Grid, Divider, Typography, Tooltip, Collapse   ,Button,
 } from "@mui/material";
-
 
 import { styled } from "@mui/material/styles";
 
@@ -26,6 +24,7 @@ import {
   PublishedComponent,
   ProgressOrError,
   GetIconComponent,
+  injectIntl,
 } from "@openimis/fe-core";
 import {
   fetchFamilyMembers,
@@ -483,14 +482,18 @@ class FamilyInsureesOverview extends PagedDataHandler {
               resetFilters={this.resetFilters}
             />
           </Collapse>
-          <Grid container alignItems="center" direction="row" className="paperHeader">
+          <Grid container direction="row" className="paperHeader" sx={{
+            alignItems: "center"
+          }}>
             <Grid size={8}>
               <Typography className="tableTitle">
                 <FormattedMessage module="insuree" id="Family.insurees" values={{ count: pageInfo.totalCount }} />
               </Typography>
             </Grid>
             <Grid size={4}>
-              <Grid container alignItems="center" justify="flex-end">
+              <Grid container justify="flex-end" sx={{
+                alignItems: "center"
+              }}>
                 {actions.map((a, idx) => {
                   return (
                     <Grid key={`form-action-${idx}`} className="paperHeaderAction">

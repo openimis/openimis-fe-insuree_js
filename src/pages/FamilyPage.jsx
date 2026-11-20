@@ -1,16 +1,15 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { styled } from "@mui/material/styles";
-import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
+import { formatMessageWithValues, withModulesManager, withHistory, historyPush, injectIntl } from "@openimis/fe-core";
 import FamilyForm from "../components/FamilyForm";
 import { createFamily, updateFamily, clearInsuree, fetchParentFamily } from "../actions";
 import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants";
 import { familyLabel } from "../utils/utils";
 
 const StyledFamilyPage = styled('div')(({ theme }) => ({
-  ...theme?.page ?? {},
+  ...(theme?.page ?? {}),
 }));
 
 class FamilyPage extends Component {

@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import _ from "lodash";
 
 import { styled } from "@mui/material/styles";
-import { GetIconComponent } from "@openimis/fe-core";
+import { GetIconComponent, injectIntl } from "@openimis/fe-core";
 const ReplayIcon = GetIconComponent("Replay")
 
 import {

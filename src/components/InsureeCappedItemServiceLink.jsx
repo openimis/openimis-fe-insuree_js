@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 import { Link, Grid } from "@mui/material";
-import { FormattedMessage } from "@openimis/fe-core";
+import { FormattedMessage, injectIntl } from "@openimis/fe-core";
 
 const StyledInsureeCappedItemServiceLink = styled('div')(({ theme }) => ({
   '& .lnk': {
