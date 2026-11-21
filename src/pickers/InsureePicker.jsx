@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
 import _ from "lodash";
 
 import { Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { TextInput, Picker, withModulesManager } from "@openimis/fe-core";
+import { TextInput, Picker, withModulesManager, injectIntl } from "@openimis/fe-core";
 import { fetchInsureesForPicker, checkIfHeadSelected } from "../actions";
 import { DEFAULT } from "../constants";
 

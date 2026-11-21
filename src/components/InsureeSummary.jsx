@@ -1,9 +1,8 @@
 import React, { Fragment } from "react";
-import { injectIntl } from "react-intl";
 
 import { Grid, Box, Typography, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { GetIconComponent } from "@openimis/fe-core";
+import { GetIconComponent, injectIntl } from "@openimis/fe-core";
 const People = GetIconComponent("People")
 
 import {
@@ -59,11 +58,15 @@ const InsureeSummary = (props) => {
     <StyledInsureeSummary>
       <Grid container className={className}>
         {hasAvatarContribution && (
-          <Box mr={3}>
+          <Box sx={{
+            mr: 3
+          }}>
             <Contributions readOnly photo={insuree.photo} contributionKey={INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY} />
           </Box>
         )}
-        <Box flexGrow={1}>
+        <Box sx={{
+          flexGrow: 1
+        }}>
           <ControlledField
             module="insuree"
             id="InsureeSummary.chfId"

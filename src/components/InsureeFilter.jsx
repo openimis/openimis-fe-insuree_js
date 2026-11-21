@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import _debounce from "lodash/debounce";
 
 import { Checkbox, FormControlLabel, Grid } from "@mui/material";
@@ -15,6 +14,7 @@ import {
   GRID_RESPONSIVE_STANDARD,
   GRID_RESPONSIVE_SMALL,
   GRID_RESPONSIVE_HALF,
+  injectIntl,
 } from "@openimis/fe-core";
 import { DEFAULT, WITHOUT_STR } from "../constants";
 import { buildParentLocationFilters } from "../utils/utils";

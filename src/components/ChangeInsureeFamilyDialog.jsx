@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
-import { withModulesManager } from "@openimis/fe-core";
+import { withModulesManager, injectIntl } from "@openimis/fe-core";
 
 const StyledChangeInsureeFamilyDialog = styled('div')(({ theme }) => ({
   '& .primaryButton': theme?.dialog?.primaryButton ?? {},

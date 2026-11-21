@@ -101,13 +101,17 @@ class InsureeMasterPanel extends FormPanel {
           <Grid size={12}>
             <Paper className="paper">
               <Grid container className="tableTitle">
-                <Grid size={GRID_INSUREE_TITLE} container alignItems="center" className="item">
+                <Grid size={GRID_INSUREE_TITLE} container className="item" sx={{
+                  alignItems: "center"
+                }}>
                   <Typography variant="h5">
                     <FormattedMessage module="insuree" id={title} values={titleParams} />
                   </Typography>
                 </Grid>
                 <Grid size={GRID_RESPONSIVE_LARGE}>
-                  <Grid container justifyContent="flex-end">
+                  <Grid container sx={{
+                    justifyContent: "flex-end"
+                  }}>
                     {!!edited &&
                       !!edited.family &&
                       !!edited.family.headInsuree &&
@@ -136,7 +140,9 @@ class InsureeMasterPanel extends FormPanel {
               </Grid>
               <Divider />
               <Grid container className="item" direction="column">
-                <Typography className="item" fontWeight="bold">
+                <Typography className="item" sx={{
+                  fontWeight: "bold"
+                }}>
                   <FormattedMessage module="insuree" id="Insuree.identity" value={titleParams} />
                 </Typography>
                 <Grid container>
@@ -210,7 +216,9 @@ class InsureeMasterPanel extends FormPanel {
                     />
                   </Grid>
                 </Grid>
-                <Typography className="item" fontWeight="bold">
+                <Typography className="item" sx={{
+                  fontWeight: "bold"
+                }}>
                   {formatMessage(intl, "insuree", `Insuree.household`)}
                 </Typography>
                 <Grid size={GRID_RESPONSIVE_FULL}>
@@ -223,7 +231,9 @@ class InsureeMasterPanel extends FormPanel {
                     onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
                   />
                 </Grid>
-                <Typography className="item" fontWeight="bold">
+                <Typography className="item" sx={{
+                  fontWeight: "bold"
+                }}>
                   {formatMessage(intl, "insuree", "Insuree.additionnalInfos")}
                 </Typography>
                 <Grid container>

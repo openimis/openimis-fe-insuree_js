@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
 
 import { styled } from "@mui/material/styles";
 
@@ -18,6 +17,7 @@ import {
   parseData,
   Helmet,
   GetIconComponent,
+  injectIntl,
 } from "@openimis/fe-core";
 import { fetchFamily, newFamily, createFamily, fetchFamilyMutation, fetchParentFamily } from "../actions";
 import { INSUREE_ACTIVE_STRING, RIGHT_FAMILY, FAMILY_TYPE_POLYGAMY_CODE } from "../constants";

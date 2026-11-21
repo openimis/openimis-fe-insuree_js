@@ -37,12 +37,16 @@ const FamilySubFamilySearcher = ({ filters, onChangeFilters, resetFilters }) => 
   return (
     <StyledFamilySubFamilySearcher>
       <Fragment>
-        <Grid container alignItems="center" direction="row" className="paperHeader">
+        <Grid container direction="row" className="paperHeader" sx={{
+          alignItems: "center"
+        }}>
           <Grid size={8}>
             <Typography className="tableTitle">{formatMessage("Insuree.searchCriteria")}</Typography>
           </Grid>
           <Grid size={4}>
-            <Grid container justifyContent="flex-end">
+            <Grid container sx={{
+              justifyContent: "flex-end"
+            }}>
               {actions.map((a) => (
                 <Grid key={`searcher-action-${a.tooltip}`} className="paperHeaderAction">
                   {withTooltip(a.button, a.tooltip)}

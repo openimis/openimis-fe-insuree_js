@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from "react";
 import InsureeMasterPanel from "./InsureeMasterPanel";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Contributions, FormattedMessage, PublishedComponent, formatMessage, withModulesManager } from "@openimis/fe-core";
+import { Contributions, FormattedMessage, PublishedComponent, formatMessage, withModulesManager, injectIntl } from "@openimis/fe-core";
 import { GetIconComponent } from "@openimis/fe-core";
 const PersonAdd = GetIconComponent("PersonAdd")
 import { fetchInsureeFull } from "../actions";

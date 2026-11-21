@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 
 const StyledDeleteFamilyDialog = styled('div')(({ theme }) => ({
@@ -9,7 +8,7 @@ const StyledDeleteFamilyDialog = styled('div')(({ theme }) => ({
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
-import { FormattedMessage } from "@openimis/fe-core";
+import { FormattedMessage, injectIntl } from "@openimis/fe-core";
 
 import { familyLabel } from "../utils/utils";
 
