@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 
 import _ from "lodash";
 import {
@@ -16,7 +15,8 @@ import {
   Searcher,
   PublishedComponent,
   GetIconComponent,
-  ActionMenu
+  ActionMenu,
+  injectIntl
 } from "@openimis/fe-core";
 const SearchIcon = GetIconComponent("Search")
 const PeopleIcon = GetIconComponent("People")

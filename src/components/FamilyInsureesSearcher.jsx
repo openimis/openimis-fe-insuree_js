@@ -50,7 +50,9 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
   return (
     <StyledFamilyInsureesSearcher>
       <Fragment>
-        <Grid container alignItems="center" direction="row" className="paperHeader">
+        <Grid container direction="row" className="paperHeader" sx={{
+          alignItems: "center"
+        }}>
           <Grid size={8}>
             <Typography className="tableTitle">
               {formatMessage('Insuree.searchCriteria')}
@@ -206,7 +208,7 @@ const FamilyInsureesSearcher = ({ filters, onChangeFilters, resetFilters }) => {
         </Grid>
       </Fragment>
     </StyledFamilyInsureesSearcher>
-  )
+  );
 }
 
 export default FamilyInsureesSearcher;

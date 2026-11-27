@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { styled } from "@mui/material/styles";
-import { formatMessageWithValues, withModulesManager, withHistory, historyPush } from "@openimis/fe-core";
+import { formatMessageWithValues, withModulesManager, withHistory, historyPush, injectIntl } from "@openimis/fe-core";
 import InsureeForm from "../components/InsureeForm";
 import { createInsuree, updateInsuree } from "../actions";
 import { RIGHT_INSUREE, RIGHT_INSUREE_ADD, RIGHT_INSUREE_EDIT } from "../constants";
 
 const StyledInsureePage = styled('div')(({ theme }) => ({
-  ...theme?.page ?? {},
+  ...theme?.page,
 }));
 
 class InsureePage extends Component {

@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 
-import { withModulesManager, useModulesManager, ValidatedTextInput } from "@openimis/fe-core";
+import { withModulesManager, useModulesManager, ValidatedTextInput, injectIntl } from "@openimis/fe-core";
 import { insureeNumberValidationCheck, insureeNumberValidationClear, insureeNumberSetValid } from "../actions";
 
 const InsureeNumberInput = (props) => {

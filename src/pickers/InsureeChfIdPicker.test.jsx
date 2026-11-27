@@ -13,7 +13,8 @@ vi.mock("../actions", () => ({ fetchInsuree }));
 
 // The fe-core barrel imports UserPicker before withModulesManager is initialized,
 // so the picker gets the few fe-core pieces it renders through, stubbed.
-vi.mock("@openimis/fe-core", () => ({
+vi.mock("@openimis/fe-core", async () => ({
+  injectIntl: (await import("@openimis/fe-core/testing")).injectIntl,
   withModulesManager: (Component) => (props) => <Component modulesManager={modulesManager} {...props} />,
   TextInput: ({ label, value, onChange, readOnly }) => (
     <input aria-label={label} value={value ?? ""} readOnly={readOnly} onChange={(e) => onChange?.(e.target.value)} />

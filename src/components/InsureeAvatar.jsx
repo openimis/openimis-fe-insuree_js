@@ -59,7 +59,9 @@ const InsureeAvatar = (props) => {
   const isRequired = Boolean(photo?.thumbnail || photo?.photo);
   return (
     <StyledInsureeAvatar>
-      <Grid container className={className} direction="row" wrap="nowrap" spacing={1} alignItems="center">
+      <Grid container className={className} direction="row" wrap="nowrap" spacing={1} sx={{
+        alignItems: "center"
+      }}>
         <div>
           <IconButton
             variant="contained"

@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
-import { withModulesManager } from "@openimis/fe-core";
+import {
+  withModulesManager,
+  injectIntl,
+  FormattedMessage,
+} from "@openimis/fe-core";
 
 const StyledChangeInsureeFamilyDialog = styled('div')(({ theme }) => ({
   '& .primaryButton': theme?.dialog?.primaryButton ?? {},
@@ -9,8 +12,6 @@ const StyledChangeInsureeFamilyDialog = styled('div')(({ theme }) => ({
 }));
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-
-import { FormattedMessage } from "@openimis/fe-core";
 
 import { familyLabel, insureeLabel } from "../utils/utils";
 

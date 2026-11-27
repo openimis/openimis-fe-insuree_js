@@ -1,9 +1,7 @@
 import React, { Fragment } from "react";
-import { injectIntl } from "react-intl";
 
 import { Grid, FormControlLabel, Checkbox, Typography, Divider, Tooltip, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
 
 import {
   historyPush,
@@ -18,6 +16,7 @@ import {
   GetIconComponent,
   GRID_RESPONSIVE_SMALL,
   GRID_RESPONSIVE_STANDARD,
+  injectIntl,
 } from "@openimis/fe-core";
 
 const GRID_FAMILY_ADDRESS = { xs: 12, sm: 12, md: 8, lg: 5 };
@@ -143,7 +142,14 @@ class FamilyMasterPanel extends FormPanel {
         <Fragment>
           <Grid container className="tableTitle">
             <Grid size="grow">
-              <Grid container alignItems="center" justifyContent="center" direction="column" className="fullHeight">
+              <Grid
+                container
+                direction="column"
+                className="fullHeight"
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
                 <Grid>
                   <Typography>
                     <FormattedMessage module="insuree" id="insuree.FamilyDetailPanel.title" />

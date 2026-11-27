@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
-import { formatMessage, withModulesManager, SelectInput } from "@openimis/fe-core";
+
+import { formatMessage, withModulesManager, SelectInput, injectIntl } from "@openimis/fe-core";
 import { fetchIdentificationTypes } from "../actions";
 import _debounce from "lodash/debounce";
 import _ from "lodash";
