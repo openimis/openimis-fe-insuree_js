@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { styled } from "@mui/material/styles";
 import { FormControl, TextField } from "@mui/material";
-import { injectIntl } from "react-intl";
+import { injectIntl } from "@openimis/fe-core";
 import { familyLabel } from "../utils/utils";
 import _ from "lodash";
 

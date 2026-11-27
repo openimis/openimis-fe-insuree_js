@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
-import { withModulesManager, FormattedMessage, formatMessage } from "@openimis/fe-core";
+import { withModulesManager, FormattedMessage, formatMessage, injectIntl } from "@openimis/fe-core";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, ListItem, ListItemText, TextField } from "@mui/material";
 import { familyLabel } from "../utils/utils";
 

@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("@openimis/fe-core", async () => {
   const { Component } = await import("react");
   return {
+    injectIntl: (await import("@openimis/fe-core/testing")).injectIntl,
     PagedDataHandler: class extends Component {},
     GetIconComponent: () => () => null,
     withModulesManager: (C) => C,

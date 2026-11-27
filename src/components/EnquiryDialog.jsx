@@ -1,7 +1,6 @@
 import React, { useEffect, Fragment, useRef } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
 
 import { Dialog, Button, DialogActions, DialogContent } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -14,6 +13,7 @@ import {
   ProgressOrError,
   withModulesManager,
   withHistory,
+  injectIntl,
 } from "@openimis/fe-core";
 import { fetchInsureeEnquiry, clearInsureeEnquiry } from "../actions";
 import InsureeSummary from "./InsureeSummary";

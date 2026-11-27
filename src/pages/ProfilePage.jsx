@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { Box, Typography, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -13,6 +12,7 @@ import {
   ControlledField,
   withHistory,
   withModulesManager,
+  injectIntl,
 } from "@openimis/fe-core";
 import { fetchInsureeFull } from "../actions";
 import { DEFAULT, MODULE_NAME } from "../constants";
@@ -67,12 +67,16 @@ const ProfilePage = () => {
           <Typography className="title" variant="h6">
             {formatMessage("link.profile")}
           </Typography>
-          <Grid size={GRID_RESPONSIVE_LARGE} container display="flex">
+          <Grid size={GRID_RESPONSIVE_LARGE} container sx={{
+            display: "flex"
+          }}>
             <ProgressOrError progress={fetchingInsuree} error={errorInsuree} />
             <Grid container direction="row" className="flexContainer">
               {hasAvatarContribution && (
                 <Grid size={GRID_RESPONSIVE_SMALL} className="item">
-                  <Box mr={3}>
+                  <Box sx={{
+                    mr: 3
+                  }}>
                     <Contributions
                       readOnly
                       photo={insuree?.photo}
@@ -82,7 +86,9 @@ const ProfilePage = () => {
                 </Grid>
               )}
               <Grid size={GRID_RESPONSIVE_LARGE} className="item">
-                <Box mr={10}>
+                <Box sx={{
+                  mr: 10
+                }}>
                   <ControlledField
                     module="insuree"
                     id="InsureeSummary.chfId"

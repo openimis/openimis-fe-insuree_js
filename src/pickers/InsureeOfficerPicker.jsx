@@ -2,9 +2,8 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { styled } from "@mui/material/styles";
-import { injectIntl } from "react-intl";
 import { fetchInsureeOfficers } from "../actions";
-import { formatMessage, AutoSuggestion, ProgressOrError, withModulesManager, decodeId } from "@openimis/fe-core";
+import { formatMessage, AutoSuggestion, ProgressOrError, withModulesManager, decodeId, injectIntl } from "@openimis/fe-core";
 import { DEFAULT } from "../constants";
 
 const StyledInsureeOfficer = styled('div')(({ theme }) => ({

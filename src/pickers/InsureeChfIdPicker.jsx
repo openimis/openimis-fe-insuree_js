@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { Grid } from "@mui/material";
-import { withModulesManager, TextInput, ProgressOrError, formatMessage, GRID_RESPONSIVE_HALF } from "@openimis/fe-core";
+import { withModulesManager, TextInput, ProgressOrError, formatMessage, GRID_RESPONSIVE_HALF, injectIntl } from "@openimis/fe-core";
 
 import { fetchInsuree } from "../actions";
 import isEqual from "lodash/isEqual";

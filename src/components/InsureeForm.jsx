@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import _ from "lodash";
 
 import { styled } from "@mui/material/styles";
-import { GetIconComponent } from "@openimis/fe-core";
-const ReplayIcon = GetIconComponent("Replay")
-
 import {
+  GetIconComponent,
+  injectIntl,
   formatMessageWithValues,
   withModulesManager,
   withHistory,
@@ -18,11 +16,14 @@ import {
   ProgressOrError,
   Helmet,
 } from "@openimis/fe-core";
+
 import { fetchInsureeFull, fetchFamily, clearInsuree, fetchInsureeMutation } from "../actions";
 import { DEFAULT, INSUREE_ACTIVE_STRING, RIGHT_INSUREE } from "../constants";
 import { insureeLabel, isValidInsuree } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
+
+const ReplayIcon = GetIconComponent("Replay")
 
 const StyledInsureeForm = styled('div')(({ theme }) => ({
   '&.lockedPage': theme?.page?.locked ?? {},

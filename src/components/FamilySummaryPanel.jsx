@@ -1,14 +1,13 @@
 import React from "react";
-import { injectIntl } from "react-intl";
 import { styled } from "@mui/material/styles";
 import { Paper, Table, TableBody, TableCell, TableRow, Typography, Box } from "@mui/material";
-import { useTranslations, useModulesManager } from "@openimis/fe-core";
+import { useTranslations, useModulesManager, injectIntl } from "@openimis/fe-core";
 
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  ...theme.paper?.paper ?? {
+  ...(theme.paper?.paper ?? {
     marginTop: theme.spacing(2),
-  },
+  }),
   '& .header': {
     padding: theme.spacing(1),
     backgroundColor: theme.paper.header.backgroundColor,
@@ -53,7 +52,13 @@ const FamilySummaryPanel = ({
 
   return (
     <StyledPaper>
-      <Box display="flex" justifyContent="space-between" alignItems="center" className="header">
+      <Box
+        className="header"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}>
         <Typography variant="h6">
           {formatMessage("familyAmountsSummary")}
         </Typography>

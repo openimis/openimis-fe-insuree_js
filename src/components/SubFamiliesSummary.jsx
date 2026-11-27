@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { injectIntl } from "react-intl";
 import _ from "lodash";
 
 import { Checkbox, Button, IconButton, Grid, Divider, Typography, Collapse, Paper } from "@mui/material";
@@ -22,6 +21,7 @@ import {
   Table,
   PagedDataHandler,
   ProgressOrError,
+  injectIntl,
 } from "@openimis/fe-core";
 import {
   fetchSubFamilySummaries,
@@ -290,14 +290,18 @@ class SubFamiliesSummary extends PagedDataHandler {
           <Collapse in={this.state.showIFamilySearcher}>
             <FamilySubFamilySearcher filters={this.state.filters} onChangeFilters={this.onChangeFilters} resetFilters={this.resetFilters} />
           </Collapse>
-          <Grid container alignItems="center" direction="row" className="paperHeader">
+          <Grid container direction="row" className="paperHeader" sx={{
+            alignItems: "center"
+          }}>
             <Grid size={8}>
               <Typography className="tableTitle">
                 <FormattedMessage module="insuree" id="Family.families" values={{ count: this.props.subFamilies && this.props.subFamilies.length > 0 ? this.props.subFamilies.length : familiesTotalCount }} />
               </Typography>
             </Grid>
             <Grid size={4}>
-              <Grid container justifyContent="flex-end">
+              <Grid container sx={{
+                justifyContent: "flex-end"
+              }}>
                 {actions.map((a) => (
                   <Grid key={`form-action-${a.tooltip}`} className="paperHeaderAction">
                     {withTooltip(a.button, a.tooltip)}

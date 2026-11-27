@@ -1,29 +1,30 @@
 import React, { Component, Fragment } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import { Checkbox, Button, Tooltip } from "@mui/material";
-import { GetIconComponent } from "@openimis/fe-core";
-const TabIcon = GetIconComponent("Tab")
-
-import _ from "lodash";
 import {
+  GetIconComponent,
+  injectIntl,
   withModulesManager,
   formatMessageWithValues,
   formatDateFromISO,
   formatMessage,
   Searcher,
   journalize,
-  ActionMenu
+  ActionMenu,
 } from "@openimis/fe-core";
 
+import _ from "lodash";
+
 import { fetchFamilySummaries, deleteFamily } from "../actions";
-const DeleteIcon = GetIconComponent("Delete")
 
 import FamilyFilter from "./FamilyFilter";
 import { DEFAULT, RIGHT_FAMILY_DELETE } from "../constants";
 import { familyLabel } from "../utils/utils";
 import DeleteFamilyDialog from "./DeleteFamilyDialog";
+
+const TabIcon = GetIconComponent("Tab")
+const DeleteIcon = GetIconComponent("Delete")
 
 const FAMILY_SEARCHER_CONTRIBUTION_KEY = "insuree.FamilySearcher";
 
