@@ -73,6 +73,8 @@ class FamilyTypePicker extends Component {
         required={required}
         withNull={withNull}
         nullLabel={this.nullDisplay}
+        // Also loading before the delayed fetch starts; an error ends it.
+        loading={this.props.fetching || (!this.props.fetched && !this.props.error)}
         fullWidth={true}
       />
     );
@@ -82,7 +84,8 @@ class FamilyTypePicker extends Component {
 const mapStateToProps = (state) => ({
   familyTypes: state.insuree.familyTypes,
   fetching: state.insuree.fetchingFamilyTypes,
-  fetched: state.medical.fetchedFamilyTypes,
+  fetched: state.insuree.fetchedFamilyTypes,
+  error: state.insuree.errorFamilyTypes,
 });
 
 const mapDispatchToProps = (dispatch) => {

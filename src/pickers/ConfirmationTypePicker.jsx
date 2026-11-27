@@ -62,6 +62,8 @@ class ConfirmationTypePicker extends Component {
         required={required}
         withNull={withNull}
         nullLabel={this.nullDisplay}
+        // Also loading before the delayed fetch starts; an error ends it.
+        loading={this.props.fetching || (!this.props.fetched && !this.props.error)}
         fullWidth={true}
       />
     );
@@ -71,7 +73,8 @@ class ConfirmationTypePicker extends Component {
 const mapStateToProps = (state) => ({
   confirmationTypes: state.insuree.confirmationTypes,
   fetching: state.insuree.fetchingConfirmationTypes,
-  fetched: state.medical.fetchedConfirmationTypes,
+  fetched: state.insuree.fetchedConfirmationTypes,
+  error: state.insuree.errorConfirmationTypes,
 });
 
 const mapDispatchToProps = (dispatch) => {

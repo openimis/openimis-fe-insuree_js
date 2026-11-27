@@ -61,6 +61,8 @@ class InsureeGenderPicker extends Component {
         required={required}
         withNull={withNull}
         nullLabel={this.nullDisplay}
+        // Also loading before the delayed fetch starts; an error ends it.
+        loading={this.props.fetching || (!this.props.fetched && !this.props.error)}
         fullWidth={true}
       />
     );
@@ -70,7 +72,8 @@ class InsureeGenderPicker extends Component {
 const mapStateToProps = (state) => ({
   insureeGenders: state.insuree.insureeGenders,
   fetching: state.insuree.fetchingInsureeGenders,
-  fetched: state.medical.fetchedInsureeGenders,
+  fetched: state.insuree.fetchedInsureeGenders,
+  error: state.insuree.errorInsureeGenders,
 });
 
 const mapDispatchToProps = (dispatch) => {
