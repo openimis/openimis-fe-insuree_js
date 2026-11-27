@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { styled } from "@mui/material/styles";
-import { withModulesManager, injectIntl } from "@openimis/fe-core";
+import {
+  withModulesManager,
+  injectIntl,
+  FormattedMessage,
+} from "@openimis/fe-core";
 
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-
-import { FormattedMessage } from "@openimis/fe-core";
 
 import { familyLabel, insureeLabel } from "../utils/utils";
 

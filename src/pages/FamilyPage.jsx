@@ -9,7 +9,7 @@ import { RIGHT_FAMILY, RIGHT_FAMILY_ADD, RIGHT_FAMILY_EDIT } from "../constants"
 import { familyLabel } from "../utils/utils";
 
 const StyledFamilyPage = styled('div')(({ theme }) => ({
-  ...(theme?.page ?? {}),
+  ...theme?.page,
 }));
 
 class FamilyPage extends Component {

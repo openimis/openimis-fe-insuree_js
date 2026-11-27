@@ -2,10 +2,9 @@ import React, { Fragment } from "react";
 
 import { Grid, Box, Typography, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { GetIconComponent, injectIntl } from "@openimis/fe-core";
-const People = GetIconComponent("People")
-
 import {
+  GetIconComponent,
+  injectIntl,
   formatMessage,
   formatMessageWithValues,
   withModulesManager,
@@ -15,9 +14,12 @@ import {
   historyPush,
   withHistory,
 } from "@openimis/fe-core";
+
 import { DEFAULT } from "../constants";
 import { formatLocationString } from "../utils/utils";
 import InsureeProfileLink from "./InsureeProfileLink";
+
+const People = GetIconComponent("People")
 
 const INSUREE_SUMMARY_AVATAR_CONTRIBUTION_KEY = "insuree.InsureeSummaryAvatar";
 const INSUREE_SUMMARY_CORE_CONTRIBUTION_KEY = "insuree.InsureeSummaryCore";

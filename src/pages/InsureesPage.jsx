@@ -3,9 +3,9 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { Fab } from "@mui/material";
-import { GetIconComponent, injectIntl } from "@openimis/fe-core";
-const AddIcon = GetIconComponent("Add")
 import {
+  GetIconComponent,
+  injectIntl,
   historyPush,
   withModulesManager,
   withHistory,
@@ -17,8 +17,10 @@ import InsureeSearcher from "../components/InsureeSearcher";
 
 import { RIGHT_INSUREE_ADD } from "../constants";
 
+const AddIcon = GetIconComponent("Add")
+
 const StyledInsureesPage = styled('div')(({ theme }) => ({
-  ...(theme?.page ?? {}),
+  ...theme?.page,
   '& .fab': theme?.fab ?? {},
 }));
 

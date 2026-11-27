@@ -8,7 +8,7 @@ import { createInsuree, updateInsuree } from "../actions";
 import { RIGHT_INSUREE, RIGHT_INSUREE_ADD, RIGHT_INSUREE_EDIT } from "../constants";
 
 const StyledInsureePage = styled('div')(({ theme }) => ({
-  ...(theme?.page ?? {}),
+  ...theme?.page,
 }));
 
 class InsureePage extends Component {

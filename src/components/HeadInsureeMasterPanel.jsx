@@ -1,11 +1,19 @@
 import React, { Component, Fragment } from "react";
 import InsureeMasterPanel from "./InsureeMasterPanel";
 import { connect } from "react-redux";
-import { Contributions, FormattedMessage, PublishedComponent, formatMessage, withModulesManager, injectIntl } from "@openimis/fe-core";
-import { GetIconComponent } from "@openimis/fe-core";
-const PersonAdd = GetIconComponent("PersonAdd")
+import {
+  Contributions,
+  FormattedMessage,
+  PublishedComponent,
+  formatMessage,
+  withModulesManager,
+  injectIntl,
+  GetIconComponent,
+} from "@openimis/fe-core";
 import { fetchInsureeFull } from "../actions";
 import { Button } from "@mui/material";
+
+const PersonAdd = GetIconComponent("PersonAdd")
 
 const INSUREE_HEAD_INSUREE_PANELS_CONTRIBUTION_KEY = "insuree.HeadInsuree.panels";
 
