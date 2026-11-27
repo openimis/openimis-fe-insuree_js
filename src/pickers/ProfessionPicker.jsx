@@ -70,7 +70,7 @@ class ProfessionPicker extends Component {
 const mapStateToProps = (state) => ({
   professions: state.insuree.professions,
   fetching: state.insuree.fetchingProfessions,
-  fetched: state.medical.fetchedProfessions,
+  fetched: state.insuree.fetchedProfessions,
 });
 
 const mapDispatchToProps = (dispatch) => {

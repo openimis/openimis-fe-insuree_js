@@ -69,7 +69,7 @@ class RelationPicker extends Component {
 const mapStateToProps = (state) => ({
   relations: state.insuree.relations,
   fetching: state.insuree.fetchingRelations,
-  fetched: state.medical.fetchedRelations,
+  fetched: state.insuree.fetchedRelations,
 });
 
 const mapDispatchToProps = (dispatch) => {

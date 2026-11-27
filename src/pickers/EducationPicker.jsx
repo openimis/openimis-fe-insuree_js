@@ -70,7 +70,7 @@ class EducationPicker extends Component {
 const mapStateToProps = (state) => ({
   educations: state.insuree.educations,
   fetching: state.insuree.fetchingEducations,
-  fetched: state.medical.fetchedEducations,
+  fetched: state.insuree.fetchedEducations,
 });
 
 const mapDispatchToProps = (dispatch) => {

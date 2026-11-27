@@ -64,6 +64,8 @@ class IdentificationTypePicker extends Component {
         selectThreshold={this.selectThreshold}
         withNull={withNull}
         nullLabel={this.nullDisplay}
+        // Also loading before the delayed fetch starts; an error ends it.
+        loading={this.props.fetching || (!this.props.fetched && !this.props.error)}
         fullWidth={true}
       />
     );
@@ -73,7 +75,8 @@ class IdentificationTypePicker extends Component {
 const mapStateToProps = (state) => ({
   identificationTypes: state.insuree.identificationTypes,
   fetching: state.insuree.fetchingIdentificationTypes,
-  fetched: state.medical.fetchedIdentificationTypes,
+  fetched: state.insuree.fetchedIdentificationTypes,
+  error: state.insuree.errorIdentificationTypes,
 });
 
 const mapDispatchToProps = (dispatch) => {
